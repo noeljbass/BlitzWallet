@@ -4,6 +4,7 @@ import RotatingAnimation from './rotatingAnimation';
 import {retrieveData, terminateAccount, storeData} from './secureStore';
 import generateMnemnoic from './seed';
 import shuffleArray from './shuffleArray';
+import userAuth from './userAuth';
 
 export {
   connectToNode,
@@ -15,4 +16,5 @@ export {
   RotatingAnimation,
   getLocalStorageItem,
   setLocalStorageItem,
+  userAuth,
 };

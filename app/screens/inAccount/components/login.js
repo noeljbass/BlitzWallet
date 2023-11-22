@@ -7,12 +7,13 @@ import {
   View,
 } from 'react-native';
 
+import {retrieveData, terminateAccount} from '../../../functions';
 import {FONT, SIZES} from '../../../constants';
-import {storeData} from '../../../functions';
 
-export default function PinSetupPage({navigation: navigate}) {
+export default function AdminLogin({navigation: {navigate}}) {
   const [pin, setPin] = useState([null, null, null, null]);
   const [error, setError] = useState(false);
+  const [pinEnterCount, setPinEnterCount] = useState(0);
 
   function addPin(id) {
     if (typeof id != 'number') {
@@ -47,19 +48,28 @@ export default function PinSetupPage({navigation: navigate}) {
 
     if (filteredPin.length != 4) return;
     (async () => {
-      const stored = await storeData('pin', JSON.stringify(pin));
-      console.log(stored);
+      const stored = JSON.parse(await retrieveData('pin'));
 
-      if (stored) {
-        console.log('TEST');
-
-        return navigate('HomeAdmin');
+      if (JSON.stringify(pin) === JSON.stringify(stored)) {
+        setPinEnterCount(0);
+        navigate('HomeAdmin');
       } else {
-        setError(true);
-        setTimeout(() => {
-          setError(false);
-          setPin([null, null, null, null]);
-        }, 1000);
+        if (pinEnterCount === 8) {
+          setTimeout(async () => {
+            const deleted = await terminateAccount();
+            console.log(deleted);
+
+            if (deleted) navigate('Home');
+            else console.log('ERRROR');
+          }, 2000);
+        } else {
+          setError(true);
+          setPinEnterCount(prev => (prev += 1));
+          setTimeout(() => {
+            setError(false);
+            setPin([null, null, null, null]);
+          }, 1000);
+        }
       }
     })();
   }, [pin]);
@@ -68,12 +78,9 @@ export default function PinSetupPage({navigation: navigate}) {
     <SafeAreaView style={styles.globalContainer}>
       <View style={styles.contentContainer}>
         <Text style={styles.header}>
-          {error ? 'Error saving data, try again' : 'Choose a 4-digit PIN'}
+          {error ? 'Wrong PIN, try again' : 'Enter 4-digit PIN'}
         </Text>
-        <Text style={styles.subHeader}>
-          PIN entry will be required for wallet access. Write it down as it
-          cannot be recovered.
-        </Text>
+        <Text style={styles.enterText}>{pinEnterCount}/8 tries left</Text>
         <View style={styles.dotContainer}>
           <View
             style={
@@ -158,14 +165,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: FONT.Title_Bold,
   },
-  subHeader: {
-    fontSize: SIZES.medium,
-    textAlign: 'center',
-    opacity: 0.5,
-    fontFamily: FONT.Descriptoin_Regular,
-
+  enterText: {
+    fontSize: SIZES.small,
+    fontWeight: 'bold',
     marginBottom: 30,
+    fontFamily: FONT.Descriptoin_Bold,
   },
+
   dotContainer: {
     width: 120,
     display: 'flex',

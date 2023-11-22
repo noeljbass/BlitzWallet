@@ -18,9 +18,10 @@ import {
   SHADOWS,
   Background,
 } from '../../constants';
-import {connectToNode} from '../../functions';
+import {connectToNode, userAuth} from '../../functions';
 
 export default function CreateAccountHome({navigation: {navigate}}) {
+  userAuth(navigate);
   const handlePress = () => {
     // Action to perform when the button is pressed
     console.log('Button pressed!');
