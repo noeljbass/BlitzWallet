@@ -1,18 +1,17 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
-import {CENTER, FONT, ICONS, SIZES} from '../../constants';
-import {useState, useRef} from 'react';
+import {Background, CENTER, FONT, ICONS, SIZES} from '../../constants';
+import {useState} from 'react';
 
-import HomeLightning from '../../components/admin/lightning/home';
+// import {CameraScan} from '../../components/admin';
 
-import {CameraScan} from '../../components/admin';
-
-import {ReceivePaymentHome} from '../../components/admin/bitcoin/BitcoinReceivePath/recieveHome';
+// import {ReceivePaymentHome} from '../../components/admin/bitcoin/BitcoinReceivePath/recieveHome';
 
 import {retrieveData, connectToNode, RotatingAnimation} from '../../functions';
 import {mnemonicToSeed} from '@breeztech/react-native-breez-sdk';
+import HomeLightning from './components/homeLightning';
 
-export default function AdminHome() {
+export default function AdminHome({navigation: {naviage}}) {
   const [bitcoinAmount, setBitcoinAmount] = useState('');
   // const [activeNav, setActiveNav] = useState([true, false]);
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -20,14 +19,14 @@ export default function AdminHome() {
   const [screenType, setScreenType] = useState('lightning');
   const [needToRefresh, setNeedToRefresh] = useState(0);
   const [manualRefresh, setManualRefresh] = useState(0);
-  useState(() => {
-    (async () => {
-      const mnemonic = await retrieveData('key');
-      const seed = await mnemonicToSeed(mnemonic);
+  // useState(() => {
+  //   (async () => {
+  //     const mnemonic = await retrieveData('key');
+  //     const seed = await mnemonicToSeed(mnemonic);
 
-      // connectToNode(seed);
-    })();
-  }, []);
+  //     // connectToNode(seed);
+  //   })();
+  // }, []);
 
   // function toggleBitcoinFunction(clicked) {
   //   if (clicked === "bitcoin") setActiveNav([true, false]);
@@ -35,45 +34,47 @@ export default function AdminHome() {
   // }
 
   return (
-    <SafeAreaView style={styles.globalContainer}>
-      <View style={styles.topBar}>
-        <Text style={styles.topBarName}>Blitz Wallet</Text>
-        <View style={styles.iconContainer}>
-          <RotatingAnimation
-            img={ICONS.refreshIcon}
-            style={{...styles.icons, backgroundColor: 'transparent'}}
-            setManualRefresh={setManualRefresh}
-          />
+    <View style={Background}>
+      <SafeAreaView style={styles.globalContainer}>
+        <View style={styles.topBar}>
+          <Text style={styles.topBarName}>Blitz Wallet</Text>
+          <View style={styles.iconContainer}>
+            {/* <RotatingAnimation
+              img={ICONS.refreshIcon}
+              style={{...styles.icons, backgroundColor: 'transparent'}}
+              setManualRefresh={setManualRefresh}
+            /> */}
 
-          <View style={styles.icons}></View>
-          <View style={styles.icons}></View>
+            <View style={styles.icons}></View>
+            <View style={styles.icons}></View>
+          </View>
         </View>
-      </View>
 
-      <HomeLightning
-        setScreenType={setScreenType}
-        setIsCameraActive={setIsCameraActive}
-        setRecivePayment={setRecivePayment}
-        needToRefresh={needToRefresh}
-        setNeedToRefresh={setNeedToRefresh}
-      />
+        <HomeLightning
+          setScreenType={setScreenType}
+          setIsCameraActive={setIsCameraActive}
+          setRecivePayment={setRecivePayment}
+          needToRefresh={needToRefresh}
+          setNeedToRefresh={setNeedToRefresh}
+        />
 
-      {/* main content */}
-      <CameraScan
+        {/* main content */}
+        {/* <CameraScan
         for={screenType}
         isCameraActive={isCameraActive}
         setIsCameraActive={setIsCameraActive}
         setNeedToRefresh={setNeedToRefresh}
         bitcoinAmount={bitcoinAmount}
-      />
-      <ReceivePaymentHome
+      /> */}
+        {/* <ReceivePaymentHome
         isDisplayed={recivePayment}
         setRecivePayment={setRecivePayment}
         for={screenType}
-      />
+      /> */}
 
-      {/* <ExpandedTransaction /> */}
-    </SafeAreaView>
+        {/* <ExpandedTransaction /> */}
+      </SafeAreaView>
+    </View>
   );
 }
 
