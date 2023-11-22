@@ -27,10 +27,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import LoginHome from './app/screens/loginHome';
-import Testing from './app/screens/test';
 import {CreateAccountHome, DislaimerPage} from './app/screens/createAccount';
 import {COLORS} from './app/constants';
+import SecuityOption from './app/screens/createAccount/keySetup/start';
+import GenerateKey from './app/screens/createAccount/keySetup/generateKey';
+import VerifyKey from './app/screens/createAccount/keySetup/verifyKey';
+import AdminHome from './app/screens/inAccount/home';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,9 +50,12 @@ function App(): JSX.Element {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="CreateAccHome" component={CreateAccountHome} />
+        <Stack.Screen name="Home" component={CreateAccountHome} />
         <Stack.Screen name="DisclaimerPage" component={DislaimerPage} />
-        <Stack.Screen name="Test" component={Testing} />
+        <Stack.Screen name="StartKeyGeneration" component={SecuityOption} />
+        <Stack.Screen name="GenerateKey" component={GenerateKey} />
+        <Stack.Screen name="VerifyKey" component={VerifyKey} />
+        {/* <Stack.Screen name="HomeAdmin" component={AdminHome} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

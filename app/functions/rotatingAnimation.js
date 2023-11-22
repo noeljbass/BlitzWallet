@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
-import { View, TouchableOpacity, Animated, Easing, Image } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import React, {useRef, useState} from 'react';
+import {Animated, Easing, Image} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 function RotatingAnimation(props) {
   const [rotation, setRotation] = useState(0);
@@ -8,7 +8,7 @@ function RotatingAnimation(props) {
 
   const startAnimation = () => {
     if (props.setManualRefresh) {
-      props.setManualRefresh((prev) => (prev += 1));
+      props.setManualRefresh(prev => (prev += 1));
     }
 
     // Update the rotation value by adding 365 degrees
@@ -30,7 +30,7 @@ function RotatingAnimation(props) {
       {
         rotate: rotateAnim.interpolate({
           inputRange: [0, 365],
-          outputRange: ["0deg", "365deg"],
+          outputRange: ['0deg', '365deg'],
         }),
       },
     ],
@@ -42,8 +42,8 @@ function RotatingAnimation(props) {
         <Image
           source={props.img}
           style={{
-            width: "100%",
-            height: "100%",
+            width: '100%',
+            height: '100%',
           }}
           resizeMode="contain"
         />

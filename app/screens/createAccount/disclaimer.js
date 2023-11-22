@@ -27,7 +27,7 @@ export default function DislaimerPage({navigation: {navigate}}) {
   return (
     <View style={Background}>
       <SafeAreaView style={styles.globalContainer}>
-        <Back_BTN navigation={navigate} destination="CreateAccHome" />
+        <Back_BTN navigation={navigate} destination="Home" />
         <View style={styles.contentContainer}>
           <Image_header
             text="Two things you must understand"
@@ -47,7 +47,7 @@ export default function DislaimerPage({navigation: {navigate}}) {
             toggleSwitch={toggleSwitch}
           />
           <Continue_BTN
-            destination="Test"
+            destination="StartKeyGeneration"
             continue={isEnabled}
             text="Next"
             for="disclaimer"

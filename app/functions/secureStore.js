@@ -1,4 +1,4 @@
-import * as SecureStore from "expo-secure-store";
+import * as SecureStore from 'expo-secure-store';
 
 async function storeData(key, value) {
   try {
@@ -28,8 +28,9 @@ async function retrieveData(key) {
 
 async function terminateAccount() {
   try {
-    await SecureStore.deleteItemAsync("key");
-    await SecureStore.deleteItemAsync("pin");
+    await SecureStore.deleteItemAsync('key');
+    await SecureStore.deleteItemAsync('pin');
+    await SecureStore.deleteItemAsync('mnemonic');
 
     return true;
   } catch (error) {
@@ -37,4 +38,4 @@ async function terminateAccount() {
   }
 }
 
-export { retrieveData, storeData, terminateAccount };
+export {retrieveData, storeData, terminateAccount};

@@ -18,12 +18,15 @@ import {
   SHADOWS,
   Background,
 } from '../../constants';
+import {connectToNode} from '../../functions';
 
 export default function CreateAccountHome({navigation: {navigate}}) {
   const handlePress = () => {
     // Action to perform when the button is pressed
     console.log('Button pressed!');
   };
+
+  connectToNode();
 
   return (
     <View style={Background}>
