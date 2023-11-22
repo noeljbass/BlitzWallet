@@ -1,4 +1,5 @@
 import connectToNode from './connectToNode';
+import {getLocalStorageItem, setLocalStorageItem} from './localStorage';
 import RotatingAnimation from './rotatingAnimation';
 import {retrieveData, terminateAccount, storeData} from './secureStore';
 import generateMnemnoic from './seed';
@@ -12,4 +13,6 @@ export {
   generateMnemnoic,
   shuffleArray,
   RotatingAnimation,
+  getLocalStorageItem,
+  setLocalStorageItem,
 };

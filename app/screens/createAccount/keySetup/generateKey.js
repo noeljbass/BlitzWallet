@@ -18,6 +18,7 @@ export default function GenerateKey({navigation: {navigate}}) {
 
       return;
     }
+    getMnemnoic();
   }, []);
 
   async function getMnemnoic() {

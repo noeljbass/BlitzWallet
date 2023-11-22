@@ -26,8 +26,6 @@ export default function CreateAccountHome({navigation: {navigate}}) {
     console.log('Button pressed!');
   };
 
-  connectToNode();
-
   return (
     <View style={Background}>
       <SafeAreaView style={{flex: 1}}>

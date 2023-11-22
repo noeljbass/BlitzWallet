@@ -3,14 +3,13 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {CENTER, FONT, ICONS, SIZES} from '../../constants';
 import {useState, useRef} from 'react';
 
-import HomeLightning from '../../components/admin/lightning/home';
+// import {CameraScan} from '../../components/admin';
 
-import {CameraScan} from '../../components/admin';
-
-import {ReceivePaymentHome} from '../../components/admin/bitcoin/BitcoinReceivePath/recieveHome';
+// import {ReceivePaymentHome} from '../../components/admin/bitcoin/BitcoinReceivePath/recieveHome';
 
 import {retrieveData, connectToNode, RotatingAnimation} from '../../functions';
 import {mnemonicToSeed} from '@breeztech/react-native-breez-sdk';
+import HomeLightning from './components/homeLightning';
 
 export default function AdminHome() {
   const [bitcoinAmount, setBitcoinAmount] = useState('');
@@ -59,18 +58,18 @@ export default function AdminHome() {
       />
 
       {/* main content */}
-      <CameraScan
+      {/* <CameraScan
         for={screenType}
         isCameraActive={isCameraActive}
         setIsCameraActive={setIsCameraActive}
         setNeedToRefresh={setNeedToRefresh}
         bitcoinAmount={bitcoinAmount}
-      />
-      <ReceivePaymentHome
+      /> */}
+      {/* <ReceivePaymentHome
         isDisplayed={recivePayment}
         setRecivePayment={setRecivePayment}
         for={screenType}
-      />
+      /> */}
 
       {/* <ExpandedTransaction /> */}
     </SafeAreaView>

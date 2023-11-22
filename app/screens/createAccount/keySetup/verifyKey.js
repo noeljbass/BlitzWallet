@@ -110,7 +110,7 @@ export default function VerifyKey({navigation: {navigate}}) {
   }
   function nextPage() {
     if (!isValid) return;
-    router.push('/newAccount/pin');
+    navigate('PinSetup');
   }
 
   return (

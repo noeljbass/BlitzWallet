@@ -8,7 +8,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import type {PropsWithChildren} from 'react';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -32,6 +32,7 @@ import {COLORS} from './app/constants';
 import SecuityOption from './app/screens/createAccount/keySetup/start';
 import GenerateKey from './app/screens/createAccount/keySetup/generateKey';
 import VerifyKey from './app/screens/createAccount/keySetup/verifyKey';
+import PinSetupPage from './app/screens/createAccount/keySetup/pin';
 import AdminHome from './app/screens/inAccount/home';
 
 const Stack = createNativeStackNavigator();
@@ -55,7 +56,8 @@ function App(): JSX.Element {
         <Stack.Screen name="StartKeyGeneration" component={SecuityOption} />
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
-        {/* <Stack.Screen name="HomeAdmin" component={AdminHome} /> */}
+        <Stack.Screen name="PinSetup" component={PinSetupPage} />
+        <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );
