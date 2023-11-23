@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {CENTER, COLORS, FONT, SIZES} from '../../../constants';
+import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../constants';
 
 export function SendRecieveBTNs(props) {
   console.log(props.for);
@@ -8,7 +8,7 @@ export function SendRecieveBTNs(props) {
       <TouchableOpacity
         onPress={() => {
           props.setIsCameraActive(true);
-          props.setScreenType(props.for);
+          // props.setScreenType(props.for);
         }}
         style={combinedStyles.firstButton}>
         <Text style={styles.text}>Send</Text>
@@ -16,7 +16,7 @@ export function SendRecieveBTNs(props) {
       <TouchableOpacity
         onPress={() => {
           props.setRecivePayment(true);
-          props.setNeedToRefresh(prev => (prev += 1));
+          // props.setNeedToRefresh(prev => (prev += 1));
         }}
         style={styles.button}>
         <Text style={styles.text}>Receive</Text>
@@ -27,32 +27,32 @@ export function SendRecieveBTNs(props) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    height: 50,
+    width: 300,
+    height: 40,
     flexDirection: 'row',
+    justifyContent: 'space-between',
 
-    borderTopRightRadius: 15,
-    borderTopLeftRadius: 15,
-    backgroundColor: COLORS.gray2,
-    overflow: 'hidden',
     ...CENTER,
   },
   button: {
     height: '100%',
-    width: '50%',
-
+    width: 130,
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 8,
+    // overflow: "hidden",
+    ...SHADOWS.medium,
   },
   text: {
-    fontSize: SIZES.medium,
     fontFamily: FONT.Other_Regular,
+    fontSize: SIZES.medium,
+    color: COLORS.background,
   },
 });
 
 const combinedStyles = StyleSheet.create({
   firstButton: {
     ...styles.button,
-    borderRightWidth: 1,
   },
 });

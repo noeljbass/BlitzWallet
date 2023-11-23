@@ -10,7 +10,7 @@ const userAuth = navigate => {
     const handleAppStateChange = nextAppState => {
       if (nextAppState === 'background') {
         // The app has transitioned to the background or inactive state (e.g., when the user switches to a different app).
-
+        console.log('background');
         (async () => {
           const userPin = await retrieveData('mnemonic');
 

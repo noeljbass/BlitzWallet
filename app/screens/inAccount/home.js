@@ -1,37 +1,64 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 
-import {Background, CENTER, FONT, ICONS, SIZES} from '../../constants';
-import {useState} from 'react';
+import {
+  Background,
+  CENTER,
+  COLORS,
+  FONT,
+  ICONS,
+  SIZES,
+  SHADOWS,
+} from '../../constants';
+import {useEffect, useState} from 'react';
 
 // import {CameraScan} from '../../components/admin';
 
 // import {ReceivePaymentHome} from '../../components/admin/bitcoin/BitcoinReceivePath/recieveHome';
 
-import {retrieveData, connectToNode, RotatingAnimation} from '../../functions';
-import {mnemonicToSeed} from '@breeztech/react-native-breez-sdk';
+import {
+  retrieveData,
+  connectToNode,
+  RotatingAnimation,
+  userAuth,
+} from '../../functions';
+import {
+  listFiatCurrencies,
+  mnemonicToSeed,
+  nodeInfo,
+} from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
+import {ReceivePaymentHome} from './components/recieveBitcoin';
+import {ConnectionToNode} from './components/conectionToNode';
 
-export default function AdminHome({navigation: {naviage}}) {
-  const [bitcoinAmount, setBitcoinAmount] = useState('');
+export default function AdminHome({navigation: {navigate}}) {
+  userAuth(navigate);
+  // const [bitcoinAmount, setBitcoinAmount] = useState('');
   // const [activeNav, setActiveNav] = useState([true, false]);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [recivePayment, setRecivePayment] = useState(false);
-  const [screenType, setScreenType] = useState('lightning');
-  const [needToRefresh, setNeedToRefresh] = useState(0);
-  const [manualRefresh, setManualRefresh] = useState(0);
-  // useState(() => {
-  //   (async () => {
-  //     const mnemonic = await retrieveData('key');
-  //     const seed = await mnemonicToSeed(mnemonic);
+  const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
+  // const [screenType, setScreenType] = useState('lightning');
+  // const [needToRefresh, setNeedToRefresh] = useState(0);
+  // const [manualRefresh, setManualRefresh] = useState(0);
+  useState(() => {
+    (async () => {
+      try {
+        const mnemonic = await retrieveData('mnemonic');
+        const seed = await mnemonicToSeed(mnemonic);
 
-  //     // connectToNode(seed);
-  //   })();
-  // }, []);
-
-  // function toggleBitcoinFunction(clicked) {
-  //   if (clicked === "bitcoin") setActiveNav([true, false]);
-  //   else setActiveNav([false, true]);
-  // }
+        connectToNode(seed);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
 
   return (
     <View style={Background}>
@@ -39,23 +66,23 @@ export default function AdminHome({navigation: {naviage}}) {
         <View style={styles.topBar}>
           <Text style={styles.topBarName}>Blitz Wallet</Text>
           <View style={styles.iconContainer}>
-            {/* <RotatingAnimation
-              img={ICONS.refreshIcon}
-              style={{...styles.icons, backgroundColor: 'transparent'}}
-              setManualRefresh={setManualRefresh}
-            /> */}
-
+            <TouchableOpacity
+              onPress={() => setNodeConnectionPopup(false)}
+              style={styles.icons}>
+              <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
+            </TouchableOpacity>
+            <View style={styles.icons}></View>
             <View style={styles.icons}></View>
             <View style={styles.icons}></View>
           </View>
         </View>
 
         <HomeLightning
-          setScreenType={setScreenType}
+          // setScreenType={setScreenType}
           setIsCameraActive={setIsCameraActive}
           setRecivePayment={setRecivePayment}
-          needToRefresh={needToRefresh}
-          setNeedToRefresh={setNeedToRefresh}
+          // needToRefresh={needToRefresh}
+          // setNeedToRefresh={setNeedToRefresh}
         />
 
         {/* main content */}
@@ -71,6 +98,14 @@ export default function AdminHome({navigation: {naviage}}) {
         setRecivePayment={setRecivePayment}
         for={screenType}
       /> */}
+        <ReceivePaymentHome
+          isDisplayed={recivePayment}
+          setRecivePayment={setRecivePayment}
+        />
+        <ConnectionToNode
+          isDisplayed={nodeConnectionPopup}
+          hidePopup={setNodeConnectionPopup}
+        />
 
         {/* <ExpandedTransaction /> */}
       </SafeAreaView>
@@ -106,15 +141,22 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
   },
   iconContainer: {
-    width: 90,
+    width: 170,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   icons: {
-    width: 25,
-    height: 25,
-    borderRadius: '50%',
-    backgroundColor: 'black',
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...SHADOWS.medium,
+  },
+  imgIcon: {
+    width: 20,
+    height: 20,
   },
 
   //   navigation between Bitcoin and lightning

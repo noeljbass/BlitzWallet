@@ -54,11 +54,11 @@ export default function HomeLightning(props) {
         {transactionElement}
       </ScrollView>
       <SendRecieveBTNs
-        setScreenType={props.setScreenType}
+        // setScreenType={props.setScreenType}
         for="lightning"
         setIsCameraActive={props.setIsCameraActive}
         setRecivePayment={props.setRecivePayment}
-        setNeedToRefresh={props.setNeedToRefresh}
+        // setNeedToRefresh={props.setNeedToRefresh}
       />
     </>
   );
