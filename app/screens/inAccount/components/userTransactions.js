@@ -3,9 +3,10 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 import {FONT, ICONS, SIZES} from '../../../constants';
 
 export function UserTransaction(props) {
+  const paymentDate = new Date(props.paymentTime * 1000).toDateString();
   return (
     <View style={styles.transactionContainer}>
-      {props.completed ? (
+      {props.status === 'complete' ? (
         <Image
           source={ICONS.Checkcircle}
           style={styles.icons}
@@ -25,10 +26,10 @@ export function UserTransaction(props) {
             : props.description}
         </Text>
 
-        <Text style={styles.dateText}>{props.date}</Text>
+        <Text style={styles.dateText}>{paymentDate}</Text>
       </View>
 
-      {props.wasSent ? (
+      {props.paymentType != 'received' ? (
         <Text style={combinedStyles.wasSent}>sent</Text>
       ) : (
         <Text style={combinedStyles.wasRecived}>Recieved</Text>

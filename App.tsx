@@ -50,6 +50,7 @@ function App(): JSX.Element {
   };
 
   useEffect(() => {
+    console.log('refresh');
     (async () => {
       const hasAccount = await retrieveData('pin');
       if (hasAccount) setIsLoggedIn(true);

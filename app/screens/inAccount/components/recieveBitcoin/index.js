@@ -1,3 +1,4 @@
+import EditAmountPopup from './editAmount';
 import {ReceivePaymentHome} from './home';
 
-export {ReceivePaymentHome};
+export {ReceivePaymentHome, EditAmountPopup};

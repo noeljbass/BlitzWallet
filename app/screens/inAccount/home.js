@@ -20,42 +20,42 @@ import {useEffect, useState} from 'react';
 
 // import {CameraScan} from '../../components/admin';
 
-// import {ReceivePaymentHome} from '../../components/admin/bitcoin/BitcoinReceivePath/recieveHome';
-
 import {
   retrieveData,
   connectToNode,
   RotatingAnimation,
   userAuth,
 } from '../../functions';
-import {
-  listFiatCurrencies,
-  mnemonicToSeed,
-  nodeInfo,
-} from '@breeztech/react-native-breez-sdk';
+import {mnemonicToSeed} from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
 import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
 
 export default function AdminHome({navigation: {navigate}}) {
-  userAuth(navigate);
+  // userAuth(navigate);
   // const [bitcoinAmount, setBitcoinAmount] = useState('');
   // const [activeNav, setActiveNav] = useState([true, false]);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [recivePayment, setRecivePayment] = useState(false);
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
+  const [didConnectToNode, setDidConnectToNode] = useState(false);
+  const [breezEvent, setBreezEvent] = useState('');
   // const [screenType, setScreenType] = useState('lightning');
   // const [needToRefresh, setNeedToRefresh] = useState(0);
   // const [manualRefresh, setManualRefresh] = useState(0);
+  // SDK events listener
+  console.log(breezEvent, 'BreezEvent on home screen');
+  const onBreezEvent = e => {
+    setBreezEvent(`${e.type}`);
+    // console.log(`Received event ${e.type} did that actually work`);
+  };
   useState(() => {
     (async () => {
       try {
-        const mnemonic = await retrieveData('mnemonic');
-        const seed = await mnemonicToSeed(mnemonic);
-
-        connectToNode(seed);
+        const response = await connectToNode(onBreezEvent);
+        setDidConnectToNode(response);
       } catch (err) {
-        console.log(err);
+        console.log(err, 'homepage connection to node err');
       }
     })();
   }, []);
@@ -68,7 +68,10 @@ export default function AdminHome({navigation: {navigate}}) {
           <View style={styles.iconContainer}>
             <TouchableOpacity
               onPress={() => setNodeConnectionPopup(false)}
-              style={styles.icons}>
+              style={{
+                ...styles.icons,
+                backgroundColor: didConnectToNode ? 'green' : 'red',
+              }}>
               <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
             </TouchableOpacity>
             <View style={styles.icons}></View>
@@ -81,6 +84,7 @@ export default function AdminHome({navigation: {navigate}}) {
           // setScreenType={setScreenType}
           setIsCameraActive={setIsCameraActive}
           setRecivePayment={setRecivePayment}
+          breezEvent={breezEvent}
           // needToRefresh={needToRefresh}
           // setNeedToRefresh={setNeedToRefresh}
         />
@@ -93,22 +97,19 @@ export default function AdminHome({navigation: {navigate}}) {
         setNeedToRefresh={setNeedToRefresh}
         bitcoinAmount={bitcoinAmount}
       /> */}
-        {/* <ReceivePaymentHome
-        isDisplayed={recivePayment}
-        setRecivePayment={setRecivePayment}
-        for={screenType}
-      /> */}
+
         <ReceivePaymentHome
           isDisplayed={recivePayment}
           setRecivePayment={setRecivePayment}
-        />
-        <ConnectionToNode
-          isDisplayed={nodeConnectionPopup}
-          hidePopup={setNodeConnectionPopup}
+          breezEvent={breezEvent}
         />
 
         {/* <ExpandedTransaction /> */}
       </SafeAreaView>
+      <ConnectionToNode
+        isDisplayed={nodeConnectionPopup}
+        hidePopup={setNodeConnectionPopup}
+      />
     </View>
   );
 }

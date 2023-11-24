@@ -15,7 +15,7 @@ const userAuth = navigate => {
           const userPin = await retrieveData('mnemonic');
 
           if (userPin) {
-            navigate('AdminLogin');
+            navigate('Home');
           } else {
             navigate('Home');
           }

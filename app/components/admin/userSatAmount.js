@@ -3,11 +3,21 @@ import {COLORS, FONT, SIZES} from '../../constants';
 
 import {useEffect, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../functions';
+import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
 // import {getLocalStorageItem, setLocalStorageItem} from '../global';
 
 export function UserSatAmount(props) {
   const [showAmount, setShowAmount] = useState(true);
+  const [bitcoinAmount, setBitcoinAmount] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      const nodeAmount = await nodeInfo();
+      const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+      setBitcoinAmount(msatToSat);
+    })();
+  }, [props.breezEvent]);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +41,7 @@ export function UserSatAmount(props) {
     const numbers = formattedAmt.split('').filter(num => !!(Number(num) + 5)); // this takes out the commus from messing up how many numbers I the user has
 
     if (numbers.length < 9) {
-      for (let i = formattedAmt.length; i < 11; i++) {
+      for (let i = formattedAmt.length; i < 9; i++) {
         formattedAmt = '0' + formattedAmt;
       }
     }
@@ -109,7 +119,7 @@ export function UserSatAmount(props) {
 
         {showAmount && (
           <Text style={styles.valueText}>
-            {formatBitcoinAmoutn(props.bitcoinAmt)}
+            {formatBitcoinAmoutn(bitcoinAmount)}
           </Text>
         )}
         {!showAmount && <Text style={styles.valueText}>* * * * *</Text>}
