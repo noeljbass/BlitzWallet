@@ -173,21 +173,21 @@ const styles = StyleSheet.create({
   },
 
   dotContainer: {
-    width: 120,
+    width: 150,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   dot: {
-    width: 20,
-    height: 20,
-    borderRadius: '50%',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     borderWidth: 1,
   },
   dot_active: {
-    width: 20,
-    height: 20,
-    borderRadius: '50%',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     borderWidth: 1,
     backgroundColor: 'black',
   },

@@ -33,16 +33,16 @@ import {getLocalStorageItem, retrieveData} from '../../../../functions';
 import {getFiatRates} from '../../../../functions/SDK';
 import EditAmountPopup from './editAmount';
 import {
-  nodeInfo,
   openChannelFee,
   receivePayment,
 } from '@breeztech/react-native-breez-sdk';
+import ConfirmPaymentScreen from './confirmPaymentScreen';
 
 export function ReceivePaymentHome(props) {
   const [generatedAddress, setGeneratedAddress] = useState('');
   const [fiatRate, setFiatRate] = useState(0);
-  const [fullAddressView, setFullAddressView] = useState(false);
-  const [sendingAmount, setSendingAmount] = useState(0);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [sendingAmount, setSendingAmount] = useState(1000);
   const [paymentDescription, setPaymentDescription] = useState('');
   const [generatingQrCode, setGeneratingQrCode] = useState(false);
   const [editPaymentPopup, setEditPaymentPopup] = useState(false);
@@ -67,14 +67,18 @@ export function ReceivePaymentHome(props) {
 
   async function generateLightningInvoice() {
     try {
+      const channelFee = await openChannelFee({
+        amountMsat: sendingAmount,
+      });
       if (sendingAmount === 0) {
         setGeneratingQrCode(false);
         setErrorMessageText('Must recieve more than 0 sats');
         return;
+      } else if (sendingAmount < channelFee.feeMsat) {
+        setGeneratingQrCode(false);
+        setErrorMessageText('Channel Open Fee is 3,000 sat');
+        return;
       }
-      await openChannelFee({
-        amountMsat: sendingAmount,
-      });
       setErrorMessageText('');
       setGeneratingQrCode(true);
       const invoice = await receivePayment({
@@ -83,18 +87,15 @@ export function ReceivePaymentHome(props) {
       });
       if (invoice) setGeneratingQrCode(false);
       setGeneratedAddress(invoice.lnInvoice.bolt11);
-
-      setGeneratingQrCode(false);
     } catch (err) {
-      setGeneratingQrCode(false);
-      setErrorMessageText('Channel Open Fee is 3,000 sat');
       console.log(err);
     }
   }
 
   useEffect(() => {
-    if (props.breezEvent.toLowerCase() === 'invoicepaid') {
+    if (props.breezEvent.type === 'invoicePaid') {
       console.log('SUCCESFULL');
+      //   setShowConfirmation(true);
     }
   }, [props.breezEvent]);
 
@@ -192,6 +193,11 @@ export function ReceivePaymentHome(props) {
         setIsDisplayed={setEditPaymentPopup}
         setUpdateQRCode={setUpdateQRCode}
       />
+      <ConfirmPaymentScreen
+        breezEvent={props.breezEvent}
+        isDisplayed={showConfirmation}
+        setIsDisplayed={setShowConfirmation}
+      />
     </Modal>
   );
 }
@@ -203,6 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: COLORS.background,
+
     position: 'relative',
   },
   topbar: {

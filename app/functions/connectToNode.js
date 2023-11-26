@@ -3,7 +3,6 @@ import {
   defaultConfig,
   EnvironmentType,
   NodeConfigVariant,
-  sendPayment,
   connect,
   mnemonicToSeed,
   nodeInfo,
@@ -12,22 +11,16 @@ import {
 import {retrieveData} from './secureStore';
 import {INVITE_KEY1, API_KEY} from '@env';
 
-// SDK events listener
-// const onBreezEvent = e => {
-//   console.log(`Received event ${e.type}`);
-// };
-
 export default async function connectToNode(breezEvent) {
   // Create the default config
   try {
     const nodeInformation = await nodeInfo();
     console.log(nodeInformation);
 
-    if (nodeInformation) {
-      return new Promise((resolve, request) => {
-        resolve(true);
-      });
-    }
+    return new Promise((resolve, request) => {
+      if (nodeInformation) resolve(true);
+      else request(false);
+    });
   } catch (err) {
     try {
       const inviteCode = INVITE_KEY1;
@@ -54,11 +47,13 @@ export default async function connectToNode(breezEvent) {
         await connect(config, seed, breezEvent);
         return new Promise((resolve, request) => {
           resolve(true);
+          request(false);
         });
       } else {
         console.log('no Mneomincs');
         return new Promise((resolve, request) => {
           resolve(false);
+          request(true);
         });
       }
     } catch (err) {

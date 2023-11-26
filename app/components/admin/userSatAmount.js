@@ -12,6 +12,7 @@ export function UserSatAmount(props) {
   const [bitcoinAmount, setBitcoinAmount] = useState(0);
 
   useEffect(() => {
+    if (Object.keys(props.breezEvent).length === 0) return;
     (async () => {
       const nodeAmount = await nodeInfo();
       const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
@@ -40,8 +41,10 @@ export function UserSatAmount(props) {
 
     const numbers = formattedAmt.split('').filter(num => !!(Number(num) + 5)); // this takes out the commus from messing up how many numbers I the user has
 
+    const loopAmt = numbers.length >= 7 ? 11 : numbers.length >= 4 ? 10 : 9;
+
     if (numbers.length < 9) {
-      for (let i = formattedAmt.length; i < 9; i++) {
+      for (let i = formattedAmt.length; i < loopAmt; i++) {
         formattedAmt = '0' + formattedAmt;
       }
     }

@@ -3,7 +3,8 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 import {FONT, ICONS, SIZES} from '../../../constants';
 
 export function UserTransaction(props) {
-  const paymentDate = new Date(props.paymentTime * 1000).toDateString();
+  const paymentDate = new Date(props.paymentTime * 1000).toLocaleString();
+
   return (
     <View style={styles.transactionContainer}>
       {props.status === 'complete' ? (
@@ -21,9 +22,10 @@ export function UserTransaction(props) {
       )}
       <View>
         <Text style={styles.descriptionText}>
-          {props.description.length > 20
+          {props.description && props.description.length > 20
             ? props.description.slice(0, 20) + '...'
             : props.description}
+          {!props.description && 'No description'}
         </Text>
 
         <Text style={styles.dateText}>{paymentDate}</Text>
@@ -32,7 +34,9 @@ export function UserTransaction(props) {
       {props.paymentType != 'received' ? (
         <Text style={combinedStyles.wasSent}>sent</Text>
       ) : (
-        <Text style={combinedStyles.wasRecived}>Recieved</Text>
+        <Text style={combinedStyles.wasRecived}>
+          +{props.amountMsat / 1000}
+        </Text>
       )}
     </View>
   );

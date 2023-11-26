@@ -39,14 +39,14 @@ export default function AdminHome({navigation: {navigate}}) {
   const [recivePayment, setRecivePayment] = useState(false);
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
   const [didConnectToNode, setDidConnectToNode] = useState(false);
-  const [breezEvent, setBreezEvent] = useState('');
+  const [breezEvent, setBreezEvent] = useState({});
   // const [screenType, setScreenType] = useState('lightning');
   // const [needToRefresh, setNeedToRefresh] = useState(0);
   // const [manualRefresh, setManualRefresh] = useState(0);
   // SDK events listener
   console.log(breezEvent, 'BreezEvent on home screen');
   const onBreezEvent = e => {
-    setBreezEvent(`${e.type}`);
+    setBreezEvent(e);
     // console.log(`Received event ${e.type} did that actually work`);
   };
   useState(() => {

@@ -1,63 +1,31 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 
-import {CENTER, SIZES} from '../../../constants';
+import {CENTER, SIZES, SHADOWS} from '../../../constants';
 import {SendRecieveBTNs} from './sendReciveBTNs';
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
 import {UserTransaction} from './userTransactions';
 import {useEffect, useState} from 'react';
 import {getTransactions} from '../../../functions/SDK';
 
-const transactions = [
-  {
-    completed: true,
-    description: 'testingtestingtestingtestingtestingtesting',
-    date: 'this is a date',
-    amount: '1,000',
-    wasSent: false,
-  },
-  {
-    completed: false,
-    description: 'testing',
-    date: 'this is a date',
-    amount: '1,000',
-    wasSent: true,
-  },
-  {
-    completed: true,
-    description: 'testing',
-    date: 'this is a date',
-    amount: '1,000',
-    wasSent: true,
-  },
-  {
-    completed: true,
-    description: 'testing',
-    date: 'this is a date',
-    amount: '1,000',
-    wasSent: false,
-  },
-  {
-    completed: true,
-    description: 'testing',
-    date: 'this is a date',
-    amount: '1,000',
-    wasSent: true,
-  },
-];
-
 export default function HomeLightning(props) {
   const [transactions, setTransactions] = useState([]);
-  const transactionElement = transactions.map((transaction, id) => {
+  const [counter, setCounter] = useState(0);
+  const transactionElement = transactions?.map((transaction, id) => {
     return <UserTransaction key={id} {...transaction} />;
   });
 
   useEffect(() => {
+    if (Object.keys(props.breezEvent).length === 0) return;
     (async () => {
-      const transactions = await getTransactions();
-      console.log(transactions);
-      setTransactions(transactions);
+      if (props.breezEvent.type === 'invoicePaid' || counter === 0) {
+        const transactions = await getTransactions();
+
+        setTransactions(transactions);
+        setCounter(prev => (prev += 1));
+      }
     })();
   }, [props.breezEvent]);
+
   return (
     <>
       <UserSatAmount breezEvent={props.breezEvent} />

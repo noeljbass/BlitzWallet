@@ -73,15 +73,15 @@ export function ConnectionToNode(props) {
           </Text>
           <Text style={styles.itemText}>
             Max Payable:{' '}
-            {(nodeInformation?.maxPayableMsat * 1000).toLocaleString()}
+            {(nodeInformation?.maxPayableMsat / 1000).toLocaleString()}
           </Text>
           <Text style={styles.itemText}>
             Max Recivable:{' '}
-            {nodeInformation?.maxReceivableMsat?.toLocaleString()}
+            {(nodeInformation?.maxReceivableMsat / 1000).toLocaleString()}
           </Text>
           <Text style={styles.itemText}>
             On-chain Balance:{' '}
-            {(nodeInformation?.onchainBalanceMsat * 1000).toLocaleString()}
+            {(nodeInformation?.onchainBalanceMsat / 1000).toLocaleString()}
           </Text>
         </View>
       </Animated.View>

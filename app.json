@@ -1,4 +1,18 @@
 {
   "name": "BlitzWallet",
-  "displayName": "BlitzWallet"
+  "displayName": "BlitzWallet",
+  "orientation": "portrait",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "da4371cb-d22d-4b26-aee8-f2bfd9cadd7a"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/da4371cb-d22d-4b26-aee8-f2bfd9cadd7a"
+    },
+    "android": {},
+    "ios": {}
+  }
 }
