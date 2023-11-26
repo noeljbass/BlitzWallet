@@ -1,50 +1,48 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 
 import {CENTER, SIZES, SHADOWS} from '../../../constants';
-import {SendRecieveBTNs} from './sendReciveBTNs';
+
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
 import {UserTransaction} from './userTransactions';
-import {useEffect, useState} from 'react';
-import {getTransactions} from '../../../functions/SDK';
+import {SendRecieveBTNs} from './sendReciveBTNs';
+import {ReceivePaymentHome} from './recieveBitcoin';
+import {useState} from 'react';
 
 export default function HomeLightning(props) {
-  const [transactions, setTransactions] = useState([]);
-  const [counter, setCounter] = useState(0);
-  const transactionElement = transactions?.map((transaction, id) => {
-    return <UserTransaction key={id} {...transaction} />;
-  });
-
-  useEffect(() => {
-    if (Object.keys(props.breezEvent).length === 0) return;
-    (async () => {
-      if (props.breezEvent.type === 'invoicePaid' || counter === 0) {
-        const transactions = await getTransactions();
-
-        setTransactions(transactions);
-        setCounter(prev => (prev += 1));
-      }
-    })();
-  }, [props.breezEvent]);
+  const [recivePayment, setRecivePayment] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const transactionElement = props.breezInformation?.transactions?.map(
+    (transaction, id) => {
+      return <UserTransaction key={id} {...transaction} />;
+    },
+  );
 
   return (
     <>
-      <UserSatAmount breezEvent={props.breezEvent} />
+      <UserSatAmount breezInformation={props.breezInformation} />
       <ScrollView style={style.scrollContainer}>
-        {transactionElement.length === 0 && (
+        {transactionElement?.length === 0 && (
           <View style={style.noTransactionsContainer}>
             <Text style={style.noTransactionsText}>
               Send or recive a transaction to see your activty here.
             </Text>
           </View>
         )}
-        {transactionElement.length != 0 && transactionElement}
+        {transactionElement?.length != 0 && transactionElement}
       </ScrollView>
       <SendRecieveBTNs
         // setScreenType={props.setScreenType}
         for="lightning"
-        setIsCameraActive={props.setIsCameraActive}
-        setRecivePayment={props.setRecivePayment}
+        setIsCameraActive={setIsCameraActive}
+        setRecivePayment={setRecivePayment}
         // setNeedToRefresh={props.setNeedToRefresh}
+      />
+      {/* POPUPS */}
+      <ReceivePaymentHome
+        isDisplayed={recivePayment}
+        setRecivePayment={setRecivePayment}
+        transactions={props.transactions}
+        breezInformation={props.breezInformation}
       />
     </>
   );

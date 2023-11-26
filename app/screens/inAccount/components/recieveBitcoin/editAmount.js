@@ -20,13 +20,11 @@ export default function EditAmountPopup(props) {
   function saveChanges() {
     try {
       if (isNaN(Number(numSats))) throw Error('Not a number');
-      if (!numSats) {
-        props.setIsDisplayed(false);
+      if (numSats) props.setSendingAmount(Number(numSats) * 1000);
+      else props.setSendingAmount(1000);
+      if (description) props.setPaymentDescription(description);
+      else props.setPaymentDescription('');
 
-        return;
-      }
-      props.setPaymentDescription(description);
-      props.setSendingAmount(Number(numSats) * 1000);
       props.setIsDisplayed(false);
     } catch (err) {
       console.log(err);

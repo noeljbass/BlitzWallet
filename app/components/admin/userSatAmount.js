@@ -9,16 +9,6 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
 export function UserSatAmount(props) {
   const [showAmount, setShowAmount] = useState(true);
-  const [bitcoinAmount, setBitcoinAmount] = useState(0);
-
-  useEffect(() => {
-    if (Object.keys(props.breezEvent).length === 0) return;
-    (async () => {
-      const nodeAmount = await nodeInfo();
-      const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-      setBitcoinAmount(msatToSat);
-    })();
-  }, [props.breezEvent]);
 
   useEffect(() => {
     (async () => {
@@ -122,7 +112,7 @@ export function UserSatAmount(props) {
 
         {showAmount && (
           <Text style={styles.valueText}>
-            {formatBitcoinAmoutn(bitcoinAmount)}
+            {formatBitcoinAmoutn(props.breezInformation?.userBalance)}
           </Text>
         )}
         {!showAmount && <Text style={styles.valueText}>* * * * *</Text>}

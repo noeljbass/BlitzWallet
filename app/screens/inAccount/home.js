@@ -16,7 +16,7 @@ import {
   SIZES,
   SHADOWS,
 } from '../../constants';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 // import {CameraScan} from '../../components/admin';
 
@@ -26,39 +26,80 @@ import {
   RotatingAnimation,
   userAuth,
 } from '../../functions';
-import {mnemonicToSeed} from '@breeztech/react-native-breez-sdk';
+import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
 import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
+import {getTransactions} from '../../functions/SDK';
+import {SendRecieveBTNs} from './components/sendReciveBTNs';
 
 export default function AdminHome({navigation: {navigate}}) {
+  const isInitialRender = useRef(true);
   // userAuth(navigate);
   // const [bitcoinAmount, setBitcoinAmount] = useState('');
   // const [activeNav, setActiveNav] = useState([true, false]);
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [recivePayment, setRecivePayment] = useState(false);
+  // const [isCameraActive, setIsCameraActive] = useState(false);
+  const [breezInformation, setBreezInformation] = useState({
+    didConnectToNode: false,
+  });
+  // const [transactions, setTransactions] = useState([]);
+  // const [userBalance, setUserBalance] = useState(0);
+  // const [recivePayment, setRecivePayment] = useState(false);
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
-  const [didConnectToNode, setDidConnectToNode] = useState(false);
+  // const [didConnectToNode, setDidConnectToNode] = useState(false);
   const [breezEvent, setBreezEvent] = useState({});
-  // const [screenType, setScreenType] = useState('lightning');
-  // const [needToRefresh, setNeedToRefresh] = useState(0);
-  // const [manualRefresh, setManualRefresh] = useState(0);
+
   // SDK events listener
   console.log(breezEvent, 'BreezEvent on home screen');
+
   const onBreezEvent = e => {
     setBreezEvent(e);
+
     // console.log(`Received event ${e.type} did that actually work`);
   };
-  useState(() => {
+  useEffect(() => {
     (async () => {
-      try {
-        const response = await connectToNode(onBreezEvent);
-        setDidConnectToNode(response);
-      } catch (err) {
-        console.log(err, 'homepage connection to node err');
+      if (isInitialRender.current) {
+        console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
+        try {
+          const response = await connectToNode(onBreezEvent);
+          if (response) {
+            const nodeAmount = await nodeInfo();
+            const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+            const transactions = await getTransactions();
+
+            setBreezInformation(prev => {
+              return {
+                ...prev,
+                didConnectToNode: response,
+                transactions: transactions,
+                userBalance: msatToSat,
+              };
+            });
+            isInitialRender.current = false;
+          }
+        } catch (err) {
+          console.log(err, 'homepage connection to node err');
+        }
+      } else {
+        if (Object.keys(breezEvent).length === 0) return;
+        if (breezEvent.type === 'invoicePaid') {
+          const transactions = await getTransactions();
+          const nodeAmount = await nodeInfo();
+          const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+          setBreezInformation(prev => {
+            return {
+              ...prev,
+              userBalance: msatToSat,
+              transactions: transactions,
+            };
+          });
+          console.log('HOME RENDER PAID INVOINCE');
+        }
+        console.log('HOME RENDER BREEZ EVENT');
       }
     })();
-  }, []);
+  }, [breezEvent]);
 
   return (
     <View style={Background}>
@@ -70,7 +111,9 @@ export default function AdminHome({navigation: {navigate}}) {
               onPress={() => setNodeConnectionPopup(false)}
               style={{
                 ...styles.icons,
-                backgroundColor: didConnectToNode ? 'green' : 'red',
+                backgroundColor: breezInformation.didConnectToNode
+                  ? 'green'
+                  : 'red',
               }}>
               <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
             </TouchableOpacity>
@@ -82,12 +125,24 @@ export default function AdminHome({navigation: {navigate}}) {
 
         <HomeLightning
           // setScreenType={setScreenType}
-          setIsCameraActive={setIsCameraActive}
-          setRecivePayment={setRecivePayment}
-          breezEvent={breezEvent}
+          // setIsCameraActive={setIsCameraActive}
+          // setRecivePayment={setRecivePayment}
+          // breezEvent={breezEvent}
+          // transactions={transactions}
+          breezInformation={breezInformation}
+          // setTransactions={setTransactions}
+          // userBalance={userBalance}
           // needToRefresh={needToRefresh}
           // setNeedToRefresh={setNeedToRefresh}
         />
+
+        {/* <SendRecieveBTNs
+          // setScreenType={props.setScreenType}
+          for="lightning"
+          // setIsCameraActive={setIsCameraActive}
+          setRecivePayment={setRecivePayment}
+          // setNeedToRefresh={props.setNeedToRefresh}
+        /> */}
 
         {/* main content */}
         {/* <CameraScan
@@ -98,11 +153,11 @@ export default function AdminHome({navigation: {navigate}}) {
         bitcoinAmount={bitcoinAmount}
       /> */}
 
-        <ReceivePaymentHome
+        {/* <ReceivePaymentHome
           isDisplayed={recivePayment}
           setRecivePayment={setRecivePayment}
-          breezEvent={breezEvent}
-        />
+          transactions={transactions}
+        /> */}
 
         {/* <ExpandedTransaction /> */}
       </SafeAreaView>

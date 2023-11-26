@@ -19,7 +19,7 @@ import {
 } from '../../../../constants';
 
 import QRCode from 'react-native-qrcode-svg';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 // import {
 //   getLocalStorageItem,
 //   setLocalStorageItem,
@@ -33,12 +33,16 @@ import {getLocalStorageItem, retrieveData} from '../../../../functions';
 import {getFiatRates} from '../../../../functions/SDK';
 import EditAmountPopup from './editAmount';
 import {
+  listLsps,
+  lspId,
+  lspInfo,
   openChannelFee,
   receivePayment,
 } from '@breeztech/react-native-breez-sdk';
 import ConfirmPaymentScreen from './confirmPaymentScreen';
 
 export function ReceivePaymentHome(props) {
+  const isInitialRender = useRef(true);
   const [generatedAddress, setGeneratedAddress] = useState('');
   const [fiatRate, setFiatRate] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -48,7 +52,17 @@ export function ReceivePaymentHome(props) {
   const [editPaymentPopup, setEditPaymentPopup] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [updateQRCode, setUpdateQRCode] = useState(0);
+
   const deviceType = Device.brand;
+
+  function clear() {
+    setSendingAmount(1000);
+    setPaymentDescription('');
+    setShowConfirmation(false);
+    setEditPaymentPopup(false);
+    props.setRecivePayment(false);
+    setErrorMessageText('');
+  }
 
   async function copyToClipboard() {
     await Clipboard.setStringAsync(generatedAddress);
@@ -88,16 +102,25 @@ export function ReceivePaymentHome(props) {
       if (invoice) setGeneratingQrCode(false);
       setGeneratedAddress(invoice.lnInvoice.bolt11);
     } catch (err) {
-      console.log(err);
+      console.log(err, 'RECIVE ERROR');
     }
   }
 
   useEffect(() => {
-    if (props.breezEvent.type === 'invoicePaid') {
-      console.log('SUCCESFULL');
-      //   setShowConfirmation(true);
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
     }
-  }, [props.breezEvent]);
+    const newDate = new Date();
+    const lastTransaction = new Date(
+      props.breezInformation?.transactions[0]?.paymentTime * 1000,
+    );
+
+    if (Math.abs(newDate - lastTransaction) >= 30 * 1000) return;
+
+    console.log('SUCCESFULL');
+    setShowConfirmation(true);
+  }, [props.breezInformation?.transactions]);
 
   useEffect(() => {
     if (props.isDisplayed === false) return;
@@ -122,11 +145,7 @@ export function ReceivePaymentHome(props) {
           styles.globalContainer,
         ]}>
         <View style={styles.topbar}>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => {
-              props.setRecivePayment(false);
-            }}>
+          <TouchableOpacity activeOpacity={1} onPress={clear}>
             <Image
               source={ICONS.leftCheveronIcon}
               style={{width: 30, height: 30}}
@@ -194,9 +213,10 @@ export function ReceivePaymentHome(props) {
         setUpdateQRCode={setUpdateQRCode}
       />
       <ConfirmPaymentScreen
-        breezEvent={props.breezEvent}
         isDisplayed={showConfirmation}
-        setIsDisplayed={setShowConfirmation}
+        transactions={props.transactions}
+        breezInformation={props.breezInformation}
+        clear={clear}
       />
     </Modal>
   );

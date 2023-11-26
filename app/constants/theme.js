@@ -1,36 +1,36 @@
 const COLORS = {
-  primary: "#0375F6",
-  secondary: "#21374F",
-  tertiary: "#009BF0",
+  primary: '#0375F6',
+  secondary: '#21374F',
+  tertiary: '#009BF0',
 
-  tertiaryBackground: "#EEE5E9",
+  tertiaryBackground: '#EEE5E9',
 
-  gray: "#83829A",
-  gray2: "#C1C0C8",
+  gray: '#83829A',
+  gray2: '#C1C0C8',
 
-  black: "black",
-  white: "white",
-  lightWhite: "#FAFAFC",
+  black: 'black',
+  white: 'white',
+  lightWhite: '#FAFAFC',
 
-  background: "#F8F8F8",
+  background: '#F8F8F8',
 
-  opaicityGray: "#767676b8",
+  opaicityGray: '#767676b8',
 };
 
 const FONT = {
-  Title_Light: "Inter-Light",
-  Title_Medium: "Inter-Medium",
-  Title_Regular: "Inter-Regular",
-  Title_Bold: "Inter-Bold",
+  Title_Light: 'Inter-Light',
+  Title_Medium: 'Inter-Medium',
+  Title_Regular: 'Inter-Regular',
+  Title_Bold: 'Inter-Bold',
 
-  Descriptoin_light: "Lato-Light",
-  Descriptoin_Regular: "Lato-Regular",
-  Descriptoin_Bold: "Lato-Bold",
+  Descriptoin_light: 'Lato-Light',
+  Descriptoin_Regular: 'Lato-Regular',
+  Descriptoin_Bold: 'Lato-Bold',
 
-  Other_light: "Montserrat-Light",
-  Other_Medium: "Montserrat-Medium",
-  Other_Regular: "Montserrat-Regular",
-  Other_Bold: "Montserrat-Bold",
+  Other_light: 'Montserrat-Light',
+  Other_Medium: 'Montserrat-Medium',
+  Other_Regular: 'Montserrat-Regular',
+  Other_Bold: 'Montserrat-Bold',
 };
 
 const SIZES = {
@@ -45,7 +45,7 @@ const SIZES = {
 
 const SHADOWS = {
   small: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -55,7 +55,7 @@ const SHADOWS = {
     elevation: 2,
   },
   medium: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -66,4 +66,4 @@ const SHADOWS = {
   },
 };
 
-export { COLORS, FONT, SIZES, SHADOWS };
+export {COLORS, FONT, SIZES, SHADOWS};

@@ -15,8 +15,6 @@ export default async function connectToNode(breezEvent) {
   // Create the default config
   try {
     const nodeInformation = await nodeInfo();
-    console.log(nodeInformation);
-
     return new Promise((resolve, request) => {
       if (nodeInformation) resolve(true);
       else request(false);

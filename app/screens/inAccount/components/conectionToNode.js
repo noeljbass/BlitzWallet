@@ -69,7 +69,7 @@ export function ConnectionToNode(props) {
             <Text style={styles.topContainerText}>Connected</Text>
           </View>
           <Text style={styles.itemText}>
-            Block height: {nodeInformation?.blockHeight}
+            Block height: {nodeInformation?.blockHeight?.toLocaleString()}
           </Text>
           <Text style={styles.itemText}>
             Max Payable:{' '}

@@ -19,14 +19,6 @@ export default function ConfirmPaymentScreen(props) {
   const [confirmedTransaction, setConfirmedTransation] = useState({});
   const fadeAnim = useRef(new Animated.Value(900)).current;
 
-  async function getTransaction() {
-    console.log(props.breezEvent, 'PAYMENT RECIVED EVENT');
-    return;
-    const transactions = await getTransactions();
-
-    setConfirmedTransation(transactions[0]);
-  }
-
   function fadeIn() {
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -44,7 +36,7 @@ export default function ConfirmPaymentScreen(props) {
 
   useEffect(() => {
     if (props.isDisplayed) {
-      //   getTransaction();
+      setConfirmedTransation(props.breezInformation?.transactions[0]);
       fadeIn();
     } else fadeOut();
   }, [props.isDisplayed]);
@@ -53,7 +45,7 @@ export default function ConfirmPaymentScreen(props) {
     <Animated.View
       style={[styles.popupContainer, {transform: [{translateY: fadeAnim}]}]}>
       <SafeAreaView style={{flex: 1}}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={props.clear}>
           <Image style={styles.backButton} source={ICONS.xSmallIcon} />
         </TouchableOpacity>
         <View style={styles.innerContainer}>

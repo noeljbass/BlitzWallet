@@ -2,7 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../constants';
 
 export function SendRecieveBTNs(props) {
-  console.log(props.for);
+  console.log('SEND RECIVE BUTTONS');
   return (
     <View style={styles.container}>
       <TouchableOpacity
