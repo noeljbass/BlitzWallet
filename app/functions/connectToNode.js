@@ -13,6 +13,7 @@ import {INVITE_KEY1, API_KEY} from '@env';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
+  // console.log(INVITE_KEY1, API_KEY);
   try {
     const nodeInformation = await nodeInfo();
     return new Promise((resolve, request) => {

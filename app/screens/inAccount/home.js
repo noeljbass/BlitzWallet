@@ -32,6 +32,7 @@ import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
 import {getTransactions} from '../../functions/SDK';
 import {SendRecieveBTNs} from './components/sendReciveBTNs';
+import {OptionsDropdown} from './components/optionsDropdown';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
@@ -41,6 +42,9 @@ export default function AdminHome({navigation: {navigate}}) {
   // const [isCameraActive, setIsCameraActive] = useState(false);
   const [breezInformation, setBreezInformation] = useState({
     didConnectToNode: false,
+  });
+  const [navViews, setNavViews] = useState({
+    features: false,
   });
   // const [transactions, setTransactions] = useState([]);
   // const [userBalance, setUserBalance] = useState(0);
@@ -58,6 +62,7 @@ export default function AdminHome({navigation: {navigate}}) {
     // console.log(`Received event ${e.type} did that actually work`);
   };
   useEffect(() => {
+    return;
     (async () => {
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
@@ -119,7 +124,19 @@ export default function AdminHome({navigation: {navigate}}) {
             </TouchableOpacity>
             <View style={styles.icons}></View>
             <View style={styles.icons}></View>
-            <View style={styles.icons}></View>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => {
+                setNavViews(prev => {
+                  return {...prev, features: !prev.features};
+                });
+              }}>
+              <View style={styles.icons}></View>
+            </TouchableOpacity>
+            <OptionsDropdown
+              setNavViews={setNavViews}
+              isDisplayed={navViews.features}
+            />
           </View>
         </View>
 
@@ -185,11 +202,13 @@ const styles = StyleSheet.create({
   topBar: {
     width: '90%',
     height: 50,
+    display: 'flex',
 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     ...CENTER,
+    zIndex: 1,
   },
   topBarName: {
     fontSize: SIZES.medium,

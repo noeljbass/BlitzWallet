@@ -7,7 +7,7 @@ export function SendRecieveBTNs(props) {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          props.setIsCameraActive(true);
+          props.setSendPayment(true);
           // props.setScreenType(props.for);
         }}
         style={combinedStyles.firstButton}>

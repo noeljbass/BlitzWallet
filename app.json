@@ -1,5 +1,7 @@
 {
   "name": "BlitzWallet",
-  "displayName": "BlitzWallet",
-  "orientation": "portrait"
+  "slug": "blitz-wallet",
+  "scheme": "blitz-wallet",
+  "displayName": "Blitz Wallet",
+  "version": "0.0.1"
 }

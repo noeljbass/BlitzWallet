@@ -7,10 +7,11 @@ import {UserTransaction} from './userTransactions';
 import {SendRecieveBTNs} from './sendReciveBTNs';
 import {ReceivePaymentHome} from './recieveBitcoin';
 import {useState} from 'react';
+import SendPaymentHome from './sendBitcoin.js/home';
 
 export default function HomeLightning(props) {
   const [recivePayment, setRecivePayment] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [sendPayment, setSendPayment] = useState(false);
   const transactionElement = props.breezInformation?.transactions?.map(
     (transaction, id) => {
       return <UserTransaction key={id} {...transaction} />;
@@ -33,7 +34,7 @@ export default function HomeLightning(props) {
       <SendRecieveBTNs
         // setScreenType={props.setScreenType}
         for="lightning"
-        setIsCameraActive={setIsCameraActive}
+        setSendPayment={setSendPayment}
         setRecivePayment={setRecivePayment}
         // setNeedToRefresh={props.setNeedToRefresh}
       />
@@ -43,6 +44,10 @@ export default function HomeLightning(props) {
         setRecivePayment={setRecivePayment}
         transactions={props.transactions}
         breezInformation={props.breezInformation}
+      />
+      <SendPaymentHome
+        isDisplayed={sendPayment}
+        setSendPayment={setSendPayment}
       />
     </>
   );
