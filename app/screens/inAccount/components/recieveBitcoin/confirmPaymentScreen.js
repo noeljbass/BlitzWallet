@@ -13,7 +13,6 @@ import {
 import {CENTER, COLORS, ICONS, SIZES} from '../../../../constants';
 
 import {useEffect, useRef, useState} from 'react';
-import {getTransactions} from '../../../../functions/SDK';
 
 export default function ConfirmPaymentScreen(props) {
   const [confirmedTransaction, setConfirmedTransation] = useState({});

@@ -15,6 +15,7 @@ const COLORS = {
   background: '#F8F8F8',
 
   opaicityGray: '#767676b8',
+  cancelRed: '#e20000',
 };
 
 const FONT = {

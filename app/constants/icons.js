@@ -10,6 +10,7 @@ import logoIcon from '../assets/icon.png';
 import leftCheveronIcon from '../assets/icons/left-chevron.png';
 import walletIcon from '../assets/icons/wallet.png';
 import connectionIcon from '../assets/icons/connection.png';
+import toolsIcon from '../assets/icons/tools.png';
 
 export default {
   Xcircle,
@@ -24,4 +25,5 @@ export default {
   leftCheveronIcon,
   walletIcon,
   connectionIcon,
+  toolsIcon,
 };

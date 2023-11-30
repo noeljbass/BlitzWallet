@@ -112,7 +112,9 @@ export function UserSatAmount(props) {
 
         {showAmount && (
           <Text style={styles.valueText}>
-            {formatBitcoinAmoutn(props.breezInformation?.userBalance)}
+            {formatBitcoinAmoutn(
+              props.breezInformation?.userBalance.toFixed(0),
+            )}
           </Text>
         )}
         {!showAmount && <Text style={styles.valueText}>* * * * *</Text>}

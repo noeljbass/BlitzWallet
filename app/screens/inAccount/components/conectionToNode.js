@@ -25,8 +25,12 @@ export function ConnectionToNode(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [nodeInformation, setNodeInformation] = useState({});
   async function getNodeData() {
-    const nodeInformatino = await nodeInfo();
-    setNodeInformation(nodeInformatino);
+    try {
+      const nodeInformatino = await nodeInfo();
+      setNodeInformation(nodeInformatino);
+    } catch (err) {
+      console.log(err);
+    }
   }
   useEffect(() => {
     if (!props.isDisplayed) {

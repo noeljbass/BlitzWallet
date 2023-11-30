@@ -32,7 +32,7 @@ export function UserTransaction(props) {
       </View>
 
       {props.paymentType != 'received' ? (
-        <Text style={combinedStyles.wasSent}>sent</Text>
+        <Text style={combinedStyles.wasSent}> -{props.amountMsat / 1000}</Text>
       ) : (
         <Text style={combinedStyles.wasRecived}>
           +{props.amountMsat / 1000}

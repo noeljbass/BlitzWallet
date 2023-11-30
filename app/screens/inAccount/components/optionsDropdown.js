@@ -22,14 +22,20 @@ import {
 } from '../../../constants';
 import {useEffect, useRef, useState} from 'react';
 
-const NAVITEMS = [{name: 'Github', link: 'URL', icon: ICONS.Checkcircle}];
+const NAVITEMS = [
+  {name: 'Faucet', link: 'URL', icon: ICONS.Checkcircle},
+  {name: 'Drain', link: 'URL', icon: ICONS.Checkcircle},
+  {name: 'Twitter', link: 'URL', icon: ICONS.Checkcircle},
+  {name: 'Telegram', link: 'URL', icon: ICONS.Checkcircle},
+  {name: 'View Code', link: 'URL', icon: ICONS.Checkcircle},
+];
 
 export function OptionsDropdown(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const navElements = NAVITEMS.map((item, id) => {
     return (
-      <View key={id}>
-        <Text>{item.name}</Text>
+      <View style={styles.navItem} key={id}>
+        <Text style={styles.navItemName}>{item.name}</Text>
         <Image source={item.icon} style={{width: 20, height: 20}} />
       </View>
     );
@@ -43,62 +49,81 @@ export function OptionsDropdown(props) {
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
+      toValue: 200,
+      duration: 400,
+      useNativeDriver: false,
     }).start();
   }
   function fadeOut() {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
+      duration: 400,
+      useNativeDriver: false,
     }).start();
   }
 
   return (
-    <TouchableWithoutFeedback
-    //   onPress={() =>
-    //     props.setNavViews(prev => {
-    //       return {...prev, features: !prev.features};
-    //     })}
-    >
-      <Animated.View
-        style={[
-          styles.globalContainer,
-          {display: props.isDisplayed ? 'flex' : 'none'},
-        ]}>
-        <ScrollView style={styles.innerContainer}>{navElements}</ScrollView>
-      </Animated.View>
-    </TouchableWithoutFeedback>
+    // <TouchableWithoutFeedback
+    // //   onPress={() =>
+    // //     props.setNavViews(prev => {
+    // //       return {...prev, features: !prev.features};
+    // //     })}
+    // >
+    <Animated.View style={[styles.globalContainer, {height: fadeAnim}]}>
+      <View style={styles.contentContainer}>
+        <View style={styles.innerContainer}>{navElements}</View>
+      </View>
+    </Animated.View>
+    // </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   globalContainer: {
     // backgroundColor: COLORS.gray,
-    width: 150,
-    height: 200,
+    width: 200,
+    height: 280,
     position: 'absolute',
     top: '80%',
-    right: 15,
+    right: 0,
 
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  innerContainer: {
-    width: '100%',
-    height: '100%',
-
-    padding: 20,
 
     ...SHADOWS.medium,
 
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.primary,
+
+    borderRadius: 5,
+  },
+  contentContainer: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+  },
+  innerContainer: {
+    width: '100%',
+    height: 280,
+
+    position: 'absolute',
+
+    top: 0,
+    left: 0,
   },
   navItem: {
     width: '100%',
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+
+    borderBottomColor: COLORS.background,
+    borderBottomWidth: 1,
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  navItemName: {
+    fontSize: SIZES.medium,
+    color: COLORS.background,
   },
 });

@@ -6,92 +6,21 @@ import {
   TouchableOpacity,
   Keyboard,
   Modal,
+  SafeAreaView,
 } from 'react-native';
-import {CameraType} from 'expo-camera';
-import {BarCodeScanner} from 'expo-barcode-scanner';
-import * as Clipboard from 'expo-clipboard';
-import * as ImagePicker from 'expo-image-picker';
 
 import {useEffect, useState} from 'react';
 
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import SendPaymentScreen from './sendPaymentScreen';
+import SendPaymentScreenOptions from './screenOptions';
 
 // import {ManualAddressInput} from './manualAddressInput';
 
 export default function SendPaymentHome(props) {
-  const type = CameraType.back;
-  const [permission, setPermission] = useState(
-    BarCodeScanner.getPermissionsAsync(),
-  );
   const [scanned, setScanned] = useState(false);
-  const [bottomExpand, setBottomExpand] = useState(false);
   const [BTCadress, setBTCadress] = useState('');
-  const [photoesPermission, setPhotoesPermission] = useState({});
-
-  const [manualBitcoinInput, setManualBitcoinInput] = useState('');
-  const [showManualInpt, setShowManualInput] = useState(false);
-
-  console.log(photoesPermission);
-  function toggleBottom() {
-    setBottomExpand(prev => !prev);
-  }
-
-  async function getClipboardText() {
-    const text = await Clipboard.getStringAsync();
-    setBTCadress(text);
-    setScanned(true);
-  }
-  async function getQRImage() {
-    if (!photoesPermission) {
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
-
-    if (result.canceled) return;
-
-    const imgURL = result.assets[0].uri;
-
-    const [{data}] = await BarCodeScanner.scanFromURLAsync(imgURL);
-
-    setBTCadress(data);
-    setScanned(true);
-  }
-
-  useEffect(() => {
-    (async () => {
-      const status = await BarCodeScanner.requestPermissionsAsync();
-
-      setPermission(status.granted);
-    })();
-  }, []);
-
-  function getManualInput() {
-    if (!manualBitcoinInput) return;
-    // add validation
-    setBTCadress(manualBitcoinInput);
-    setScanned(true);
-  }
-
-  function toggleManualInput() {
-    setShowManualInput(prev => !prev);
-    setBottomExpand(false);
-  }
-
-  function handleBarCodeScanned({type, data}) {
-    if (!type.includes('QRCode')) {
-      setScanned(false);
-      return;
-    }
-
-    setScanned(true);
-    const bitcoinAdress = data;
-    setBTCadress(data);
-
-    console.log(bitcoinAdress);
-  }
+  console.log(scanned, 'HOME');
 
   return (
     <Modal
@@ -99,94 +28,20 @@ export default function SendPaymentHome(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}>
-      <View style={styles.cameraContainer}>
-        <View style={styles.topBar}>
-          <Text
-            style={{width: 20, height: '100%'}}
-            onPress={() => {
-              setBTCadress('');
-              setScanned(false);
-              props.setSendPayment(false);
-            }}>
-            <Image
-              source={ICONS.leftCheveronIcon}
-              style={{width: 30, height: 30, marginRight: 'auto'}}
-              resizeMode="contain"
-            />
-          </Text>
-          <Text style={styles.headerText}>Scan A QR code</Text>
-        </View>
+      <SafeAreaView style={styles.cameraContainer}>
+        <SendPaymentScreenOptions
+          setBTCadress={setBTCadress}
+          BTCadress={BTCadress}
+          setScanned={setScanned}
+          setSendPayment={props.setSendPayment}
+        />
 
-        {!permission && <Text>No access to camera</Text>}
-        {permission && !scanned && (
-          <BarCodeScanner
-            type={type}
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={styles.camera}
-          />
-        )}
-        <View
-          onTouchEnd={toggleBottom}
-          style={{...styles.arrowIcon, bottom: bottomExpand ? 150 : 50}}>
-          <Image
-            source={ICONS.angleUpIcon}
-            style={{
-              width: 30,
-              height: 20,
-              transform: bottomExpand
-                ? [{rotate: '180deg'}]
-                : [{rotate: '0deg'}],
-            }}
-            resizeMode="contain"
-          />
-        </View>
-
-        <View style={{...styles.bottomBar, height: bottomExpand ? 150 : 50}}>
-          <TouchableOpacity
-            onPress={getClipboardText}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text style={styles.bottomText}>Paste from clipbard</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={getQRImage}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text style={styles.bottomText}>Choose image</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={toggleManualInput}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text style={styles.bottomText}>Manual input</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* <ManualAddressInput
-        for={props.for}
-        getManualInput={getManualInput}
-        isDisplayed={showManualInpt}
-        toggleManualInput={toggleManualInput}
-        setManualBitcoinInput={setManualBitcoinInput}
-      /> */}
-
-        {scanned && props.for === 'bitcoin' && (
-          <ConfirmBitcoinPath
-            for={props.for}
-            setScanned={setScanned}
-            BTCadress={BTCadress}
-            refreshTransactions={props.refreshTransactions}
-            bitcoinAmount={props.bitcoinAmount}
-          />
-        )}
-        {scanned && props.for === 'lightning' && (
-          <ConfirmLightningPath
-            for={props.for}
-            setScanned={setScanned}
-            BTCadress={BTCadress}
-          />
-        )}
-      </View>
+        <SendPaymentScreen
+          isDisplayed={scanned}
+          setScanned={setScanned}
+          BTCadress={BTCadress}
+        />
+      </SafeAreaView>
     </Modal>
   );
 }
@@ -200,7 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     zIndex: 5,
     display: 'flex',
-    paddingTop: 50,
+    position: 'relative',
   },
   topBar: {
     width: '100%',

@@ -26,13 +26,19 @@ import {
   RotatingAnimation,
   userAuth,
 } from '../../functions';
-import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {
+  listLsps,
+  lspId,
+  lspInfo,
+  nodeInfo,
+} from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
 import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
 import {getTransactions} from '../../functions/SDK';
 import {SendRecieveBTNs} from './components/sendReciveBTNs';
 import {OptionsDropdown} from './components/optionsDropdown';
+import {CommonActions} from '@react-navigation/native';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
@@ -42,6 +48,8 @@ export default function AdminHome({navigation: {navigate}}) {
   // const [isCameraActive, setIsCameraActive] = useState(false);
   const [breezInformation, setBreezInformation] = useState({
     didConnectToNode: false,
+    transactions: [],
+    userBalance: 0,
   });
   const [navViews, setNavViews] = useState({
     features: false,
@@ -62,16 +70,18 @@ export default function AdminHome({navigation: {navigate}}) {
     // console.log(`Received event ${e.type} did that actually work`);
   };
   useEffect(() => {
-    return;
     (async () => {
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
+
         try {
           const response = await connectToNode(onBreezEvent);
           if (response) {
             const nodeAmount = await nodeInfo();
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
+            const lsps = await lspInfo();
+            console.log(lsps, 'LSPPSSS');
 
             setBreezInformation(prev => {
               return {
@@ -91,6 +101,7 @@ export default function AdminHome({navigation: {navigate}}) {
         if (breezEvent.type === 'invoicePaid') {
           const transactions = await getTransactions();
           const nodeAmount = await nodeInfo();
+
           const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
           setBreezInformation(prev => {
             return {
@@ -126,12 +137,13 @@ export default function AdminHome({navigation: {navigate}}) {
             <View style={styles.icons}></View>
             <TouchableOpacity
               activeOpacity={0.5}
+              style={styles.icons}
               onPress={() => {
                 setNavViews(prev => {
                   return {...prev, features: !prev.features};
                 });
               }}>
-              <View style={styles.icons}></View>
+              <Image style={styles.imgIcon} source={ICONS.toolsIcon} />
             </TouchableOpacity>
             <OptionsDropdown
               setNavViews={setNavViews}
@@ -230,8 +242,8 @@ const styles = StyleSheet.create({
     ...SHADOWS.medium,
   },
   imgIcon: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
   },
 
   //   navigation between Bitcoin and lightning
