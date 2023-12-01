@@ -84,6 +84,7 @@ export function ReceivePaymentHome(props) {
       const channelFee = await openChannelFee({
         amountMsat: sendingAmount,
       });
+
       if (sendingAmount === 0) {
         setGeneratingQrCode(false);
         setErrorMessageText('Must recieve more than 0 sats');

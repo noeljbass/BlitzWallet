@@ -39,26 +39,23 @@ import {getTransactions} from '../../functions/SDK';
 import {SendRecieveBTNs} from './components/sendReciveBTNs';
 import {OptionsDropdown} from './components/optionsDropdown';
 import {CommonActions} from '@react-navigation/native';
+import NavBar from './components/navBar';
+import SystemSettings from './components/settings';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
-  // userAuth(navigate);
-  // const [bitcoinAmount, setBitcoinAmount] = useState('');
-  // const [activeNav, setActiveNav] = useState([true, false]);
-  // const [isCameraActive, setIsCameraActive] = useState(false);
   const [breezInformation, setBreezInformation] = useState({
     didConnectToNode: false,
     transactions: [],
     userBalance: 0,
   });
-  const [navViews, setNavViews] = useState({
-    features: false,
-  });
-  // const [transactions, setTransactions] = useState([]);
-  // const [userBalance, setUserBalance] = useState(0);
-  // const [recivePayment, setRecivePayment] = useState(false);
+  // const [navViews, setNavViews] = useState({
+  //   features: false,
+  // });
+
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
-  // const [didConnectToNode, setDidConnectToNode] = useState(false);
+  const [systemSettingsPopup, setSystemSettingsPopup] = useState(false);
+
   const [breezEvent, setBreezEvent] = useState({});
 
   // SDK events listener
@@ -71,17 +68,18 @@ export default function AdminHome({navigation: {navigate}}) {
   };
   useEffect(() => {
     (async () => {
+      return;
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
 
         try {
           const response = await connectToNode(onBreezEvent);
+          console.log(response, 'RESPONSE');
           if (response) {
             const nodeAmount = await nodeInfo();
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
-            const lsps = await lspInfo();
-            console.log(lsps, 'LSPPSSS');
+            console.log(nodeAmount, 'LSPPSSS');
 
             setBreezInformation(prev => {
               return {
@@ -120,79 +118,23 @@ export default function AdminHome({navigation: {navigate}}) {
   return (
     <View style={Background}>
       <SafeAreaView style={styles.globalContainer}>
-        <View style={styles.topBar}>
-          <Text style={styles.topBarName}>Blitz Wallet</Text>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity
-              onPress={() => setNodeConnectionPopup(false)}
-              style={{
-                ...styles.icons,
-                backgroundColor: breezInformation.didConnectToNode
-                  ? 'green'
-                  : 'red',
-              }}>
-              <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
-            </TouchableOpacity>
-            <View style={styles.icons}></View>
-            <View style={styles.icons}></View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={styles.icons}
-              onPress={() => {
-                setNavViews(prev => {
-                  return {...prev, features: !prev.features};
-                });
-              }}>
-              <Image style={styles.imgIcon} source={ICONS.toolsIcon} />
-            </TouchableOpacity>
-            <OptionsDropdown
-              setNavViews={setNavViews}
-              isDisplayed={navViews.features}
-            />
-          </View>
-        </View>
-
-        <HomeLightning
-          // setScreenType={setScreenType}
-          // setIsCameraActive={setIsCameraActive}
-          // setRecivePayment={setRecivePayment}
-          // breezEvent={breezEvent}
-          // transactions={transactions}
+        <NavBar
           breezInformation={breezInformation}
-          // setTransactions={setTransactions}
-          // userBalance={userBalance}
-          // needToRefresh={needToRefresh}
-          // setNeedToRefresh={setNeedToRefresh}
+          nodeConnectionPopup={nodeConnectionPopup}
+          setNodeConnectionPopup={setNodeConnectionPopup}
+          setSystemSettingsPopup={setSystemSettingsPopup}
         />
-
-        {/* <SendRecieveBTNs
-          // setScreenType={props.setScreenType}
-          for="lightning"
-          // setIsCameraActive={setIsCameraActive}
-          setRecivePayment={setRecivePayment}
-          // setNeedToRefresh={props.setNeedToRefresh}
-        /> */}
-
-        {/* main content */}
-        {/* <CameraScan
-        for={screenType}
-        isCameraActive={isCameraActive}
-        setIsCameraActive={setIsCameraActive}
-        setNeedToRefresh={setNeedToRefresh}
-        bitcoinAmount={bitcoinAmount}
-      /> */}
-
-        {/* <ReceivePaymentHome
-          isDisplayed={recivePayment}
-          setRecivePayment={setRecivePayment}
-          transactions={transactions}
-        /> */}
+        <HomeLightning breezInformation={breezInformation} />
 
         {/* <ExpandedTransaction /> */}
       </SafeAreaView>
       <ConnectionToNode
         isDisplayed={nodeConnectionPopup}
         hidePopup={setNodeConnectionPopup}
+      />
+      <SystemSettings
+        isDisplayed={systemSettingsPopup}
+        setSystemSettingsPopup={setSystemSettingsPopup}
       />
     </View>
   );
@@ -246,31 +188,6 @@ const styles = StyleSheet.create({
     height: 15,
   },
 
-  //   navigation between Bitcoin and lightning
-  navBar: {
-    width: '90%',
-    maxWidth: 250,
-
-    flexDirection: 'row',
-
-    alignItems: 'cetner',
-    justifyContent: 'space-between',
-
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    marginTop: 30,
-  },
-  navBarTextContainer_active: {
-    borderBottomWidth: 2,
-    paddingBottom: 5,
-  },
-  navBarTextContainer_inActive: {
-    paddingBottom: 5,
-  },
-  navBarText: {
-    fontSize: SIZES.large,
-    fontFamily: FONT.Title_Regular,
-  },
   //   main content styling
   mainContent: {
     flex: 1,

@@ -2,7 +2,7 @@ import {listPayments} from '@breeztech/react-native-breez-sdk';
 
 export default async function getTransactions() {
   try {
-    const payments = listPayments({});
+    const payments = await listPayments({});
 
     return new Promise((resolve, request) => {
       resolve(payments);

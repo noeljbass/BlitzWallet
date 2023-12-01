@@ -21,13 +21,29 @@ import {
   SHADOWS,
 } from '../../../constants';
 import {useEffect, useRef, useState} from 'react';
+import * as WebBrowser from 'expo-web-browser';
 
 const NAVITEMS = [
-  {name: 'Faucet', link: 'URL', icon: ICONS.Checkcircle},
-  {name: 'Drain', link: 'URL', icon: ICONS.Checkcircle},
-  {name: 'Twitter', link: 'URL', icon: ICONS.Checkcircle},
-  {name: 'Telegram', link: 'URL', icon: ICONS.Checkcircle},
-  {name: 'View Code', link: 'URL', icon: ICONS.Checkcircle},
+  {name: 'Faucet', link: 'URL', icon: ICONS.faucetIcon, inApp: true},
+  // {name: 'Drain', link: 'URL', icon: ICONS.Checkcircle, inApp: true},
+  {
+    name: 'Twitter',
+    link: 'https://twitter.com/BlitzWallet1',
+    icon: ICONS.twitterIcon,
+    inApp: false,
+  },
+  {
+    name: 'Telegram',
+    link: 'https://t.me/+-VIAPa9ObHM4YWQx',
+    icon: ICONS.telegramIcon,
+    inApp: false,
+  },
+  {
+    name: 'View Code',
+    link: 'https://github.com/BlakeKaufman/BlitzWallet',
+    icon: ICONS.githubIcon,
+    inApp: false,
+  },
 ];
 
 export function OptionsDropdown(props) {
@@ -35,8 +51,25 @@ export function OptionsDropdown(props) {
   const navElements = NAVITEMS.map((item, id) => {
     return (
       <View style={styles.navItem} key={id}>
-        <Text style={styles.navItemName}>{item.name}</Text>
-        <Image source={item.icon} style={{width: 20, height: 20}} />
+        <TouchableOpacity
+          onPress={() => {
+            (async () => {
+              if (!item.inApp) {
+                try {
+                  await WebBrowser.openBrowserAsync(item.link);
+                } catch (err) {
+                  console.log(err, 'OPENING LINK ERROR');
+                }
+              } else {
+                return;
+              }
+              props.setNavViews(false);
+            })();
+          }}
+          style={styles.tochableOpacityContainer}>
+          <Text style={styles.navItemName}>{item.name}</Text>
+          <Image source={item.icon} style={{width: 20, height: 20}} />
+        </TouchableOpacity>
       </View>
     );
   });
@@ -49,7 +82,7 @@ export function OptionsDropdown(props) {
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
-      toValue: 200,
+      toValue: 160,
       duration: 400,
       useNativeDriver: false,
     }).start();
@@ -63,18 +96,11 @@ export function OptionsDropdown(props) {
   }
 
   return (
-    // <TouchableWithoutFeedback
-    // //   onPress={() =>
-    // //     props.setNavViews(prev => {
-    // //       return {...prev, features: !prev.features};
-    // //     })}
-    // >
     <Animated.View style={[styles.globalContainer, {height: fadeAnim}]}>
       <View style={styles.contentContainer}>
         <View style={styles.innerContainer}>{navElements}</View>
       </View>
     </Animated.View>
-    // </TouchableWithoutFeedback>
   );
 }
 
@@ -82,7 +108,7 @@ const styles = StyleSheet.create({
   globalContainer: {
     // backgroundColor: COLORS.gray,
     width: 200,
-    height: 280,
+    height: 160,
     position: 'absolute',
     top: '80%',
     right: 0,
@@ -121,6 +147,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingRight: 10,
     paddingLeft: 10,
+  },
+  tochableOpacityContainer: {
+    width: '100%',
+    height: '100%',
+
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   navItemName: {
     fontSize: SIZES.medium,

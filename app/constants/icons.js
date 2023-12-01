@@ -11,6 +11,11 @@ import leftCheveronIcon from '../assets/icons/left-chevron.png';
 import walletIcon from '../assets/icons/wallet.png';
 import connectionIcon from '../assets/icons/connection.png';
 import toolsIcon from '../assets/icons/tools.png';
+import settingsIcon from '../assets/icons/settings.png';
+import githubIcon from '../assets/icons/github.png';
+import twitterIcon from '../assets/icons/twitter.png';
+import telegramIcon from '../assets/icons/telegram.png';
+import faucetIcon from '../assets/icons/faucet.png';
 
 export default {
   Xcircle,
@@ -26,4 +31,9 @@ export default {
   walletIcon,
   connectionIcon,
   toolsIcon,
+  settingsIcon,
+  githubIcon,
+  twitterIcon,
+  telegramIcon,
+  faucetIcon,
 };
