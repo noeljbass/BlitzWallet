@@ -40,6 +40,7 @@ export default function SendPaymentHome(props) {
           isDisplayed={scanned}
           setScanned={setScanned}
           BTCadress={BTCadress}
+          setSendPayment={props.setSendPayment}
         />
       </SafeAreaView>
     </Modal>

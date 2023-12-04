@@ -13,6 +13,7 @@ const COLORS = {
   lightWhite: '#FAFAFC',
 
   background: '#F8F8F8',
+  offsetBackground: '#cbcbcb',
 
   opaicityGray: '#767676b8',
   cancelRed: '#e20000',

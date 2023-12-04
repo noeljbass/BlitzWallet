@@ -15,7 +15,6 @@ import {CENTER, COLORS, ICONS, SIZES} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
 
 export default function ConfirmPaymentScreen(props) {
-  const [confirmedTransaction, setConfirmedTransation] = useState({});
   const fadeAnim = useRef(new Animated.Value(900)).current;
 
   function fadeIn() {
@@ -35,44 +34,41 @@ export default function ConfirmPaymentScreen(props) {
 
   useEffect(() => {
     if (props.isDisplayed) {
-      setConfirmedTransation(props.breezInformation?.transactions[0]);
       fadeIn();
     } else fadeOut();
   }, [props.isDisplayed]);
 
+  console.log(props.information, 'CONFIRM SCREEN');
+
   return (
     <Animated.View
       style={[styles.popupContainer, {transform: [{translateY: fadeAnim}]}]}>
-      <SafeAreaView style={{flex: 1}}>
-        <TouchableOpacity onPress={props.clear}>
-          <Image style={styles.backButton} source={ICONS.xSmallIcon} />
-        </TouchableOpacity>
-        <View style={styles.innerContainer}>
-          <Image style={styles.confirmedIocn} source={ICONS.Checkcircle} />
-          <Text style={styles.confirmText}>Confirmed</Text>
-          <Text style={styles.dateText}>
-            {new Date(
-              confirmedTransaction?.paymentTime * 1000,
-            ).toLocaleString()}
-          </Text>
-          <Text style={styles.amountText}>
-            {(confirmedTransaction?.amountMsat / 1000)?.toFixed(2)}{' '}
-            <Text style={{color: COLORS.primary}}>sat</Text>
-          </Text>
-          <View style={styles.seperator}></View>
+      <TouchableOpacity onPress={props.clear}>
+        <Image style={styles.backButton} source={ICONS.xSmallIcon} />
+      </TouchableOpacity>
+      <View style={styles.innerContainer}>
+        <Image style={styles.confirmedIocn} source={ICONS.Checkcircle} />
+        <Text style={styles.confirmText}>Confirmed</Text>
+        <Text style={styles.dateText}>
+          {new Date(props.information?.paymentTime * 1000).toLocaleString()}
+        </Text>
+        <Text style={styles.amountText}>
+          {(props.information?.amountMsat / 1000)?.toFixed(2)}{' '}
+          <Text style={{color: COLORS.primary}}>sat</Text>
+        </Text>
+        <View style={styles.seperator}></View>
 
-          <Text style={styles.descriptionText}>
-            <Text style={styles.descriptor}>Desc</Text>{' '}
-            {confirmedTransaction?.description
-              ? confirmedTransaction.description
-              : 'no description'}
-          </Text>
-          <Text style={styles.feeText}>
-            <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
-            {(confirmedTransaction?.feeMsat / 1000).toFixed(2)}
-          </Text>
-        </View>
-      </SafeAreaView>
+        <Text style={styles.descriptionText}>
+          <Text style={styles.descriptor}>Desc</Text>{' '}
+          {props.information?.description
+            ? props.information.description
+            : 'no description'}
+        </Text>
+        <Text style={styles.feeText}>
+          <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
+          {(props.information?.feeMsat / 1000).toFixed(2)}
+        </Text>
+      </View>
     </Animated.View>
   );
 }

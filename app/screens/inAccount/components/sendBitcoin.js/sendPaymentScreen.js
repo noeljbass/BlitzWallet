@@ -28,10 +28,24 @@ import {
   parseInput,
   sendPayment,
 } from '@breeztech/react-native-breez-sdk';
+import ConfirmPaymentScreen from './confirmPaymentScreen';
 
 export default function SendPaymentScreen(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
+  const [confirmPayment, setConfirmPayment] = useState({
+    isDisplayed: false,
+    information: {},
+  });
   const [paymentInfo, setPaymentInfo] = useState({});
+
+  function clear() {
+    props.setScanned(false);
+    setConfirmPayment({
+      isDisplayed: false,
+      information: {},
+    });
+    props.setSendPayment(false);
+  }
 
   async function sendPaymentFunction() {
     try {
@@ -42,7 +56,13 @@ export default function SendPaymentScreen(props) {
         //   ? paymentInfo?.invoice?.amountMsat
         //   : null,
       });
-      console.log(response);
+      if (response) {
+        setConfirmPayment({
+          isDisplayed: true,
+          information: response?.payment,
+        });
+      }
+      console.log(response, 'SEND PAYMENT RESPONSE');
     } catch (err) {
       console.log(err);
     }
@@ -60,8 +80,6 @@ export default function SendPaymentScreen(props) {
       console.log(err);
     }
   }
-
-  console.log(props.BTCadress, 'TT');
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -84,7 +102,6 @@ export default function SendPaymentScreen(props) {
       fadeIn();
     } else fadeOut();
   }, [props.isDisplayed]);
-  console.log(paymentInfo);
 
   return (
     <Modal
@@ -93,7 +110,7 @@ export default function SendPaymentScreen(props) {
       statusBarTranslucent={false}
       visible={props.isDisplayed}>
       <View style={styles.popupContainer}>
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1, position: 'relative'}}>
           <View style={styles.topBar}>
             <TouchableOpacity onPress={() => props.setScanned(false)}>
               <Image
@@ -166,6 +183,8 @@ export default function SendPaymentScreen(props) {
               </TouchableOpacity>
             </View>
           </View>
+          {/* popups */}
+          <ConfirmPaymentScreen clear={clear} {...confirmPayment} />
         </SafeAreaView>
       </View>
     </Modal>

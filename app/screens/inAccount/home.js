@@ -68,7 +68,6 @@ export default function AdminHome({navigation: {navigate}}) {
   };
   useEffect(() => {
     (async () => {
-      return;
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
 
@@ -79,7 +78,7 @@ export default function AdminHome({navigation: {navigate}}) {
             const nodeAmount = await nodeInfo();
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
-            console.log(nodeAmount, 'LSPPSSS');
+            // console.log(nodeAmount, 'LSPPSSS');
 
             setBreezInformation(prev => {
               return {
