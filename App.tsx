@@ -18,6 +18,7 @@ import {
   useColorScheme,
   View,
   AppState,
+  Platform,
 } from 'react-native';
 
 import {
@@ -37,27 +38,51 @@ import PinSetupPage from './app/screens/createAccount/keySetup/pin';
 import AdminHome from './app/screens/inAccount/home';
 import {retrieveData, userAuth} from './app/functions';
 import AdminLogin from './app/screens/inAccount/components/login';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
   const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
+
+  // console.log(appState);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   useEffect(() => {
-    console.log(appState);
     console.log('refresh');
     (async () => {
       const hasAccount = await retrieveData('pin');
       if (hasAccount) setIsLoggedIn(true);
       else setIsLoggedIn(false);
     })();
-  }, [appState]);
+
+    if (Platform.OS === 'android') {
+      SplashScreen.hide();
+    }
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (appState.current.match(/inactive/) && nextAppState === 'background') {
+        console.log('Background!');
+        // NAVIGATE TO HOME PAGE
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   return (
     <NavigationContainer>

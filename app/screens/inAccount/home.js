@@ -26,12 +26,7 @@ import {
   RotatingAnimation,
   userAuth,
 } from '../../functions';
-import {
-  listLsps,
-  lspId,
-  lspInfo,
-  nodeInfo,
-} from '@breeztech/react-native-breez-sdk';
+import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
 import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
@@ -78,7 +73,8 @@ export default function AdminHome({navigation: {navigate}}) {
             const nodeAmount = await nodeInfo();
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
-            // console.log(nodeAmount, 'LSPPSSS');
+
+            console.log(nodeAmount, 'LSPPSSS');
 
             setBreezInformation(prev => {
               return {
