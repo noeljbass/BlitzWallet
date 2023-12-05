@@ -26,7 +26,11 @@ import {
   RotatingAnimation,
   userAuth,
 } from '../../functions';
-import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {
+  nodeInfo,
+  serviceHealthCheck,
+  setLogStream,
+} from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
 import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
@@ -54,7 +58,7 @@ export default function AdminHome({navigation: {navigate}}) {
   const [breezEvent, setBreezEvent] = useState({});
 
   // SDK events listener
-  console.log(breezEvent, 'BreezEvent on home screen');
+  // console.log(breezEvent, 'BreezEvent on home screen');
 
   const onBreezEvent = e => {
     setBreezEvent(e);
@@ -62,14 +66,26 @@ export default function AdminHome({navigation: {navigate}}) {
     // console.log(`Received event ${e.type} did that actually work`);
   };
   useEffect(() => {
+    const logHandler = logEntry => {
+      if (logEntry.level != 'TRACE') {
+        console.log(`[${logEntry.level}]: ${logEntry.line}`);
+      }
+    };
+
     (async () => {
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
 
         try {
           const response = await connectToNode(onBreezEvent);
-          console.log(response, 'RESPONSE');
+
+          // console.log(response, 'RESPONSE');
+
           if (response) {
+            // await setLogStream(logHandler);
+            const healthCheck = await serviceHealthCheck();
+            // console.log(healthCheck);
+
             const nodeAmount = await nodeInfo();
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
@@ -87,11 +103,14 @@ export default function AdminHome({navigation: {navigate}}) {
             isInitialRender.current = false;
           }
         } catch (err) {
-          console.log(err, 'homepage connection to node err');
+          // console.log(err, 'homepage connection to node err');
         }
       } else {
         if (Object.keys(breezEvent).length === 0) return;
-        if (breezEvent.type === 'invoicePaid') {
+        if (
+          breezEvent.type === 'invoicePaid' ||
+          breezEvent.type === 'payment'
+        ) {
           const transactions = await getTransactions();
           const nodeAmount = await nodeInfo();
 
@@ -105,7 +124,7 @@ export default function AdminHome({navigation: {navigate}}) {
           });
           console.log('HOME RENDER PAID INVOINCE');
         }
-        console.log('HOME RENDER BREEZ EVENT');
+        // console.log('HOME RENDER BREEZ EVENT');
       }
     })();
   }, [breezEvent]);
