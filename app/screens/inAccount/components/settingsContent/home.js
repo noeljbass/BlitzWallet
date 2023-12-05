@@ -8,7 +8,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {COLORS, ICONS, SIZES} from '../../../../constants';
+import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AboutPage from './about';
 
@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 'auto',
     transform: [{translateX: -12.5}],
+    fontFamily: FONT.Title_Bold,
   },
 });

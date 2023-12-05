@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   topBarName: {
-    fontSize: SIZES.medium,
+    fontSize: SIZES.large,
     fontWeight: 'bold',
     fontFamily: FONT.Title_Bold,
   },

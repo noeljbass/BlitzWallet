@@ -15,6 +15,7 @@ import {
   BTN,
   CENTER,
   COLORS,
+  FONT,
   ICONS,
   SHADOWS,
   SIZES,
@@ -217,10 +218,11 @@ const styles = StyleSheet.create({
     height: 30,
   },
   headerText: {
-    fontSize: SIZES.medium,
+    fontSize: SIZES.large,
     fontWeight: 'bold',
     marginRight: 'auto',
     marginLeft: 'auto',
+    fontFamily: FONT.Title_Bold,
 
     transform: [{translateX: -15}],
   },
@@ -228,9 +230,10 @@ const styles = StyleSheet.create({
     fontSize: SIZES.xxLarge,
     marginBottom: 90,
     marginTop: 'auto',
+    fontFamily: FONT.Title_Regular,
   },
   feeBreakdownContainer: {
-    width: '75%',
+    width: '85%',
   },
   feeBreakdownRow: {
     width: '100%',
@@ -242,6 +245,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
 
     alignItems: 'flex-end',
+    fontSize: SIZES.medium,
+    fontFamily: FONT.Descriptoin_Regular,
   },
 
   buttonsContainer: {
@@ -264,5 +269,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: SIZES.medium,
     color: COLORS.lightWhite,
+    fontFamily: FONT.Other_Regular,
   },
 });

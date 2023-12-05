@@ -173,7 +173,7 @@ export function ReceivePaymentHome(props) {
             {((fiatRate / 100000000) * (sendingAmount / 1000)).toFixed(2)}{' '}
             {'USD'}
           </Text>
-          <Text>
+          <Text style={styles.valueAmountText}>
             {paymentDescription ? paymentDescription : 'no description'}
           </Text>
         </View>
@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
   },
   valueAmountText: {
     fontSize: SIZES.medium,
+    fontFamily: FONT.Descriptoin_Regular,
     marginBottom: 10,
   },
 
@@ -278,6 +279,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: SIZES.large,
+    fontFamily: FONT.Descriptoin_Regular,
   },
 
   buttonsContainer: {

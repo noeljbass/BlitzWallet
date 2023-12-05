@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 
-import {CENTER, SIZES, SHADOWS} from '../../../constants';
+import {CENTER, SIZES, SHADOWS, FONT} from '../../../constants';
 
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
 import {UserTransaction} from './userTransactions';
@@ -66,5 +66,6 @@ const style = StyleSheet.create({
     fontSize: SIZES.medium,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: FONT.Descriptoin_Regular,
   },
 });

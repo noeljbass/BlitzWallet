@@ -131,9 +131,11 @@ const styles = StyleSheet.create({
   topContainerText: {
     fontSize: SIZES.large,
     fontWeight: 'bold',
+    fontFamily: FONT.Title_Bold,
   },
   itemText: {
     fontSize: SIZES.medium,
     marginBottom: 10,
+    fontFamily: FONT.Descriptoin_Regular,
   },
 });

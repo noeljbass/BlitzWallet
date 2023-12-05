@@ -58,7 +58,7 @@ export default function AdminHome({navigation: {navigate}}) {
   const [breezEvent, setBreezEvent] = useState({});
 
   // SDK events listener
-  // console.log(breezEvent, 'BreezEvent on home screen');
+  console.log(breezEvent, 'BreezEvent on home screen');
 
   const onBreezEvent = e => {
     setBreezEvent(e);

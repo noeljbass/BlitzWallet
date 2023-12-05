@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Keyboard,
   Modal,
+  SafeAreaView,
+  Animated,
 } from 'react-native';
 import {CameraType} from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
@@ -32,7 +34,6 @@ export default function SendPaymentScreenOptions(props) {
   const [manualBitcoinInput, setManualBitcoinInput] = useState('');
   const [showManualInpt, setShowManualInput] = useState(false);
 
-  console.log(photoesPermission);
   function toggleBottom() {
     setBottomExpand(prev => !prev);
   }
@@ -121,21 +122,22 @@ export default function SendPaymentScreenOptions(props) {
           style={styles.camera}
         />
       )}
-      <View
-        onTouchEnd={toggleBottom}
-        style={{...styles.arrowIcon, bottom: bottomExpand ? 150 : 50}}>
-        <Image
-          source={ICONS.angleUpIcon}
-          style={{
-            width: 30,
-            height: 20,
-            transform: bottomExpand ? [{rotate: '180deg'}] : [{rotate: '0deg'}],
-          }}
-          resizeMode="contain"
-        />
-      </View>
 
       <View style={{...styles.bottomBar, height: bottomExpand ? 150 : 50}}>
+        <View onTouchEnd={toggleBottom} style={{...styles.arrowIcon}}>
+          <Animated.Image
+            source={ICONS.angleUpIcon}
+            style={{
+              width: 30,
+              height: 20,
+              transform: bottomExpand
+                ? [{rotate: '180deg'}]
+                : [{rotate: '0deg'}],
+            }}
+            resizeMode="contain"
+          />
+          <Image />
+        </View>
         <TouchableOpacity
           onPress={getClipboardText}
           style={{backgroundColor: 'transparent'}}
@@ -172,8 +174,8 @@ const styles = StyleSheet.create({
   },
   topBar: {
     width: '100%',
-    padding: 10,
 
+    paddingBottom: 10,
     flexDirection: 'row',
   },
   headerText: {
@@ -183,15 +185,16 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 'auto',
     fontFamily: FONT.Title_Bold,
+    transform: [{translateX: -10}],
   },
   camera: {flex: 1},
   bottomBar: {
     width: '100%',
     height: 50,
 
-    overflow: 'hidden',
+    // overflow: 'hidden',
     position: 'absolute',
-    bottom: 0,
+    bottom: 10,
     left: 0,
     zIndex: 1,
     backgroundColor: 'white',
@@ -211,7 +214,7 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     position: 'absolute',
-    bottom: 50,
+    top: -20,
     left: '50%',
     zIndex: 1,
     transform: [{translateX: -40}],

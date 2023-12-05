@@ -8,7 +8,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {COLORS, ICONS, SIZES} from '../../../constants';
+import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SettingsContent from './settingsContent/home';
 
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 'auto',
     transform: [{translateX: -12.5}],
+    fontFamily: FONT.Title_Bold,
   },
 
   //
@@ -220,6 +221,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     textTransform: 'uppercase',
     marginBottom: 5,
+    fontFamily: FONT.Title_Regular,
   },
   optionsListContainer: {
     backgroundColor: COLORS.offsetBackground,
@@ -235,6 +237,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     marginRight: 'auto',
     marginLeft: 10,
+    fontFamily: FONT.Descriptoin_Regular,
   },
   listIcon: {
     width: 20,

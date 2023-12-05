@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {CENTER, COLORS, ICONS, SIZES} from '../../../../constants';
+import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
 import {useEffect, useRef, useState} from 'react';
 
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily: FONT.Title_Bold,
   },
   input: {
     width: '100%',
@@ -124,10 +125,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
 
     borderRadius: 10,
+    fontFamily: FONT.Descriptoin_Regular,
   },
   saveText: {
     color: COLORS.primary,
     fontSize: SIZES.large,
+    fontFamily: FONT.Descriptoin_Regular,
 
     marginLeft: 'auto',
     marginBottom: 20,

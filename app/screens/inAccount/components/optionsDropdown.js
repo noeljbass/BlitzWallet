@@ -159,5 +159,6 @@ const styles = StyleSheet.create({
   navItemName: {
     fontSize: SIZES.medium,
     color: COLORS.background,
+    fontFamily: FONT.Title_Regular,
   },
 });
