@@ -1,17 +1,39 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
 
-import {CENTER, SIZES, SHADOWS, FONT} from '../../../constants';
+import {CENTER, SIZES, FONT} from '../../../constants';
 
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
 import {UserTransaction} from './userTransactions';
 import {SendRecieveBTNs} from './sendReciveBTNs';
 import {ReceivePaymentHome} from './recieveBitcoin';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import SendPaymentHome from './sendBitcoin.js/home';
+import ConfirmPage from './confirmPage';
 
 export default function HomeLightning(props) {
+  console.log('HOME LIGHTNING PAGE');
   const [recivePayment, setRecivePayment] = useState(false);
   const [sendPayment, setSendPayment] = useState(false);
+  const [confirmPage, setConfirmPage] = useState({
+    for: '',
+    isDisplayed: false,
+  });
+
+  useEffect(() => {
+    if (Object.keys(props.breezEvent).length === 0) return;
+    if (
+      props.breezEvent.type === 'invoicePaid' ||
+      props.breezEvent.type === 'paymentSucceed'
+    ) {
+      if (props.breezEvent.type === 'invoicePaid') setRecivePayment(false);
+      else setSendPayment(false);
+      setConfirmPage({
+        for: props.breezEvent.type,
+        isDisplayed: true,
+      });
+    }
+  }, [props.breezEvent]);
+
   const transactionElement = props.breezInformation?.transactions?.map(
     (transaction, id) => {
       return <UserTransaction key={id} {...transaction} />;
@@ -32,22 +54,24 @@ export default function HomeLightning(props) {
         {transactionElement?.length != 0 && transactionElement}
       </ScrollView>
       <SendRecieveBTNs
-        // setScreenType={props.setScreenType}
-        for="lightning"
         setSendPayment={setSendPayment}
         setRecivePayment={setRecivePayment}
-        // setNeedToRefresh={props.setNeedToRefresh}
       />
+
       {/* POPUPS */}
       <ReceivePaymentHome
         isDisplayed={recivePayment}
         setRecivePayment={setRecivePayment}
-        transactions={props.transactions}
-        breezInformation={props.breezInformation}
       />
       <SendPaymentHome
         isDisplayed={sendPayment}
         setSendPayment={setSendPayment}
+        confirmPageDisplayed={confirmPage.isDisplayed}
+      />
+      <ConfirmPage
+        information={props.breezEvent}
+        setConfirmPage={setConfirmPage}
+        {...confirmPage}
       />
     </>
   );

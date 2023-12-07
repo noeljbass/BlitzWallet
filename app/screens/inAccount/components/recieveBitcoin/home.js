@@ -33,13 +33,9 @@ import {getLocalStorageItem, retrieveData} from '../../../../functions';
 import {getFiatRates} from '../../../../functions/SDK';
 import EditAmountPopup from './editAmount';
 import {
-  listLsps,
-  lspId,
-  lspInfo,
   openChannelFee,
   receivePayment,
 } from '@breeztech/react-native-breez-sdk';
-import ConfirmPaymentScreen from './confirmPaymentScreen';
 
 export function ReceivePaymentHome(props) {
   const isInitialRender = useRef(true);
@@ -107,24 +103,27 @@ export function ReceivePaymentHome(props) {
     }
   }
 
+  // useEffect(() => {
+  //   if (isInitialRender.current) {
+  //     isInitialRender.current = false;
+  //     return;
+  //   }
+  //   const newDate = new Date();
+  //   const lastTransaction = new Date(
+  //     props.breezInformation?.transactions[0]?.paymentTime * 1000,
+  //   );
+
+  //   if (Math.abs(newDate - lastTransaction) >= 30 * 1000) return;
+
+  //   console.log('SUCCESFULL');
+  //   setShowConfirmation(true);
+  // }, [props.breezInformation?.transactions]);
+
   useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
+    if (props.isDisplayed === false) {
+      clear();
       return;
     }
-    const newDate = new Date();
-    const lastTransaction = new Date(
-      props.breezInformation?.transactions[0]?.paymentTime * 1000,
-    );
-
-    if (Math.abs(newDate - lastTransaction) >= 30 * 1000) return;
-
-    console.log('SUCCESFULL');
-    setShowConfirmation(true);
-  }, [props.breezInformation?.transactions]);
-
-  useEffect(() => {
-    if (props.isDisplayed === false) return;
     generateLightningInvoice();
 
     (async () => {
@@ -212,12 +211,6 @@ export function ReceivePaymentHome(props) {
         isDisplayed={editPaymentPopup}
         setIsDisplayed={setEditPaymentPopup}
         setUpdateQRCode={setUpdateQRCode}
-      />
-      <ConfirmPaymentScreen
-        isDisplayed={showConfirmation}
-        transactions={props.transactions}
-        breezInformation={props.breezInformation}
-        clear={clear}
       />
     </Modal>
   );

@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {OptionsDropdown} from './optionsDropdown';
 
 export default function NavBar(props) {
+  console.log('NAV BAR PAGE');
   const [navViews, setNavViews] = useState({
     features: false,
   });

@@ -109,7 +109,7 @@ export default function AdminHome({navigation: {navigate}}) {
         if (Object.keys(breezEvent).length === 0) return;
         if (
           breezEvent.type === 'invoicePaid' ||
-          breezEvent.type === 'payment'
+          breezEvent.type === 'paymentSucceed'
         ) {
           const transactions = await getTransactions();
           const nodeAmount = await nodeInfo();
@@ -138,7 +138,10 @@ export default function AdminHome({navigation: {navigate}}) {
           setNodeConnectionPopup={setNodeConnectionPopup}
           setSystemSettingsPopup={setSystemSettingsPopup}
         />
-        <HomeLightning breezInformation={breezInformation} />
+        <HomeLightning
+          breezEvent={breezEvent}
+          breezInformation={breezInformation}
+        />
 
         {/* <ExpandedTransaction /> */}
       </SafeAreaView>

@@ -29,24 +29,11 @@ import {
   parseInput,
   sendPayment,
 } from '@breeztech/react-native-breez-sdk';
-import ConfirmPaymentScreen from './confirmPaymentScreen';
 
 export default function SendPaymentScreen(props) {
+  console.log('CONFIRM SEND PAYMENT SCREEN');
   const fadeAnim = useRef(new Animated.Value(900)).current;
-  const [confirmPayment, setConfirmPayment] = useState({
-    isDisplayed: false,
-    information: {},
-  });
   const [paymentInfo, setPaymentInfo] = useState({});
-
-  function clear() {
-    props.setScanned(false);
-    setConfirmPayment({
-      isDisplayed: false,
-      information: {},
-    });
-    props.setSendPayment(false);
-  }
 
   async function sendPaymentFunction() {
     try {
@@ -58,12 +45,13 @@ export default function SendPaymentScreen(props) {
         //   : null,
       });
       if (response) {
-        setConfirmPayment({
-          isDisplayed: true,
-          information: response?.payment,
-        });
+        // setConfirmPayment({
+        //   isDisplayed: true,
+        //   information: response?.payment,
+        // });
+        props.setScanned(false);
       }
-      console.log(response, 'SEND PAYMENT RESPONSE');
+      // console.log(response, 'SEND PAYMENT RESPONSE');
     } catch (err) {
       console.log(err);
     }
@@ -104,98 +92,94 @@ export default function SendPaymentScreen(props) {
     } else fadeOut();
   }, [props.isDisplayed]);
 
+  console.log(props.isDisplayed, 'SEND PAYMENT CONFIRM');
+
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      statusBarTranslucent={false}
-      visible={props.isDisplayed}>
-      <View style={styles.popupContainer}>
-        <SafeAreaView style={{flex: 1, position: 'relative'}}>
-          <View style={styles.topBar}>
-            <TouchableOpacity onPress={() => props.setScanned(false)}>
-              <Image
-                style={styles.backButton}
-                source={ICONS.leftCheveronIcon}
-              />
+    <Animated.View
+      style={[styles.popupContainer, {transform: [{translateX: fadeAnim}]}]}>
+      <SafeAreaView style={{flex: 1, position: 'relative'}}>
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => props.setScanned(false)}>
+            <Image style={styles.backButton} source={ICONS.leftCheveronIcon} />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Confirm Payment</Text>
+        </View>
+        <View style={styles.innerContainer}>
+          <Text style={styles.sendingAmtBTC}>
+            {(paymentInfo?.invoice?.amountMsat / 1000).toLocaleString()}{' '}
+            <Text style={{color: COLORS.primary}}>sat</Text>
+          </Text>
+          <View style={styles.feeBreakdownContainer}>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={[styles.feeBreakdownItem]}>Amount</Text>
+              <View style={[styles.feeBreakdownItem]}>
+                <Text>
+                  {(paymentInfo?.invoice?.amountMsat / 1000).toLocaleString()}{' '}
+                  sat
+                </Text>
+                <Text>
+                  {(
+                    (paymentInfo?.invoice?.amountMsat / 1000) *
+                    (paymentInfo[0]?.value / 100000000)
+                  ).toLocaleString()}{' '}
+                  usd
+                </Text>
+              </View>
+            </View>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={[styles.feeBreakdownItem]}>Lightning Fee</Text>
+              <View style={[styles.feeBreakdownItem]}>
+                <Text>{0} sat</Text>
+                <Text>0.00 usd</Text>
+              </View>
+            </View>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={[styles.feeBreakdownItem]}>Total</Text>
+              <View style={[styles.feeBreakdownItem]}>
+                <Text>
+                  {(
+                    paymentInfo?.invoice?.amountMsat / 1000 +
+                    0
+                  ).toLocaleString()}{' '}
+                  sat
+                </Text>
+                <Text>
+                  {(
+                    (paymentInfo?.invoice?.amountMsat / 1000 + 0) *
+                    (paymentInfo[0]?.value / 100000000)
+                  ).toLocaleString()}{' '}
+                  usd
+                </Text>
+              </View>
+            </View>
+          </View>
+          {/* Buttons */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              onPress={() => props.setScanned(false)}
+              style={[styles.button, {backgroundColor: COLORS.cancelRed}]}>
+              <Text style={styles.buttonText}>cancel</Text>
             </TouchableOpacity>
-            <Text style={styles.headerText}>Confirm Payment</Text>
+            <TouchableOpacity
+              onPress={sendPaymentFunction}
+              style={[styles.button, {backgroundColor: COLORS.primary}]}>
+              <Text style={styles.buttonText}>send</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.innerContainer}>
-            <Text style={styles.sendingAmtBTC}>
-              {(paymentInfo?.invoice?.amountMsat / 1000).toLocaleString()}{' '}
-              <Text style={{color: COLORS.primary}}>sat</Text>
-            </Text>
-            <View style={styles.feeBreakdownContainer}>
-              <View style={styles.feeBreakdownRow}>
-                <Text style={[styles.feeBreakdownItem]}>Amount</Text>
-                <View style={[styles.feeBreakdownItem]}>
-                  <Text>
-                    {(paymentInfo?.invoice?.amountMsat / 1000).toLocaleString()}{' '}
-                    sat
-                  </Text>
-                  <Text>
-                    {(
-                      (paymentInfo?.invoice?.amountMsat / 1000) *
-                      (paymentInfo[0]?.value / 100000000)
-                    ).toLocaleString()}{' '}
-                    usd
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.feeBreakdownRow}>
-                <Text style={[styles.feeBreakdownItem]}>Lightning Fee</Text>
-                <View style={[styles.feeBreakdownItem]}>
-                  <Text>{0} sat</Text>
-                  <Text>0.00 usd</Text>
-                </View>
-              </View>
-              <View style={styles.feeBreakdownRow}>
-                <Text style={[styles.feeBreakdownItem]}>Total</Text>
-                <View style={[styles.feeBreakdownItem]}>
-                  <Text>
-                    {(
-                      paymentInfo?.invoice?.amountMsat / 1000 +
-                      0
-                    ).toLocaleString()}{' '}
-                    sat
-                  </Text>
-                  <Text>
-                    {(
-                      (paymentInfo?.invoice?.amountMsat / 1000 + 0) *
-                      (paymentInfo[0]?.value / 100000000)
-                    ).toLocaleString()}{' '}
-                    usd
-                  </Text>
-                </View>
-              </View>
-            </View>
-            {/* Buttons */}
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                onPress={() => props.setScanned(false)}
-                style={[styles.button, {backgroundColor: COLORS.cancelRed}]}>
-                <Text style={styles.buttonText}>cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={sendPaymentFunction}
-                style={[styles.button, {backgroundColor: COLORS.primary}]}>
-                <Text style={styles.buttonText}>send</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {/* popups */}
-          <ConfirmPaymentScreen clear={clear} {...confirmPayment} />
-        </SafeAreaView>
-      </View>
-    </Modal>
+        </View>
+        {/* popups */}
+      </SafeAreaView>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   popupContainer: {
     flex: 1,
+    height: '100%',
+    width: '100%',
     backgroundColor: COLORS.background,
+    position: 'absolute',
   },
 
   innerContainer: {

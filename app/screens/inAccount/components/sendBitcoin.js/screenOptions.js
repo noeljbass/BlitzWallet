@@ -22,6 +22,7 @@ import SendPaymentScreen from './sendPaymentScreen';
 // import {ManualAddressInput} from './manualAddressInput';
 
 export default function SendPaymentScreenOptions(props) {
+  console.log('SCREEN OPTIONS PAGE');
   const type = CameraType.back;
   const [permission, setPermission] = useState(
     BarCodeScanner.getPermissionsAsync(),
@@ -96,72 +97,79 @@ export default function SendPaymentScreenOptions(props) {
   }
 
   return (
-    <>
-      <View style={styles.topBar}>
-        <Text
-          style={{width: 20, height: '100%'}}
-          onPress={() => {
-            setBTCadress('');
-            setScanned(false);
-            props.setSendPayment(false);
-          }}>
-          <Image
-            source={ICONS.leftCheveronIcon}
-            style={{width: 30, height: 30, marginRight: 'auto'}}
-            resizeMode="contain"
-          />
-        </Text>
-        <Text style={styles.headerText}>Scan A QR code</Text>
-      </View>
-
-      {!permission && <Text>No access to camera</Text>}
-      {permission && !scanned && (
-        <BarCodeScanner
-          type={type}
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.camera}
-        />
-      )}
-
-      <View style={{...styles.bottomBar, height: bottomExpand ? 150 : 50}}>
-        <View onTouchEnd={toggleBottom} style={{...styles.arrowIcon}}>
-          <Animated.Image
-            source={ICONS.angleUpIcon}
-            style={{
-              width: 30,
-              height: 20,
-              transform: bottomExpand
-                ? [{rotate: '180deg'}]
-                : [{rotate: '0deg'}],
-            }}
-            resizeMode="contain"
-          />
-          <Image />
+    <View style={styles.viewContainer}>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.topBar}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{width: 20, height: '100%'}}
+            onPress={() => {
+              props.setSendPayment(false);
+            }}>
+            <Image
+              source={ICONS.leftCheveronIcon}
+              style={{width: 30, height: 30, marginRight: 'auto'}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Scan A QR code</Text>
         </View>
-        <TouchableOpacity
-          onPress={getClipboardText}
-          style={{backgroundColor: 'transparent'}}
-          activeOpacity={0.2}>
-          <Text style={styles.bottomText}>Paste from clipbard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={getQRImage}
-          style={{backgroundColor: 'transparent'}}
-          activeOpacity={0.2}>
-          <Text style={styles.bottomText}>Choose image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={toggleManualInput}
-          style={{backgroundColor: 'transparent'}}
-          activeOpacity={0.2}>
-          <Text style={styles.bottomText}>Manual input</Text>
-        </TouchableOpacity>
-      </View>
-    </>
+
+        {!permission && <Text>No access to camera</Text>}
+        {permission && !scanned && (
+          <BarCodeScanner
+            type={type}
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={styles.camera}
+          />
+        )}
+
+        <View style={{...styles.bottomBar, height: bottomExpand ? 150 : 50}}>
+          <View onTouchEnd={toggleBottom} style={{...styles.arrowIcon}}>
+            <Animated.Image
+              source={ICONS.angleUpIcon}
+              style={{
+                width: 30,
+                height: 20,
+                transform: bottomExpand
+                  ? [{rotate: '180deg'}]
+                  : [{rotate: '0deg'}],
+              }}
+              resizeMode="contain"
+            />
+            <Image />
+          </View>
+          <TouchableOpacity
+            onPress={getClipboardText}
+            style={{backgroundColor: 'transparent'}}
+            activeOpacity={0.2}>
+            <Text style={styles.bottomText}>Paste from clipbard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={getQRImage}
+            style={{backgroundColor: 'transparent'}}
+            activeOpacity={0.2}>
+            <Text style={styles.bottomText}>Choose image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={toggleManualInput}
+            style={{backgroundColor: 'transparent'}}
+            activeOpacity={0.2}>
+            <Text style={styles.bottomText}>Manual input</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  viewContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    height: '100%',
+    width: '100%',
+  },
   cameraContainer: {
     flex: 1,
     width: '100%',

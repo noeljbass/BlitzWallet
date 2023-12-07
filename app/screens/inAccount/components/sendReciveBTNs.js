@@ -8,7 +8,6 @@ export function SendRecieveBTNs(props) {
       <TouchableOpacity
         onPress={() => {
           props.setSendPayment(true);
-          // props.setScreenType(props.for);
         }}
         style={combinedStyles.firstButton}>
         <Text style={styles.text}>Send</Text>
@@ -16,7 +15,6 @@ export function SendRecieveBTNs(props) {
       <TouchableOpacity
         onPress={() => {
           props.setRecivePayment(true);
-          // props.setNeedToRefresh(prev => (prev += 1));
         }}
         style={styles.button}>
         <Text style={styles.text}>Receive</Text>

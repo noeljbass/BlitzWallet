@@ -18,9 +18,17 @@ import SendPaymentScreenOptions from './screenOptions';
 // import {ManualAddressInput} from './manualAddressInput';
 
 export default function SendPaymentHome(props) {
+  console.log('SEND BITCOIN MAIN PAGE');
   const [scanned, setScanned] = useState(false);
   const [BTCadress, setBTCadress] = useState('');
-  console.log(scanned, 'HOME');
+
+  useEffect(() => {
+    if (props.confirmPageDisplayed) {
+      setScanned(false);
+      props.setSendPayment(false);
+      setBTCadress('');
+    }
+  }, [props.confirmPageDisplayed]);
 
   return (
     <Modal
@@ -28,31 +36,30 @@ export default function SendPaymentHome(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}
-      style={{backgroundColor: COLORS.background}}>
-      <SafeAreaView style={styles.cameraContainer}>
-        <SendPaymentScreenOptions
-          setBTCadress={setBTCadress}
-          BTCadress={BTCadress}
-          setScanned={setScanned}
-          setSendPayment={props.setSendPayment}
-        />
+      style={styles.containr}>
+      <SendPaymentScreenOptions
+        setBTCadress={setBTCadress}
+        BTCadress={BTCadress}
+        setScanned={setScanned}
+        setSendPayment={props.setSendPayment}
+      />
 
-        <SendPaymentScreen
-          isDisplayed={scanned}
-          setScanned={setScanned}
-          BTCadress={BTCadress}
-          setSendPayment={props.setSendPayment}
-        />
-      </SafeAreaView>
+      <SendPaymentScreen
+        isDisplayed={scanned}
+        setScanned={setScanned}
+        BTCadress={BTCadress}
+        setSendPayment={props.setSendPayment}
+      />
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  cameraContainer: {
+  containr: {
     flex: 1,
 
     display: 'flex',
     position: 'relative',
+    backgroundColor: COLORS.background,
   },
 });
