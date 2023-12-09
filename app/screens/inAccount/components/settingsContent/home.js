@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
-import {SafeAreaView} from 'react-native-safe-area-context';
+
 import AboutPage from './about';
 
 export default function SettingsContent(props) {
@@ -58,17 +59,16 @@ export default function SettingsContent(props) {
 
 const styles = StyleSheet.create({
   globalContainer: {
+    flex: 1,
     height: '100%',
     width: '100%',
-
     position: 'absolute',
-    top: 0,
-    left: 0,
     backgroundColor: COLORS.background,
-    zIndex: 1,
+    zIndex: 2,
   },
   innerContainer: {
     flex: 1,
+    position: 'relative',
     backgroundColor: COLORS.background,
   },
   topbar: {

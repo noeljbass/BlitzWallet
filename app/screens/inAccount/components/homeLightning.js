@@ -21,6 +21,7 @@ export default function HomeLightning(props) {
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
+    // if (props.breezEvent?.payment?.description?.includes('faucet')) return;
     if (
       props.breezEvent.type === 'invoicePaid' ||
       props.breezEvent.type === 'paymentSucceed'

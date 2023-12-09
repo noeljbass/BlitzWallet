@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Modal,
+  SafeAreaView,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
-import {SafeAreaView} from 'react-native-safe-area-context';
+
 import SettingsContent from './settingsContent/home';
 
 const GENERALOPTIONS = [
@@ -95,7 +97,6 @@ export default function SystemSettings(props) {
     isDisplayed: false,
     for: 'About',
   });
-  const fadeAnim = useRef(new Animated.Value(600)).current;
 
   const settingsElements = SETTINGSOPTIONS.map((element, id) => {
     const internalElements = element.map((element, id) => {
@@ -130,29 +131,12 @@ export default function SystemSettings(props) {
     );
   });
 
-  function fadeIn() {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-  function fadeOut() {
-    Animated.timing(fadeAnim, {
-      toValue: 600,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-
-  useEffect(() => {
-    if (props.isDisplayed) fadeIn();
-    else fadeOut();
-  }, [props.isDisplayed]);
-
   return (
-    <Animated.View
-      style={[styles.globalContainer, {transform: [{translateX: fadeAnim}]}]}>
+    <Modal
+      animationType="slide"
+      transparent={false}
+      statusBarTranslucent={false}
+      visible={props.isDisplayed}>
       <SafeAreaView style={styles.innerContainer}>
         <View style={styles.topbar}>
           <TouchableOpacity onPress={() => props.setSystemSettingsPopup(false)}>
@@ -172,7 +156,7 @@ export default function SystemSettings(props) {
         {...settingsContent}
         setSettingsContent={setSettingsContent}
       />
-    </Animated.View>
+    </Modal>
   );
 }
 
@@ -184,12 +168,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    backgroundColor: COLORS.background,
+    // backgroundColor: COLORS.background,
     zIndex: 1,
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    // backgroundColor: COLORS.background,
   },
   topbar: {
     flexDirection: 'row',

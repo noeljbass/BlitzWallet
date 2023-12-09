@@ -1,4 +1,4 @@
-import {COLORS, SHADOWS} from './theme';
+import {COLORS, FONT, SHADOWS, SIZES} from './theme';
 
 const CENTER = {marginRight: 'auto', marginLeft: 'auto'};
 
@@ -14,8 +14,20 @@ const BTN = {
   ...SHADOWS.small,
 };
 
+const headerText = {
+  fontSize: SIZES.large,
+  marginRight: 'auto',
+  marginLeft: 'auto',
+
+  fontFamily: FONT.Title_Bold,
+};
+const backArrow = {
+  width: 25,
+  height: 25,
+};
+
 const Background = {
   flex: 1,
   backgroundColor: COLORS.background,
 };
-export {CENTER, BTN, Background};
+export {CENTER, BTN, Background, headerText, backArrow};

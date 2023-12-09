@@ -35,7 +35,7 @@ export function ConnectionToNode(props) {
   useEffect(() => {
     if (!props.isDisplayed) {
       fadeIn();
-      getNodeData();
+      // getNodeData();
     } else fadeOut();
   }, [props.isDisplayed]);
 

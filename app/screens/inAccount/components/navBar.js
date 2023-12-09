@@ -2,12 +2,18 @@ import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../constants';
 import {useState} from 'react';
 import {OptionsDropdown} from './optionsDropdown';
+import SystemSettings from './settings';
+import {ConnectionToNode} from './conectionToNode';
+import {FaucetHome} from './faucet';
 
 export default function NavBar(props) {
   console.log('NAV BAR PAGE');
   const [navViews, setNavViews] = useState({
     features: false,
   });
+  const [systemSettingsPopup, setSystemSettingsPopup] = useState(false);
+  const [fucet, setFaucet] = useState(false);
+
   return (
     <View style={styles.topBar}>
       <Text style={styles.topBarName}>Blitz Wallet</Text>
@@ -24,7 +30,7 @@ export default function NavBar(props) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            props.setSystemSettingsPopup(true);
+            setSystemSettingsPopup(true);
           }}
           activeOpacity={0.5}
           style={styles.icons}>
@@ -44,8 +50,14 @@ export default function NavBar(props) {
         <OptionsDropdown
           setNavViews={setNavViews}
           isDisplayed={navViews.features}
+          setFaucet={setFaucet}
         />
       </View>
+      <SystemSettings
+        isDisplayed={systemSettingsPopup}
+        setSystemSettingsPopup={setSystemSettingsPopup}
+      />
+      <FaucetHome setFaucet={setFaucet} isDisplayed={fucet} />
     </View>
   );
 }

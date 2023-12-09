@@ -48,12 +48,8 @@ export default function AdminHome({navigation: {navigate}}) {
     transactions: [],
     userBalance: 0,
   });
-  // const [navViews, setNavViews] = useState({
-  //   features: false,
-  // });
 
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
-  const [systemSettingsPopup, setSystemSettingsPopup] = useState(false);
 
   const [breezEvent, setBreezEvent] = useState({});
 
@@ -136,7 +132,7 @@ export default function AdminHome({navigation: {navigate}}) {
           breezInformation={breezInformation}
           nodeConnectionPopup={nodeConnectionPopup}
           setNodeConnectionPopup={setNodeConnectionPopup}
-          setSystemSettingsPopup={setSystemSettingsPopup}
+          // setSystemSettingsPopup={setSystemSettingsPopup}
         />
         <HomeLightning
           breezEvent={breezEvent}
@@ -148,10 +144,6 @@ export default function AdminHome({navigation: {navigate}}) {
       <ConnectionToNode
         isDisplayed={nodeConnectionPopup}
         hidePopup={setNodeConnectionPopup}
-      />
-      <SystemSettings
-        isDisplayed={systemSettingsPopup}
-        setSystemSettingsPopup={setSystemSettingsPopup}
       />
     </View>
   );

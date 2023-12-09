@@ -61,6 +61,12 @@ export function OptionsDropdown(props) {
                   console.log(err, 'OPENING LINK ERROR');
                 }
               } else {
+                if (item.name === 'Faucet') {
+                  props.setFaucet(true);
+                  props.setNavViews({
+                    features: false,
+                  });
+                }
                 return;
               }
               props.setNavViews(false);
