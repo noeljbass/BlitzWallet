@@ -22,7 +22,9 @@ export function UserTransaction(props) {
       )}
       <View>
         <Text style={styles.descriptionText}>
-          {props.description && props.description.length > 20
+          {props.description.includes('bwrfd')
+            ? 'faucet'
+            : props.description.length > 20
             ? props.description.slice(0, 20) + '...'
             : props.description}
           {!props.description && 'No description'}

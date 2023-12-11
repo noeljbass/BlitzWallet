@@ -132,6 +132,7 @@ export default function AdminHome({navigation: {navigate}}) {
           breezInformation={breezInformation}
           nodeConnectionPopup={nodeConnectionPopup}
           setNodeConnectionPopup={setNodeConnectionPopup}
+          breezEvent={breezEvent}
           // setSystemSettingsPopup={setSystemSettingsPopup}
         />
         <HomeLightning

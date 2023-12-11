@@ -74,6 +74,10 @@ export default function FaucetHome(props) {
           isDisplayed={recivePath.mainPage}
           numberOfPeople={numberOfPeople}
           amountPerPerson={amountPerPerson}
+          breezEvent={props.breezEvent}
+          setNumberOfPeople={setNumberOfPeople}
+          setAmountPerPerson={setAmountPerPerson}
+          setFaucet={props.setFaucet}
         />
       </View>
     </Modal>

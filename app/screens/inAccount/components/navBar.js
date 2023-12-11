@@ -57,7 +57,11 @@ export default function NavBar(props) {
         isDisplayed={systemSettingsPopup}
         setSystemSettingsPopup={setSystemSettingsPopup}
       />
-      <FaucetHome setFaucet={setFaucet} isDisplayed={fucet} />
+      <FaucetHome
+        breezEvent={props.breezEvent}
+        setFaucet={setFaucet}
+        isDisplayed={fucet}
+      />
     </View>
   );
 }
