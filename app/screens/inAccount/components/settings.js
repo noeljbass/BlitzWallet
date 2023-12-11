@@ -23,7 +23,7 @@ const GENERALOPTIONS = [
   },
   {
     for: 'general',
-    name: 'Display',
+    name: 'Fiat currency',
     icon: ICONS.Checkcircle,
     arrowIcon: ICONS.leftCheveronIcon,
   },

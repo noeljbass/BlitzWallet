@@ -18,6 +18,7 @@ export default function HomeLightning(props) {
     for: '',
     isDisplayed: false,
   });
+  const [showAmount, setShowAmount] = useState(true);
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
@@ -38,13 +39,19 @@ export default function HomeLightning(props) {
 
   const transactionElement = props.breezInformation?.transactions?.map(
     (transaction, id) => {
-      return <UserTransaction key={id} {...transaction} />;
+      return (
+        <UserTransaction showAmount={showAmount} key={id} {...transaction} />
+      );
     },
   );
 
   return (
     <>
-      <UserSatAmount breezInformation={props.breezInformation} />
+      <UserSatAmount
+        setShowAmount={setShowAmount}
+        showAmount={showAmount}
+        breezInformation={props.breezInformation}
+      />
       <ScrollView style={style.scrollContainer}>
         {transactionElement?.length === 0 && (
           <View style={style.noTransactionsContainer}>

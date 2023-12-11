@@ -39,18 +39,16 @@ export default function ConfirmPage(props) {
             <Text style={styles.dateText}>
               {new Date(
                 props.for?.toLowerCase() === 'invoicepaid'
-                  ? props.information.details.payment?.paymentTime * 1000
+                  ? props.information.details?.payment?.paymentTime * 1000
                   : props.information.details?.paymentTime * 1000,
               ).toLocaleString()}
             </Text>
             <Text style={styles.amountText}>
               {props.for?.toLowerCase() === 'invoicepaid'
                 ? (
-                    props.information.details.payment?.amountMsat / 1000
+                    props.information.details?.payment?.amountMsat / 1000
                   )?.toFixed(2)
-                : (props.information.details?.amountMsat / 1000)?.toFixed(
-                    2,
-                  )}{' '}
+                : (props.information.details?.amountMsat / 1000)?.toFixed(2)}
               <Text style={{color: COLORS.primary}}>sat</Text>
             </Text>
             <View style={styles.seperator}></View>
@@ -58,8 +56,8 @@ export default function ConfirmPage(props) {
             <Text style={styles.descriptionText}>
               <Text style={styles.descriptor}>Desc</Text>{' '}
               {props.for?.toLowerCase() === 'invoicepaid'
-                ? props.information.details.payment?.description
-                  ? props.information.details.payment.description
+                ? props.information.details?.payment?.description
+                  ? props.information.details?.payment.description
                   : 'no description'
                 : props.information.details?.description
                 ? props.information.details?.description
@@ -68,7 +66,9 @@ export default function ConfirmPage(props) {
             <Text style={styles.feeText}>
               <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
               {props.for?.toLowerCase() === 'invoicepaid'
-                ? (props.information.details.payment?.feeMsat / 1000).toFixed(2)
+                ? (props.information.details?.payment?.feeMsat / 1000).toFixed(
+                    2,
+                  )
                 : (props.information.details?.feeMsat / 1000).toFixed(2)}
             </Text>
           </View>

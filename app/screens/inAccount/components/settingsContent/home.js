@@ -12,6 +12,8 @@ import {
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
 import AboutPage from './about';
+import RecoveryPage from './recoveryPhrase';
+import FiatCurrencyPage from './fiatCurrency';
 
 export default function SettingsContent(props) {
   const fadeAnim = useRef(new Animated.Value(600)).current;
@@ -39,7 +41,7 @@ export default function SettingsContent(props) {
   return (
     <Animated.View
       style={[styles.globalContainer, {transform: [{translateX: fadeAnim}]}]}>
-      <SafeAreaView style={styles.innerContainer}>
+      <SafeAreaView>
         <View style={styles.topbar}>
           <TouchableOpacity
             onPress={() =>
@@ -49,10 +51,14 @@ export default function SettingsContent(props) {
           </TouchableOpacity>
           <Text style={styles.topBarText}>{props.for}</Text>
         </View>
-        <ScrollView>
-          {props.for?.toLowerCase() === 'about' && <AboutPage />}
-        </ScrollView>
       </SafeAreaView>
+      <View style={{flex: 1}}>
+        {props.for?.toLowerCase() === 'about' && <AboutPage />}
+        {props.for?.toLowerCase() === 'recovery phrase' && <RecoveryPage />}
+        {props.for?.toLowerCase() === 'fiat currency' && (
+          <FiatCurrencyPage setSettingsContent={props.setSettingsContent} />
+        )}
+      </View>
     </Animated.View>
   );
 }

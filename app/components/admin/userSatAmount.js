@@ -8,7 +8,7 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 // import {getLocalStorageItem, setLocalStorageItem} from '../global';
 
 export function UserSatAmount(props) {
-  const [showAmount, setShowAmount] = useState(true);
+  // const [showAmount, setShowAmount] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -17,8 +17,8 @@ export function UserSatAmount(props) {
       );
 
       if (displayAmount != null) {
-        setShowAmount(displayAmount);
-      } else setShowAmount(true);
+        props.setShowAmount(displayAmount);
+      } else props.setShowAmount(true);
     })();
   }, []);
 
@@ -102,7 +102,7 @@ export function UserSatAmount(props) {
   return (
     <TouchableOpacity
       onPress={() => {
-        setShowAmount(prev => {
+        props.setShowAmount(prev => {
           setLocalStorageItem('showBalance', JSON.stringify(!prev));
           return !prev;
         });
@@ -110,14 +110,14 @@ export function UserSatAmount(props) {
       <View style={styles.valueContainer}>
         <Text style={combinedStyles.bitcoinText}>BTC</Text>
 
-        {showAmount && (
+        {props.showAmount && (
           <Text style={styles.valueText}>
             {formatBitcoinAmoutn(
               props.breezInformation?.userBalance.toFixed(0),
             )}
           </Text>
         )}
-        {!showAmount && <Text style={styles.valueText}>* * * * *</Text>}
+        {!props.showAmount && <Text style={styles.valueText}>* * * * *</Text>}
         <Text style={combinedStyles.satsText}>Sats</Text>
       </View>
     </TouchableOpacity>

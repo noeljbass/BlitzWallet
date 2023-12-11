@@ -79,7 +79,7 @@ export default function AdminHome({navigation: {navigate}}) {
 
           if (response) {
             // await setLogStream(logHandler);
-            const healthCheck = await serviceHealthCheck();
+            // const healthCheck = await serviceHealthCheck();
             // console.log(healthCheck);
 
             const nodeAmount = await nodeInfo();
