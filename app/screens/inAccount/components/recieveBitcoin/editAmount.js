@@ -19,11 +19,36 @@ export default function EditAmountPopup(props) {
 
   function saveChanges() {
     try {
-      if (isNaN(Number(numSats))) throw Error('Not a number');
-      if (numSats) props.setSendingAmount(Number(numSats) * 1000);
-      else props.setSendingAmount(1000);
-      if (description) props.setPaymentDescription(description);
-      else props.setPaymentDescription('');
+      // if (isNaN(Number(numSats))) throw Error('Not a number');
+      if (numSats)
+        props.setSendingAmount(prev => {
+          if (props.type === 'lightning')
+            return {...prev, lightning: Number(numSats) * 1000};
+          else if (props.type === 'bitcoin')
+            return {...prev, bitcoin: Number(numSats) * 1000};
+          else return {...prev, liquid: Number(numSats) * 1000};
+        });
+      else
+        props.setSendingAmount({
+          lightning: 1000,
+          bitcoin: 1000,
+          liquid: 1000,
+        });
+
+      if (description)
+        props.setPaymentDescription(prev => {
+          if (props.type === 'lightning')
+            return {...prev, lightning: description};
+          else if (props.type === 'bitcoin')
+            return {...prev, bitcoin: description};
+          else return {...prev, liquid: description};
+        });
+      else
+        props.setPaymentDescription({
+          lightning: '',
+          bitcoin: '',
+          liquid: '',
+        });
 
       props.setIsDisplayed(false);
     } catch (err) {
@@ -51,6 +76,13 @@ export default function EditAmountPopup(props) {
     else fadeOut();
   }, [props.isDisplayed]);
 
+  useEffect(() => {
+    console.log('TESTING FOR THIS');
+    setNumSats('');
+    setdescription('');
+  }, [props.type]);
+  // console.log('EDIT AMOUNT', props.type);
+
   return (
     <Animated.View
       style={[
@@ -72,12 +104,14 @@ export default function EditAmountPopup(props) {
               placeholderTextColor={COLORS.gray}
               onChangeText={setNumSats}
               keyboardType="numeric"
+              value={numSats}
             />
             <TextInput
               style={styles.input}
               placeholder="Description (optional)"
               placeholderTextColor={COLORS.gray}
               onChangeText={setdescription}
+              value={description}
             />
             <TouchableOpacity
               onPress={() => {
