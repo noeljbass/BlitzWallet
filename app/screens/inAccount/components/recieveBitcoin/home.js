@@ -61,6 +61,7 @@ export function ReceivePaymentHome(props) {
       bitcoin: '',
       liquid: '',
     });
+    setGeneratedAddress('');
 
     if (type === 'navChange') return;
     setEditPaymentPopup(false);
@@ -77,51 +78,59 @@ export function ReceivePaymentHome(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}>
-      <SafeAreaView style={{flex: 1}}>
-        <TopBar clear={clear} />
-        <Text style={styles.title}>
-          {selectedRecieveOption[0].toUpperCase() +
-            selectedRecieveOption.slice(1)}
-        </Text>
+      <View style={{flex: 1, backgroundColor: COLORS.background}}>
+        <SafeAreaView style={{flex: 1}}>
+          <TopBar clear={clear} />
+          <Text style={styles.title}>
+            {selectedRecieveOption[0].toUpperCase() +
+              selectedRecieveOption.slice(1)}
+          </Text>
 
-        <NavBar
-          selectedRecieveOption={selectedRecieveOption}
-          setSelectedRecieveOption={setSelectedRecieveOption}
-        />
+          <NavBar
+            selectedRecieveOption={selectedRecieveOption}
+            setSelectedRecieveOption={setSelectedRecieveOption}
+          />
 
-        {/*PAGES*/}
-        <LightningPage
-          selectedRecieveOption={selectedRecieveOption}
-          sendingAmount={sendingAmount.lightning}
-          updateQRCode={updateQRCode}
-          isDisplayed={props.isDisplayed}
-          generatedAddress={generatedAddress}
-          paymentDescription={paymentDescription.lightning}
-          setGeneratedAddress={setGeneratedAddress}
-        />
-        <BitcoinPage selectedRecieveOption={selectedRecieveOption} />
-        <LiquidPage selectedRecieveOption={selectedRecieveOption} />
+          {/*PAGES*/}
+          <LightningPage
+            selectedRecieveOption={selectedRecieveOption}
+            sendingAmount={sendingAmount.lightning}
+            updateQRCode={updateQRCode}
+            isDisplayed={props.isDisplayed}
+            generatedAddress={generatedAddress}
+            paymentDescription={paymentDescription.lightning}
+            setGeneratedAddress={setGeneratedAddress}
+          />
+          <BitcoinPage
+            selectedRecieveOption={selectedRecieveOption}
+            setGeneratedAddress={setGeneratedAddress}
+            generatedAddress={generatedAddress}
+          />
+          <LiquidPage selectedRecieveOption={selectedRecieveOption} />
 
-        <ButtonsContainer
-          generatedAddress={generatedAddress}
-          setEditPaymentPopup={setEditPaymentPopup}
-        />
+          <ButtonsContainer
+            selectedRecieveOption={selectedRecieveOption}
+            generatedAddress={generatedAddress}
+            setEditPaymentPopup={setEditPaymentPopup}
+          />
 
-        {/* popups */}
-        {/* <FullAdress
+          {/* popups */}
+          {/* <FullAdress
           isDisplayed={fullAddressView}
           setDisplayAdress={setFullAddressView}
           address={generatedAddress}
         /> */}
-      </SafeAreaView>
-      <EditAmountPopup
-        type={selectedRecieveOption}
-        setSendingAmount={setSendingAmount}
-        setPaymentDescription={setPaymentDescription}
-        isDisplayed={editPaymentPopup}
-        setIsDisplayed={setEditPaymentPopup}
-        setUpdateQRCode={setUpdateQRCode}
-      />
+        </SafeAreaView>
+
+        <EditAmountPopup
+          type={selectedRecieveOption}
+          setSendingAmount={setSendingAmount}
+          setPaymentDescription={setPaymentDescription}
+          isDisplayed={editPaymentPopup}
+          setIsDisplayed={setEditPaymentPopup}
+          setUpdateQRCode={setUpdateQRCode}
+        />
+      </View>
     </Modal>
   );
 }

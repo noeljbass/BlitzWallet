@@ -27,6 +27,7 @@ import {
   userAuth,
 } from '../../functions';
 import {
+  lspInfo,
   nodeInfo,
   serviceHealthCheck,
   setLogStream,
@@ -40,6 +41,7 @@ import {OptionsDropdown} from './components/optionsDropdown';
 import {CommonActions} from '@react-navigation/native';
 import NavBar from './components/navBar';
 import SystemSettings from './components/settings';
+import {getSwapFee, getSwapPairInformation} from '../../functions/LBTC';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
@@ -69,8 +71,12 @@ export default function AdminHome({navigation: {navigate}}) {
     };
 
     (async () => {
+      // // getSwapFee();
+      // getSwapPairInformation();
+      // return;
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
+        isInitialRender.current = false;
 
         try {
           const response = await connectToNode(onBreezEvent);
@@ -85,8 +91,9 @@ export default function AdminHome({navigation: {navigate}}) {
             const nodeAmount = await nodeInfo();
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
+            const info = await lspInfo();
 
-            console.log(nodeAmount, 'LSPPSSS');
+            console.log(info, 'LSPPSSS');
 
             setBreezInformation(prev => {
               return {
@@ -96,10 +103,9 @@ export default function AdminHome({navigation: {navigate}}) {
                 userBalance: msatToSat,
               };
             });
-            isInitialRender.current = false;
           }
         } catch (err) {
-          // console.log(err, 'homepage connection to node err');
+          console.log(err, 'homepage connection to node err');
         }
       } else {
         if (Object.keys(breezEvent).length === 0) return;

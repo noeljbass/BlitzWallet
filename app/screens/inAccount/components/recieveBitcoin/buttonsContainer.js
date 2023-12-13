@@ -4,7 +4,11 @@ import * as Clipboard from 'expo-clipboard';
 
 export default function ButtonsContainer(props) {
   return (
-    <View style={styles.buttonsContainer}>
+    <View
+      style={[
+        styles.buttonsContainer,
+        {width: props.selectedRecieveOption != 'bitcoin' ? '90%' : '60%'},
+      ]}>
       <TouchableOpacity
         onPress={openShareOptions}
         style={[styles.buttonsOpacity]}>
@@ -15,11 +19,13 @@ export default function ButtonsContainer(props) {
         style={[styles.buttonsOpacity]}>
         <Text style={styles.buttonText}>Copy</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => props.setEditPaymentPopup(true)}
-        style={[styles.buttonsOpacity]}>
-        <Text style={styles.buttonText}>Edit</Text>
-      </TouchableOpacity>
+      {props.selectedRecieveOption != 'bitcoin' && (
+        <TouchableOpacity
+          onPress={() => props.setEditPaymentPopup(true)}
+          style={[styles.buttonsOpacity]}>
+          <Text style={styles.buttonText}>Edit</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 
