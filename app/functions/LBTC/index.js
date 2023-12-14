@@ -1,4 +1,8 @@
 import axios from 'axios';
+import {generateSecureRandom} from 'react-native-securerandom';
+import ecc from '@bitcoinerlab/secp256k1';
+import {ECPairFactory} from 'ecpair';
+const ECPair = ECPairFactory(ecc);
 
 export async function getSwapFee() {
   try {
@@ -18,22 +22,40 @@ export async function getSwapPairInformation() {
     return new Promise(resolve => {
       resolve(data);
     });
-    console.log(data);
   } catch (err) {
     console.log(err);
   }
 }
 
-export async function createLiquidSwap(invoice) {
+export async function createLiquidSwap(invoice, hash) {
   try {
-    const request = await axios.post('https://api.boltz.exchange/createswap', {
+    const randomBytesArray = await generateSecureRandom(32);
+    const privateKey = Buffer.from(randomBytesArray);
+    // Create a public key from the private key
+    const publicKey =
+      ECPair.fromPrivateKey(privateKey).publicKey.toString('hex');
+
+    const url = 'https://api.boltz.exchange/createswap';
+    // Set the Content-Type header to application/json
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const postData = {
       type: 'submarine',
       pairId: 'L-BTC/BTC',
       orderSide: 'sell',
       invoice: invoice,
+      //   pairHash: hash,
+      refundPublicKey: publicKey,
+    };
+
+    const request = await axios.post(url, postData);
+
+    return new Promise(resolve => {
+      resolve(request.data);
     });
-    const data = request.data.pairs['L-BTC/BTC'];
-    console.log(data);
+
+    // console.log(request.data);
   } catch (err) {
     console.log(err);
   }

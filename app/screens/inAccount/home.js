@@ -71,9 +71,6 @@ export default function AdminHome({navigation: {navigate}}) {
     };
 
     (async () => {
-      // // getSwapFee();
-      // getSwapPairInformation();
-      // return;
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
         isInitialRender.current = false;

@@ -8,9 +8,19 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {CENTER, COLORS, ICONS, SIZES} from '../../../constants';
+import {useEffect, useState} from 'react';
 
 export default function ConfirmPage(props) {
-  console.log('CONFIRM PAYMENT SCREEN');
+  const [information, setInformation] = useState({});
+  console.log('CONFIRM PAYMENT SCREEN', information);
+  useEffect(() => {
+    if (
+      props.information.type != 'invoicePaid' &&
+      props.information.type != 'paymentSucceed'
+    )
+      return;
+    setInformation(props.information);
+  }, [props.information]);
 
   return (
     <Modal
@@ -39,37 +49,33 @@ export default function ConfirmPage(props) {
             <Text style={styles.dateText}>
               {new Date(
                 props.for?.toLowerCase() === 'invoicepaid'
-                  ? props.information.details?.payment?.paymentTime * 1000
-                  : props.information.details?.paymentTime * 1000,
+                  ? information.details?.payment?.paymentTime * 1000
+                  : information.details?.paymentTime * 1000,
               ).toLocaleString()}
             </Text>
             <Text style={styles.amountText}>
               {props.for?.toLowerCase() === 'invoicepaid'
-                ? (
-                    props.information.details?.payment?.amountMsat / 1000
-                  )?.toFixed(2)
-                : (props.information.details?.amountMsat / 1000)?.toFixed(2)}
-              <Text style={{color: COLORS.primary}}>sat</Text>
+                ? (information.details?.payment?.amountMsat / 1000)?.toFixed(2)
+                : (information.details?.amountMsat / 1000)?.toFixed(2)}
+              <Text style={{color: COLORS.primary}}> sat</Text>
             </Text>
             <View style={styles.seperator}></View>
 
             <Text style={styles.descriptionText}>
               <Text style={styles.descriptor}>Desc</Text>{' '}
               {props.for?.toLowerCase() === 'invoicepaid'
-                ? props.information.details?.payment?.description
-                  ? props.information.details?.payment.description
+                ? information.details?.payment?.description
+                  ? information.details?.payment.description
                   : 'no description'
-                : props.information.details?.description
-                ? props.information.details?.description
+                : information.details?.description
+                ? information.details?.description
                 : 'no description'}
             </Text>
             <Text style={styles.feeText}>
               <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
               {props.for?.toLowerCase() === 'invoicepaid'
-                ? (props.information.details?.payment?.feeMsat / 1000).toFixed(
-                    2,
-                  )
-                : (props.information.details?.feeMsat / 1000).toFixed(2)}
+                ? (information.details?.payment?.feeMsat / 1000).toFixed(2)
+                : (information.details?.feeMsat / 1000).toFixed(2)}
             </Text>
           </View>
         </SafeAreaView>
