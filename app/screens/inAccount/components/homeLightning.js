@@ -68,20 +68,26 @@ export default function HomeLightning(props) {
       />
 
       {/* POPUPS */}
-      <ReceivePaymentHome
-        isDisplayed={recivePayment}
-        setRecivePayment={setRecivePayment}
-      />
-      <SendPaymentHome
-        isDisplayed={sendPayment}
-        setSendPayment={setSendPayment}
-        confirmPageDisplayed={confirmPage.isDisplayed}
-      />
-      <ConfirmPage
-        information={props.breezEvent}
-        setConfirmPage={setConfirmPage}
-        {...confirmPage}
-      />
+      {recivePayment && (
+        <ReceivePaymentHome
+          isDisplayed={recivePayment}
+          setRecivePayment={setRecivePayment}
+        />
+      )}
+      {sendPayment && (
+        <SendPaymentHome
+          isDisplayed={sendPayment}
+          setSendPayment={setSendPayment}
+          confirmPageDisplayed={confirmPage.isDisplayed}
+        />
+      )}
+      {confirmPage.isDisplayed && (
+        <ConfirmPage
+          information={props.breezEvent}
+          setConfirmPage={setConfirmPage}
+          {...confirmPage}
+        />
+      )}
     </>
   );
 }

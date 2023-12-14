@@ -59,6 +59,9 @@ export default function AdminHome({navigation: {navigate}}) {
   console.log(breezEvent, 'BreezEvent on home screen');
 
   const onBreezEvent = e => {
+    console.log(e, 'IN FUNCTION EVENT');
+    // if (e?.type != 'invoicePaid' && e?.type != 'paymentSucceed') return;
+
     setBreezEvent(e);
 
     // console.log(`Received event ${e.type} did that actually work`);
