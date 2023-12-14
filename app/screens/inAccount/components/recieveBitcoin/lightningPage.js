@@ -13,12 +13,14 @@ import {
 } from '@breeztech/react-native-breez-sdk';
 import QRCode from 'react-native-qrcode-svg';
 import {FONT, SIZES, CENTER, COLORS} from '../../../../constants';
+import {err} from 'react-native-svg/lib/typescript/xml';
 
 export default function LightningPage(props) {
   const [fiatRate, setFiatRate] = useState(0);
   const [generatingQrCode, setGeneratingQrCode] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  console.log(props.sendingAmount * 5, props.paymentDescription, 'TEST');
+  console.log('error message text', errorMessageText);
+
   useEffect(() => {
     if (props.selectedRecieveOption != 'lightning') {
       setErrorMessageText('');
@@ -44,7 +46,7 @@ export default function LightningPage(props) {
         {generatingQrCode && (
           <ActivityIndicator size="large" color={COLORS.primary} />
         )}
-        {!generatingQrCode && !errorMessageText && (
+        {!generatingQrCode && (
           <QRCode
             size={250}
             value={
@@ -75,21 +77,25 @@ export default function LightningPage(props) {
 
   async function generateLightningInvoice() {
     try {
+      if (props.sendingAmount === 0) {
+        console.log('reciving zero');
+        setGeneratingQrCode(true);
+        setErrorMessageText('Must recieve more than 0 sats');
+        return;
+      }
       const channelFee = await openChannelFee({
         amountMsat: props.sendingAmount,
       });
-
-      if (props.sendingAmount === 0) {
-        setGeneratingQrCode(false);
-        setErrorMessageText('Must recieve more than 0 sats');
-        return;
-      } else if (props.sendingAmount < channelFee.feeMsat) {
-        setGeneratingQrCode(false);
-        setErrorMessageText('Channel Open Fee is 3,000 sat');
-        return;
-      }
+      console.log(channelFee, channelFee?.usedFeeParams);
       setErrorMessageText('');
       setGeneratingQrCode(true);
+
+      if (channelFee?.usedFeeParams) {
+        setErrorMessageText(
+          'Amount is above your reciveing capacity. Sending this payment will incur a 2,500 sat fee',
+        );
+      }
+
       const invoice = await receivePayment({
         amountMsat: props.sendingAmount,
         description: props.paymentDescription,
@@ -129,13 +135,16 @@ const styles = StyleSheet.create({
   },
 
   errorContainer: {
-    flex: 1,
+    width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
+    ...CENTER,
   },
   errorText: {
     color: 'red',
     fontSize: SIZES.large,
     fontFamily: FONT.Descriptoin_Regular,
+    textAlign: 'center',
   },
 });

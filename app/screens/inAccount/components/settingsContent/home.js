@@ -14,6 +14,7 @@ import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import AboutPage from './about';
 import RecoveryPage from './recoveryPhrase';
 import FiatCurrencyPage from './fiatCurrency';
+import NodeInfo from './nodeInfo';
 
 export default function SettingsContent(props) {
   const fadeAnim = useRef(new Animated.Value(600)).current;
@@ -58,6 +59,7 @@ export default function SettingsContent(props) {
         {props.for?.toLowerCase() === 'fiat currency' && (
           <FiatCurrencyPage setSettingsContent={props.setSettingsContent} />
         )}
+        {props.for?.toLowerCase() === 'node info' && <NodeInfo />}
       </View>
     </Animated.View>
   );

@@ -46,7 +46,7 @@ export default function HomeLightning(props) {
   );
 
   return (
-    <>
+    <View style={style.globalContainer}>
       <UserSatAmount
         setShowAmount={setShowAmount}
         showAmount={showAmount}
@@ -88,14 +88,18 @@ export default function HomeLightning(props) {
           {...confirmPage}
         />
       )}
-    </>
+    </View>
   );
 }
 
 const style = StyleSheet.create({
+  globalContainer: {
+    flex: 1,
+  },
   scrollContainer: {
+    flex: 1,
     width: '90%',
-    marginVertical: 20,
+    marginTop: 20,
     ...CENTER,
   },
   noTransactionsContainer: {

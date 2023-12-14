@@ -60,7 +60,7 @@ export default function AdminHome({navigation: {navigate}}) {
 
   const onBreezEvent = e => {
     console.log(e, 'IN FUNCTION EVENT');
-    // if (e?.type != 'invoicePaid' && e?.type != 'paymentSucceed') return;
+    if (e?.type != 'invoicePaid' && e?.type != 'paymentSucceed') return;
 
     setBreezEvent(e);
 
@@ -92,7 +92,8 @@ export default function AdminHome({navigation: {navigate}}) {
             const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
             const transactions = await getTransactions();
             const info = await lspInfo();
-
+            const heath = await serviceHealthCheck();
+            console.log(heath);
             console.log(info, 'LSPPSSS');
 
             setBreezInformation(prev => {

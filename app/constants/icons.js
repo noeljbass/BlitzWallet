@@ -19,6 +19,14 @@ import faucetIcon from '../assets/icons/faucet.png';
 import bitcoinIcon from '../assets/icons/bitcoin_logo.png';
 import lightningIcon from '../assets/icons/bitcoin_lightning.png';
 import liquidIcon from '../assets/icons/liquidIcon.png';
+import trashIcon from '../assets/icons/trashIcon.png';
+import linkIcon from '../assets/icons/linkIcon.png';
+import faceIDIcon from '../assets/icons/faceIDIcon.png';
+import keyIcon from '../assets/icons/keyIcon.png';
+import notificationsIcon from '../assets/icons/notificationsIcon.png';
+import nodeIcon from '../assets/icons/nodeIcon.png';
+import currencyIcon from '../assets/icons/currencyIcon.png';
+import aboutIcon from '../assets/icons/aboutIcon.png';
 
 export default {
   Xcircle,
@@ -42,4 +50,12 @@ export default {
   bitcoinIcon,
   lightningIcon,
   liquidIcon,
+  trashIcon,
+  linkIcon,
+  faceIDIcon,
+  keyIcon,
+  notificationsIcon,
+  nodeIcon,
+  currencyIcon,
+  aboutIcon,
 };

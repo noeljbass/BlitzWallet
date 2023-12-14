@@ -18,31 +18,31 @@ const GENERALOPTIONS = [
   {
     for: 'general',
     name: 'About',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.aboutIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   {
     for: 'general',
     name: 'Fiat currency',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.currencyIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   {
     for: 'general',
     name: 'Node Info',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.nodeIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  {
-    for: 'general',
-    name: 'Channels',
-    icon: ICONS.Checkcircle,
-    arrowIcon: ICONS.leftCheveronIcon,
-  },
+  // {
+  //   for: 'general',
+  //   name: 'Channels',
+  //   icon: ICONS.Checkcircle,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  // },
   {
     for: 'general',
     name: 'Notifications',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.notificationsIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
 ];
@@ -50,39 +50,39 @@ const SECURITYOPTIONS = [
   {
     for: 'Security & Customization',
     name: 'Face ID',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.faceIDIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   {
     for: 'Security & Customization',
     name: 'Recovery phrase',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.keyIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   {
     for: 'Security & Customization',
     name: 'LSP',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.linkIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
 ];
 const ADVANCEDOPTIONS = [
-  {
-    for: 'Closeing Accont',
-    name: 'Drain Wallet',
-    icon: ICONS.Checkcircle,
-    arrowIcon: ICONS.leftCheveronIcon,
-  },
+  // {
+  //   for: 'Closeing Accont',
+  //   name: 'Drain Wallet',
+  //   icon: ICONS.Checkcircle,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  // },
   {
     for: 'Closeing Accont',
     name: 'Reset Wallet',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.trashIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   {
     for: 'Closeing Accont',
     name: 'Force-close channels',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.Xcircle,
     arrowIcon: ICONS.leftCheveronIcon,
   },
 ];

@@ -81,7 +81,7 @@ export function ConnectionToNode(props) {
           </Text>
           <Text style={styles.itemText}>
             Max Recivable:{' '}
-            {(nodeInformation?.maxReceivableMsat / 1000).toLocaleString()}
+            {(nodeInformation?.inboundLiquidityMsats / 1000).toLocaleString()}
           </Text>
           <Text style={styles.itemText}>
             On-chain Balance:{' '}
