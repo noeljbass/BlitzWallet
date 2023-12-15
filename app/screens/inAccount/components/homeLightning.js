@@ -1,14 +1,15 @@
 import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
 
-import {CENTER, SIZES, FONT} from '../../../constants';
+import {CENTER, SIZES, FONT, COLORS} from '../../../constants';
 
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
 import {UserTransaction} from './userTransactions';
 import {SendRecieveBTNs} from './sendReciveBTNs';
 import {ReceivePaymentHome} from './recieveBitcoin';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import SendPaymentHome from './sendBitcoin.js/home';
 import ConfirmPage from './confirmPage';
+import {getLocalStorageItem} from '../../../functions';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
@@ -52,7 +53,18 @@ export default function HomeLightning(props) {
         showAmount={showAmount}
         breezInformation={props.breezInformation}
       />
+      {!props.breezInformation.didConnectToNode && (
+        <View style={style.errorContainer}>
+          <Text style={style.errorText}>
+            Not connected to node. Balances and transactions may not be updated
+          </Text>
+        </View>
+      )}
       <ScrollView style={style.scrollContainer}>
+        {/* <TransactionListElements
+          showAmount={showAmount}
+          breezTransactions={props.breezInformation}
+        /> */}
         {transactionElement?.length === 0 && (
           <View style={style.noTransactionsContainer}>
             <Text style={style.noTransactionsText}>
@@ -92,6 +104,46 @@ export default function HomeLightning(props) {
   );
 }
 
+function TransactionListElements(props) {
+  // const isInitialRender = useRef(true);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      if (isInitialRender.current) {
+        const storedTransaction = await getLocalStorageItem('breezInfo');
+        isInitialRender.current = false;
+        if (!storedTransaction) return;
+        setTransactions(JSON.parse(storedTransaction)[0]);
+      } else {
+        setTransactions(props?.breezTransactions?.transactions);
+      }
+    })();
+  }, [props?.breezTransactions?.transactions]);
+
+  const transactionElement = transactions?.map((transaction, id) => {
+    return (
+      <UserTransaction
+        showAmount={props.showAmount}
+        key={id}
+        {...transaction}
+      />
+    );
+  });
+
+  return (
+    <>
+      {transactionElement?.length === 0 && (
+        <View style={style.noTransactionsContainer}>
+          <Text style={style.noTransactionsText}>
+            Send or recive a transaction to see your activty here.
+          </Text>
+        </View>
+      )}
+      {transactionElement?.length != 0 && transactionElement}
+    </>
+  );
+}
 const style = StyleSheet.create({
   globalContainer: {
     flex: 1,
@@ -110,5 +162,24 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: FONT.Descriptoin_Regular,
+  },
+
+  errorContainer: {
+    width: '95%',
+    backgroundColor: 'orange',
+
+    padding: 8,
+    ...CENTER,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.cancelRed,
+
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  errorText: {
+    fontFamily: FONT.Title_Bold,
+    fontSize: SIZES.small,
+    textAlign: 'center',
   },
 });

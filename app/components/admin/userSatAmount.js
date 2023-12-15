@@ -8,6 +8,7 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 // import {getLocalStorageItem, setLocalStorageItem} from '../global';
 
 export function UserSatAmount(props) {
+  // const isInitialRender = useRef(true);
   // const [showAmount, setShowAmount] = useState(true);
 
   useEffect(() => {
@@ -21,6 +22,12 @@ export function UserSatAmount(props) {
       } else props.setShowAmount(true);
     })();
   }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+
+  //   })();
+  // }, [props.breezInformation.userBalance]);
 
   function formatBitcoinAmoutn(amout) {
     if (!Number(amout)) {

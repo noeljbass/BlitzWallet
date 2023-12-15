@@ -25,6 +25,8 @@ import {
   connectToNode,
   RotatingAnimation,
   userAuth,
+  setLocalStorageItem,
+  getLocalStorageItem,
 } from '../../functions';
 import {
   lspInfo,
@@ -74,6 +76,17 @@ export default function AdminHome({navigation: {navigate}}) {
     };
 
     (async () => {
+      const savedBreezInfo = await getLocalStorageItem('breezInfo');
+      if (savedBreezInfo) {
+        setBreezInformation(prev => {
+          return {
+            ...prev,
+            transactions: JSON.parse(savedBreezInfo)[0],
+            userBalance: JSON.parse(savedBreezInfo)[1],
+          };
+        });
+      }
+
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
         isInitialRender.current = false;
@@ -104,6 +117,14 @@ export default function AdminHome({navigation: {navigate}}) {
                 userBalance: msatToSat,
               };
             });
+
+            if (savedBreezInfo[0].toString() === transactions.toString())
+              return;
+
+            await setLocalStorageItem(
+              'breezInfo',
+              JSON.stringify([transactions, msatToSat]),
+            );
           }
         } catch (err) {
           console.log(err, 'homepage connection to node err');
@@ -125,6 +146,13 @@ export default function AdminHome({navigation: {navigate}}) {
               transactions: transactions,
             };
           });
+          if (savedBreezInfo[0].toString() === transactions.toString()) return;
+
+          await setLocalStorageItem(
+            'breezInfo',
+            JSON.stringify([transactions, msatToSat]),
+          );
+
           console.log('HOME RENDER PAID INVOINCE');
         }
         // console.log('HOME RENDER BREEZ EVENT');
