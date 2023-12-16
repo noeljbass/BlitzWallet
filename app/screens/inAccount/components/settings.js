@@ -39,12 +39,12 @@ const GENERALOPTIONS = [
   //   icon: ICONS.Checkcircle,
   //   arrowIcon: ICONS.leftCheveronIcon,
   // },
-  {
-    for: 'general',
-    name: 'Notifications',
-    icon: ICONS.notificationsIcon,
-    arrowIcon: ICONS.leftCheveronIcon,
-  },
+  // {
+  //   for: 'general',
+  //   name: 'Notifications',
+  //   icon: ICONS.notificationsIcon,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  // },
 ];
 const SECURITYOPTIONS = [
   {
@@ -81,7 +81,7 @@ const ADVANCEDOPTIONS = [
   },
   {
     for: 'Closeing Accont',
-    name: 'Force-close channels',
+    name: 'Drain Wallet',
     icon: ICONS.Xcircle,
     arrowIcon: ICONS.leftCheveronIcon,
   },

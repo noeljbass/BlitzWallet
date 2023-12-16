@@ -13,7 +13,7 @@ import {
 import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
 
-export default function ReceiveFaucetHome(props) {
+export default function SettingsPage(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
 
   const [errorMessage, setErrorMessage] = useState({
@@ -53,8 +53,9 @@ export default function ReceiveFaucetHome(props) {
       return;
     }
 
-    props.setRecievePath(prev => {
-      return {...prev, mainPage: true};
+    props.setUserPath(prev => {
+      if (props.recivePath.type === 'receive') return {...prev, recive: true};
+      else return {...prev, send: true};
     });
     setErrorMessage({
       for: null,
@@ -75,17 +76,24 @@ export default function ReceiveFaucetHome(props) {
           <View style={styles.topBar}>
             <TouchableOpacity
               onPress={() => {
-                props.setRecievePath(prev => {
+                props.setUserPath(prev => {
                   return {...prev, settings: false};
                 });
                 console.log('CLEAR');
                 props.setAmountPerPerson('');
                 props.setNumberOfPeople('');
+                setErrorMessage({
+                  for: null,
+                  message: '',
+                });
               }}>
               <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
             </TouchableOpacity>
             <Text style={[headerText, {transform: [{translateX: -12.5}]}]}>
-              Receieve Faucet
+              {props.userPath.type.toLowerCase() === 'receive'
+                ? 'Receive'
+                : 'Send'}{' '}
+              Faucet
             </Text>
           </View>
           <View style={styles.contentContainer}>

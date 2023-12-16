@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   Animated,
   StyleSheet,
@@ -15,9 +15,16 @@ import AboutPage from './about';
 import RecoveryPage from './recoveryPhrase';
 import FiatCurrencyPage from './fiatCurrency';
 import NodeInfo from './nodeInfo';
+import LSPPage from './lsp';
+import InfoPopup from './popupContainer';
+import ResetPage from './resetWallet';
 
 export default function SettingsContent(props) {
   const fadeAnim = useRef(new Animated.Value(600)).current;
+  const [displayPopup, setDisplayPopup] = useState({
+    isDisplayed: false,
+    type: '',
+  });
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -60,7 +67,12 @@ export default function SettingsContent(props) {
           <FiatCurrencyPage setSettingsContent={props.setSettingsContent} />
         )}
         {props.for?.toLowerCase() === 'node info' && <NodeInfo />}
+        {props.for?.toLowerCase() === 'lsp' && (
+          <LSPPage setDisplayPopup={setDisplayPopup} />
+        )}
+        {props.for?.toLowerCase() === 'reset wallet' && <ResetPage />}
       </View>
+      <InfoPopup setDisplayPopup={setDisplayPopup} {...displayPopup} />
     </Animated.View>
   );
 }

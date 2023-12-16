@@ -10,19 +10,21 @@ import {
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
 
-import ReceiveFaucetHome from './receiveFaucet';
 import {useState} from 'react';
 import ReceievePage from './receivePage';
+import SendPage from './sendPage';
+import SettingsPage from './settingsPage';
 
 export default function FaucetHome(props) {
-  const [recivePath, setRecievePath] = useState({
+  const [userPath, setUserPath] = useState({
     settings: false,
-    mainPage: false,
+    receive: false,
+    send: false,
+    type: '',
   });
   const [numberOfPeople, setNumberOfPeople] = useState('');
   const [amountPerPerson, setAmountPerPerson] = useState('');
 
-  const [sendBTN, setSendBTN] = useState(false);
   return (
     <Modal
       animationType="slide"
@@ -45,13 +47,19 @@ export default function FaucetHome(props) {
               Would you like to create a send or recieve faucet?
             </Text>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.button]}>
+              <TouchableOpacity
+                onPress={() => {
+                  setUserPath(prev => {
+                    return {...prev, settings: true, type: 'send'};
+                  });
+                }}
+                style={[styles.button]}>
                 <Text style={{color: COLORS.white}}>Send</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
-                  setRecievePath(prev => {
-                    return {...prev, settings: true};
+                  setUserPath(prev => {
+                    return {...prev, settings: true, type: 'receive'};
                   })
                 }
                 style={[styles.button]}>
@@ -61,17 +69,18 @@ export default function FaucetHome(props) {
           </View>
         </SafeAreaView>
         {/* popups */}
-        <ReceiveFaucetHome
-          setRecievePath={setRecievePath}
-          isDisplayed={recivePath.settings}
+        <SettingsPage
+          setUserPath={setUserPath}
+          isDisplayed={userPath.settings}
           setNumberOfPeople={setNumberOfPeople}
           setAmountPerPerson={setAmountPerPerson}
           numberOfPeople={numberOfPeople}
           amountPerPerson={amountPerPerson}
+          userPath={userPath}
         />
         <ReceievePage
-          setRecievePath={setRecievePath}
-          isDisplayed={recivePath.mainPage}
+          setUserPath={setUserPath}
+          isDisplayed={userPath.receive}
           numberOfPeople={numberOfPeople}
           amountPerPerson={amountPerPerson}
           breezEvent={props.breezEvent}
@@ -79,6 +88,17 @@ export default function FaucetHome(props) {
           setAmountPerPerson={setAmountPerPerson}
           setFaucet={props.setFaucet}
         />
+        <SendPage
+          setUserPath={setUserPath}
+          isDisplayed={userPath.send}
+          numberOfPeople={numberOfPeople}
+          amountPerPerson={amountPerPerson}
+          breezEvent={props.breezEvent}
+          setNumberOfPeople={setNumberOfPeople}
+          setAmountPerPerson={setAmountPerPerson}
+          setFaucet={props.setFaucet}
+        />
+        {/* NEED TO CREATE */}
       </View>
     </Modal>
   );

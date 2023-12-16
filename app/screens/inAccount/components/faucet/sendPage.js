@@ -20,10 +20,10 @@ import {randomUUID} from 'expo-crypto';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {removeLocalStorageItem} from '../../../../functions/localStorage';
 
-export default function ReceievePage(props) {
+export default function SendPage(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
-  const [numReceived, setNumReceived] = useState(0);
-  const [receiveAddress, setReceiveAddress] = useState('');
+  const [numSent, setNumSent] = useState(0);
+  const [sendAddress, setSendAddress] = useState('');
   const [isGeneratinAddress, setIsGeneratingAddress] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -42,77 +42,25 @@ export default function ReceievePage(props) {
     }).start();
   }
 
-  async function generateAddress() {
-    setIsGeneratingAddress(true);
-
-    try {
-      const UUID = randomUUID();
-      const invoice = await receivePayment({
-        amountMsat: props.amountPerPerson * 1000,
-        description: `bwrfd ${UUID}`,
-      });
-      //   BWRFD = Blitz Wallet Receive Faucet Data
-      //   removeLocalStorageItem('faucet');
-      const localStorageItem = await getLocalStorageItem('faucet');
-      if (!localStorageItem) {
-        setLocalStorageItem('faucet', JSON.stringify([UUID]));
-      } else {
-        const tempArr = JSON.parse(localStorageItem);
-        tempArr.push(UUID);
-        setLocalStorageItem('faucet', JSON.stringify([...tempArr]));
-      }
-      console.log(localStorageItem);
-
-      setReceiveAddress(invoice.lnInvoice.bolt11);
-      setIsGeneratingAddress(false);
-      // console.log(invoice);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => {
-    console.log(props.breezEvent?.details, 'BREEZ EVENT IN RECIVE FAUCET');
-    (async () => {
-      if (!props.breezEvent?.details?.payment?.description?.includes('bwrfd'))
-        return;
-      const faucetItemsList = await getLocalStorageItem('faucet');
-      const description =
-        props.breezEvent?.details?.payment?.description.split(' ')[1];
-
-      if (faucetItemsList?.includes(description)) {
-        if (numReceived + 1 >= props.numberOfPeople) {
-          setIsComplete(true);
-          setNumReceived(prev => (prev += 1));
-          //   NEED TO CLEAR faucet local storage
-          // reset page to normal page
-          return;
-        }
-        setNumReceived(prev => (prev += 1));
-        generateAddress();
-      }
-    })();
-  }, [props.breezEvent]);
-
   useEffect(() => {
     if (props.isDisplayed) {
       fadeIn();
-      generateAddress();
     } else fadeOut();
   }, [props.isDisplayed]);
 
   function clear() {
-    setNumReceived(0);
-    setReceiveAddress('');
+    setNumSent(0);
+    setSendAddress('');
     props.setUserPath({
       settings: false,
-      mainPage: false,
+      sent: false,
     });
     props.setNumberOfPeople('');
     props.setAmountPerPerson('');
     props.setFaucet(false);
     removeLocalStorageItem('faucet');
   }
+
   return (
     <Animated.View
       style={[styles.popupContainer, {transform: [{translateX: fadeAnim}]}]}>
@@ -122,7 +70,7 @@ export default function ReceievePage(props) {
             <TouchableOpacity
               onPress={() =>
                 props.setUserPath(prev => {
-                  return {...prev, receive: false};
+                  return {...prev, send: false};
                 })
               }>
               <Image style={backArrow} source={ICONS.leftCheveronIcon} />
@@ -133,7 +81,7 @@ export default function ReceievePage(props) {
               headerText,
               {transform: [{translateX: !isComplete ? -12.5 : 0}]},
             ]}>
-            Receive Faucet
+            Send Faucet
           </Text>
         </View>
         <View style={styles.contentContainer}>
@@ -146,15 +94,15 @@ export default function ReceievePage(props) {
                 {!isGeneratinAddress && (
                   <QRCode
                     size={250}
-                    value={receiveAddress ? receiveAddress : "IT'S COMING"}
+                    value={sendAddress ? sendAddress : "IT'S COMING"}
                   />
                 )}
               </View>
               <Text
                 style={[
-                  styles.recivedAmount,
+                  styles.sentAmount,
                   {color: isComplete ? 'green' : 'red'},
-                ]}>{`${numReceived}/${props.numberOfPeople}`}</Text>
+                ]}>{`${numSent}/${props.numberOfPeople}`}</Text>
             </>
           )}
           {/* 
@@ -166,8 +114,8 @@ export default function ReceievePage(props) {
               <Image style={styles.confirmIcon} source={ICONS.Checkcircle} />
               <Text style={styles.completedText}>Completed</Text>
               <View style={{alignItems: 'center', flex: 1}}>
-                <Text style={styles.youRecievedHeader}>You Receieved</Text>
-                <Text style={[styles.recivedAmount, {marginBottom: 'auto'}]}>
+                <Text style={styles.youSentHeader}>You Sent</Text>
+                <Text style={[styles.sentAmount, {marginBottom: 'auto'}]}>
                   {(
                     props.numberOfPeople * props.amountPerPerson
                   ).toLocaleString()}{' '}
@@ -213,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  recivedAmount: {
+  sentAmount: {
     fontSize: SIZES.large,
     fontFamily: FONT.Title_Bold,
   },
@@ -235,7 +183,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.xLarge,
     marginBottom: 'auto',
   },
-  youRecievedHeader: {
+  youSentHeader: {
     fontFamily: FONT.Title_Regular,
     fontSize: SIZES.large,
     marginTop: 'auto',

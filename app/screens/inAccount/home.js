@@ -74,6 +74,7 @@ export default function AdminHome({navigation: {navigate}}) {
         console.log(`[${logEntry.level}]: ${logEntry.line}`);
       }
     };
+    return;
 
     (async () => {
       const savedBreezInfo = await getLocalStorageItem('breezInfo');
