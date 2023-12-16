@@ -1,42 +1,93 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {KeyContainer} from '../../../../components/login';
 import {retrieveData} from '../../../../functions';
-import {useEffect, useState} from 'react';
-import {COLORS, FONT, SIZES} from '../../../../constants';
+import {useEffect, useRef, useState} from 'react';
+import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
 
 export default function RecoveryPage(props) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const isInitialRender = useRef(true);
   const [mnemonic, setMnemonic] = useState([]);
+  const [showSeed, setShowSeed] = useState(false);
+  console.log(props);
 
   useEffect(() => {
-    (async () => {
-      const mnemonic = await retrieveData('mnemonic');
-      setMnemonic(mnemonic.split(' '));
-    })();
-  }, []);
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+    if (showSeed) {
+      (async () => {
+        const mnemonic = await retrieveData('mnemonic');
+        setMnemonic(mnemonic.split(' '));
+      })();
+      fadeout();
+    }
+  }, [showSeed]);
 
   //   console.log(mnemonic);
   return (
-    <View style={styles.container}>
-      <Text
-        style={[
-          styles.headerPhrase,
-          {marginBottom: 15, fontSize: SIZES.xLarge, textAlign: 'center'},
-        ]}>
-        Keep this phrase in a secure and safe place
-      </Text>
-      <Text
-        style={[
-          styles.headerPhrase,
-          {marginBottom: 50, fontSize: SIZES.medium, color: COLORS.cancelRed},
-        ]}>
-        Do not shre it with anyone
-      </Text>
-      <KeyContainer keys={mnemonic} />
+    <View style={styles.globalContainer}>
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.headerPhrase,
+            {marginBottom: 15, fontSize: SIZES.xLarge, textAlign: 'center'},
+          ]}>
+          Keep this phrase in a secure and safe place
+        </Text>
+        <Text
+          style={[
+            styles.headerPhrase,
+            {marginBottom: 50, fontSize: SIZES.medium, color: COLORS.cancelRed},
+          ]}>
+          Do not shre it with anyone
+        </Text>
+        <KeyContainer keys={mnemonic} />
+      </View>
+
+      <Animated.View
+        style={[styles.confirmPopup, {transform: [{translateY: fadeAnim}]}]}>
+        <Text style={styles.confirmPopupTitle}>
+          Are you sure you want to show your seed phrase
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 50,
+            width: '90%',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity
+            style={[styles.confirmBTN, {backgroundColor: COLORS.primary}]}
+            onPress={() => setShowSeed(true)}>
+            <Text style={styles.confirmBTNText}>Yes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              props.setSettingsContent({isDisplayed: false, for: null})
+            }
+            style={[styles.confirmBTN, {backgroundColor: COLORS.cancelRed}]}>
+            <Text style={styles.confirmBTNText}>No</Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
     </View>
   );
+
+  function fadeout() {
+    Animated.timing(fadeAnim, {
+      toValue: 900,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }
 }
 
 const styles = StyleSheet.create({
+  globalContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     width: '90%',
@@ -48,5 +99,35 @@ const styles = StyleSheet.create({
 
   headerPhrase: {
     fontFamily: FONT.Title_Regular,
+  },
+
+  confirmPopup: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    backgroundColor: COLORS.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmPopupTitle: {
+    fontFamily: FONT.Title_Bold,
+    fontSize: SIZES.large,
+    textAlign: 'center',
+  },
+  confirmBTN: {
+    width: 150,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    ...SHADOWS.small,
+  },
+  confirmBTNText: {
+    fontFamily: FONT.Other_Regular,
+    fontSize: SIZES.medium,
+    color: 'white',
   },
 });

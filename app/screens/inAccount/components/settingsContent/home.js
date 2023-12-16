@@ -62,7 +62,9 @@ export default function SettingsContent(props) {
       </SafeAreaView>
       <View style={{flex: 1}}>
         {props.for?.toLowerCase() === 'about' && <AboutPage />}
-        {props.for?.toLowerCase() === 'recovery phrase' && <RecoveryPage />}
+        {props.for?.toLowerCase() === 'recovery phrase' && (
+          <RecoveryPage setSettingsContent={props.setSettingsContent} />
+        )}
         {props.for?.toLowerCase() === 'fiat currency' && (
           <FiatCurrencyPage setSettingsContent={props.setSettingsContent} />
         )}
