@@ -18,6 +18,7 @@ import NodeInfo from './nodeInfo';
 import LSPPage from './lsp';
 import InfoPopup from './popupContainer';
 import ResetPage from './resetWallet';
+import DrainPage from './drainPage';
 
 export default function SettingsContent(props) {
   const fadeAnim = useRef(new Animated.Value(600)).current;
@@ -25,6 +26,7 @@ export default function SettingsContent(props) {
     isDisplayed: false,
     type: '',
   });
+  const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -73,8 +75,19 @@ export default function SettingsContent(props) {
           <LSPPage setDisplayPopup={setDisplayPopup} />
         )}
         {props.for?.toLowerCase() === 'reset wallet' && <ResetPage />}
+        {props.for?.toLowerCase() === 'drain wallet' && (
+          <DrainPage
+            setBitcoinAddress={setBitcoinAddress}
+            bitcoinAddress={bitcoinAddress}
+            setDisplayPopup={setDisplayPopup}
+          />
+        )}
       </View>
-      <InfoPopup setDisplayPopup={setDisplayPopup} {...displayPopup} />
+      <InfoPopup
+        setDisplayPopup={setDisplayPopup}
+        {...displayPopup}
+        setBitcoinAddress={setBitcoinAddress}
+      />
     </Animated.View>
   );
 }
