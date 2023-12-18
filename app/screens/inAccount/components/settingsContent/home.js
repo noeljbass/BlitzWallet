@@ -25,6 +25,7 @@ export default function SettingsContent(props) {
   const [displayPopup, setDisplayPopup] = useState({
     isDisplayed: false,
     type: '',
+    variable: null,
   });
   const [bitcoinAddress, setBitcoinAddress] = useState('');
 

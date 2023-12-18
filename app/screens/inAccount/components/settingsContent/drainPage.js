@@ -6,10 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
+import {useEffect, useState} from 'react';
 
 export default function DrainPage(props) {
-  console.log(props.bitcoinAddress, 'DRAIN PAGE');
+  const [wantsToDrain, setWantsToDrain] = useState(false);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+  useEffect(() => {
+    if (!wantsToDrain) return;
+    console.log('DRAINING WALLET');
+  }, [wantsToDrain]);
+
   return (
     <View style={styles.globalContainer}>
       <View style={styles.balanceContainer}>
@@ -40,8 +48,24 @@ export default function DrainPage(props) {
         </View>
       </View>
 
-      <TouchableOpacity>
-        <Text>Drain</Text>
+      <TouchableOpacity
+        onPress={() => {
+          setShowConfirmPopup(true);
+          props.setDisplayPopup({
+            isDisplayed: true,
+            type: 'confirmDrain',
+            variable: setWantsToDrain,
+          });
+        }}
+        style={[
+          BTN,
+          {
+            backgroundColor: COLORS.primary,
+            marginTop: 'auto',
+            marginBottom: 50,
+          },
+        ]}>
+        <Text style={styles.buttonText}>Drain</Text>
       </TouchableOpacity>
     </View>
   );
@@ -100,5 +124,10 @@ const styles = StyleSheet.create({
   scanIcon: {
     width: 35,
     height: 35,
+  },
+  buttonText: {
+    color: COLORS.white,
+    fontSize: SIZES.medium,
+    fontFamily: FONT.Other_Regular,
   },
 });

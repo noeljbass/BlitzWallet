@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {backArrow} from '../../../../constants/styles';
 import {CameraType} from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
@@ -56,6 +56,12 @@ export default function InfoPopup(props) {
             setDisplayPopup={props.setDisplayPopup}
           />
         )}
+        {props.type === 'confirmDrain' && (
+          <AreYouSure
+            variable={props.variable}
+            setDisplayPopup={props.setDisplayPopup}
+          />
+        )}
       </SafeAreaView>
     </Animated.View>
   );
@@ -65,7 +71,9 @@ function WhatIsAnLSP(props) {
   return (
     <View style={popupStyles.popupContentContainer}>
       <TouchableOpacity
-        onPress={() => props.setDisplayPopup({isDisplayed: false, type: ''})}>
+        onPress={() =>
+          props.setDisplayPopup({isDisplayed: false, type: 'LSPInfo'})
+        }>
         <Image
           style={[backArrow, {marginBottom: 20, marginLeft: 0}]}
           source={ICONS.leftCheveronIcon}
@@ -163,7 +171,7 @@ function BTCCamera(props) {
           onPress={() => {
             props.setDisplayPopup({
               isDisplayed: false,
-              type: '',
+              type: 'btcCamera',
             });
           }}>
           <Image
@@ -214,6 +222,47 @@ function BTCCamera(props) {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+  );
+}
+
+function AreYouSure(props) {
+  return (
+    <View style={[confirmPopup.container]}>
+      <View style={confirmPopup.innerContainer}>
+        <Text style={confirmPopup.headerText}>Are you sure?</Text>
+        <Text style={confirmPopup.descriptionText}>
+          Once you drain your wallet this cannot be undone.
+        </Text>
+
+        <View style={confirmPopup.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              props.variable(true);
+              props.setDisplayPopup(prev => {
+                return {...prev, isDisplayed: false};
+              });
+            }}
+            style={[confirmPopup.button]}>
+            <Text style={confirmPopup.buttonText}>Yes</Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              height: '100%',
+              width: 2,
+              backgroundColor: COLORS.background,
+            }}></View>
+          <TouchableOpacity
+            onPress={() => {
+              props.setDisplayPopup(prev => {
+                return {...prev, isDisplayed: false};
+              });
+            }}
+            style={confirmPopup.button}>
+            <Text style={confirmPopup.buttonText}>No</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 }
 const btcCameraStyles = StyleSheet.create({
@@ -297,5 +346,54 @@ const popupStyles = StyleSheet.create({
 
     padding: 10,
     borderRadius: 8,
+  },
+});
+
+const confirmPopup = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 1,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  innerContainer: {
+    maxWidth: '90%',
+    backgroundColor: COLORS.primary,
+    padding: 8,
+    borderRadius: 8,
+    ...SHADOWS.medium,
+  },
+
+  headerText: {
+    fontFamily: FONT.Title_Bold,
+    fontSize: SIZES.large,
+    textAlign: 'center',
+    color: COLORS.background,
+    marginBottom: 5,
+  },
+  descriptionText: {
+    maxWidth: '90%',
+    fontFamily: FONT.Descriptoin_Regular,
+    fontSize: SIZES.medium,
+    textAlign: 'center',
+    color: COLORS.background,
+    marginBottom: 25,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  button: {
+    width: '50%',
+    height: 30,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontFamily: FONT.Other_Regular,
+    fontSize: SIZES.large,
+    color: COLORS.background,
   },
 });
