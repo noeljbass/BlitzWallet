@@ -11,12 +11,16 @@ import {
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
 
-export default function NodeInfo(props) {
+export default function NodeInfo() {
   const [lnNodeInfo, setLNNodeInfo] = useState({});
+  const [isInfoSet, stIsInfoSet] = useState(false);
   useEffect(() => {
     (async () => {
-      const lightningNode = await nodeInfo();
-      setLNNodeInfo(lightningNode);
+      try {
+        const lightningNode = await nodeInfo();
+        setLNNodeInfo(lightningNode);
+        stIsInfoSet(true);
+      } catch (err) {}
     })();
   }, []);
 
@@ -31,6 +35,24 @@ export default function NodeInfo(props) {
   }
 
   console.log(lnNodeInfo);
+
+  const connectedPeersElements = lnNodeInfo?.connectedPeers?.map((peer, id) => {
+    return (
+      <View
+        key={id}
+        style={{
+          borderBottomWidth: lnNodeInfo?.connectedPeers.length === 1 ? 0 : 2,
+        }}>
+        <Text style={styles.peerTitle}>Peer ID</Text>
+        <TouchableOpacity
+          onPress={() => {
+            copyToClipboard(peer);
+          }}>
+          <Text style={styles.descriptionContent}>{peer}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  });
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -38,49 +60,42 @@ export default function NodeInfo(props) {
           <Text style={styles.sectionTitle}>Lightning</Text>
           <View style={styles.itemContainer}>
             <Text style={styles.itemTitle}>Node ID</Text>
-            <TouchableOpacity
-              onPress={() => {
-                copyToClipboard(lnNodeInfo?.id);
-              }}>
-              <Text style={styles.descriptionContent}>{lnNodeInfo?.id}</Text>
-            </TouchableOpacity>
+            {isInfoSet && (
+              <TouchableOpacity
+                onPress={() => {
+                  copyToClipboard(lnNodeInfo?.id);
+                }}>
+                <Text style={styles.descriptionContent}>{lnNodeInfo?.id}</Text>
+              </TouchableOpacity>
+            )}
+            {!isInfoSet && <Text style={styles.descriptionContent}>N/A</Text>}
           </View>
           <View style={[styles.itemContainer, styles.horizontalContainer]}>
             <View style={styles.innerHorizontalContainer}>
               <Text style={styles.itemTitle}>Max Payable</Text>
               <Text style={styles.descriptionContent}>
-                {(lnNodeInfo?.maxPayableMsat / 1000).toLocaleString()}
+                {isInfoSet
+                  ? (lnNodeInfo?.maxPayableMsat / 1000).toLocaleString()
+                  : 'N/A'}
               </Text>
             </View>
             <View style={styles.innerHorizontalContainer}>
               <Text style={styles.itemTitle}>Max Receivable</Text>
               <Text style={styles.descriptionContent}>
-                {(lnNodeInfo?.inboundLiquidityMsats / 1000).toLocaleString()}
+                {isInfoSet
+                  ? (lnNodeInfo?.inboundLiquidityMsats / 1000).toLocaleString()
+                  : 'N/A'}
               </Text>
             </View>
           </View>
           <View style={styles.itemContainer}>
             <Text style={styles.itemTitle}>Connected Peers</Text>
-            <ScrollView style={{height: 120}}>
-              {lnNodeInfo?.connectedPeers?.map((peer, id) => {
-                return (
-                  <View
-                    key={id}
-                    style={{
-                      borderBottomWidth:
-                        lnNodeInfo?.connectedPeers.length === 1 ? 0 : 2,
-                    }}>
-                    <Text style={styles.peerTitle}>Peer ID</Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        copyToClipboard(peer);
-                      }}>
-                      <Text style={styles.descriptionContent}>{peer}</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-            </ScrollView>
+            {isInfoSet && (
+              <ScrollView style={{height: 120}}>
+                {connectedPeersElements}
+              </ScrollView>
+            )}
+            {!isInfoSet && <Text style={styles.descriptionContent}>N/A</Text>}
           </View>
         </View>
         {/* Bitcoin */}
@@ -98,7 +113,9 @@ export default function NodeInfo(props) {
               Onchain Balance
             </Text>
             <Text style={styles.descriptionContent}>
-              {(lnNodeInfo?.onchainBalanceMsat / 1000).toLocaleString()}
+              {isInfoSet
+                ? (lnNodeInfo?.onchainBalanceMsat / 1000).toLocaleString()
+                : 'N/A'}
             </Text>
           </View>
           <View
@@ -113,7 +130,7 @@ export default function NodeInfo(props) {
               Block Height
             </Text>
             <Text style={styles.descriptionContent}>
-              {lnNodeInfo?.blockHeight?.toLocaleString()}
+              {isInfoSet ? lnNodeInfo?.blockHeight?.toLocaleString() : 'N/A'}
             </Text>
           </View>
         </View>

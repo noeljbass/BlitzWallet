@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {useEffect, useState} from 'react';
+import {ReloadInstructions} from 'react-native/Libraries/NewAppScreen';
 
 export default function DrainPage(props) {
   const [wantsToDrain, setWantsToDrain] = useState(false);

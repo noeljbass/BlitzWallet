@@ -56,9 +56,11 @@ function App(): JSX.Element {
 
   useEffect(() => {
     console.log('refresh');
+
     (async () => {
-      const hasAccount = await retrieveData('pin');
-      if (hasAccount) setIsLoggedIn(true);
+      const pin = await retrieveData('pin');
+      const mnemonic = await retrieveData('mnemonic');
+      if (pin && mnemonic) setIsLoggedIn(true);
       else setIsLoggedIn(false);
     })();
 
@@ -72,6 +74,7 @@ function App(): JSX.Element {
       if (appState.current.match(/inactive/) && nextAppState === 'background') {
         console.log('Background!');
         // NAVIGATE TO HOME PAGE
+        // SplashScreen.show();
       }
 
       appState.current = nextAppState;
@@ -99,8 +102,8 @@ function App(): JSX.Element {
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
-        <Stack.Screen name="HomeAdmin" component={AdminHome} />
         <Stack.Screen name="AdminLogin" component={AdminLogin} />
+        <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );
