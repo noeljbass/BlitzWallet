@@ -25,11 +25,13 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 export function ConnectionToNode(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [nodeInformation, setNodeInformation] = useState({});
+  const [isConnected, setIsConnected] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
   async function getNodeData() {
     try {
       const nodeInformatino = await nodeInfo();
       setNodeInformation(nodeInformatino);
+      setIsConnected(true);
     } catch (err) {
       console.log(err);
     }
@@ -90,7 +92,7 @@ export function ConnectionToNode(props) {
                     : COLORS.lightModeText,
                 },
               ]}>
-              Connected
+              {isConnected ? 'Connected' : 'Not Connected'}
             </Text>
           </View>
           <Text
@@ -100,7 +102,10 @@ export function ConnectionToNode(props) {
                 color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            Block height: {nodeInformation?.blockHeight?.toLocaleString()}
+            Block height:{' '}
+            {isConnected
+              ? nodeInformation?.blockHeight?.toLocaleString()
+              : 'N/A'}
           </Text>
           <Text
             style={[
@@ -110,7 +115,9 @@ export function ConnectionToNode(props) {
               },
             ]}>
             Max Payable:{' '}
-            {(nodeInformation?.maxPayableMsat / 1000).toLocaleString()}
+            {isConnected
+              ? (nodeInformation?.maxPayableMsat / 1000).toLocaleString()
+              : 'N/A'}
           </Text>
           <Text
             style={[
@@ -120,7 +127,9 @@ export function ConnectionToNode(props) {
               },
             ]}>
             Max Recivable:{' '}
-            {(nodeInformation?.inboundLiquidityMsats / 1000).toLocaleString()}
+            {isConnected
+              ? (nodeInformation?.inboundLiquidityMsats / 1000).toLocaleString()
+              : 'N/A'}
           </Text>
           <Text
             style={[
@@ -130,7 +139,9 @@ export function ConnectionToNode(props) {
               },
             ]}>
             On-chain Balance:{' '}
-            {(nodeInformation?.onchainBalanceMsat / 1000).toLocaleString()}
+            {isConnected
+              ? (nodeInformation?.onchainBalanceMsat / 1000).toLocaleString()
+              : 'N/A'}
           </Text>
         </View>
       </Animated.View>
