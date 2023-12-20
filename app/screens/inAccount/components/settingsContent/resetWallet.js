@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from 'react-native';
 import {BTN, COLORS, FONT, SIZES} from '../../../../constants';
 import {useState} from 'react';
 
@@ -8,20 +14,59 @@ export default function ResetPage(props) {
     paymentHistory: false,
     pin: false,
   });
+  const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
-      <View style={[styles.infoContainer, {marginTop: 30}]}>
+      <View
+        style={[
+          styles.infoContainer,
+          {
+            marginTop: 30,
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}>
         <Text style={styles.warningHeader}>Are you sure?</Text>
       </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoTitle}>
+      <View
+        style={[
+          styles.infoContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}>
+        <Text
+          style={[
+            styles.infoTitle,
+            {
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
           Select data to delete from this device.
         </Text>
-        <Text style={[styles.infoDescription, {marginBottom: 15}]}>
+        <Text
+          style={[
+            styles.infoDescription,
+            {
+              marginBottom: 15,
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
           Any option that is selected will be removed forever. If your seed is
           forgotten, you WILL lose your funds.
         </Text>
-        <View style={styles.borderView}></View>
+        <View
+          style={[
+            styles.borderView,
+            {
+              backgroundColor: isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}></View>
         <View style={{marginTop: 15}}>
           <View style={styles.selectorContainer}>
             <TouchableOpacity
@@ -29,8 +74,23 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorDot,
                 selectedOptions.seed && styles.isSelectedDot,
+                {
+                  borderColor: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
               ]}></TouchableOpacity>
-            <Text style={styles.selectorText}>Delete seed from my device</Text>
+            <Text
+              style={[
+                styles.selectorText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Delete seed from my device
+            </Text>
           </View>
           <View style={styles.selectorContainer}>
             <TouchableOpacity
@@ -38,8 +98,21 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorDot,
                 selectedOptions.paymentHistory && styles.isSelectedDot,
+                {
+                  borderColor: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
               ]}></TouchableOpacity>
-            <Text style={styles.selectorText}>
+            <Text
+              style={[
+                styles.selectorText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               Delete payment history from my device
             </Text>
           </View>
@@ -49,16 +122,53 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorDot,
                 selectedOptions.pin && styles.isSelectedDot,
+                {
+                  borderColor: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
               ]}></TouchableOpacity>
-            <Text style={styles.selectorText}>Delete pin from my device</Text>
+            <Text
+              style={[
+                styles.selectorText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Delete pin from my device
+            </Text>
           </View>
         </View>
       </View>
-      <View style={styles.infoContainer}>
-        <Text style={[styles.infoTitle, {textAlign: 'center'}]}>
+      <View
+        style={[
+          styles.infoContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}>
+        <Text
+          style={[
+            styles.infoTitle,
+            {
+              textAlign: 'center',
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
           Your balance is
         </Text>
-        <Text style={[styles.infoDescription, {textAlign: 'center'}]}>
+        <Text
+          style={[
+            styles.infoDescription,
+            {
+              textAlign: 'center',
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
           1,500 sats
         </Text>
       </View>

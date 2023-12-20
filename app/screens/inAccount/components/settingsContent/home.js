@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
@@ -28,6 +29,7 @@ export default function SettingsContent(props) {
     variable: null,
   });
   const [bitcoinAddress, setBitcoinAddress] = useState('');
+  const isDarkMode = useColorScheme() === 'dark';
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -51,16 +53,36 @@ export default function SettingsContent(props) {
 
   return (
     <Animated.View
-      style={[styles.globalContainer, {transform: [{translateX: fadeAnim}]}]}>
+      style={[
+        styles.globalContainer,
+        {
+          transform: [{translateX: fadeAnim}],
+          backgroundColor: isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
       <SafeAreaView>
         <View style={styles.topbar}>
           <TouchableOpacity
             onPress={() =>
               props.setSettingsContent({isDisplayed: false, for: null})
             }>
-            <Image style={styles.topBarIcon} source={ICONS.leftCheveronIcon} />
+            <Image
+              style={[
+                styles.topBarIcon,
+                {backgroundColor: isDarkMode ? COLORS.white : COLORS.black},
+              ]}
+              source={ICONS.leftCheveronIcon}
+            />
           </TouchableOpacity>
-          <Text style={styles.topBarText}>{props.for}</Text>
+          <Text
+            style={[
+              styles.topBarText,
+              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            ]}>
+            {props.for}
+          </Text>
         </View>
       </SafeAreaView>
       <View style={{flex: 1}}>

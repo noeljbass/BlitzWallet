@@ -1,4 +1,11 @@
-import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from 'react-native';
 import {KeyContainer} from '../../../../components/login';
 import {retrieveData} from '../../../../functions';
 import {useEffect, useRef, useState} from 'react';
@@ -9,6 +16,7 @@ export default function RecoveryPage(props) {
   const isInitialRender = useRef(true);
   const [mnemonic, setMnemonic] = useState([]);
   const [showSeed, setShowSeed] = useState(false);
+  const isDarkMode = useColorScheme() === 'dark';
   console.log(props);
 
   useEffect(() => {
@@ -32,7 +40,12 @@ export default function RecoveryPage(props) {
         <Text
           style={[
             styles.headerPhrase,
-            {marginBottom: 15, fontSize: SIZES.xLarge, textAlign: 'center'},
+            {
+              marginBottom: 15,
+              fontSize: SIZES.xLarge,
+              textAlign: 'center',
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
           ]}>
           Keep this phrase in a secure and safe place
         </Text>
@@ -47,8 +60,20 @@ export default function RecoveryPage(props) {
       </View>
 
       <Animated.View
-        style={[styles.confirmPopup, {transform: [{translateY: fadeAnim}]}]}>
-        <Text style={styles.confirmPopupTitle}>
+        style={[
+          styles.confirmPopup,
+          {
+            transform: [{translateY: fadeAnim}],
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+          },
+        ]}>
+        <Text
+          style={[
+            styles.confirmPopupTitle,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
           Are you sure you want to show your seed phrase
         </Text>
         <View

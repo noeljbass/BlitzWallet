@@ -1,4 +1,11 @@
-import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  useColorScheme,
+} from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../constants';
 import {useState} from 'react';
 import {OptionsDropdown} from './optionsDropdown';
@@ -11,12 +18,21 @@ export default function NavBar(props) {
   const [navViews, setNavViews] = useState({
     features: false,
   });
+  const isDarkMode = useColorScheme() === 'dark';
   const [systemSettingsPopup, setSystemSettingsPopup] = useState(false);
   const [fucet, setFaucet] = useState(false);
 
   return (
     <View style={styles.topBar}>
-      <Text style={styles.topBarName}>Blitz Wallet</Text>
+      <Text
+        style={[
+          styles.topBarName,
+          {
+            color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+          },
+        ]}>
+        Blitz Wallet
+      </Text>
       <View style={styles.iconContainer}>
         <TouchableOpacity
           onPress={() => props.setNodeConnectionPopup(false)}
@@ -80,7 +96,6 @@ const styles = StyleSheet.create({
   },
   topBarName: {
     fontSize: SIZES.large,
-    fontWeight: 'bold',
     fontFamily: FONT.Title_Bold,
   },
   iconContainer: {

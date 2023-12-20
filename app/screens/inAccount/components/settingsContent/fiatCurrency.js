@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {
@@ -24,6 +25,7 @@ export default function FiatCurrencyPage(props) {
   const [textInput, setTextInput] = useState('');
   const [listData, setListData] = useState([]);
   const [currentCurrency, setCurrentCurrency] = useState('');
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     (async () => {
@@ -75,7 +77,6 @@ export default function FiatCurrencyPage(props) {
   }
 
   const CurrencyElements = currency => {
-    // console.log(currency.item.info.name);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -90,9 +91,15 @@ export default function FiatCurrencyPage(props) {
             style={[
               styles.currencyTitle,
               {
-                color:
-                  currency.item.id?.toLowerCase() ===
-                    currentCurrency?.toLowerCase() && 'green',
+                color: isDarkMode
+                  ? currency.item.id?.toLowerCase() ===
+                    currentCurrency?.toLowerCase()
+                    ? 'green'
+                    : COLORS.darkModeText
+                  : currency.item.id?.toLowerCase() ===
+                    currentCurrency?.toLowerCase()
+                  ? 'green'
+                  : COLORS.lightModeText,
               },
             ]}>
             {currency.item.info.name}
@@ -101,9 +108,15 @@ export default function FiatCurrencyPage(props) {
             style={[
               styles.currencyID,
               {
-                color:
-                  currency.item.id?.toLowerCase() ===
-                    currentCurrency?.toLowerCase() && 'green',
+                color: isDarkMode
+                  ? currency.item.id?.toLowerCase() ===
+                    currentCurrency?.toLowerCase()
+                    ? 'green'
+                    : COLORS.darkModeText
+                  : currency.item.id?.toLowerCase() ===
+                    currentCurrency?.toLowerCase()
+                  ? 'green'
+                  : COLORS.lightModeText,
               },
             ]}>
             {currency.item.id}
@@ -121,7 +134,19 @@ export default function FiatCurrencyPage(props) {
     <View style={styles.container}>
       <TextInput
         onKeyPress={handleKeyPress}
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+
+            color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+          },
+        ]}
+        placeholderTextColor={
+          isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+        }
         placeholder="Search currency"
       />
       {/* <ScrollView style={{flex: 1, width: '85%', height: '100%'}}> */}

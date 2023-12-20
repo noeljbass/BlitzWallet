@@ -13,7 +13,16 @@ const COLORS = {
   lightWhite: '#FAFAFC',
 
   background: '#F8F8F8',
+
+  lightModeBackground: '#F8F8F8',
+  darkModeBackground: '#000d1c',
+
+  lightModeText: 'black',
+  darkModeText: 'white',
+
   offsetBackground: '#cbcbcb',
+  lightModeBackgroundOffset: '#cbcbcb',
+  darkModeBackgroundOffset: '#001833',
 
   opaicityGray: '#767676b8',
   cancelRed: '#e20000',

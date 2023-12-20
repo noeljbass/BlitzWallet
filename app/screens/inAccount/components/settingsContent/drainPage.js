@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  useColorScheme,
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {useEffect, useState} from 'react';
@@ -13,6 +14,7 @@ import {ReloadInstructions} from 'react-native/Libraries/NewAppScreen';
 export default function DrainPage(props) {
   const [wantsToDrain, setWantsToDrain] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (!wantsToDrain) return;
@@ -22,20 +24,58 @@ export default function DrainPage(props) {
   return (
     <View style={styles.globalContainer}>
       <View style={styles.balanceContainer}>
-        <Text style={styles.balanceDescription}>Current balance</Text>
-        <Text style={styles.balanceNum}>
+        <Text
+          style={[
+            styles.balanceDescription,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
+          Current balance
+        </Text>
+        <Text
+          style={[
+            styles.balanceNum,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
           {Number(25000).toLocaleString()} sats
         </Text>
-        <Text style={styles.fiatBalanceNum}>= $2.5 usd</Text>
+        <Text
+          style={[
+            styles.fiatBalanceNum,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
+          = $2.5 usd
+        </Text>
       </View>
 
-      <View style={styles.btcAdressContainer}>
-        <Text style={styles.btcAdressHeader}>Enter BTC address</Text>
-        <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.btcAdressContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}>
+        <Text
+          style={[
+            styles.btcAdressHeader,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
+          Enter BTC address
+        </Text>
+        <View style={[styles.inputContainer]}>
           <TextInput
             value={props.bitcoinAddress}
             onChangeText={props.setBitcoinAddress}
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                borderColor: isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}
           />
           <TouchableOpacity
             onPress={() => {

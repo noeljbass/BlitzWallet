@@ -8,6 +8,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Animated,
+  useColorScheme,
 } from 'react-native';
 import {
   BTN,
@@ -24,6 +25,7 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 export function ConnectionToNode(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [nodeInformation, setNodeInformation] = useState({});
+  const isDarkMode = useColorScheme() === 'dark';
   async function getNodeData() {
     try {
       const nodeInformatino = await nodeInfo();
@@ -32,6 +34,7 @@ export function ConnectionToNode(props) {
       console.log(err);
     }
   }
+
   useEffect(() => {
     if (!props.isDisplayed) {
       fadeIn();
@@ -64,26 +67,68 @@ export function ConnectionToNode(props) {
           {opacity: fadeAnim},
           {zIndex: !props.isDisplayed ? 1 : -1},
         ]}>
-        <View style={styles.innerContainer}>
+        <View
+          style={[
+            styles.innerContainer,
+            {
+              backgroundColor: isDarkMode
+                ? COLORS.darkModeBackground
+                : COLORS.lightModeBackground,
+            },
+          ]}>
           <View style={styles.topContainer}>
             <Image
               style={styles.topContainerImg}
               source={ICONS.connectionIcon}
             />
-            <Text style={styles.topContainerText}>Connected</Text>
+            <Text
+              style={[
+                styles.topContainerText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Connected
+            </Text>
           </View>
-          <Text style={styles.itemText}>
+          <Text
+            style={[
+              styles.itemText,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
             Block height: {nodeInformation?.blockHeight?.toLocaleString()}
           </Text>
-          <Text style={styles.itemText}>
+          <Text
+            style={[
+              styles.itemText,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
             Max Payable:{' '}
             {(nodeInformation?.maxPayableMsat / 1000).toLocaleString()}
           </Text>
-          <Text style={styles.itemText}>
+          <Text
+            style={[
+              styles.itemText,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
             Max Recivable:{' '}
             {(nodeInformation?.inboundLiquidityMsats / 1000).toLocaleString()}
           </Text>
-          <Text style={styles.itemText}>
+          <Text
+            style={[
+              styles.itemText,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
             On-chain Balance:{' '}
             {(nodeInformation?.onchainBalanceMsat / 1000).toLocaleString()}
           </Text>

@@ -50,10 +50,6 @@ function App(): JSX.Element {
 
   // console.log(appState);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   useEffect(() => {
     console.log('refresh');
 

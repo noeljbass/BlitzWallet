@@ -9,6 +9,7 @@ import {
   ScrollView,
   Modal,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
 
@@ -98,6 +99,8 @@ export default function SystemSettings(props) {
     for: 'About',
   });
 
+  const isDarkMode = useColorScheme() === 'dark';
+
   const settingsElements = SETTINGSOPTIONS.map((element, id) => {
     const internalElements = element.map((element, id) => {
       return (
@@ -108,8 +111,16 @@ export default function SystemSettings(props) {
           onPress={() => {
             setSettingsContent({isDisplayed: true, for: element.name});
           }}>
-          <Image style={styles.listIcon} source={element.icon} />
-          <Text style={styles.listText}>{element.name}</Text>
+          <Image style={[styles.listIcon]} source={element.icon} />
+          <Text
+            style={[
+              styles.listText,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
+            {element.name}
+          </Text>
           <Image
             style={[styles.listIcon, {transform: [{rotate: '180deg'}]}]}
             source={element.arrowIcon}
@@ -119,14 +130,30 @@ export default function SystemSettings(props) {
     });
     return (
       <View key={id} style={styles.optionsContainer}>
-        <Text style={styles.optionsTitle}>
+        <Text
+          style={[
+            styles.optionsTitle,
+            {
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
           {id === 0
             ? 'general'
             : id === 1
             ? 'Security & Customization'
             : 'Closeing Accont'}
         </Text>
-        <View style={styles.optionsListContainer}>{internalElements}</View>
+        <View
+          style={[
+            styles.optionsListContainer,
+            {
+              backgroundColor: isDarkMode
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+            },
+          ]}>
+          {internalElements}
+        </View>
       </View>
     );
   });
@@ -137,43 +164,59 @@ export default function SystemSettings(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}>
-      <SafeAreaView style={styles.innerContainer}>
-        <View style={styles.topbar}>
-          <TouchableOpacity onPress={() => props.setSystemSettingsPopup(false)}>
-            <Image style={styles.topBarIcon} source={ICONS.leftCheveronIcon} />
-          </TouchableOpacity>
-          <Text style={styles.topBarText}>Settings</Text>
-        </View>
-        <ScrollView
-          contentContainerStyle={{alignItems: 'center'}}
-          style={styles.settingsContainer}>
-          {settingsElements}
-        </ScrollView>
-      </SafeAreaView>
+      <View
+        style={[
+          styles.globalContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+          },
+        ]}>
+        <SafeAreaView style={[styles.innerContainer]}>
+          <View style={styles.topbar}>
+            <TouchableOpacity
+              onPress={() => props.setSystemSettingsPopup(false)}>
+              <Image
+                style={styles.topBarIcon}
+                source={ICONS.leftCheveronIcon}
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.topBarText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Settings
+            </Text>
+          </View>
+          <ScrollView
+            contentContainerStyle={{alignItems: 'center'}}
+            style={styles.settingsContainer}>
+            {settingsElements}
+          </ScrollView>
+        </SafeAreaView>
 
-      {/* popups */}
-      <SettingsContent
-        {...settingsContent}
-        setSettingsContent={setSettingsContent}
-      />
+        {/* popups */}
+        <SettingsContent
+          {...settingsContent}
+          setSettingsContent={setSettingsContent}
+        />
+      </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   globalContainer: {
-    height: '100%',
-    width: '100%',
-
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    // backgroundColor: COLORS.background,
-    zIndex: 1,
+    flex: 1,
   },
   innerContainer: {
     flex: 1,
-    // backgroundColor: COLORS.background,
   },
   topbar: {
     flexDirection: 'row',
@@ -182,6 +225,7 @@ const styles = StyleSheet.create({
   topBarIcon: {
     width: 25,
     height: 25,
+    backgroundColor: 'white',
   },
   topBarText: {
     fontSize: SIZES.large,
@@ -208,7 +252,6 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Regular,
   },
   optionsListContainer: {
-    backgroundColor: COLORS.offsetBackground,
     padding: 5,
     borderRadius: 8,
   },

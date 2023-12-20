@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  useColorScheme,
 } from 'react-native';
 
 import {
@@ -56,6 +57,7 @@ export default function AdminHome({navigation: {navigate}}) {
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
 
   const [breezEvent, setBreezEvent] = useState({});
+  const isDarkMode = useColorScheme() === 'dark';
 
   // SDK events listener
   console.log(breezEvent, 'BreezEvent on home screen');
@@ -68,16 +70,19 @@ export default function AdminHome({navigation: {navigate}}) {
 
     // console.log(`Received event ${e.type} did that actually work`);
   };
+
   useEffect(() => {
     const logHandler = logEntry => {
       if (logEntry.level != 'TRACE') {
         console.log(`[${logEntry.level}]: ${logEntry.line}`);
       }
     };
+
     return;
 
     (async () => {
       const savedBreezInfo = await getLocalStorageItem('breezInfo');
+
       if (savedBreezInfo) {
         setBreezInformation(prev => {
           return {
@@ -162,13 +167,20 @@ export default function AdminHome({navigation: {navigate}}) {
   }, [breezEvent]);
 
   return (
-    <View style={Background}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: isDarkMode
+          ? COLORS.darkModeBackground
+          : COLORS.lightModeBackground,
+      }}>
       <SafeAreaView style={styles.globalContainer}>
         <NavBar
           breezInformation={breezInformation}
           nodeConnectionPopup={nodeConnectionPopup}
           setNodeConnectionPopup={setNodeConnectionPopup}
           breezEvent={breezEvent}
+
           // setSystemSettingsPopup={setSystemSettingsPopup}
         />
         <HomeLightning

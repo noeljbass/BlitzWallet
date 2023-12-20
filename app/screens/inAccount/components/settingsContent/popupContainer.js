@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useColorScheme,
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {backArrow} from '../../../../constants/styles';
@@ -17,6 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 export default function InfoPopup(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
+  const isDarkMode = useColorScheme() === 'dark';
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -48,16 +50,21 @@ export default function InfoPopup(props) {
       ]}>
       <SafeAreaView style={popupStyles.innerContainer}>
         {props.type === 'LSPInfo' && (
-          <WhatIsAnLSP setDisplayPopup={props.setDisplayPopup} />
+          <WhatIsAnLSP
+            isDarkMode={isDarkMode}
+            setDisplayPopup={props.setDisplayPopup}
+          />
         )}
         {props.type === 'btcCamera' && (
           <BTCCamera
+            isDarkMode={isDarkMode}
             setBitcoinAddress={props.setBitcoinAddress}
             setDisplayPopup={props.setDisplayPopup}
           />
         )}
         {props.type === 'confirmDrain' && (
           <AreYouSure
+            isDarkMode={isDarkMode}
             variable={props.variable}
             setDisplayPopup={props.setDisplayPopup}
           />
@@ -69,7 +76,15 @@ export default function InfoPopup(props) {
 
 function WhatIsAnLSP(props) {
   return (
-    <View style={popupStyles.popupContentContainer}>
+    <View
+      style={[
+        popupStyles.popupContentContainer,
+        {
+          backgroundColor: props.isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
       <TouchableOpacity
         onPress={() =>
           props.setDisplayPopup({isDisplayed: false, type: 'LSPInfo'})
@@ -79,7 +94,16 @@ function WhatIsAnLSP(props) {
           source={ICONS.leftCheveronIcon}
         />
       </TouchableOpacity>
-      <Text>An lsp is an ____</Text>
+      <Text
+        style={[
+          {
+            color: props.isDarkMode
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
+          },
+        ]}>
+        An lsp is an ____
+      </Text>
     </View>
   );
 }
@@ -161,7 +185,9 @@ function BTCCamera(props) {
       style={{
         flex: 1,
         overflow: 'hidden',
-        backgroundColor: COLORS.background,
+        backgroundColor: props.isDarkMode
+          ? COLORS.darkModeBackground
+          : COLORS.lightModeBackground,
         borderRadius: 8,
       }}>
       <View style={btcCameraStyles.topBar}>
@@ -180,7 +206,17 @@ function BTCCamera(props) {
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <Text style={btcCameraStyles.headerText}>Scan A QR code</Text>
+        <Text
+          style={[
+            btcCameraStyles.headerText,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          Scan A QR code
+        </Text>
       </View>
 
       {!permission && <Text>No access to camera</Text>}
@@ -193,8 +229,21 @@ function BTCCamera(props) {
       )}
 
       <View
-        style={{...btcCameraStyles.bottomBar, height: bottomExpand ? 100 : 50}}>
-        <View onTouchEnd={toggleBottom} style={{...btcCameraStyles.arrowIcon}}>
+        style={{
+          ...btcCameraStyles.bottomBar,
+          height: bottomExpand ? 100 : 50,
+          backgroundColor: props.isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        }}>
+        <View
+          onTouchEnd={toggleBottom}
+          style={{
+            ...btcCameraStyles.arrowIcon,
+            backgroundColor: props.isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+          }}>
           <Animated.Image
             source={ICONS.angleUpIcon}
             style={{
@@ -212,13 +261,33 @@ function BTCCamera(props) {
           onPress={getClipboardText}
           style={{backgroundColor: 'transparent'}}
           activeOpacity={0.2}>
-          <Text style={btcCameraStyles.bottomText}>Paste from clipbard</Text>
+          <Text
+            style={[
+              btcCameraStyles.bottomText,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Paste from clipbard
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={getQRImage}
           style={{backgroundColor: 'transparent'}}
           activeOpacity={0.2}>
-          <Text style={btcCameraStyles.bottomText}>Choose image</Text>
+          <Text
+            style={[
+              btcCameraStyles.bottomText,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Choose image
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -228,9 +297,35 @@ function BTCCamera(props) {
 function AreYouSure(props) {
   return (
     <View style={[confirmPopup.container]}>
-      <View style={confirmPopup.innerContainer}>
-        <Text style={confirmPopup.headerText}>Are you sure?</Text>
-        <Text style={confirmPopup.descriptionText}>
+      <View
+        style={[
+          confirmPopup.innerContainer,
+          {
+            backgroundColor: props.isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+          },
+        ]}>
+        <Text
+          style={[
+            confirmPopup.headerText,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          Are you sure?
+        </Text>
+        <Text
+          style={[
+            confirmPopup.descriptionText,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
           Once you drain your wallet this cannot be undone.
         </Text>
 
@@ -243,13 +338,25 @@ function AreYouSure(props) {
               });
             }}
             style={[confirmPopup.button]}>
-            <Text style={confirmPopup.buttonText}>Yes</Text>
+            <Text
+              style={[
+                confirmPopup.buttonText,
+                {
+                  color: props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Yes
+            </Text>
           </TouchableOpacity>
           <View
             style={{
               height: '100%',
               width: 2,
-              backgroundColor: COLORS.background,
+              backgroundColor: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             }}></View>
           <TouchableOpacity
             onPress={() => {
@@ -258,7 +365,17 @@ function AreYouSure(props) {
               });
             }}
             style={confirmPopup.button}>
-            <Text style={confirmPopup.buttonText}>No</Text>
+            <Text
+              style={[
+                confirmPopup.buttonText,
+                {
+                  color: props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              No
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

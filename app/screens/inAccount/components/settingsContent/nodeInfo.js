@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
@@ -14,6 +15,7 @@ import * as Clipboard from 'expo-clipboard';
 export default function NodeInfo() {
   const [lnNodeInfo, setLNNodeInfo] = useState({});
   const [isInfoSet, stIsInfoSet] = useState(false);
+  const isDarkMode = useColorScheme() === 'dark';
   useEffect(() => {
     (async () => {
       try {
@@ -33,8 +35,6 @@ export default function NodeInfo() {
       console.log(err);
     }
   }
-
-  console.log(lnNodeInfo);
 
   const connectedPeersElements = lnNodeInfo?.connectedPeers?.map((peer, id) => {
     return (
@@ -57,62 +57,214 @@ export default function NodeInfo() {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View>
-          <Text style={styles.sectionTitle}>Lightning</Text>
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemTitle}>Node ID</Text>
+          <Text
+            style={[
+              styles.sectionTitle,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
+            Lightning
+          </Text>
+          <View
+            style={[
+              styles.itemContainer,
+              {
+                backgroundColor: isDarkMode
+                  ? COLORS.darkModeBackgroundOffset
+                  : COLORS.lightModeBackgroundOffset,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.itemTitle,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Node ID
+            </Text>
             {isInfoSet && (
               <TouchableOpacity
                 onPress={() => {
                   copyToClipboard(lnNodeInfo?.id);
                 }}>
-                <Text style={styles.descriptionContent}>{lnNodeInfo?.id}</Text>
+                <Text
+                  style={[
+                    styles.descriptionContent,
+                    {
+                      color: isDarkMode
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                    },
+                  ]}>
+                  {lnNodeInfo?.id}
+                </Text>
               </TouchableOpacity>
             )}
-            {!isInfoSet && <Text style={styles.descriptionContent}>N/A</Text>}
+            {!isInfoSet && (
+              <Text
+                style={[
+                  styles.descriptionContent,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                N/A
+              </Text>
+            )}
           </View>
-          <View style={[styles.itemContainer, styles.horizontalContainer]}>
+          <View
+            style={[
+              styles.itemContainer,
+              styles.horizontalContainer,
+              {
+                backgroundColor: isDarkMode
+                  ? COLORS.darkModeBackgroundOffset
+                  : COLORS.lightModeBackgroundOffset,
+              },
+            ]}>
             <View style={styles.innerHorizontalContainer}>
-              <Text style={styles.itemTitle}>Max Payable</Text>
-              <Text style={styles.descriptionContent}>
+              <Text
+                style={[
+                  styles.itemTitle,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                Max Payable
+              </Text>
+              <Text
+                style={[
+                  styles.descriptionContent,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 {isInfoSet
                   ? (lnNodeInfo?.maxPayableMsat / 1000).toLocaleString()
                   : 'N/A'}
               </Text>
             </View>
             <View style={styles.innerHorizontalContainer}>
-              <Text style={styles.itemTitle}>Max Receivable</Text>
-              <Text style={styles.descriptionContent}>
+              <Text
+                style={[
+                  styles.itemTitle,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                Max Receivable
+              </Text>
+              <Text
+                style={[
+                  styles.descriptionContent,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 {isInfoSet
                   ? (lnNodeInfo?.inboundLiquidityMsats / 1000).toLocaleString()
                   : 'N/A'}
               </Text>
             </View>
           </View>
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemTitle}>Connected Peers</Text>
+          <View
+            style={[
+              styles.itemContainer,
+              {
+                backgroundColor: isDarkMode
+                  ? COLORS.darkModeBackgroundOffset
+                  : COLORS.lightModeBackgroundOffset,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.itemTitle,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Connected Peers
+            </Text>
             {isInfoSet && (
               <ScrollView style={{height: 120}}>
                 {connectedPeersElements}
               </ScrollView>
             )}
-            {!isInfoSet && <Text style={styles.descriptionContent}>N/A</Text>}
+            {!isInfoSet && (
+              <Text
+                style={[
+                  styles.descriptionContent,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                N/A
+              </Text>
+            )}
           </View>
         </View>
         {/* Bitcoin */}
         <View>
-          <Text style={styles.sectionTitle}>Bitcoin</Text>
+          <Text
+            style={[
+              styles.sectionTitle,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
+            Bitcoin
+          </Text>
           <View
             style={[
               styles.itemContainer,
               {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                backgroundColor: isDarkMode
+                  ? COLORS.darkModeBackgroundOffset
+                  : COLORS.lightModeBackgroundOffset,
               },
             ]}>
-            <Text style={[styles.itemTitle, {width: 'auto', marginBottom: 0}]}>
+            <Text
+              style={[
+                styles.itemTitle,
+                {
+                  width: 'auto',
+                  marginBottom: 0,
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               Onchain Balance
             </Text>
-            <Text style={styles.descriptionContent}>
+            <Text
+              style={[
+                styles.descriptionContent,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               {isInfoSet
                 ? (lnNodeInfo?.onchainBalanceMsat / 1000).toLocaleString()
                 : 'N/A'}
@@ -124,12 +276,33 @@ export default function NodeInfo() {
               {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                backgroundColor: isDarkMode
+                  ? COLORS.darkModeBackgroundOffset
+                  : COLORS.lightModeBackgroundOffset,
               },
             ]}>
-            <Text style={[styles.itemTitle, {width: 'auto', marginBottom: 0}]}>
+            <Text
+              style={[
+                styles.itemTitle,
+                {
+                  width: 'auto',
+                  marginBottom: 0,
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               Block Height
             </Text>
-            <Text style={styles.descriptionContent}>
+            <Text
+              style={[
+                styles.descriptionContent,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               {isInfoSet ? lnNodeInfo?.blockHeight?.toLocaleString() : 'N/A'}
             </Text>
           </View>

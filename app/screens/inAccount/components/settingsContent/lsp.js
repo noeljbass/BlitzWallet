@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   Animated,
+  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
@@ -13,10 +14,19 @@ import {useEffect, useRef, useState} from 'react';
 import {extractFont} from 'react-native-svg/lib/typescript/lib/extract/extractText';
 
 export default function LSPPage(props) {
+  const isDarkMode = useColorScheme() === 'dark';
   //   const [infoPopup, setInfoPopup] = useState(false);
   return (
     <View style={styles.globalContainer}>
-      <View style={[styles.contentContainer]}>
+      <View
+        style={[
+          styles.contentContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}>
         <TouchableOpacity
           onPress={() =>
             props.setDisplayPopup({isDisplayed: true, type: 'LSPInfo'})
@@ -26,17 +36,44 @@ export default function LSPPage(props) {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={styles.titleText}>What is an LSP?</Text>
+          <Text
+            style={[
+              styles.titleText,
+              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            ]}>
+            What is an LSP?
+          </Text>
           <Image style={{width: 20, height: 20}} source={ICONS.aboutIcon} />
         </TouchableOpacity>
       </View>
-      <View style={styles.contentContainer}>
-        <Text style={[styles.titleText, {marginBottom: 5}]}>Current LSP</Text>
+      <View
+        style={[
+          styles.contentContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}>
+        <Text
+          style={[
+            styles.titleText,
+            {
+              marginBottom: 5,
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
+          Current LSP
+        </Text>
         <TouchableOpacity
           onPress={() => {
             copyToClipboard('LSP ID');
           }}>
-          <Text style={styles.descriptionText}>
+          <Text
+            style={[
+              styles.descriptionText,
+              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            ]}>
             asdfasdfasfasdfasdfasdfasdfafadsfasdfasdfasdfasdfs
           </Text>
         </TouchableOpacity>
