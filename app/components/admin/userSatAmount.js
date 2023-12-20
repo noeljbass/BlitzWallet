@@ -1,15 +1,21 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from 'react-native';
 import {COLORS, FONT, SIZES} from '../../constants';
 
 import {useEffect, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../functions';
-import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
 // import {getLocalStorageItem, setLocalStorageItem} from '../global';
 
 export function UserSatAmount(props) {
   // const isInitialRender = useRef(true);
   // const [showAmount, setShowAmount] = useState(true);
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     (async () => {
@@ -23,11 +29,47 @@ export function UserSatAmount(props) {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        props.setShowAmount(prev => {
+          setLocalStorageItem('showBalance', JSON.stringify(!prev));
+          return !prev;
+        });
+      }}>
+      <View style={styles.valueContainer}>
+        <Text
+          style={[
+            combinedStyles.bitcoinText,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
+          BTC
+        </Text>
 
-  //   })();
-  // }, [props.breezInformation.userBalance]);
+        {props.showAmount && (
+          <Text
+            style={[
+              styles.valueText,
+              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            ]}>
+            {formatBitcoinAmoutn(
+              props.breezInformation?.userBalance.toFixed(0),
+            )}
+          </Text>
+        )}
+        {!props.showAmount && (
+          <Text
+            style={[
+              styles.valueText,
+              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            ]}>
+            * * * * *
+          </Text>
+        )}
+        <Text style={combinedStyles.satsText}>SATS</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   function formatBitcoinAmoutn(amout) {
     if (!Number(amout)) {
@@ -105,30 +147,6 @@ export function UserSatAmount(props) {
 
     return styledSplit;
   }
-
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        props.setShowAmount(prev => {
-          setLocalStorageItem('showBalance', JSON.stringify(!prev));
-          return !prev;
-        });
-      }}>
-      <View style={styles.valueContainer}>
-        <Text style={combinedStyles.bitcoinText}>BTC</Text>
-
-        {props.showAmount && (
-          <Text style={styles.valueText}>
-            {formatBitcoinAmoutn(
-              props.breezInformation?.userBalance.toFixed(0),
-            )}
-          </Text>
-        )}
-        {!props.showAmount && <Text style={styles.valueText}>* * * * *</Text>}
-        <Text style={combinedStyles.satsText}>Sats</Text>
-      </View>
-    </TouchableOpacity>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -145,7 +163,7 @@ const styles = StyleSheet.create({
 
   denominatorText: {
     fontSize: SIZES.large,
-    fontFamily: FONT.Title_Regular,
+    fontFamily: FONT.Title_Bold,
   },
   valueText: {
     color: COLORS.gray,

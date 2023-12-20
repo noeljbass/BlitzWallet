@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  useColorScheme,
 } from 'react-native';
 import {
   COLORS,
@@ -36,6 +37,7 @@ export default function LiquidPage(props) {
     amount: true,
     qrCode: false,
   });
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (props.selectedRecieveOption === 'liquid') return;
@@ -66,10 +68,15 @@ export default function LiquidPage(props) {
             setProcessStage={setProcessStage}
             feeInfo={feeInfo}
             setFeeInfo={setFeeInfo}
+            isDarkMode={isDarkMode}
           />
         )}
         {processStage.qrCode && (
-          <QrCodePage liquidAmount={liquidAmount} feeInfo={feeInfo} />
+          <QrCodePage
+            liquidAmount={liquidAmount}
+            feeInfo={feeInfo}
+            isDarkMode={isDarkMode}
+          />
         )}
       </View>
     </View>
@@ -85,7 +92,7 @@ function EnterAmount(props) {
 
     (async () => {
       const swapInfo = await getSwapPairInformation();
-      console.log(swapInfo);
+      if (!swapInfo) return;
       setMaxAmount(swapInfo.limits.maximal);
       setMinAmount(swapInfo.limits.minimal + 1000);
       props.setFeeInfo({
@@ -99,7 +106,19 @@ function EnterAmount(props) {
   }, [props.selectedRecieveOption]);
   return (
     <>
-      <View style={[styles.inputContainer, {marginTop: 'auto'}]}>
+      <View
+        style={[
+          styles.inputContainer,
+          {
+            marginTop: 'auto',
+            backgroundColor: props.isDarkMode
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+            borderColor: props.isDarkMode
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
+          },
+        ]}>
         <View style={styles.labelContainer}>
           <Image
             style={{width: 30, height: 30, marginRight: 5}}
@@ -109,7 +128,14 @@ function EnterAmount(props) {
         </View>
 
         <TextInput
-          style={styles.inputField}
+          style={[
+            styles.inputField,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}
           keyboardType="number-pad"
           onChangeText={props.setLiquidAmount}
           value={props.liquidAmount}
@@ -117,18 +143,64 @@ function EnterAmount(props) {
       </View>
       <View style={styles.feeContainer}>
         <View style={[styles.feeRow, {marginBottom: 5}]}>
-          <Text style={styles.feeLabel}>Network Fee</Text>
-          <Text style={styles.feeText}>{props.feeInfo.liquidFee}</Text>
+          <Text
+            style={[
+              styles.feeLabel,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Network Fee
+          </Text>
+          <Text
+            style={[
+              styles.feeText,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            {props.feeInfo.liquidFee}
+          </Text>
         </View>
         <View style={styles.feeRow}>
-          <Text style={styles.feeLabel}>Boltz Fee (0.1%)</Text>
-          <Text style={styles.feeText}>
+          <Text
+            style={[
+              styles.feeLabel,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Boltz Fee (0.1%)
+          </Text>
+          <Text
+            style={[
+              styles.feeText,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
             {props.feeInfo.boltzFeePercent * props.liquidAmount}
           </Text>
         </View>
       </View>
       <View
-        style={[styles.inputContainer, {backgroundColor: COLORS.opaicityGray}]}>
+        style={[
+          styles.inputContainer,
+          {
+            backgroundColor: COLORS.opaicityGray,
+            borderColor: props.isDarkMode
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
+          },
+        ]}>
         <View style={styles.labelContainer}>
           <Image
             style={{width: 30, height: 30, marginRight: 5}}
@@ -167,7 +239,7 @@ function EnterAmount(props) {
 }
 
 function QrCodePage(props) {
-  const [generatingQrCode, setGeneratingQrCode] = useState(false);
+  const [generatingQrCode, setGeneratingQrCode] = useState(true);
   const [generatedAddress, setGeneratedAddress] = useState('');
   const [evenSource, setEventSource] = useState({});
 
@@ -210,17 +282,40 @@ function QrCodePage(props) {
     <>
       <View style={[styles.qrcodeContainer]}>
         {generatingQrCode && (
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator
+            size="large"
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
+          />
         )}
         {!generatingQrCode && (
           <QRCode
             size={250}
             value={generatedAddress ? generatedAddress : 'lets swap'}
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
+            backgroundColor={
+              props.isDarkMode
+                ? COLORS.darkModeBackground
+                : COLORS.lightModeBackground
+            }
           />
         )}
       </View>
       <View style={styles.transactionStatusContainer}>
-        <Text style={styles.statusTitle}>Status:</Text>
+        <Text
+          style={[
+            styles.statusTitle,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          Status:
+        </Text>
         <View style={{height: 80, justifyContent: 'space-between'}}>
           <Text
             style={[
@@ -231,7 +326,9 @@ function QrCodePage(props) {
                   evenSource === '{"status":"transaction.mempool"}' ||
                   evenSource === '{"status":"invoice.pending"}'
                     ? 'green'
-                    : COLORS.black,
+                    : props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
               },
             ]}>
             Invoice Set
@@ -244,7 +341,9 @@ function QrCodePage(props) {
                   evenSource === '{"status":"transaction.mempool"}' ||
                   evenSource === '{"status":"invoice.pending"}'
                     ? 'green'
-                    : COLORS.black,
+                    : props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
               },
             ]}>
             In mempool
@@ -256,7 +355,9 @@ function QrCodePage(props) {
                 color:
                   evenSource === '{"status":"invoice.pending"}'
                     ? 'green'
-                    : COLORS.black,
+                    : props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
               },
             ]}>
             Payment Pending

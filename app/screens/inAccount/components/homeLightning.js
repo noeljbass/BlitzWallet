@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  SafeAreaView,
+  useColorScheme,
+} from 'react-native';
 
 import {CENTER, SIZES, FONT, COLORS} from '../../../constants';
 
@@ -20,6 +27,7 @@ export default function HomeLightning(props) {
     isDisplayed: false,
   });
   const [showAmount, setShowAmount] = useState(true);
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
@@ -61,14 +69,18 @@ export default function HomeLightning(props) {
         </View>
       )}
       <ScrollView style={style.scrollContainer}>
-        {/* <TransactionListElements
-          showAmount={showAmount}
-          breezTransactions={props.breezInformation}
-        /> */}
         {transactionElement?.length === 0 && (
           <View style={style.noTransactionsContainer}>
-            <Text style={style.noTransactionsText}>
-              Send or recive a transaction to see your activty here.
+            <Text
+              style={[
+                style.noTransactionsText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Send or receive a transaction to see your activty here.
             </Text>
           </View>
         )}

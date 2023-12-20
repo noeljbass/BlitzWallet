@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
   TouchableWithoutFeedback,
+  useColorScheme,
 } from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
@@ -16,6 +17,111 @@ export default function EditAmountPopup(props) {
   const [numSats, setNumSats] = useState('');
   const [description, setdescription] = useState('');
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const isDarkMode = useColorScheme() === 'dark';
+
+  function fadeIn() {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }
+  function fadeOut() {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  useEffect(() => {
+    if (props.isDisplayed) fadeIn();
+    else fadeOut();
+  }, [props.isDisplayed]);
+
+  useEffect(() => {
+    console.log('TESTING FOR THIS');
+    setNumSats('');
+    setdescription('');
+  }, [props.type]);
+  // console.log('EDIT AMOUNT', props.type);
+
+  return (
+    <Animated.View
+      style={[
+        styles.popupContainer,
+        {opacity: fadeAnim},
+        {zIndex: props.isDisplayed ? 1 : -1},
+      ]}>
+      <TouchableWithoutFeedback onPress={() => props.setIsDisplayed(false)}>
+        <KeyboardAvoidingView
+          style={{flex: 1, justifyContent: 'flex-end'}}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}>
+          <View
+            style={[
+              styles.inputContainer,
+              {
+                backgroundColor: isDarkMode
+                  ? COLORS.darkModeBackground
+                  : COLORS.lightModeBackground,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.inputHeader,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Edit Payment Detials
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  borderColor: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}
+              placeholder="Amount (sat)"
+              placeholderTextColor={
+                isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+              }
+              onChangeText={setNumSats}
+              keyboardType="numeric"
+              value={numSats}
+            />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  borderColor: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}
+              placeholder="Description (optional)"
+              placeholderTextColor={
+                isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+              }
+              onChangeText={setdescription}
+              value={description}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                saveChanges();
+                props.setUpdateQRCode(prev => (prev += 1));
+              }}>
+              <Text style={styles.saveText}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </Animated.View>
+  );
 
   function saveChanges() {
     try {
@@ -55,76 +161,6 @@ export default function EditAmountPopup(props) {
       console.log(err);
     }
   }
-
-  function fadeIn() {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-  function fadeOut() {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-
-  useEffect(() => {
-    if (props.isDisplayed) fadeIn();
-    else fadeOut();
-  }, [props.isDisplayed]);
-
-  useEffect(() => {
-    console.log('TESTING FOR THIS');
-    setNumSats('');
-    setdescription('');
-  }, [props.type]);
-  // console.log('EDIT AMOUNT', props.type);
-
-  return (
-    <Animated.View
-      style={[
-        styles.popupContainer,
-        {opacity: fadeAnim},
-        {zIndex: props.isDisplayed ? 1 : -1},
-      ]}>
-      <TouchableWithoutFeedback
-        onPress={() => props.setIsDisplayed(false)}
-        style={{flex: 1}}>
-        <KeyboardAvoidingView
-          style={{flex: 1, justifyContent: 'flex-end'}}
-          behavior={Platform.OS === 'ios' ? 'padding' : null}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputHeader}>Edit Payment Detials</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Amount (sat)"
-              placeholderTextColor={COLORS.gray}
-              onChangeText={setNumSats}
-              keyboardType="numeric"
-              value={numSats}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Description (optional)"
-              placeholderTextColor={COLORS.gray}
-              onChangeText={setdescription}
-              value={description}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                saveChanges();
-                props.setUpdateQRCode(prev => (prev += 1));
-              }}>
-              <Text style={styles.saveText}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
-    </Animated.View>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -164,8 +200,7 @@ const styles = StyleSheet.create({
   saveText: {
     color: COLORS.primary,
     fontSize: SIZES.large,
-    fontFamily: FONT.Descriptoin_Regular,
-
+    fontFamily: FONT.Other_Bold,
     marginLeft: 'auto',
     marginBottom: 20,
   },

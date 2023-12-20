@@ -8,6 +8,7 @@ import {
   Modal,
   ActivityIndicator,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
 import {
   BTN,
@@ -32,41 +33,22 @@ import LiquidPage from './liquidPage';
 
 export function ReceivePaymentHome(props) {
   const [generatedAddress, setGeneratedAddress] = useState('');
-
   const [sendingAmount, setSendingAmount] = useState({
     lightning: 1000,
     bitcoin: 1000,
-    liquid: 1000,
+    liquid: 2000,
   });
   const [paymentDescription, setPaymentDescription] = useState({
     lightning: '',
     bitcoin: '',
     liquid: '',
   });
-
   const [editPaymentPopup, setEditPaymentPopup] = useState(false);
-
   const [updateQRCode, setUpdateQRCode] = useState(0);
   const [selectedRecieveOption, setSelectedRecieveOption] =
     useState('lightning');
 
-  function clear(type) {
-    setSendingAmount({
-      lightning: 1000,
-      bitcoin: 1000,
-      liquid: 1000,
-    });
-    setPaymentDescription({
-      lightning: '',
-      bitcoin: '',
-      liquid: '',
-    });
-    setGeneratedAddress('');
-
-    if (type === 'navChange') return;
-    setEditPaymentPopup(false);
-    props.setRecivePayment(false);
-  }
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     clear('navChange');
@@ -78,10 +60,22 @@ export function ReceivePaymentHome(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}>
-      <View style={{flex: 1, backgroundColor: COLORS.background}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        }}>
         <SafeAreaView style={{flex: 1}}>
           <TopBar clear={clear} />
-          <Text style={styles.title}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
             {selectedRecieveOption[0].toUpperCase() +
               selectedRecieveOption.slice(1)}
           </Text>
@@ -115,11 +109,6 @@ export function ReceivePaymentHome(props) {
           />
 
           {/* popups */}
-          {/* <FullAdress
-          isDisplayed={fullAddressView}
-          setDisplayAdress={setFullAddressView}
-          address={generatedAddress}
-        /> */}
         </SafeAreaView>
 
         <EditAmountPopup
@@ -133,6 +122,24 @@ export function ReceivePaymentHome(props) {
       </View>
     </Modal>
   );
+
+  function clear(type) {
+    setSendingAmount({
+      lightning: 1000,
+      bitcoin: 1000,
+      liquid: 2000,
+    });
+    setPaymentDescription({
+      lightning: '',
+      bitcoin: '',
+      liquid: '',
+    });
+    setGeneratedAddress('');
+
+    if (type === 'navChange') return;
+    setEditPaymentPopup(false);
+    props.setRecivePayment(false);
+  }
 }
 
 const styles = StyleSheet.create({

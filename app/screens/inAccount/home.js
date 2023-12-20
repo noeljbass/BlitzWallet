@@ -78,8 +78,6 @@ export default function AdminHome({navigation: {navigate}}) {
       }
     };
 
-    return;
-
     (async () => {
       const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
@@ -92,6 +90,7 @@ export default function AdminHome({navigation: {navigate}}) {
           };
         });
       }
+      return;
 
       if (isInitialRender.current) {
         console.log('HOME RENDER BREEZ EVENT FIRST LOAD');

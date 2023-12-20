@@ -1,9 +1,10 @@
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, useColorScheme} from 'react-native';
 
-import {FONT, ICONS, SIZES} from '../../../constants';
+import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
 
 export function UserTransaction(props) {
   const paymentDate = new Date(props.paymentTime * 1000).toLocaleString();
+  const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={styles.transactionContainer}>
@@ -21,7 +22,11 @@ export function UserTransaction(props) {
         />
       )}
       <View>
-        <Text style={styles.descriptionText}>
+        <Text
+          style={[
+            styles.descriptionText,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
           {props.description.includes('bwrfd')
             ? 'faucet'
             : props.description.length > 20
@@ -30,7 +35,13 @@ export function UserTransaction(props) {
           {!props.description && 'No description'}
         </Text>
 
-        <Text style={styles.dateText}>{paymentDate}</Text>
+        <Text
+          style={[
+            styles.dateText,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
+          {paymentDate}
+        </Text>
       </View>
 
       {props.showAmount ? (
@@ -44,7 +55,16 @@ export function UserTransaction(props) {
           </Text>
         )
       ) : (
-        <Text style={[styles.amountText, {fontSize: SIZES.medium}]}>*****</Text>
+        <Text
+          style={[
+            styles.amountText,
+            {
+              fontSize: SIZES.medium,
+              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
+          *****
+        </Text>
       )}
     </View>
   );
@@ -74,6 +94,7 @@ const styles = StyleSheet.create({
   amountText: {
     marginLeft: 'auto',
     fontFamily: FONT.Other_Regular,
+    fontSize: SIZES.medium,
   },
 });
 

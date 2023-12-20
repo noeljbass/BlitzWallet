@@ -6,12 +6,14 @@ import {
   Image,
   Modal,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
-import {CENTER, COLORS, ICONS, SIZES} from '../../../constants';
+import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import {useEffect, useState} from 'react';
 
 export default function ConfirmPage(props) {
   const [information, setInformation] = useState({});
+  const isDarkMode = useColorScheme() === 'dark';
   console.log('CONFIRM PAYMENT SCREEN', information);
   useEffect(() => {
     if (
@@ -28,7 +30,15 @@ export default function ConfirmPage(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}>
-      <View style={styles.popupContainer}>
+      <View
+        style={[
+          styles.popupContainer,
+          {
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+          },
+        ]}>
         <SafeAreaView style={{flex: 1}}>
           <TouchableOpacity
             onPress={() => {
@@ -41,27 +51,62 @@ export default function ConfirmPage(props) {
           </TouchableOpacity>
           <View style={styles.innerContainer}>
             <Image style={styles.confirmedIocn} source={ICONS.Checkcircle} />
-            <Text style={styles.confirmText}>
+            <Text
+              style={[
+                styles.confirmText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               {props.for?.toLowerCase() === 'paymentsucceed'
                 ? 'Sent'
                 : 'Received'}
             </Text>
-            <Text style={styles.dateText}>
+            <Text
+              style={[
+                styles.dateText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               {new Date(
                 props.for?.toLowerCase() === 'invoicepaid'
                   ? information.details?.payment?.paymentTime * 1000
                   : information.details?.paymentTime * 1000,
               ).toLocaleString()}
             </Text>
-            <Text style={styles.amountText}>
+            <Text
+              style={[
+                styles.amountText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               {props.for?.toLowerCase() === 'invoicepaid'
                 ? (information.details?.payment?.amountMsat / 1000)?.toFixed(2)
                 : (information.details?.amountMsat / 1000)?.toFixed(2)}
-              <Text style={{color: COLORS.primary}}> sat</Text>
+              <Text
+                style={{color: COLORS.primary, fontFamily: FONT.Title_Bold}}>
+                {' '}
+                sat
+              </Text>
             </Text>
             <View style={styles.seperator}></View>
-
-            <Text style={styles.descriptionText}>
+            <Text
+              style={[
+                styles.descriptionText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               <Text style={styles.descriptor}>Desc</Text>{' '}
               {props.for?.toLowerCase() === 'invoicepaid'
                 ? information.details?.payment?.description
@@ -71,7 +116,15 @@ export default function ConfirmPage(props) {
                 ? information.details?.description
                 : 'no description'}
             </Text>
-            <Text style={styles.feeText}>
+            <Text
+              style={[
+                styles.feeText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
               {props.for?.toLowerCase() === 'invoicepaid'
                 ? (information.details?.payment?.feeMsat / 1000).toFixed(2)
@@ -108,16 +161,19 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     fontSize: SIZES.huge,
+    fontFamily: FONT.Title_Bold,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   dateText: {
     fontSize: SIZES.medium,
     marginBottom: 50,
+    fontFamily: FONT.Descriptoin_Regular,
   },
   amountText: {
     fontSize: SIZES.large,
     marginBottom: 40,
+    fontFamily: FONT.Title_Bold,
   },
   seperator: {
     backgroundColor: COLORS.primary,
@@ -129,9 +185,11 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: SIZES.medium,
     marginBottom: 10,
+    fontFamily: FONT.Descriptoin_Regular,
   },
   feeText: {
     fontSize: SIZES.medium,
+    fontFamily: FONT.Descriptoin_Regular,
   },
   descriptor: {
     fontWeight: 'bold',

@@ -6,6 +6,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  useColorScheme,
 } from 'react-native';
 import {
   openChannelFee,
@@ -13,28 +14,32 @@ import {
 } from '@breeztech/react-native-breez-sdk';
 import QRCode from 'react-native-qrcode-svg';
 import {FONT, SIZES, CENTER, COLORS} from '../../../../constants';
-import {err} from 'react-native-svg/lib/typescript/xml';
 
 export default function LightningPage(props) {
   const [fiatRate, setFiatRate] = useState(0);
-  const [generatingQrCode, setGeneratingQrCode] = useState(false);
+  const [generatingQrCode, setGeneratingQrCode] = useState(true);
   const [errorMessageText, setErrorMessageText] = useState('');
   console.log('error message text', errorMessageText);
+  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (props.selectedRecieveOption != 'lightning') {
       setErrorMessageText('');
       setFiatRate('');
-      setGeneratingQrCode(false);
+      setGeneratingQrCode(true);
       return;
     }
 
     generateLightningInvoice();
 
     (async () => {
-      const fiatRates = await getFiatRates();
-      const [selectedPrice] = fiatRates.filter(rate => rate.coin === 'USD');
-      setFiatRate(selectedPrice.value);
+      try {
+        const fiatRates = await getFiatRates();
+        const [selectedPrice] = fiatRates.filter(rate => rate.coin === 'USD');
+        setFiatRate(selectedPrice.value);
+      } catch (err) {
+        console.log(err);
+      }
     })();
   }, [props.selectedRecieveOption, props.updateQRCode]);
   return (
@@ -44,7 +49,10 @@ export default function LightningPage(props) {
       }}>
       <View style={[styles.qrcodeContainer]}>
         {generatingQrCode && (
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator
+            size="large"
+            color={isDarkMode ? COLORS.darkModeText : COLORS.lightModeText}
+          />
         )}
         {!generatingQrCode && (
           <QRCode
@@ -52,18 +60,32 @@ export default function LightningPage(props) {
             value={
               props.generatedAddress
                 ? props.generatedAddress
-                : 'Random Input Data'
+                : 'Thanks for using Blitz!'
+            }
+            color={isDarkMode ? COLORS.darkModeText : COLORS.lightModeText}
+            backgroundColor={
+              isDarkMode
+                ? COLORS.darkModeBackground
+                : COLORS.lightModeBackground
             }
           />
         )}
       </View>
       <View style={styles.amountContainer}>
-        <Text style={styles.valueAmountText}>
+        <Text
+          style={[
+            styles.valueAmountText,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
           {(props.sendingAmount / 1000).toLocaleString()} sat /{' '}
           {((fiatRate / 100000000) * (props.sendingAmount / 1000)).toFixed(2)}{' '}
           {'USD'}
         </Text>
-        <Text style={styles.valueAmountText}>
+        <Text
+          style={[
+            styles.valueAmountText,
+            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
           {props.paymentDescription
             ? props.paymentDescription
             : 'no description'}

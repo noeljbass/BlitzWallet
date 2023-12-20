@@ -1,7 +1,15 @@
-import {StyleSheet, View, TouchableOpacity, Text, Image} from 'react-native';
-import {FONT, SIZES, CENTER, ICONS} from '../../../../constants';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  useColorScheme,
+} from 'react-native';
+import {FONT, SIZES, CENTER, ICONS, COLORS} from '../../../../constants';
 
 export default function TopBar(props) {
+  const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.topbar}>
       <TouchableOpacity activeOpacity={1} onPress={props.clear}>
@@ -11,7 +19,15 @@ export default function TopBar(props) {
           resizeMode="contain"
         />
       </TouchableOpacity>
-      <Text style={styles.navText}>Receive</Text>
+      <Text
+        style={[
+          styles.navText,
+          {
+            color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+          },
+        ]}>
+        Receive
+      </Text>
     </View>
   );
 }

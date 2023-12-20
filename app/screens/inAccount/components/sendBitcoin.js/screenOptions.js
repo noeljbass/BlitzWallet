@@ -8,6 +8,7 @@ import {
   Modal,
   SafeAreaView,
   Animated,
+  useColorScheme,
 } from 'react-native';
 import {CameraType} from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
@@ -17,7 +18,6 @@ import * as ImagePicker from 'expo-image-picker';
 import {useEffect, useState} from 'react';
 
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
-import SendPaymentScreen from './sendPaymentScreen';
 
 // import {ManualAddressInput} from './manualAddressInput';
 
@@ -27,13 +27,14 @@ export default function SendPaymentScreenOptions(props) {
   const [permission, setPermission] = useState(
     BarCodeScanner.getPermissionsAsync(),
   );
-  const [scanned, setScanned] = useState(false);
+  // const [scanned, setScanned] = useState(false);
   const [bottomExpand, setBottomExpand] = useState(false);
-  const [BTCadress, setBTCadress] = useState('');
+  // const [BTCadress, setBTCadress] = useState('');
   const [photoesPermission, setPhotoesPermission] = useState({});
 
   const [manualBitcoinInput, setManualBitcoinInput] = useState('');
   const [showManualInpt, setShowManualInput] = useState(false);
+  const isDarkMode = useColorScheme() === 'dark';
 
   function toggleBottom() {
     setBottomExpand(prev => !prev);
@@ -41,6 +42,7 @@ export default function SendPaymentScreenOptions(props) {
 
   async function getClipboardText() {
     const text = await Clipboard.getStringAsync();
+    if (!text) return;
     props.setBTCadress(text);
     props.setScanned(true);
   }
@@ -71,17 +73,17 @@ export default function SendPaymentScreenOptions(props) {
     })();
   }, []);
 
-  function getManualInput() {
-    if (!manualBitcoinInput) return;
-    // add validation
-    props.setBTCadress(manualBitcoinInput);
-    props.setScanned(true);
-  }
+  // function getManualInput() {
+  //   if (!manualBitcoinInput) return;
+  //   // add validation
+  //   props.setBTCadress(manualBitcoinInput);
+  //   props.setScanned(true);
+  // }
 
-  function toggleManualInput() {
-    setShowManualInput(prev => !prev);
-    setBottomExpand(false);
-  }
+  // function toggleManualInput() {
+  //   setShowManualInput(prev => !prev);
+  //   setBottomExpand(false);
+  // }
 
   function handleBarCodeScanned({type, data}) {
     if (!type.includes('QRCode')) {
@@ -97,7 +99,15 @@ export default function SendPaymentScreenOptions(props) {
   }
 
   return (
-    <View style={styles.viewContainer}>
+    <View
+      style={[
+        styles.viewContainer,
+        {
+          backgroundColor: isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.topBar}>
           <TouchableOpacity
@@ -112,20 +122,53 @@ export default function SendPaymentScreenOptions(props) {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Scan A QR code</Text>
+          <Text
+            style={[
+              styles.headerText,
+              {
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
+            Scan A QR code
+          </Text>
         </View>
 
         {!permission && <Text>No access to camera</Text>}
-        {permission && !scanned && (
+        {permission && (
           <BarCodeScanner
             type={type}
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            onBarCodeScanned={handleBarCodeScanned}
             style={styles.camera}
           />
         )}
 
-        <View style={{...styles.bottomBar, height: bottomExpand ? 150 : 50}}>
-          <View onTouchEnd={toggleBottom} style={{...styles.arrowIcon}}>
+        <View
+          style={{
+            ...styles.bottomBar,
+            height: bottomExpand ? 100 : 50,
+            backgroundColor: isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+            borderTopColor: isDarkMode
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
+            borderTopWidth: 2,
+          }}>
+          <View
+            onTouchEnd={toggleBottom}
+            style={{
+              ...styles.arrowIcon,
+              backgroundColor: isDarkMode
+                ? COLORS.darkModeBackground
+                : COLORS.lightModeBackground,
+
+              borderColor: isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+              borderTopWidth: 2,
+              borderLeftWidth: 2,
+              borderRightWidth: 2,
+            }}>
             <Animated.Image
               source={ICONS.angleUpIcon}
               style={{
@@ -143,20 +186,40 @@ export default function SendPaymentScreenOptions(props) {
             onPress={getClipboardText}
             style={{backgroundColor: 'transparent'}}
             activeOpacity={0.2}>
-            <Text style={styles.bottomText}>Paste from clipbard</Text>
+            <Text
+              style={[
+                styles.bottomText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Paste from clipbard
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={getQRImage}
             style={{backgroundColor: 'transparent'}}
             activeOpacity={0.2}>
-            <Text style={styles.bottomText}>Choose image</Text>
+            <Text
+              style={[
+                styles.bottomText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              Choose image
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={toggleManualInput}
             style={{backgroundColor: 'transparent'}}
             activeOpacity={0.2}>
             <Text style={styles.bottomText}>Manual input</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </SafeAreaView>
     </View>
@@ -166,7 +229,6 @@ export default function SendPaymentScreenOptions(props) {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    backgroundColor: COLORS.background,
     height: '100%',
     width: '100%',
   },
@@ -222,7 +284,7 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     position: 'absolute',
-    top: -20,
+    bottom: '100%',
     left: '50%',
     zIndex: 1,
     transform: [{translateX: -40}],

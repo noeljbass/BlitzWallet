@@ -50,7 +50,9 @@ export function OptionsDropdown(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const navElements = NAVITEMS.map((item, id) => {
     return (
-      <View style={styles.navItem} key={id}>
+      <View
+        style={[styles.navItem, {borderBottomWidth: id == 3 ? 0 : 1}]}
+        key={id}>
         <TouchableOpacity
           onPress={() => {
             (async () => {
@@ -113,7 +115,7 @@ export function OptionsDropdown(props) {
 const styles = StyleSheet.create({
   globalContainer: {
     // backgroundColor: COLORS.gray,
-    width: 200,
+    width: 170,
     height: 160,
     position: 'absolute',
     top: '80%',

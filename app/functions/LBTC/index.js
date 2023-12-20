@@ -13,6 +13,9 @@ export async function getSwapFee() {
     console.log(data);
   } catch (err) {
     console.log(err);
+    return new Promise(resolve => {
+      resolve(false);
+    });
   }
 }
 export async function getSwapPairInformation() {
@@ -24,6 +27,9 @@ export async function getSwapPairInformation() {
     });
   } catch (err) {
     console.log(err);
+    return new Promise(resolve => {
+      resolve(false);
+    });
   }
 }
 
@@ -58,5 +64,8 @@ export async function createLiquidSwap(invoice, hash) {
     // console.log(request.data);
   } catch (err) {
     console.log(err);
+    return new Promise(resolve => {
+      resolve(false);
+    });
   }
 }

@@ -60,6 +60,5 @@ const styles = StyleSheet.create({
 
     display: 'flex',
     position: 'relative',
-    backgroundColor: COLORS.background,
   },
 });
