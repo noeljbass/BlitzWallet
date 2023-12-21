@@ -20,7 +20,7 @@ export default function LightningPage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
   const [errorMessageText, setErrorMessageText] = useState('');
   console.log('error message text', errorMessageText);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (props.selectedRecieveOption != 'lightning') {
@@ -51,7 +51,9 @@ export default function LightningPage(props) {
         {generatingQrCode && (
           <ActivityIndicator
             size="large"
-            color={isDarkMode ? COLORS.darkModeText : COLORS.lightModeText}
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
           />
         )}
         {!generatingQrCode && (
@@ -62,9 +64,11 @@ export default function LightningPage(props) {
                 ? props.generatedAddress
                 : 'Thanks for using Blitz!'
             }
-            color={isDarkMode ? COLORS.darkModeText : COLORS.lightModeText}
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
             backgroundColor={
-              isDarkMode
+              props.isDarkMode
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground
             }
@@ -75,7 +79,11 @@ export default function LightningPage(props) {
         <Text
           style={[
             styles.valueAmountText,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           {(props.sendingAmount / 1000).toLocaleString()} sat /{' '}
           {((fiatRate / 100000000) * (props.sendingAmount / 1000)).toFixed(2)}{' '}
@@ -84,7 +92,11 @@ export default function LightningPage(props) {
         <Text
           style={[
             styles.valueAmountText,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           {props.paymentDescription
             ? props.paymentDescription

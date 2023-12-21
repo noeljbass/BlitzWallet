@@ -16,8 +16,8 @@ export default function RecoveryPage(props) {
   const isInitialRender = useRef(true);
   const [mnemonic, setMnemonic] = useState([]);
   const [showSeed, setShowSeed] = useState(false);
-  const isDarkMode = useColorScheme() === 'dark';
-  console.log(props);
+  // const props.isDarkMode = useColorScheme() === 'dark';
+  // console.log(props);
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -44,7 +44,9 @@ export default function RecoveryPage(props) {
               marginBottom: 15,
               fontSize: SIZES.xLarge,
               textAlign: 'center',
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           Keep this phrase in a secure and safe place
@@ -64,7 +66,7 @@ export default function RecoveryPage(props) {
           styles.confirmPopup,
           {
             transform: [{translateY: fadeAnim}],
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           },
@@ -72,7 +74,11 @@ export default function RecoveryPage(props) {
         <Text
           style={[
             styles.confirmPopupTitle,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           Are you sure you want to show your seed phrase
         </Text>

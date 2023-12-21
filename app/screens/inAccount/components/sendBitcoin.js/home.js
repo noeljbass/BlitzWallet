@@ -42,6 +42,7 @@ export default function SendPaymentHome(props) {
         BTCadress={BTCadress}
         setScanned={setScanned}
         setSendPayment={props.setSendPayment}
+        isDarkMode={props.isDarkMode}
       />
 
       <SendPaymentScreen
@@ -49,6 +50,7 @@ export default function SendPaymentHome(props) {
         setScanned={setScanned}
         BTCadress={BTCadress}
         setSendPayment={props.setSendPayment}
+        isDarkMode={props.isDarkMode}
       />
     </Modal>
   );

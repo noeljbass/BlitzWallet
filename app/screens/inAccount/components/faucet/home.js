@@ -30,7 +30,15 @@ export default function FaucetHome(props) {
       animationType="slide"
       transparent={false}
       visible={props.isDisplayed}>
-      <View style={styles.globalContainer}>
+      <View
+        style={[
+          styles.globalContainer,
+          {
+            backgroundColor: props.isDarkMode
+              ? COLORS.darkModeBackground
+              : COLORS.lightModeBackground,
+          },
+        ]}>
         <SafeAreaView style={{flex: 1}}>
           <View style={styles.topBar}>
             <TouchableOpacity
@@ -38,12 +46,29 @@ export default function FaucetHome(props) {
               onPress={() => props.setFaucet(false)}>
               <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
             </TouchableOpacity>
-            <Text style={[headerText, {transform: [{translateX: -12.5}]}]}>
+            <Text
+              style={[
+                headerText,
+                {
+                  transform: [{translateX: -12.5}],
+                  color: props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               Faucet
             </Text>
           </View>
           <View style={styles.contentContainer}>
-            <Text style={styles.questionText}>
+            <Text
+              style={[
+                styles.questionText,
+                {
+                  color: props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               Would you like to create a send or recieve faucet?
             </Text>
             <View style={styles.buttonContainer}>
@@ -77,6 +102,7 @@ export default function FaucetHome(props) {
           numberOfPeople={numberOfPeople}
           amountPerPerson={amountPerPerson}
           userPath={userPath}
+          isDarkMode={props.isDarkMode}
         />
         <ReceievePage
           setUserPath={setUserPath}
@@ -87,6 +113,7 @@ export default function FaucetHome(props) {
           setNumberOfPeople={setNumberOfPeople}
           setAmountPerPerson={setAmountPerPerson}
           setFaucet={props.setFaucet}
+          isDarkMode={props.isDarkMode}
         />
         <SendPage
           setUserPath={setUserPath}
@@ -97,6 +124,7 @@ export default function FaucetHome(props) {
           setNumberOfPeople={setNumberOfPeople}
           setAmountPerPerson={setAmountPerPerson}
           setFaucet={props.setFaucet}
+          isDarkMode={props.isDarkMode}
         />
         {/* NEED TO CREATE */}
       </View>

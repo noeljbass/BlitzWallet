@@ -34,12 +34,12 @@ const GENERALOPTIONS = [
     icon: ICONS.nodeIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  // {
-  //   for: 'general',
-  //   name: 'Channels',
-  //   icon: ICONS.Checkcircle,
-  //   arrowIcon: ICONS.leftCheveronIcon,
-  // },
+  {
+    for: 'general',
+    name: 'Display options',
+    icon: ICONS.Checkcircle,
+    arrowIcon: ICONS.leftCheveronIcon,
+  },
   // {
   //   for: 'general',
   //   name: 'Notifications',
@@ -99,7 +99,7 @@ export default function SystemSettings(props) {
     for: 'About',
   });
 
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   const settingsElements = SETTINGSOPTIONS.map((element, id) => {
     const internalElements = element.map((element, id) => {
@@ -116,7 +116,9 @@ export default function SystemSettings(props) {
             style={[
               styles.listText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             {element.name}
@@ -134,7 +136,9 @@ export default function SystemSettings(props) {
           style={[
             styles.optionsTitle,
             {
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           {id === 0
@@ -147,7 +151,7 @@ export default function SystemSettings(props) {
           style={[
             styles.optionsListContainer,
             {
-              backgroundColor: isDarkMode
+              backgroundColor: props.isDarkMode
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -168,7 +172,7 @@ export default function SystemSettings(props) {
         style={[
           styles.globalContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           },
@@ -186,7 +190,7 @@ export default function SystemSettings(props) {
               style={[
                 styles.topBarText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -205,6 +209,8 @@ export default function SystemSettings(props) {
         <SettingsContent
           {...settingsContent}
           setSettingsContent={setSettingsContent}
+          isDarkMode={props.isDarkMode}
+          setIsDarkMode={props.setIsDarkMode}
         />
       </View>
     </Modal>

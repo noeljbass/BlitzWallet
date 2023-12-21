@@ -25,7 +25,7 @@ export default function FiatCurrencyPage(props) {
   const [textInput, setTextInput] = useState('');
   const [listData, setListData] = useState([]);
   const [currentCurrency, setCurrentCurrency] = useState('');
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     (async () => {
@@ -91,7 +91,7 @@ export default function FiatCurrencyPage(props) {
             style={[
               styles.currencyTitle,
               {
-                color: isDarkMode
+                color: props.isDarkMode
                   ? currency.item.id?.toLowerCase() ===
                     currentCurrency?.toLowerCase()
                     ? 'green'
@@ -108,7 +108,7 @@ export default function FiatCurrencyPage(props) {
             style={[
               styles.currencyID,
               {
-                color: isDarkMode
+                color: props.isDarkMode
                   ? currency.item.id?.toLowerCase() ===
                     currentCurrency?.toLowerCase()
                     ? 'green'
@@ -137,15 +137,17 @@ export default function FiatCurrencyPage(props) {
         style={[
           styles.input,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
 
-            color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            color: props.isDarkMode
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
           },
         ]}
         placeholderTextColor={
-          isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+          props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
         }
         placeholder="Search currency"
       />

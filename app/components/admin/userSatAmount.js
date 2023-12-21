@@ -15,7 +15,7 @@ import {getLocalStorageItem, setLocalStorageItem} from '../../functions';
 export function UserSatAmount(props) {
   // const isInitialRender = useRef(true);
   // const [showAmount, setShowAmount] = useState(true);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     (async () => {
@@ -41,7 +41,11 @@ export function UserSatAmount(props) {
         <Text
           style={[
             combinedStyles.bitcoinText,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           BTC
         </Text>
@@ -50,7 +54,11 @@ export function UserSatAmount(props) {
           <Text
             style={[
               styles.valueText,
-              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             {formatBitcoinAmoutn(
               props.breezInformation?.userBalance.toFixed(0),
@@ -61,7 +69,11 @@ export function UserSatAmount(props) {
           <Text
             style={[
               styles.valueText,
-              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             * * * * *
           </Text>

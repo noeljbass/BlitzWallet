@@ -34,7 +34,7 @@ export default function SendPaymentScreenOptions(props) {
 
   const [manualBitcoinInput, setManualBitcoinInput] = useState('');
   const [showManualInpt, setShowManualInput] = useState(false);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   function toggleBottom() {
     setBottomExpand(prev => !prev);
@@ -103,7 +103,7 @@ export default function SendPaymentScreenOptions(props) {
       style={[
         styles.viewContainer,
         {
-          backgroundColor: isDarkMode
+          backgroundColor: props.isDarkMode
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -126,7 +126,9 @@ export default function SendPaymentScreenOptions(props) {
             style={[
               styles.headerText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Scan A QR code
@@ -146,10 +148,10 @@ export default function SendPaymentScreenOptions(props) {
           style={{
             ...styles.bottomBar,
             height: bottomExpand ? 100 : 50,
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
-            borderTopColor: isDarkMode
+            borderTopColor: props.isDarkMode
               ? COLORS.darkModeText
               : COLORS.lightModeText,
             borderTopWidth: 2,
@@ -158,11 +160,11 @@ export default function SendPaymentScreenOptions(props) {
             onTouchEnd={toggleBottom}
             style={{
               ...styles.arrowIcon,
-              backgroundColor: isDarkMode
+              backgroundColor: props.isDarkMode
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground,
 
-              borderColor: isDarkMode
+              borderColor: props.isDarkMode
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
               borderTopWidth: 2,
@@ -190,7 +192,7 @@ export default function SendPaymentScreenOptions(props) {
               style={[
                 styles.bottomText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -206,7 +208,7 @@ export default function SendPaymentScreenOptions(props) {
               style={[
                 styles.bottomText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },

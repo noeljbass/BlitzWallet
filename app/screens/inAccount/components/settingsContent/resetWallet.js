@@ -14,7 +14,7 @@ export default function ResetPage(props) {
     paymentHistory: false,
     pin: false,
   });
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
       <View
@@ -22,7 +22,7 @@ export default function ResetPage(props) {
           styles.infoContainer,
           {
             marginTop: 30,
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -33,7 +33,7 @@ export default function ResetPage(props) {
         style={[
           styles.infoContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -42,7 +42,9 @@ export default function ResetPage(props) {
           style={[
             styles.infoTitle,
             {
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           Select data to delete from this device.
@@ -52,7 +54,9 @@ export default function ResetPage(props) {
             styles.infoDescription,
             {
               marginBottom: 15,
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           Any option that is selected will be removed forever. If your seed is
@@ -62,7 +66,7 @@ export default function ResetPage(props) {
           style={[
             styles.borderView,
             {
-              backgroundColor: isDarkMode
+              backgroundColor: props.isDarkMode
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             },
@@ -75,7 +79,7 @@ export default function ResetPage(props) {
                 styles.selectorDot,
                 selectedOptions.seed && styles.isSelectedDot,
                 {
-                  borderColor: isDarkMode
+                  borderColor: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -84,7 +88,7 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -99,7 +103,7 @@ export default function ResetPage(props) {
                 styles.selectorDot,
                 selectedOptions.paymentHistory && styles.isSelectedDot,
                 {
-                  borderColor: isDarkMode
+                  borderColor: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -108,7 +112,7 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -123,7 +127,7 @@ export default function ResetPage(props) {
                 styles.selectorDot,
                 selectedOptions.pin && styles.isSelectedDot,
                 {
-                  borderColor: isDarkMode
+                  borderColor: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -132,7 +136,7 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -146,7 +150,7 @@ export default function ResetPage(props) {
         style={[
           styles.infoContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -156,7 +160,9 @@ export default function ResetPage(props) {
             styles.infoTitle,
             {
               textAlign: 'center',
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           Your balance is
@@ -166,7 +172,9 @@ export default function ResetPage(props) {
             styles.infoDescription,
             {
               textAlign: 'center',
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           1,500 sats

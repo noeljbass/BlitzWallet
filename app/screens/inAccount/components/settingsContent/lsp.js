@@ -14,7 +14,7 @@ import {useEffect, useRef, useState} from 'react';
 import {extractFont} from 'react-native-svg/lib/typescript/lib/extract/extractText';
 
 export default function LSPPage(props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
   //   const [infoPopup, setInfoPopup] = useState(false);
   return (
     <View style={styles.globalContainer}>
@@ -22,7 +22,7 @@ export default function LSPPage(props) {
         style={[
           styles.contentContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -39,7 +39,11 @@ export default function LSPPage(props) {
           <Text
             style={[
               styles.titleText,
-              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             What is an LSP?
           </Text>
@@ -50,7 +54,7 @@ export default function LSPPage(props) {
         style={[
           styles.contentContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -60,7 +64,9 @@ export default function LSPPage(props) {
             styles.titleText,
             {
               marginBottom: 5,
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           Current LSP
@@ -72,7 +78,11 @@ export default function LSPPage(props) {
           <Text
             style={[
               styles.descriptionText,
-              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             asdfasdfasfasdfasdfasdfasdfafadsfasdfasdfasdfasdfs
           </Text>

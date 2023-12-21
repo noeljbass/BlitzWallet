@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import {COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 
-export default function AboutPage() {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function AboutPage(props) {
+  // const props.isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={[styles.container]}>
       <View style={styles.innerContainer}>
@@ -17,7 +17,9 @@ export default function AboutPage() {
             styles.sectionHeader,
             {
               marginTop: 50,
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           Software
@@ -27,7 +29,7 @@ export default function AboutPage() {
             styles.contentContainer,
             {
               marginBottom: 30,
-              backgroundColor: isDarkMode
+              backgroundColor: props.isDarkMode
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -36,7 +38,9 @@ export default function AboutPage() {
             style={[
               styles.contentText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Blitz is a free and open source app under the _________ license.
@@ -46,7 +50,11 @@ export default function AboutPage() {
           <Text
             style={[
               styles.sectionHeader,
-              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             Blitz Wallet
           </Text>
@@ -54,7 +62,7 @@ export default function AboutPage() {
             style={[
               styles.contentContainer,
               {
-                backgroundColor: isDarkMode
+                backgroundColor: props.isDarkMode
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -63,7 +71,7 @@ export default function AboutPage() {
               style={[
                 styles.contentText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -77,7 +85,7 @@ export default function AboutPage() {
               style={[
                 styles.contentText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -90,7 +98,7 @@ export default function AboutPage() {
               style={[
                 styles.contentText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },

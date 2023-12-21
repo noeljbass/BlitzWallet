@@ -35,7 +35,7 @@ export default function SendPaymentScreen(props) {
   console.log('CONFIRM SEND PAYMENT SCREEN');
   const fadeAnim = useRef(new Animated.Value(900)).current;
   const [paymentInfo, setPaymentInfo] = useState({});
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (props.isDisplayed) {
@@ -52,7 +52,7 @@ export default function SendPaymentScreen(props) {
         styles.popupContainer,
         {
           transform: [{translateX: fadeAnim}],
-          backgroundColor: isDarkMode
+          backgroundColor: props.isDarkMode
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -66,7 +66,9 @@ export default function SendPaymentScreen(props) {
             style={[
               styles.headerText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Confirm Payment
@@ -77,7 +79,9 @@ export default function SendPaymentScreen(props) {
             style={[
               styles.sendingAmtBTC,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             {(paymentInfo?.invoice?.amountMsat / 1000).toLocaleString()}{' '}
@@ -89,7 +93,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.feeBreakdownItem,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -100,7 +104,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.feeBreakdownItem,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -109,7 +113,7 @@ export default function SendPaymentScreen(props) {
                   style={[
                     styles.feeBreakdownValue,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },
@@ -121,7 +125,7 @@ export default function SendPaymentScreen(props) {
                   style={[
                     styles.feeBreakdownValue,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },
@@ -139,7 +143,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.feeBreakdownItem,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -150,7 +154,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.feeBreakdownItem,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -159,7 +163,7 @@ export default function SendPaymentScreen(props) {
                   style={[
                     styles.feeBreakdownValue,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },
@@ -170,7 +174,7 @@ export default function SendPaymentScreen(props) {
                   style={[
                     styles.feeBreakdownValue,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },
@@ -184,7 +188,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.feeBreakdownItem,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -195,7 +199,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.feeBreakdownItem,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -204,7 +208,7 @@ export default function SendPaymentScreen(props) {
                   style={[
                     styles.feeBreakdownValue,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },
@@ -219,7 +223,7 @@ export default function SendPaymentScreen(props) {
                   style={[
                     styles.feeBreakdownValue,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },

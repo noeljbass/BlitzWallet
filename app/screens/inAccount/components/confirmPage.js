@@ -13,7 +13,7 @@ import {useEffect, useState} from 'react';
 
 export default function ConfirmPage(props) {
   const [information, setInformation] = useState({});
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
   console.log('CONFIRM PAYMENT SCREEN', information);
   useEffect(() => {
     if (
@@ -34,7 +34,7 @@ export default function ConfirmPage(props) {
         style={[
           styles.popupContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           },
@@ -55,7 +55,7 @@ export default function ConfirmPage(props) {
               style={[
                 styles.confirmText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -68,7 +68,7 @@ export default function ConfirmPage(props) {
               style={[
                 styles.dateText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -83,7 +83,7 @@ export default function ConfirmPage(props) {
               style={[
                 styles.amountText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -102,7 +102,7 @@ export default function ConfirmPage(props) {
               style={[
                 styles.descriptionText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -120,7 +120,7 @@ export default function ConfirmPage(props) {
               style={[
                 styles.feeText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },

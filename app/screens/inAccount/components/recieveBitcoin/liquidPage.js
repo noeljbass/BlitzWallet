@@ -68,14 +68,14 @@ export default function LiquidPage(props) {
             setProcessStage={setProcessStage}
             feeInfo={feeInfo}
             setFeeInfo={setFeeInfo}
-            isDarkMode={isDarkMode}
+            isDarkMode={props.isDarkMode}
           />
         )}
         {processStage.qrCode && (
           <QrCodePage
             liquidAmount={liquidAmount}
             feeInfo={feeInfo}
-            isDarkMode={isDarkMode}
+            isDarkMode={props.isDarkMode}
           />
         )}
       </View>

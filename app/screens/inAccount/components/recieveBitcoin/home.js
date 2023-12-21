@@ -48,7 +48,7 @@ export function ReceivePaymentHome(props) {
   const [selectedRecieveOption, setSelectedRecieveOption] =
     useState('lightning');
 
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     clear('navChange');
@@ -63,7 +63,7 @@ export function ReceivePaymentHome(props) {
       <View
         style={{
           flex: 1,
-          backgroundColor: isDarkMode
+          backgroundColor: props.isDarkMode
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         }}>
@@ -73,7 +73,9 @@ export function ReceivePaymentHome(props) {
             style={[
               styles.title,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             {selectedRecieveOption[0].toUpperCase() +
@@ -83,6 +85,7 @@ export function ReceivePaymentHome(props) {
           <NavBar
             selectedRecieveOption={selectedRecieveOption}
             setSelectedRecieveOption={setSelectedRecieveOption}
+            isDarkMode={props.isDarkMode}
           />
 
           {/*PAGES*/}
@@ -94,13 +97,18 @@ export function ReceivePaymentHome(props) {
             generatedAddress={generatedAddress}
             paymentDescription={paymentDescription.lightning}
             setGeneratedAddress={setGeneratedAddress}
+            isDarkMode={props.isDarkMode}
           />
           <BitcoinPage
             selectedRecieveOption={selectedRecieveOption}
             setGeneratedAddress={setGeneratedAddress}
             generatedAddress={generatedAddress}
+            isDarkMode={props.isDarkMode}
           />
-          <LiquidPage selectedRecieveOption={selectedRecieveOption} />
+          <LiquidPage
+            selectedRecieveOption={selectedRecieveOption}
+            isDarkMode={props.isDarkMode}
+          />
 
           <ButtonsContainer
             selectedRecieveOption={selectedRecieveOption}

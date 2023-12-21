@@ -15,7 +15,7 @@ import * as Clipboard from 'expo-clipboard';
 export default function NodeInfo() {
   const [lnNodeInfo, setLNNodeInfo] = useState({});
   const [isInfoSet, stIsInfoSet] = useState(false);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
   useEffect(() => {
     (async () => {
       try {
@@ -61,7 +61,9 @@ export default function NodeInfo() {
             style={[
               styles.sectionTitle,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Lightning
@@ -70,7 +72,7 @@ export default function NodeInfo() {
             style={[
               styles.itemContainer,
               {
-                backgroundColor: isDarkMode
+                backgroundColor: props.isDarkMode
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -79,7 +81,7 @@ export default function NodeInfo() {
               style={[
                 styles.itemTitle,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -95,7 +97,7 @@ export default function NodeInfo() {
                   style={[
                     styles.descriptionContent,
                     {
-                      color: isDarkMode
+                      color: props.isDarkMode
                         ? COLORS.darkModeText
                         : COLORS.lightModeText,
                     },
@@ -109,7 +111,7 @@ export default function NodeInfo() {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -123,7 +125,7 @@ export default function NodeInfo() {
               styles.itemContainer,
               styles.horizontalContainer,
               {
-                backgroundColor: isDarkMode
+                backgroundColor: props.isDarkMode
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -133,7 +135,7 @@ export default function NodeInfo() {
                 style={[
                   styles.itemTitle,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -144,7 +146,7 @@ export default function NodeInfo() {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -159,7 +161,7 @@ export default function NodeInfo() {
                 style={[
                   styles.itemTitle,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -170,7 +172,7 @@ export default function NodeInfo() {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -185,7 +187,7 @@ export default function NodeInfo() {
             style={[
               styles.itemContainer,
               {
-                backgroundColor: isDarkMode
+                backgroundColor: props.isDarkMode
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -194,7 +196,7 @@ export default function NodeInfo() {
               style={[
                 styles.itemTitle,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -211,7 +213,7 @@ export default function NodeInfo() {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: isDarkMode
+                    color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -227,7 +229,9 @@ export default function NodeInfo() {
             style={[
               styles.sectionTitle,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Bitcoin
@@ -238,7 +242,7 @@ export default function NodeInfo() {
               {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                backgroundColor: isDarkMode
+                backgroundColor: props.isDarkMode
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -249,7 +253,7 @@ export default function NodeInfo() {
                 {
                   width: 'auto',
                   marginBottom: 0,
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -260,7 +264,7 @@ export default function NodeInfo() {
               style={[
                 styles.descriptionContent,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -276,7 +280,7 @@ export default function NodeInfo() {
               {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                backgroundColor: isDarkMode
+                backgroundColor: props.isDarkMode
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -287,7 +291,7 @@ export default function NodeInfo() {
                 {
                   width: 'auto',
                   marginBottom: 0,
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -298,7 +302,7 @@ export default function NodeInfo() {
               style={[
                 styles.descriptionContent,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },

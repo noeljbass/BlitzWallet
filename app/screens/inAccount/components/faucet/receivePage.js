@@ -115,7 +115,15 @@ export default function ReceievePage(props) {
   }
   return (
     <Animated.View
-      style={[styles.popupContainer, {transform: [{translateX: fadeAnim}]}]}>
+      style={[
+        styles.popupContainer,
+        {
+          transform: [{translateX: fadeAnim}],
+          backgroundColor: props.isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.topBar}>
           {!isComplete && (
@@ -131,7 +139,12 @@ export default function ReceievePage(props) {
           <Text
             style={[
               headerText,
-              {transform: [{translateX: !isComplete ? -12.5 : 0}]},
+              {
+                transform: [{translateX: !isComplete ? -12.5 : 0}],
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             Receive Faucet
           </Text>
@@ -141,12 +154,27 @@ export default function ReceievePage(props) {
             <>
               <View style={styles.qrCodeContainer}>
                 {isGeneratinAddress && (
-                  <ActivityIndicator size="large" color={COLORS.primary} />
+                  <ActivityIndicator
+                    size="large"
+                    color={
+                      props.isDarkMode
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText
+                    }
+                  />
                 )}
                 {!isGeneratinAddress && (
                   <QRCode
                     size={250}
                     value={receiveAddress ? receiveAddress : "IT'S COMING"}
+                    color={
+                      isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+                    }
+                    backgroundColor={
+                      isDarkMode
+                        ? COLORS.darkModeBackground
+                        : COLORS.lightModeBackground
+                    }
                   />
                 )}
               </View>

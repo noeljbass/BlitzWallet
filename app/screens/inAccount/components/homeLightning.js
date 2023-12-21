@@ -27,7 +27,7 @@ export default function HomeLightning(props) {
     isDisplayed: false,
   });
   const [showAmount, setShowAmount] = useState(true);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
@@ -49,7 +49,12 @@ export default function HomeLightning(props) {
   const transactionElement = props.breezInformation?.transactions?.map(
     (transaction, id) => {
       return (
-        <UserTransaction showAmount={showAmount} key={id} {...transaction} />
+        <UserTransaction
+          isDarkMode={props.isDarkMode}
+          showAmount={showAmount}
+          key={id}
+          {...transaction}
+        />
       );
     },
   );
@@ -60,6 +65,7 @@ export default function HomeLightning(props) {
         setShowAmount={setShowAmount}
         showAmount={showAmount}
         breezInformation={props.breezInformation}
+        isDarkMode={props.isDarkMode}
       />
       {!props.breezInformation.didConnectToNode && (
         <View style={style.errorContainer}>
@@ -75,7 +81,7 @@ export default function HomeLightning(props) {
               style={[
                 style.noTransactionsText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -96,6 +102,7 @@ export default function HomeLightning(props) {
         <ReceivePaymentHome
           isDisplayed={recivePayment}
           setRecivePayment={setRecivePayment}
+          isDarkMode={props.isDarkMode}
         />
       )}
       {sendPayment && (
@@ -103,6 +110,7 @@ export default function HomeLightning(props) {
           isDisplayed={sendPayment}
           setSendPayment={setSendPayment}
           confirmPageDisplayed={confirmPage.isDisplayed}
+          isDarkMode={props.isDarkMode}
         />
       )}
       {confirmPage.isDisplayed && (
@@ -110,52 +118,53 @@ export default function HomeLightning(props) {
           information={props.breezEvent}
           setConfirmPage={setConfirmPage}
           {...confirmPage}
+          isDarkMode={props.isDarkMode}
         />
       )}
     </View>
   );
 }
 
-function TransactionListElements(props) {
-  // const isInitialRender = useRef(true);
-  const [transactions, setTransactions] = useState([]);
+// function TransactionListElements(props) {
+//   // const isInitialRender = useRef(true);
+//   const [transactions, setTransactions] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      if (isInitialRender.current) {
-        const storedTransaction = await getLocalStorageItem('breezInfo');
-        isInitialRender.current = false;
-        if (!storedTransaction) return;
-        setTransactions(JSON.parse(storedTransaction)[0]);
-      } else {
-        setTransactions(props?.breezTransactions?.transactions);
-      }
-    })();
-  }, [props?.breezTransactions?.transactions]);
+//   useEffect(() => {
+//     (async () => {
+//       if (isInitialRender.current) {
+//         const storedTransaction = await getLocalStorageItem('breezInfo');
+//         isInitialRender.current = false;
+//         if (!storedTransaction) return;
+//         setTransactions(JSON.parse(storedTransaction)[0]);
+//       } else {
+//         setTransactions(props?.breezTransactions?.transactions);
+//       }
+//     })();
+//   }, [props?.breezTransactions?.transactions]);
 
-  const transactionElement = transactions?.map((transaction, id) => {
-    return (
-      <UserTransaction
-        showAmount={props.showAmount}
-        key={id}
-        {...transaction}
-      />
-    );
-  });
+//   const transactionElement = transactions?.map((transaction, id) => {
+//     return (
+//       <UserTransaction
+//         showAmount={props.showAmount}
+//         key={id}
+//         {...transaction}
+//       />
+//     );
+//   });
 
-  return (
-    <>
-      {transactionElement?.length === 0 && (
-        <View style={style.noTransactionsContainer}>
-          <Text style={style.noTransactionsText}>
-            Send or recive a transaction to see your activty here.
-          </Text>
-        </View>
-      )}
-      {transactionElement?.length != 0 && transactionElement}
-    </>
-  );
-}
+//   return (
+//     <>
+//       {transactionElement?.length === 0 && (
+//         <View style={style.noTransactionsContainer}>
+//           <Text style={style.noTransactionsText}>
+//             Send or recive a transaction to see your activty here.
+//           </Text>
+//         </View>
+//       )}
+//       {transactionElement?.length != 0 && transactionElement}
+//     </>
+//   );
+// }
 const style = StyleSheet.create({
   globalContainer: {
     flex: 1,

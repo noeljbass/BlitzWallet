@@ -26,7 +26,7 @@ export function ConnectionToNode(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [nodeInformation, setNodeInformation] = useState({});
   const [isConnected, setIsConnected] = useState(false);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
   async function getNodeData() {
     try {
       const nodeInformatino = await nodeInfo();
@@ -73,7 +73,7 @@ export function ConnectionToNode(props) {
           style={[
             styles.innerContainer,
             {
-              backgroundColor: isDarkMode
+              backgroundColor: props.isDarkMode
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground,
             },
@@ -87,7 +87,7 @@ export function ConnectionToNode(props) {
               style={[
                 styles.topContainerText,
                 {
-                  color: isDarkMode
+                  color: props.isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -99,7 +99,9 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Block height:{' '}
@@ -111,7 +113,9 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Max Payable:{' '}
@@ -123,7 +127,9 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             Max Recivable:{' '}
@@ -135,7 +141,9 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}>
             On-chain Balance:{' '}

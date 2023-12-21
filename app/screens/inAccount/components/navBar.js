@@ -10,7 +10,6 @@ import {CENTER, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../constants';
 import {useState} from 'react';
 import {OptionsDropdown} from './optionsDropdown';
 import SystemSettings from './settings';
-import {ConnectionToNode} from './conectionToNode';
 import {FaucetHome} from './faucet';
 
 export default function NavBar(props) {
@@ -18,7 +17,7 @@ export default function NavBar(props) {
   const [navViews, setNavViews] = useState({
     features: false,
   });
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props. = useColorScheme() === 'dark';
   const [systemSettingsPopup, setSystemSettingsPopup] = useState(false);
   const [fucet, setFaucet] = useState(false);
 
@@ -28,7 +27,9 @@ export default function NavBar(props) {
         style={[
           styles.topBarName,
           {
-            color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+            color: props.isDarkMode
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
           },
         ]}>
         Blitz Wallet
@@ -72,11 +73,14 @@ export default function NavBar(props) {
       <SystemSettings
         isDisplayed={systemSettingsPopup}
         setSystemSettingsPopup={setSystemSettingsPopup}
+        isDarkMode={props.isDarkMode}
+        setIsDarkMode={props.setIsDarkMode}
       />
       <FaucetHome
         breezEvent={props.breezEvent}
         setFaucet={setFaucet}
         isDisplayed={fucet}
+        isDarkMode={props.isDarkMode}
       />
     </View>
   );

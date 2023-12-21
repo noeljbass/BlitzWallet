@@ -20,6 +20,7 @@ import LSPPage from './lsp';
 import InfoPopup from './popupContainer';
 import ResetPage from './resetWallet';
 import DrainPage from './drainPage';
+import DisplayOptions from './displayOptions';
 
 export default function SettingsContent(props) {
   const fadeAnim = useRef(new Animated.Value(600)).current;
@@ -29,7 +30,7 @@ export default function SettingsContent(props) {
     variable: null,
   });
   const [bitcoinAddress, setBitcoinAddress] = useState('');
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -57,7 +58,7 @@ export default function SettingsContent(props) {
         styles.globalContainer,
         {
           transform: [{translateX: fadeAnim}],
-          backgroundColor: isDarkMode
+          backgroundColor: props.isDarkMode
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -71,7 +72,11 @@ export default function SettingsContent(props) {
             <Image
               style={[
                 styles.topBarIcon,
-                {backgroundColor: isDarkMode ? COLORS.white : COLORS.black},
+                {
+                  backgroundColor: props.isDarkMode
+                    ? COLORS.white
+                    : COLORS.black,
+                },
               ]}
               source={ICONS.leftCheveronIcon}
             />
@@ -79,30 +84,57 @@ export default function SettingsContent(props) {
           <Text
             style={[
               styles.topBarText,
-              {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             {props.for}
           </Text>
         </View>
       </SafeAreaView>
       <View style={{flex: 1}}>
-        {props.for?.toLowerCase() === 'about' && <AboutPage />}
-        {props.for?.toLowerCase() === 'recovery phrase' && (
-          <RecoveryPage setSettingsContent={props.setSettingsContent} />
+        {props.for?.toLowerCase() === 'about' && (
+          <AboutPage isDarkMode={props.isDarkMode} />
         )}
+
         {props.for?.toLowerCase() === 'fiat currency' && (
-          <FiatCurrencyPage setSettingsContent={props.setSettingsContent} />
+          <FiatCurrencyPage
+            isDarkMode={props.isDarkMode}
+            setSettingsContent={props.setSettingsContent}
+          />
         )}
-        {props.for?.toLowerCase() === 'node info' && <NodeInfo />}
+        {props.for?.toLowerCase() === 'node info' && (
+          <NodeInfo isDarkMode={props.isDarkMode} />
+        )}
+        {props.for?.toLowerCase() === 'display options' && (
+          <DisplayOptions
+            setIsDarkMode={props.setIsDarkMode}
+            isDarkMode={props.isDarkMode}
+          />
+        )}
+        {props.for?.toLowerCase() === 'recovery phrase' && (
+          <RecoveryPage
+            isDarkMode={props.isDarkMode}
+            setSettingsContent={props.setSettingsContent}
+          />
+        )}
         {props.for?.toLowerCase() === 'lsp' && (
-          <LSPPage setDisplayPopup={setDisplayPopup} />
+          <LSPPage
+            isDarkMode={props.isDarkMode}
+            setDisplayPopup={setDisplayPopup}
+          />
         )}
-        {props.for?.toLowerCase() === 'reset wallet' && <ResetPage />}
+        {props.for?.toLowerCase() === 'reset wallet' && (
+          <ResetPage isDarkMode={props.isDarkMode} />
+        )}
         {props.for?.toLowerCase() === 'drain wallet' && (
           <DrainPage
             setBitcoinAddress={setBitcoinAddress}
             bitcoinAddress={bitcoinAddress}
             setDisplayPopup={setDisplayPopup}
+            isDarkMode={props.isDarkMode}
           />
         )}
       </View>
@@ -110,6 +142,7 @@ export default function SettingsContent(props) {
         setDisplayPopup={setDisplayPopup}
         {...displayPopup}
         setBitcoinAddress={setBitcoinAddress}
+        isDarkMode={props.isDarkMode}
       />
     </Animated.View>
   );

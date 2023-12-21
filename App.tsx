@@ -98,7 +98,7 @@ function App(): JSX.Element {
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
-        <Stack.Screen name="AdminLogin" component={AdminLogin} />
+        {/* <Stack.Screen name="AdminLogin" component={AdminLogin} /> */}
         <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
     </NavigationContainer>

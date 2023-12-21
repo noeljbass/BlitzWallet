@@ -57,7 +57,8 @@ export default function AdminHome({navigation: {navigate}}) {
   const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
 
   const [breezEvent, setBreezEvent] = useState({});
-  const isDarkMode = useColorScheme() === 'dark';
+  const hookDarkMode = useColorScheme() === 'dark';
+  const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
 
   // SDK events listener
   console.log(breezEvent, 'BreezEvent on home screen');
@@ -72,6 +73,19 @@ export default function AdminHome({navigation: {navigate}}) {
   };
 
   useEffect(() => {
+    (async () => {
+      const colorSchemeStyle = await getLocalStorageItem('colorScheme');
+      console.log(
+        colorSchemeStyle,
+        JSON.parse(colorSchemeStyle) === 'dark',
+        'TESTDDFSDFSDF',
+      );
+      if (JSON.parse(colorSchemeStyle))
+        setIsDarkMode(JSON.parse(colorSchemeStyle) === 'dark');
+    })();
+  }, [hookDarkMode]);
+
+  useEffect(() => {
     const logHandler = logEntry => {
       if (logEntry.level != 'TRACE') {
         console.log(`[${logEntry.level}]: ${logEntry.line}`);
@@ -81,7 +95,7 @@ export default function AdminHome({navigation: {navigate}}) {
     (async () => {
       const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
-      if (savedBreezInfo) {
+      if (savedBreezInfo)
         setBreezInformation(prev => {
           return {
             ...prev,
@@ -89,7 +103,7 @@ export default function AdminHome({navigation: {navigate}}) {
             userBalance: JSON.parse(savedBreezInfo)[1],
           };
         });
-      }
+
       return;
 
       if (isInitialRender.current) {
@@ -179,12 +193,15 @@ export default function AdminHome({navigation: {navigate}}) {
           nodeConnectionPopup={nodeConnectionPopup}
           setNodeConnectionPopup={setNodeConnectionPopup}
           breezEvent={breezEvent}
+          isDarkMode={isDarkMode}
+          setIsDarkMode={setIsDarkMode}
 
           // setSystemSettingsPopup={setSystemSettingsPopup}
         />
         <HomeLightning
           breezEvent={breezEvent}
           breezInformation={breezInformation}
+          isDarkMode={isDarkMode}
         />
 
         {/* <ExpandedTransaction /> */}
@@ -192,6 +209,7 @@ export default function AdminHome({navigation: {navigate}}) {
       <ConnectionToNode
         isDisplayed={nodeConnectionPopup}
         hidePopup={setNodeConnectionPopup}
+        isDarkMode={isDarkMode}
       />
     </View>
   );

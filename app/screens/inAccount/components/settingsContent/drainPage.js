@@ -14,7 +14,7 @@ import {ReloadInstructions} from 'react-native/Libraries/NewAppScreen';
 export default function DrainPage(props) {
   const [wantsToDrain, setWantsToDrain] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (!wantsToDrain) return;
@@ -27,21 +27,33 @@ export default function DrainPage(props) {
         <Text
           style={[
             styles.balanceDescription,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           Current balance
         </Text>
         <Text
           style={[
             styles.balanceNum,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           {Number(25000).toLocaleString()} sats
         </Text>
         <Text
           style={[
             styles.fiatBalanceNum,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           = $2.5 usd
         </Text>
@@ -51,7 +63,7 @@ export default function DrainPage(props) {
         style={[
           styles.btcAdressContainer,
           {
-            backgroundColor: isDarkMode
+            backgroundColor: props.isDarkMode
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -59,7 +71,11 @@ export default function DrainPage(props) {
         <Text
           style={[
             styles.btcAdressHeader,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           Enter BTC address
         </Text>
@@ -70,10 +86,12 @@ export default function DrainPage(props) {
             style={[
               styles.input,
               {
-                borderColor: isDarkMode
+                borderColor: props.isDarkMode
                   ? COLORS.darkModeText
                   : COLORS.lightModeText,
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
               },
             ]}
           />

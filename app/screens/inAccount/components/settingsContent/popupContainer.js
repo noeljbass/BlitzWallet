@@ -18,7 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 export default function InfoPopup(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
-  const isDarkMode = useColorScheme() === 'dark';
+  // const isDarkMode = useColorScheme() === 'dark';
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -51,20 +51,20 @@ export default function InfoPopup(props) {
       <SafeAreaView style={popupStyles.innerContainer}>
         {props.type === 'LSPInfo' && (
           <WhatIsAnLSP
-            isDarkMode={isDarkMode}
+            isDarkMode={props.isDarkMode}
             setDisplayPopup={props.setDisplayPopup}
           />
         )}
         {props.type === 'btcCamera' && (
           <BTCCamera
-            isDarkMode={isDarkMode}
+            isDarkMode={props.isDarkMode}
             setBitcoinAddress={props.setBitcoinAddress}
             setDisplayPopup={props.setDisplayPopup}
           />
         )}
         {props.type === 'confirmDrain' && (
           <AreYouSure
-            isDarkMode={isDarkMode}
+            isDarkMode={props.isDarkMode}
             variable={props.variable}
             setDisplayPopup={props.setDisplayPopup}
           />

@@ -54,7 +54,7 @@ export default function SettingsPage(props) {
     }
 
     props.setUserPath(prev => {
-      if (props.recivePath.type === 'receive') return {...prev, recive: true};
+      if (props.userPath.type === 'receive') return {...prev, receive: true};
       else return {...prev, send: true};
     });
     setErrorMessage({
@@ -70,7 +70,15 @@ export default function SettingsPage(props) {
   }, [props.isDisplayed]);
   return (
     <Animated.View
-      style={[styles.popupContainer, {transform: [{translateX: fadeAnim}]}]}>
+      style={[
+        styles.popupContainer,
+        {
+          transform: [{translateX: fadeAnim}],
+          backgroundColor: props.isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
       <SafeAreaView style={{flex: 1}}>
         <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
           <View style={styles.topBar}>
@@ -89,7 +97,16 @@ export default function SettingsPage(props) {
               }}>
               <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
             </TouchableOpacity>
-            <Text style={[headerText, {transform: [{translateX: -12.5}]}]}>
+            <Text
+              style={[
+                headerText,
+                {
+                  transform: [{translateX: -12.5}],
+                  color: props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
               {props.userPath.type.toLowerCase() === 'receive'
                 ? 'Receive'
                 : 'Send'}{' '}
@@ -117,7 +134,17 @@ export default function SettingsPage(props) {
                   value={props.numberOfPeople}
                   keyboardType="number-pad"
                 />
-                <Text style={styles.descriptionText}>Number of People</Text>
+                <Text
+                  style={[
+                    styles.descriptionText,
+                    {
+                      color: props.isDarkMode
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                    },
+                  ]}>
+                  Number of People
+                </Text>
               </View>
               <View style={styles.inputContainer}>
                 <TextInput
@@ -134,7 +161,17 @@ export default function SettingsPage(props) {
                   value={props.amountPerPerson}
                   keyboardType="number-pad"
                 />
-                <Text style={styles.descriptionText}>Amount Per Person</Text>
+                <Text
+                  style={[
+                    styles.descriptionText,
+                    {
+                      color: props.isDarkMode
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                    },
+                  ]}>
+                  Amount Per Person
+                </Text>
               </View>
             </View>
             {errorMessage.message && (

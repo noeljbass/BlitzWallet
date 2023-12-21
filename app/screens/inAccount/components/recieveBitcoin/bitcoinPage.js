@@ -16,7 +16,7 @@ import QRCode from 'react-native-qrcode-svg';
 
 export default function BitcoinPage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
   // const [swapInfo, setSwapInfo] = useState({});
   useEffect(() => {
     if (props.selectedRecieveOption != 'bitcoin') return;
@@ -32,7 +32,9 @@ export default function BitcoinPage(props) {
         {generatingQrCode && (
           <ActivityIndicator
             size="large"
-            color={isDarkMode ? COLORS.darkModeText : COLORS.lightModeText}
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
           />
         )}
         {!generatingQrCode && (
@@ -43,9 +45,11 @@ export default function BitcoinPage(props) {
                 ? props.generatedAddress
                 : 'Thanks for using Blitz!'
             }
-            color={isDarkMode ? COLORS.darkModeText : COLORS.lightModeText}
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
             backgroundColor={
-              isDarkMode
+              props.isDarkMode
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground
             }

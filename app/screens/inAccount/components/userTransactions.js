@@ -4,7 +4,7 @@ import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
 
 export function UserTransaction(props) {
   const paymentDate = new Date(props.paymentTime * 1000).toLocaleString();
-  const isDarkMode = useColorScheme() === 'dark';
+  // const props.isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={styles.transactionContainer}>
@@ -25,7 +25,11 @@ export function UserTransaction(props) {
         <Text
           style={[
             styles.descriptionText,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           {props.description.includes('bwrfd')
             ? 'faucet'
@@ -38,7 +42,11 @@ export function UserTransaction(props) {
         <Text
           style={[
             styles.dateText,
-            {color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText},
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           {paymentDate}
         </Text>
@@ -60,7 +68,9 @@ export function UserTransaction(props) {
             styles.amountText,
             {
               fontSize: SIZES.medium,
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
             },
           ]}>
           *****
