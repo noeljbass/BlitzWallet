@@ -1,50 +1,22 @@
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  useColorScheme,
-} from 'react-native';
-
-import {
-  Background,
-  CENTER,
-  COLORS,
-  FONT,
-  ICONS,
-  SIZES,
-  SHADOWS,
-} from '../../constants';
+import {SafeAreaView, StyleSheet, View, useColorScheme} from 'react-native';
+import {COLORS} from '../../constants';
 import {useEffect, useRef, useState} from 'react';
-
-// import {CameraScan} from '../../components/admin';
-
 import {
-  retrieveData,
   connectToNode,
-  RotatingAnimation,
-  userAuth,
   setLocalStorageItem,
   getLocalStorageItem,
+  setColorScheme,
 } from '../../functions';
 import {
   lspInfo,
   nodeInfo,
   serviceHealthCheck,
-  setLogStream,
 } from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './components/homeLightning';
-import {ReceivePaymentHome} from './components/recieveBitcoin';
 import {ConnectionToNode} from './components/conectionToNode';
 import {getTransactions} from '../../functions/SDK';
-import {SendRecieveBTNs} from './components/sendReciveBTNs';
-import {OptionsDropdown} from './components/optionsDropdown';
-import {CommonActions} from '@react-navigation/native';
+
 import NavBar from './components/navBar';
-import SystemSettings from './components/settings';
-import {getSwapFee, getSwapPairInformation} from '../../functions/LBTC';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
@@ -73,121 +45,110 @@ export default function AdminHome({navigation: {navigate}}) {
   };
 
   useEffect(() => {
-    (async () => {
-      const colorSchemeStyle = await getLocalStorageItem('colorScheme');
-      console.log(
-        colorSchemeStyle,
-        JSON.parse(colorSchemeStyle) === 'dark',
-        'TESTDDFSDFSDF',
-      );
-      if (JSON.parse(colorSchemeStyle))
-        setIsDarkMode(JSON.parse(colorSchemeStyle) === 'dark');
-    })();
-  }, [hookDarkMode]);
+    // const logHandler = logEntry => {
+    //   if (logEntry.level != 'TRACE') {
+    //     console.log(`[${logEntry.level}]: ${logEntry.line}`);
+    //   }
+    // };
 
-  useEffect(() => {
-    const logHandler = logEntry => {
-      if (logEntry.level != 'TRACE') {
-        console.log(`[${logEntry.level}]: ${logEntry.line}`);
-      }
-    };
+    // (async () => {
+    // const savedBreezInfo = await initBalanceAndTransactions(
+    //   setBreezInformation,
+    // );
 
-    (async () => {
-      const savedBreezInfo = await getLocalStorageItem('breezInfo');
+    // return;
+    initWallet(
+      isInitialRender,
+      setBreezInformation,
+      breezEvent,
+      setIsDarkMode,
+      onBreezEvent,
+    );
 
-      if (savedBreezInfo)
-        setBreezInformation(prev => {
-          return {
-            ...prev,
-            transactions: JSON.parse(savedBreezInfo)[0],
-            userBalance: JSON.parse(savedBreezInfo)[1],
-          };
-        });
+    // if (isInitialRender.current) {
+    //   console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
+    //   isInitialRender.current = false;
 
-      return;
+    //   try {
+    //     const response = await connectToNode(onBreezEvent);
 
-      if (isInitialRender.current) {
-        console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
-        isInitialRender.current = false;
+    //     // console.log(response, 'RESPONSE');
 
-        try {
-          const response = await connectToNode(onBreezEvent);
+    //     if (response) {
+    //       // await setLogStream(logHandler);
+    //       // const healthCheck = await serviceHealthCheck();
+    //       // console.log(healthCheck);
 
-          // console.log(response, 'RESPONSE');
+    //       const nodeAmount = await nodeInfo();
+    //       const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+    //       const transactions = await getTransactions();
+    //       const info = await lspInfo();
+    //       const heath = await serviceHealthCheck();
+    //       console.log(heath);
+    //       console.log(info, 'LSPPSSS');
 
-          if (response) {
-            // await setLogStream(logHandler);
-            // const healthCheck = await serviceHealthCheck();
-            // console.log(healthCheck);
+    //       setBreezInformation(prev => {
+    //         return {
+    //           ...prev,
+    //           didConnectToNode: response,
+    //           transactions: transactions,
+    //           userBalance: msatToSat,
+    //         };
+    //       });
 
-            const nodeAmount = await nodeInfo();
-            const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-            const transactions = await getTransactions();
-            const info = await lspInfo();
-            const heath = await serviceHealthCheck();
-            console.log(heath);
-            console.log(info, 'LSPPSSS');
+    //       if (savedBreezInfo[0].toString() === transactions.toString())
+    //         return;
 
-            setBreezInformation(prev => {
-              return {
-                ...prev,
-                didConnectToNode: response,
-                transactions: transactions,
-                userBalance: msatToSat,
-              };
-            });
+    //       await setLocalStorageItem(
+    //         'breezInfo',
+    //         JSON.stringify([transactions, msatToSat]),
+    //       );
+    //     }
+    //   } catch (err) {
+    //     console.log(err, 'homepage connection to node err');
+    //   }
+    // } else {
+    //   if (Object.keys(breezEvent).length === 0) return;
+    //   if (
+    //     breezEvent.type === 'invoicePaid' ||
+    //     breezEvent.type === 'paymentSucceed'
+    //   ) {
+    //     const transactions = await getTransactions();
+    //     const nodeAmount = await nodeInfo();
 
-            if (savedBreezInfo[0].toString() === transactions.toString())
-              return;
+    //     const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+    //     setBreezInformation(prev => {
+    //       return {
+    //         ...prev,
+    //         userBalance: msatToSat,
+    //         transactions: transactions,
+    //       };
+    //     });
+    //     if (savedBreezInfo[0].toString() === transactions.toString()) return;
 
-            await setLocalStorageItem(
-              'breezInfo',
-              JSON.stringify([transactions, msatToSat]),
-            );
-          }
-        } catch (err) {
-          console.log(err, 'homepage connection to node err');
-        }
-      } else {
-        if (Object.keys(breezEvent).length === 0) return;
-        if (
-          breezEvent.type === 'invoicePaid' ||
-          breezEvent.type === 'paymentSucceed'
-        ) {
-          const transactions = await getTransactions();
-          const nodeAmount = await nodeInfo();
+    //     await setLocalStorageItem(
+    //       'breezInfo',
+    //       JSON.stringify([transactions, msatToSat]),
+    //     );
 
-          const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-          setBreezInformation(prev => {
-            return {
-              ...prev,
-              userBalance: msatToSat,
-              transactions: transactions,
-            };
-          });
-          if (savedBreezInfo[0].toString() === transactions.toString()) return;
-
-          await setLocalStorageItem(
-            'breezInfo',
-            JSON.stringify([transactions, msatToSat]),
-          );
-
-          console.log('HOME RENDER PAID INVOINCE');
-        }
-        // console.log('HOME RENDER BREEZ EVENT');
-      }
-    })();
+    //     console.log('HOME RENDER PAID INVOINCE');
+    //   }
+    //   // console.log('HOME RENDER BREEZ EVENT');
+    // }
+    // })();
   }, [breezEvent]);
 
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: isDarkMode
-          ? COLORS.darkModeBackground
-          : COLORS.lightModeBackground,
-      }}>
-      <SafeAreaView style={styles.globalContainer}>
+      style={[
+        styles.container,
+        {
+          backgroundColor: isDarkMode
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
+      <SafeAreaView style={styles.container}>
         <NavBar
           breezInformation={breezInformation}
           nodeConnectionPopup={nodeConnectionPopup}
@@ -215,57 +176,111 @@ export default function AdminHome({navigation: {navigate}}) {
   );
 }
 
+async function initBalanceAndTransactions(setBreezInformation) {
+  try {
+    const savedBreezInfo = await getLocalStorageItem('breezInfo');
+
+    if (savedBreezInfo)
+      setBreezInformation(prev => {
+        return {
+          ...prev,
+          transactions: JSON.parse(savedBreezInfo)[0],
+          userBalance: JSON.parse(savedBreezInfo)[1],
+        };
+      });
+    return new Promise(response => {
+      response(savedBreezInfo);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function initWallet(
+  isInitialRender,
+  setBreezInformation,
+  breezEvent,
+  setIsDarkMode,
+  onBreezEvent,
+) {
+  if (isInitialRender.current) {
+    console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
+    isInitialRender.current = false;
+    const setStyle = await setColorScheme();
+    if (setStyle) setIsDarkMode(setStyle);
+    const savedBreezInfo = await initBalanceAndTransactions(
+      setBreezInformation,
+    );
+    return;
+
+    try {
+      const response = await connectToNode(onBreezEvent);
+
+      // console.log(response, 'RESPONSE');
+
+      if (response) {
+        // await setLogStream(logHandler);
+        // const healthCheck = await serviceHealthCheck();
+        // console.log(healthCheck);
+
+        const nodeAmount = await nodeInfo();
+        const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+        const transactions = await getTransactions();
+        const info = await lspInfo();
+        const heath = await serviceHealthCheck();
+        console.log(heath);
+        console.log(info, 'LSPPSSS');
+
+        setBreezInformation(prev => {
+          return {
+            ...prev,
+            didConnectToNode: response,
+            transactions: transactions,
+            userBalance: msatToSat,
+          };
+        });
+
+        if (savedBreezInfo[0]?.toString() === transactions?.toString()) return;
+
+        await setLocalStorageItem(
+          'breezInfo',
+          JSON.stringify([transactions, msatToSat]),
+        );
+      }
+    } catch (err) {
+      console.log(err, 'homepage connection to node err');
+    }
+  } else {
+    if (Object.keys(breezEvent).length === 0) return;
+    // if (
+    //   breezEvent.type === 'invoicePaid' ||
+    //   breezEvent.type === 'paymentSucceed'
+    // ) {
+    const transactions = await getTransactions();
+    const nodeAmount = await nodeInfo();
+
+    const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+    setBreezInformation(prev => {
+      return {
+        ...prev,
+        userBalance: msatToSat,
+        transactions: transactions,
+      };
+    });
+    if (savedBreezInfo[0]?.toString() === transactions?.toString()) return;
+
+    await setLocalStorageItem(
+      'breezInfo',
+      JSON.stringify([transactions, msatToSat]),
+    );
+
+    console.log('HOME RENDER PAID INVOINCE');
+    // }
+  }
+}
+
 const styles = StyleSheet.create({
-  globalContainer: {
+  container: {
     flex: 1,
-    width: '100%',
-    position: 'relative',
-  },
-  contentContainer: {
-    flex: 1,
-    width: '90%',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-  },
-  //   topBar
-  topBar: {
-    width: '90%',
-    height: 50,
-    display: 'flex',
-
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    ...CENTER,
-    zIndex: 1,
-  },
-  topBarName: {
-    fontSize: SIZES.medium,
-    fontWeight: 'bold',
-    fontFamily: FONT.Title_Bold,
-  },
-  iconContainer: {
-    width: 170,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  icons: {
-    width: 35,
-    height: 35,
-    borderRadius: 17.5,
-    backgroundColor: COLORS.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...SHADOWS.medium,
-  },
-  imgIcon: {
-    width: 15,
-    height: 15,
-  },
-
-  //   main content styling
-  mainContent: {
-    flex: 1,
-    marginTop: 30,
   },
 });

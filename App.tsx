@@ -37,7 +37,7 @@ import VerifyKey from './app/screens/createAccount/keySetup/verifyKey';
 import PinSetupPage from './app/screens/createAccount/keySetup/pin';
 import AdminHome from './app/screens/inAccount/home';
 import {retrieveData, userAuth} from './app/functions';
-import AdminLogin from './app/screens/inAccount/components/login';
+import AdminLogin from './app/screens/inAccount/login';
 import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
@@ -46,9 +46,6 @@ function App(): JSX.Element {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const isDarkMode = useColorScheme() === 'dark';
-
-  // console.log(appState);
 
   useEffect(() => {
     console.log('refresh');
@@ -82,6 +79,7 @@ function App(): JSX.Element {
       subscription.remove();
     };
   }, []);
+  console.log('TEST');
 
   return (
     <NavigationContainer>

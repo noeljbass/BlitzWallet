@@ -11,24 +11,22 @@ import {
 import {
   getLocalStorageItem,
   retrieveData,
+  setColorScheme,
   terminateAccount,
-} from '../../../functions';
-import {COLORS, FONT, SIZES} from '../../../constants';
+} from '../../functions';
+import {COLORS, FONT, SIZES} from '../../constants';
 
 export default function AdminLogin({navigation: {navigate}}) {
   const [pin, setPin] = useState([null, null, null, null]);
   const [error, setError] = useState(false);
   const [pinEnterCount, setPinEnterCount] = useState(0);
   const hookDarkMode = useColorScheme() === 'dark';
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
 
   useEffect(() => {
     (async () => {
-      const colorSchemeStyle = await getLocalStorageItem('colorScheme');
-
-      if (JSON.parse(colorSchemeStyle))
-        setIsDarkMode(JSON.parse(colorSchemeStyle) === 'dark');
-      else setIsDarkMode(hookDarkMode);
+      const setStyle = await setColorScheme();
+      if (setStyle) setIsDarkMode(setStyle);
     })();
   }, [hookDarkMode]);
 
@@ -54,12 +52,13 @@ export default function AdminLogin({navigation: {navigate}}) {
             else console.log('ERRROR');
           }, 2000);
         } else {
+          if (error) return;
           setError(true);
           setPinEnterCount(prev => (prev += 1));
           setTimeout(() => {
             setError(false);
             setPin([null, null, null, null]);
-          }, 1000);
+          }, 500);
         }
       }
     })();
