@@ -26,7 +26,7 @@ export default function DislaimerPage({navigation: {navigate}}) {
 
   return (
     <View style={Background}>
-      <SafeAreaView style={styles.globalContainer}>
+      <SafeAreaView style={[styles.globalContainer]}>
         <Back_BTN navigation={navigate} destination="Home" />
         <View style={styles.contentContainer}>
           <Image_header
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   globalContainer: {
     flex: 1,
     backgroundColor: COLORS.background,
+    paddingBottom: 15,
   },
   contentContainer: {
     flex: 1,

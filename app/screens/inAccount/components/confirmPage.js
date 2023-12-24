@@ -140,7 +140,6 @@ export default function ConfirmPage(props) {
 const styles = StyleSheet.create({
   popupContainer: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
 
   innerContainer: {

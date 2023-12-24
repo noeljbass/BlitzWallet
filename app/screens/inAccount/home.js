@@ -203,14 +203,15 @@ async function initWallet(
   setIsDarkMode,
   onBreezEvent,
 ) {
+  let savedBreezInfo;
   if (isInitialRender.current) {
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
     const setStyle = await setColorScheme();
     if (setStyle) setIsDarkMode(setStyle);
-    const savedBreezInfo = await initBalanceAndTransactions(
-      setBreezInformation,
-    );
+
+    savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
+
     return;
 
     try {

@@ -15,7 +15,7 @@ import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
 import QRCode from 'react-native-qrcode-svg';
 import {receivePayment} from '@breeztech/react-native-breez-sdk';
-import crypto from 'react-native-quick-crypto';
+// import crypto from 'react-native-quick-crypto';
 import {randomUUID} from 'expo-crypto';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {removeLocalStorageItem} from '../../../../functions/localStorage';

@@ -10,13 +10,14 @@ import {
 import {CENTER, SIZES, FONT, COLORS} from '../../../constants';
 
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
-import {UserTransaction} from './userTransactions';
+import {UserTransactions} from './userTransactions';
 import {SendRecieveBTNs} from './sendReciveBTNs';
 import {ReceivePaymentHome} from './recieveBitcoin';
 import {useEffect, useRef, useState} from 'react';
 import SendPaymentHome from './sendBitcoin.js/home';
 import ConfirmPage from './confirmPage';
 import {getLocalStorageItem} from '../../../functions';
+import TransactionDetials from './transactionDetails';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
@@ -27,7 +28,10 @@ export default function HomeLightning(props) {
     isDisplayed: false,
   });
   const [showAmount, setShowAmount] = useState(true);
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const [expandedTransaction, setExpandedTransactoin] = useState({
+    isDisplayed: false,
+    txId: null,
+  });
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
@@ -46,19 +50,6 @@ export default function HomeLightning(props) {
     }
   }, [props.breezEvent]);
 
-  const transactionElement = props.breezInformation?.transactions?.map(
-    (transaction, id) => {
-      return (
-        <UserTransaction
-          isDarkMode={props.isDarkMode}
-          showAmount={showAmount}
-          key={id}
-          {...transaction}
-        />
-      );
-    },
-  );
-
   return (
     <View style={style.globalContainer}>
       <UserSatAmount
@@ -74,24 +65,13 @@ export default function HomeLightning(props) {
           </Text>
         </View>
       )}
-      <ScrollView style={style.scrollContainer}>
-        {transactionElement?.length === 0 && (
-          <View style={style.noTransactionsContainer}>
-            <Text
-              style={[
-                style.noTransactionsText,
-                {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              Send or receive a transaction to see your activty here.
-            </Text>
-          </View>
-        )}
-        {transactionElement?.length != 0 && transactionElement}
-      </ScrollView>
+
+      <UserTransactions
+        transactions={props.breezInformation?.transactions}
+        isDarkMode={props.isDarkMode}
+        showAmount={showAmount}
+        setExpandedTransactoin={setExpandedTransactoin}
+      />
       <SendRecieveBTNs
         setSendPayment={setSendPayment}
         setRecivePayment={setRecivePayment}
@@ -121,68 +101,22 @@ export default function HomeLightning(props) {
           isDarkMode={props.isDarkMode}
         />
       )}
+      {expandedTransaction.isDisplayed && (
+        <TransactionDetials
+          isDisplayed={expandedTransaction.isDisplayed}
+          txId={expandedTransaction.txId}
+          transactions={props.breezInformation?.transactions}
+          showAmount={showAmount}
+          setExpandedTransactoin={setExpandedTransactoin}
+        />
+      )}
     </View>
   );
 }
 
-// function TransactionListElements(props) {
-//   // const isInitialRender = useRef(true);
-//   const [transactions, setTransactions] = useState([]);
-
-//   useEffect(() => {
-//     (async () => {
-//       if (isInitialRender.current) {
-//         const storedTransaction = await getLocalStorageItem('breezInfo');
-//         isInitialRender.current = false;
-//         if (!storedTransaction) return;
-//         setTransactions(JSON.parse(storedTransaction)[0]);
-//       } else {
-//         setTransactions(props?.breezTransactions?.transactions);
-//       }
-//     })();
-//   }, [props?.breezTransactions?.transactions]);
-
-//   const transactionElement = transactions?.map((transaction, id) => {
-//     return (
-//       <UserTransaction
-//         showAmount={props.showAmount}
-//         key={id}
-//         {...transaction}
-//       />
-//     );
-//   });
-
-//   return (
-//     <>
-//       {transactionElement?.length === 0 && (
-//         <View style={style.noTransactionsContainer}>
-//           <Text style={style.noTransactionsText}>
-//             Send or recive a transaction to see your activty here.
-//           </Text>
-//         </View>
-//       )}
-//       {transactionElement?.length != 0 && transactionElement}
-//     </>
-//   );
-// }
 const style = StyleSheet.create({
   globalContainer: {
     flex: 1,
-  },
-  scrollContainer: {
-    flex: 1,
-    width: '90%',
-    marginTop: 20,
-    ...CENTER,
-  },
-  noTransactionsContainer: {
-    flex: 1,
-  },
-  noTransactionsText: {
-    fontSize: SIZES.medium,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: FONT.Descriptoin_Regular,
   },
 
   errorContainer: {
