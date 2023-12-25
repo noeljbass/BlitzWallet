@@ -40,13 +40,14 @@ export function ReceivePaymentHome(props) {
   });
   const [paymentDescription, setPaymentDescription] = useState({
     lightning: '',
-    bitcoin: '',
+    // bitcoin: '',
     liquid: '',
   });
   const [editPaymentPopup, setEditPaymentPopup] = useState(false);
   const [updateQRCode, setUpdateQRCode] = useState(0);
   const [selectedRecieveOption, setSelectedRecieveOption] =
     useState('lightning');
+  const [isSwapCreated, setIsSwapCreated] = useState(false);
 
   // const props.isDarkMode = useColorScheme() === 'dark';
 
@@ -99,21 +100,25 @@ export function ReceivePaymentHome(props) {
             setGeneratedAddress={setGeneratedAddress}
             isDarkMode={props.isDarkMode}
           />
-          <BitcoinPage
+          {/* <BitcoinPage
             selectedRecieveOption={selectedRecieveOption}
             setGeneratedAddress={setGeneratedAddress}
             generatedAddress={generatedAddress}
             isDarkMode={props.isDarkMode}
-          />
+          /> */}
           <LiquidPage
             selectedRecieveOption={selectedRecieveOption}
             isDarkMode={props.isDarkMode}
+            setIsSwapCreated={setIsSwapCreated}
+            setGeneratedAddress={setGeneratedAddress}
+            generatedAddress={generatedAddress}
           />
 
           <ButtonsContainer
             selectedRecieveOption={selectedRecieveOption}
             generatedAddress={generatedAddress}
             setEditPaymentPopup={setEditPaymentPopup}
+            isSwapCreated={isSwapCreated}
           />
 
           {/* popups */}

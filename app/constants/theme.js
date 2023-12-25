@@ -26,6 +26,9 @@ const COLORS = {
 
   opaicityGray: '#767676b8',
   cancelRed: '#e20000',
+
+  connectedNodeColor: '#33cc33',
+  notConnectedNodeColor: '#ff0000',
 };
 
 const FONT = {

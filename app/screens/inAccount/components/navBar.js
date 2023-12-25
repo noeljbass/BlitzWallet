@@ -40,8 +40,8 @@ export default function NavBar(props) {
           style={{
             ...styles.icons,
             backgroundColor: props.breezInformation.didConnectToNode
-              ? 'green'
-              : 'red',
+              ? COLORS.connectedNodeColor
+              : COLORS.notConnectedNodeColor,
           }}>
           <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
         </TouchableOpacity>
@@ -62,7 +62,14 @@ export default function NavBar(props) {
         </TouchableOpacity>
         {/* <View style={styles.icons}></View> */}
         <TouchableOpacity
-          style={styles.icons}
+          style={[
+            styles.icons,
+            {
+              backgroundColor: props.isDarkMode
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+            },
+          ]}
           activeOpacity={0.5}
           onPress={() => {
             setNavViews(prev => {

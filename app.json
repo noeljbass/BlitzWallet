@@ -1,7 +1,7 @@
 {
   "name": "BlitzWallet",
-  "slug": "blitz-wallet",
-  "scheme": "blitz-wallet",
+  "slug": "BlitzWallet",
+  "scheme": "BlitzWallet",
   "displayName": "Blitz Wallet",
   "version": "0.0.1"
 }

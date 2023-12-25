@@ -40,11 +40,9 @@ export default function EditAmountPopup(props) {
   }, [props.isDisplayed]);
 
   useEffect(() => {
-    console.log('TESTING FOR THIS');
     setNumSats('');
     setdescription('');
   }, [props.type]);
-  // console.log('EDIT AMOUNT', props.type);
 
   return (
     <Animated.View

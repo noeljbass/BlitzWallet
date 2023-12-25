@@ -32,14 +32,14 @@ export default function NavBar(props) {
           source={ICONS.lightningIcon}
         />
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         activeOpacity={0.5}
         onPress={() => props.setSelectedRecieveOption('bitcoin')}>
         <Animated.Image
           style={[styles.navIcon, {transform: [{scale: bitcoin}]}]}
           source={ICONS.bitcoinIcon}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         activeOpacity={0.5}

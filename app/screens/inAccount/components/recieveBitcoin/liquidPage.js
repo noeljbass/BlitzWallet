@@ -37,7 +37,6 @@ export default function LiquidPage(props) {
     amount: true,
     qrCode: false,
   });
-  const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (props.selectedRecieveOption === 'liquid') return;
@@ -46,6 +45,7 @@ export default function LiquidPage(props) {
       qrCode: false,
     });
     setLiquidAmount('2000');
+    props.setIsSwapCreated(false);
   }, [props.selectedRecieveOption]);
 
   return (
@@ -69,6 +69,7 @@ export default function LiquidPage(props) {
             feeInfo={feeInfo}
             setFeeInfo={setFeeInfo}
             isDarkMode={props.isDarkMode}
+            setIsSwapCreated={props.setIsSwapCreated}
           />
         )}
         {processStage.qrCode && (
@@ -76,6 +77,8 @@ export default function LiquidPage(props) {
             liquidAmount={liquidAmount}
             feeInfo={feeInfo}
             isDarkMode={props.isDarkMode}
+            setGeneratedAddress={props.setGeneratedAddress}
+            generatedAddress={props.generatedAddress}
           />
         )}
       </View>
@@ -222,6 +225,7 @@ function EnterAmount(props) {
           props.setProcessStage(prev => {
             return {...prev, amount: false, qrCode: true};
           });
+          props.setIsSwapCreated(true);
         }}
         style={[
           styles.createSwapBTN,
@@ -240,7 +244,7 @@ function EnterAmount(props) {
 
 function QrCodePage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
-  const [generatedAddress, setGeneratedAddress] = useState('');
+  // const [generatedAddress, setGeneratedAddress] = useState('');
   const [evenSource, setEventSource] = useState({});
 
   useEffect(() => {
@@ -262,7 +266,7 @@ function QrCodePage(props) {
             props.feeInfo.hash,
           );
 
-          setGeneratedAddress(swapInfo.bip21);
+          props.setGeneratedAddress(swapInfo.bip21);
           setGeneratingQrCode(false);
 
           const eventSource = new RNEventSource(
@@ -292,7 +296,9 @@ function QrCodePage(props) {
         {!generatingQrCode && (
           <QRCode
             size={250}
-            value={generatedAddress ? generatedAddress : 'lets swap'}
+            value={
+              props.generatedAddress ? props.generatedAddress : 'lets swap'
+            }
             color={
               props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
             }
@@ -437,7 +443,7 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
     ...SHADOWS.medium,
     marginTop: 'auto',
-    marginBottom: 30,
+    // marginBottom: 30,
   },
   buttonText: {
     fontFamily: FONT.Other_Regular,

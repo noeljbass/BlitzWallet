@@ -3,30 +3,47 @@ import {COLORS, CENTER, FONT, SHADOWS, SIZES} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
 
 export default function ButtonsContainer(props) {
+  console.log(
+    (props.isSwapCreated && props.selectedRecieveOption === 'liquid') ||
+      props.selectedRecieveOption === 'lightning',
+    'TESTTES',
+  );
   return (
-    <View
-      style={[
-        styles.buttonsContainer,
-        {width: props.selectedRecieveOption != 'bitcoin' ? '90%' : '60%'},
-      ]}>
-      <TouchableOpacity
-        onPress={openShareOptions}
-        style={[styles.buttonsOpacity]}>
-        <Text style={styles.buttonText}>Share</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={copyToClipboard}
-        style={[styles.buttonsOpacity]}>
-        <Text style={styles.buttonText}>Copy</Text>
-      </TouchableOpacity>
-      {props.selectedRecieveOption != 'bitcoin' && (
-        <TouchableOpacity
-          onPress={() => props.setEditPaymentPopup(true)}
-          style={[styles.buttonsOpacity]}>
-          <Text style={styles.buttonText}>Edit</Text>
-        </TouchableOpacity>
+    <>
+      {((props.isSwapCreated && props.selectedRecieveOption === 'liquid') ||
+        props.selectedRecieveOption === 'lightning') && (
+        <View
+          style={[
+            styles.buttonsContainer,
+            {
+              width:
+                props.selectedRecieveOption != 'bitcoin' &&
+                props.selectedRecieveOption != 'liquid'
+                  ? '90%'
+                  : '60%',
+            },
+          ]}>
+          <TouchableOpacity
+            onPress={openShareOptions}
+            style={[styles.buttonsOpacity]}>
+            <Text style={styles.buttonText}>Share</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={copyToClipboard}
+            style={[styles.buttonsOpacity]}>
+            <Text style={styles.buttonText}>Copy</Text>
+          </TouchableOpacity>
+          {props.selectedRecieveOption != 'bitcoin' &&
+            props.selectedRecieveOption != 'liquid' && (
+              <TouchableOpacity
+                onPress={() => props.setEditPaymentPopup(true)}
+                style={[styles.buttonsOpacity]}>
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+            )}
+        </View>
       )}
-    </View>
+    </>
   );
 
   async function copyToClipboard() {
