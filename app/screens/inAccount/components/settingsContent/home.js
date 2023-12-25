@@ -69,17 +69,7 @@ export default function SettingsContent(props) {
             onPress={() =>
               props.setSettingsContent({isDisplayed: false, for: null})
             }>
-            <Image
-              style={[
-                styles.topBarIcon,
-                {
-                  backgroundColor: props.isDarkMode
-                    ? COLORS.white
-                    : COLORS.black,
-                },
-              ]}
-              source={ICONS.leftCheveronIcon}
-            />
+            <Image style={styles.topBarIcon} source={ICONS.leftCheveronIcon} />
           </TouchableOpacity>
           <Text
             style={[

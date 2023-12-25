@@ -37,7 +37,7 @@ const GENERALOPTIONS = [
   {
     for: 'general',
     name: 'Display options',
-    icon: ICONS.Checkcircle,
+    icon: ICONS.colorIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   // {
@@ -231,7 +231,6 @@ const styles = StyleSheet.create({
   topBarIcon: {
     width: 25,
     height: 25,
-    backgroundColor: 'white',
   },
   topBarText: {
     fontSize: SIZES.large,

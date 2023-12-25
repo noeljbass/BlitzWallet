@@ -27,6 +27,7 @@ import notificationsIcon from '../assets/icons/notificationsIcon.png';
 import nodeIcon from '../assets/icons/nodeIcon.png';
 import currencyIcon from '../assets/icons/currencyIcon.png';
 import aboutIcon from '../assets/icons/aboutIcon.png';
+import colorIcon from '../assets/icons/colorIcon.png';
 
 export default {
   Xcircle,
@@ -58,4 +59,5 @@ export default {
   nodeIcon,
   currencyIcon,
   aboutIcon,
+  colorIcon,
 };

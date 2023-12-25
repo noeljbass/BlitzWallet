@@ -50,13 +50,20 @@ export default function NavBar(props) {
             setSystemSettingsPopup(true);
           }}
           activeOpacity={0.5}
-          style={styles.icons}>
+          style={[
+            styles.icons,
+            {
+              backgroundColor: props.isDarkMode
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+            },
+          ]}>
           <Image style={styles.imgIcon} source={ICONS.settingsIcon} />
         </TouchableOpacity>
-        <View style={styles.icons}></View>
+        {/* <View style={styles.icons}></View> */}
         <TouchableOpacity
-          activeOpacity={0.5}
           style={styles.icons}
+          activeOpacity={0.5}
           onPress={() => {
             setNavViews(prev => {
               return {...prev, features: !prev.features};
@@ -68,6 +75,7 @@ export default function NavBar(props) {
           setNavViews={setNavViews}
           isDisplayed={navViews.features}
           setFaucet={setFaucet}
+          isDarkMode={props.isDarkMode}
         />
       </View>
       <SystemSettings
@@ -103,7 +111,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
   },
   iconContainer: {
-    width: 170,
+    width: 130,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -111,10 +119,12 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 17.5,
-    backgroundColor: COLORS.primary,
+    // backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     ...SHADOWS.medium,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
   },
   imgIcon: {
     width: 15,

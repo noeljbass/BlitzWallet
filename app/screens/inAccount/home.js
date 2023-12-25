@@ -36,7 +36,7 @@ export default function AdminHome({navigation: {navigate}}) {
   console.log(breezEvent, 'BreezEvent on home screen');
 
   const onBreezEvent = e => {
-    console.log(e, 'IN FUNCTION EVENT');
+    console.log(e.type, 'IN FUNCTION EVENT');
     if (e?.type != 'invoicePaid' && e?.type != 'paymentSucceed') return;
 
     setBreezEvent(e);
@@ -212,8 +212,6 @@ async function initWallet(
 
     savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
 
-    return;
-
     try {
       const response = await connectToNode(onBreezEvent);
 
@@ -268,7 +266,7 @@ async function initWallet(
         transactions: transactions,
       };
     });
-    if (savedBreezInfo[0]?.toString() === transactions?.toString()) return;
+    // if (savedBreezInfo[0]?.toString() === transactions?.toString()) return;
 
     await setLocalStorageItem(
       'breezInfo',

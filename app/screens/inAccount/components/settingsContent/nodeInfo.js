@@ -12,7 +12,7 @@ import {
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
 
-export default function NodeInfo() {
+export default function NodeInfo(props) {
   const [lnNodeInfo, setLNNodeInfo] = useState({});
   const [isInfoSet, stIsInfoSet] = useState(false);
   // const props.isDarkMode = useColorScheme() === 'dark';
@@ -22,7 +22,9 @@ export default function NodeInfo() {
         const lightningNode = await nodeInfo();
         setLNNodeInfo(lightningNode);
         stIsInfoSet(true);
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     })();
   }, []);
 
@@ -43,12 +45,32 @@ export default function NodeInfo() {
         style={{
           borderBottomWidth: lnNodeInfo?.connectedPeers.length === 1 ? 0 : 2,
         }}>
-        <Text style={styles.peerTitle}>Peer ID</Text>
+        <Text
+          style={[
+            styles.peerTitle,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          Peer ID
+        </Text>
         <TouchableOpacity
           onPress={() => {
             copyToClipboard(peer);
           }}>
-          <Text style={styles.descriptionContent}>{peer}</Text>
+          <Text
+            style={[
+              styles.descriptionContent,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            {peer}
+          </Text>
         </TouchableOpacity>
       </View>
     );

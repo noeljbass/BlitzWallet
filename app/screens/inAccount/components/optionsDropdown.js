@@ -75,7 +75,17 @@ export function OptionsDropdown(props) {
             })();
           }}
           style={styles.tochableOpacityContainer}>
-          <Text style={styles.navItemName}>{item.name}</Text>
+          <Text
+            style={[
+              styles.navItemName,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            {item.name}
+          </Text>
           <Image source={item.icon} style={{width: 20, height: 20}} />
         </TouchableOpacity>
       </View>
@@ -104,7 +114,16 @@ export function OptionsDropdown(props) {
   }
 
   return (
-    <Animated.View style={[styles.globalContainer, {height: fadeAnim}]}>
+    <Animated.View
+      style={[
+        styles.globalContainer,
+        {height: fadeAnim},
+        {
+          backgroundColor: props.isDarkMode
+            ? COLORS.darkModeBackgroundOffset
+            : COLORS.lightModeBackgroundOffset,
+        },
+      ]}>
       <View style={styles.contentContainer}>
         <View style={styles.innerContainer}>{navElements}</View>
       </View>
@@ -125,8 +144,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
     ...SHADOWS.medium,
-
-    backgroundColor: COLORS.primary,
 
     borderRadius: 5,
   },
@@ -151,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
 
-    borderBottomColor: COLORS.background,
+    // borderBottomColor: COLORS.background,
     borderBottomWidth: 1,
     paddingRight: 10,
     paddingLeft: 10,

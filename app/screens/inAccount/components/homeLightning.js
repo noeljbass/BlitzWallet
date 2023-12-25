@@ -43,6 +43,7 @@ export default function HomeLightning(props) {
     ) {
       if (props.breezEvent.type === 'invoicePaid') setRecivePayment(false);
       else setSendPayment(false);
+      console.log(props.breezEvent.type, 'CONFIRM PAGE');
       setConfirmPage({
         for: props.breezEvent.type,
         isDisplayed: true,
