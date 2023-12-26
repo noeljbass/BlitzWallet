@@ -9,6 +9,8 @@ import {
 
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 
+const MILISECONDSDAYCONSTANT = 86400000;
+
 export function UserTransactions(props) {
   const transactionObject = {
     currentDateString: '',
@@ -17,7 +19,9 @@ export function UserTransactions(props) {
   };
 
   const transactionElements = props.transactions.map((transaction, id) => {
-    const paymentDate = new Date(transaction.paymentTime * 1000);
+    const paymentDate = new Date(
+      transaction.paymentTime * 1000 + MILISECONDSDAYCONSTANT,
+    );
 
     if (id === 0)
       transactionObject.currentDateString = paymentDate.toDateString();
