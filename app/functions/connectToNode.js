@@ -9,7 +9,7 @@ import {
 } from '@breeztech/react-native-breez-sdk';
 // import Config from 'react-native-config';
 import {retrieveData} from './secureStore';
-import {INVITE_KEY1, API_KEY} from '@env';
+// import {INVITE_KEY1, API_KEY} from '@env';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
@@ -22,8 +22,7 @@ export default async function connectToNode(breezEvent) {
     });
   } catch (err) {
     try {
-      const inviteCode = INVITE_KEY1;
-      const apiKey = API_KEY;
+      const inviteCode = process.env.INVITE_KEY1;
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
@@ -33,7 +32,7 @@ export default async function connectToNode(breezEvent) {
 
       const config = await defaultConfig(
         EnvironmentType.PRODUCTION,
-        apiKey,
+        process.env.API_KEY,
         nodeConfig,
       );
 
