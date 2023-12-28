@@ -50,7 +50,11 @@ export default function CreateAccountHome({navigation: {navigate}}) {
             }}>
             <Text style={styles.button_full_text}>Create New Wallet</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button_empty} onPress={handlePress}>
+          <TouchableOpacity
+            style={styles.button_empty}
+            onPress={() => {
+              navigate('RestoreWallet');
+            }}>
             <Text style={styles.button_empty_text}>
               Restore Existing Wallet
             </Text>

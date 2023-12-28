@@ -182,7 +182,6 @@ export default function SendPaymentScreenOptions(props) {
               }}
               resizeMode="contain"
             />
-            <Image />
           </View>
           <TouchableOpacity
             onPress={getClipboardText}

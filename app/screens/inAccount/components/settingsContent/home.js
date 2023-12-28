@@ -63,7 +63,7 @@ export default function SettingsContent(props) {
             : COLORS.lightModeBackground,
         },
       ]}>
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1}}>
         <View style={styles.topbar}>
           <TouchableOpacity
             onPress={() =>
@@ -83,8 +83,8 @@ export default function SettingsContent(props) {
             {props.for}
           </Text>
         </View>
-      </SafeAreaView>
-      <View style={{flex: 1}}>
+
+        {/* <View style={{flex: 1}}> */}
         {props.for?.toLowerCase() === 'about' && (
           <AboutPage isDarkMode={props.isDarkMode} />
         )}
@@ -127,7 +127,8 @@ export default function SettingsContent(props) {
             isDarkMode={props.isDarkMode}
           />
         )}
-      </View>
+        {/* </View> */}
+      </SafeAreaView>
       <InfoPopup
         setDisplayPopup={setDisplayPopup}
         {...displayPopup}

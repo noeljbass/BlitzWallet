@@ -36,7 +36,7 @@ export default function SendPaymentHome(props) {
       transparent={false}
       statusBarTranslucent={false}
       visible={props.isDisplayed}
-      style={styles.containr}>
+      style={styles.container}>
       <SendPaymentScreenOptions
         setBTCadress={setBTCadress}
         BTCadress={BTCadress}
@@ -57,7 +57,7 @@ export default function SendPaymentHome(props) {
 }
 
 const styles = StyleSheet.create({
-  containr: {
+  container: {
     flex: 1,
 
     display: 'flex',

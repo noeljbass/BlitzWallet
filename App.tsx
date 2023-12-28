@@ -8,6 +8,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
+// import {registerRootComponent} from 'expo';
 
 import {
   SafeAreaView,
@@ -39,6 +40,7 @@ import AdminHome from './app/screens/inAccount/home';
 import {retrieveData, userAuth} from './app/functions';
 import AdminLogin from './app/screens/inAccount/login';
 import SplashScreen from 'react-native-splash-screen';
+import RestoreWallet from './app/screens/createAccount/restoreWallet/home';
 
 const Stack = createNativeStackNavigator();
 
@@ -96,6 +98,7 @@ function App(): JSX.Element {
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
+        <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
         {/* <Stack.Screen name="AdminLogin" component={AdminLogin} /> */}
         <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
@@ -123,3 +126,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+// registerRootComponent(App);

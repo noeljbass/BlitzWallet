@@ -3,7 +3,7 @@ import {getLocalStorageItem} from './localStorage';
 export default async function setColorScheme() {
   try {
     const colorSchemeStyle = await getLocalStorageItem('colorScheme');
-    console.log('test color scheme', colorSchemeStyle);
+    // console.log('test color scheme', colorSchemeStyle);
 
     if (JSON.parse(colorSchemeStyle))
       return new Promise(response => {

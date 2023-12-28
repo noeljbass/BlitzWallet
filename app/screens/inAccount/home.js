@@ -43,6 +43,7 @@ export default function AdminHome({navigation: {navigate}}) {
 
     // console.log(`Received event ${e.type} did that actually work`);
   };
+  // console.log(breezInformation, 'HSDVD');
 
   useEffect(() => {
     // const logHandler = logEntry => {
@@ -179,6 +180,7 @@ export default function AdminHome({navigation: {navigate}}) {
 async function initBalanceAndTransactions(setBreezInformation) {
   try {
     const savedBreezInfo = await getLocalStorageItem('breezInfo');
+    console.log(JSON.parse(savedBreezInfo)[0], 'TEST');
 
     if (savedBreezInfo)
       setBreezInformation(prev => {
@@ -239,7 +241,11 @@ async function initWallet(
           };
         });
 
-        if (savedBreezInfo[0]?.toString() === transactions?.toString()) return;
+        if (
+          savedBreezInfo &&
+          savedBreezInfo[0]?.toString() === transactions?.toString()
+        )
+          return;
 
         await setLocalStorageItem(
           'breezInfo',

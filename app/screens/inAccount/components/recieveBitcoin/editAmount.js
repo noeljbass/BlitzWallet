@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   useColorScheme,
+  Keyboard,
 } from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
@@ -51,7 +52,11 @@ export default function EditAmountPopup(props) {
         {opacity: fadeAnim},
         {zIndex: props.isDisplayed ? 1 : -1},
       ]}>
-      <TouchableWithoutFeedback onPress={() => props.setIsDisplayed(false)}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          props.setIsDisplayed(false);
+          Keyboard.dismiss();
+        }}>
         <KeyboardAvoidingView
           style={{flex: 1, justifyContent: 'flex-end'}}
           behavior={Platform.OS === 'ios' ? 'padding' : null}>
@@ -124,7 +129,7 @@ export default function EditAmountPopup(props) {
   function saveChanges() {
     try {
       // if (isNaN(Number(numSats))) throw Error('Not a number');
-      if (numSats)
+      if (numSats) {
         props.setSendingAmount(prev => {
           if (props.type === 'lightning')
             return {...prev, lightning: Number(numSats) * 1000};
@@ -132,14 +137,15 @@ export default function EditAmountPopup(props) {
             return {...prev, bitcoin: Number(numSats) * 1000};
           else return {...prev, liquid: Number(numSats) * 1000};
         });
-      else
+        Keyboard.dismiss();
+      } else
         props.setSendingAmount({
           lightning: 1000,
           bitcoin: 1000,
           liquid: 1000,
         });
 
-      if (description)
+      if (description) {
         props.setPaymentDescription(prev => {
           if (props.type === 'lightning')
             return {...prev, lightning: description};
@@ -147,7 +153,8 @@ export default function EditAmountPopup(props) {
             return {...prev, bitcoin: description};
           else return {...prev, liquid: description};
         });
-      else
+        Keyboard.dismiss();
+      } else
         props.setPaymentDescription({
           lightning: '',
           bitcoin: '',

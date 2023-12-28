@@ -9,11 +9,12 @@ import {
 } from '@breeztech/react-native-breez-sdk';
 // import Config from 'react-native-config';
 import {retrieveData} from './secureStore';
-// import {INVITE_KEY1, API_KEY} from '@env';
+import {INVITE_KEY1, API_KEY} from '@env';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
   // console.log(INVITE_KEY1, API_KEY);
+  console.log(process.env.INVITE_KEY1, process.env.API_KEY);
   try {
     const nodeInformation = await nodeInfo();
     return new Promise((resolve, request) => {
@@ -37,6 +38,7 @@ export default async function connectToNode(breezEvent) {
       );
 
       const mnemonic = await retrieveData('mnemonic');
+      console.log(mnemonic);
 
       if (mnemonic) {
         const seed = await mnemonicToSeed(mnemonic);
