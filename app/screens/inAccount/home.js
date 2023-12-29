@@ -168,11 +168,13 @@ export default function AdminHome({navigation: {navigate}}) {
 
         {/* <ExpandedTransaction /> */}
       </SafeAreaView>
-      <ConnectionToNode
-        isDisplayed={nodeConnectionPopup}
-        hidePopup={setNodeConnectionPopup}
-        isDarkMode={isDarkMode}
-      />
+      {!nodeConnectionPopup && (
+        <ConnectionToNode
+          isDisplayed={nodeConnectionPopup}
+          hidePopup={setNodeConnectionPopup}
+          isDarkMode={isDarkMode}
+        />
+      )}
     </View>
   );
 }

@@ -211,6 +211,7 @@ export default function SystemSettings(props) {
           setSettingsContent={setSettingsContent}
           isDarkMode={props.isDarkMode}
           setIsDarkMode={props.setIsDarkMode}
+          breezInformation={props.breezInformation}
         />
       </View>
     </Modal>

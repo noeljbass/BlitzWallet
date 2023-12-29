@@ -8,15 +8,24 @@ import {
   useColorScheme,
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+import {fetchFiatRates} from '@breeztech/react-native-breez-sdk';
+import {getLocalStorageItem} from '../../../../functions';
 // TEXT INPUT CAUSES LAUNCH SCREEN TO FAIL
 export default function DrainPage(props) {
+  const isInitialRender = useRef(true);
   const [wantsToDrain, setWantsToDrain] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [fiatRate, setFiatRate] = useState(0);
   // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
+    if (isInitialRender.current) {
+      getFiatConversion();
+      isInitialRender.current = false;
+    }
     if (!wantsToDrain) return;
+
     console.log('DRAINING WALLET');
   }, [wantsToDrain]);
 
@@ -43,7 +52,10 @@ export default function DrainPage(props) {
                 : COLORS.lightModeText,
             },
           ]}>
-          {Number(25000).toLocaleString()} sats
+          {Math.floor(props.breezInformation?.userBalance)
+            .toLocaleString()
+            .toLocaleString()}{' '}
+          sats
         </Text>
         <Text
           style={[
@@ -54,7 +66,10 @@ export default function DrainPage(props) {
                 : COLORS.lightModeText,
             },
           ]}>
-          = $2.5 usd
+          = $
+          {props.breezInformation?.userBalance *
+            (fiatRate / 100000000).toFixed(5)}{' '}
+          usd
         </Text>
       </View>
 
@@ -108,6 +123,7 @@ export default function DrainPage(props) {
 
       <TouchableOpacity
         onPress={() => {
+          if (!props.bitcoinAddress) return;
           setShowConfirmPopup(true);
           props.setDisplayPopup({
             isDisplayed: true,
@@ -121,12 +137,27 @@ export default function DrainPage(props) {
             backgroundColor: COLORS.primary,
             marginTop: 'auto',
             marginBottom: 50,
+            opacity: !props.bitcoinAddress ? 0.5 : 1,
           },
         ]}>
         <Text style={styles.buttonText}>Drain</Text>
       </TouchableOpacity>
     </View>
   );
+
+  async function getFiatConversion() {
+    try {
+      const userSelectedFiat = await getLocalStorageItem('currency');
+      const fiat = await fetchFiatRates();
+      const [fiatRate] = fiat.filter(rate => {
+        return rate.coin.toLowerCase() === userSelectedFiat.toLowerCase();
+      });
+      if (!fiatRate) return;
+      setFiatRate(fiatRate.value);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 const styles = StyleSheet.create({

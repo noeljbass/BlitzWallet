@@ -109,6 +109,7 @@ export default function HomeLightning(props) {
           transactions={props.breezInformation?.transactions}
           showAmount={showAmount}
           setExpandedTransactoin={setExpandedTransactoin}
+          isDarkMode={props.isDarkMode}
         />
       )}
     </View>

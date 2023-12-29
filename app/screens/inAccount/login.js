@@ -40,16 +40,18 @@ export default function AdminLogin({navigation: {navigate}}) {
       const stored = JSON.parse(await retrieveData('pin'));
 
       if (JSON.stringify(pin) === JSON.stringify(stored)) {
-        setPinEnterCount(0);
+        clearSettings();
+
         navigate('HomeAdmin');
       } else {
         if (pinEnterCount === 8) {
           setTimeout(async () => {
             const deleted = await terminateAccount();
-            console.log(deleted);
 
-            if (deleted) navigate('Home');
-            else console.log('ERRROR');
+            if (deleted) {
+              clearSettings();
+              navigate('Home');
+            } else console.log('ERRROR');
           }, 2000);
         } else {
           if (error) return;
@@ -342,6 +344,11 @@ export default function AdminLogin({navigation: {navigate}}) {
         });
       });
     }
+  }
+  function clearSettings() {
+    setPin([null, null, null, null]);
+    setError(false);
+    setPinEnterCount(0);
   }
 }
 

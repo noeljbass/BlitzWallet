@@ -7,7 +7,9 @@ import {
 } from 'react-native';
 import {BTN, COLORS, FONT, SIZES} from '../../../../constants';
 import {useState} from 'react';
-
+import {deleteItem} from '../../../../functions/secureStore';
+import {removeLocalStorageItem} from '../../../../functions/localStorage';
+import RNRestart from 'react-native-restart';
 export default function ResetPage(props) {
   const [selectedOptions, setSelectedOptions] = useState({
     seed: false,
@@ -177,7 +179,8 @@ export default function ResetPage(props) {
                 : COLORS.lightModeText,
             },
           ]}>
-          1,500 sats
+          {Math.floor(props.breezInformation?.userBalance).toLocaleString()}{' '}
+          sats
         </Text>
       </View>
       <TouchableOpacity
@@ -217,13 +220,31 @@ export default function ResetPage(props) {
     });
   }
 
-  function resetWallet() {
+  async function resetWallet() {
     if (
       !selectedOptions.paymentHistory &&
       !selectedOptions.pin &&
       !selectedOptions.seed
     )
       return;
+    try {
+      let paymentHistory = false;
+      let pin = false;
+      let seed = false;
+      if (selectedOptions.paymentHistory)
+        paymentHistory = await removeLocalStorageItem('breezInfo');
+      if (selectedOptions.pin) pin = await deleteItem('pin');
+      if (selectedOptions.seed) seed = await deleteItem('mnemonic');
+      if (
+        selectedOptions.paymentHistory === paymentHistory &&
+        selectedOptions.pin === pin &&
+        selectedOptions.seed === seed
+      ) {
+        RNRestart.restart();
+      }
+    } catch (err) {
+      console.log(err);
+    }
     console.log('RESET');
   }
 }

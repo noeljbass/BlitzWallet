@@ -117,7 +117,10 @@ export default function SettingsContent(props) {
           />
         )}
         {props.for?.toLowerCase() === 'reset wallet' && (
-          <ResetPage isDarkMode={props.isDarkMode} />
+          <ResetPage
+            breezInformation={props.breezInformation}
+            isDarkMode={props.isDarkMode}
+          />
         )}
         {props.for?.toLowerCase() === 'drain wallet' && (
           <DrainPage
@@ -125,6 +128,7 @@ export default function SettingsContent(props) {
             bitcoinAddress={bitcoinAddress}
             setDisplayPopup={setDisplayPopup}
             isDarkMode={props.isDarkMode}
+            breezInformation={props.breezInformation}
           />
         )}
         {/* </View> */}

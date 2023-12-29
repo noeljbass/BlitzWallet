@@ -38,4 +38,18 @@ async function terminateAccount() {
   }
 }
 
-export {retrieveData, storeData, terminateAccount};
+async function deleteItem(key) {
+  try {
+    await SecureStore.deleteItemAsync(key);
+
+    return new Promise(Response => {
+      Response(true);
+    });
+  } catch (error) {
+    return new Promise(Response => {
+      Response(false);
+    });
+  }
+}
+
+export {retrieveData, storeData, terminateAccount, deleteItem};

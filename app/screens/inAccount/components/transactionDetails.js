@@ -15,10 +15,7 @@ export default function TransactionDetials(props) {
 
   const [selectedTX] = props.transactions?.filter(tx => {
     return props.txId === tx.details.data.paymentHash;
-    console.log(tx.details.data.paymentHash);
-    return true;
   });
-  console.log(selectedTX);
 
   return (
     <Modal

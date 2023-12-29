@@ -93,13 +93,15 @@ function App(): JSX.Element {
           name="Home"
           component={isLoggedIn ? AdminLogin : CreateAccountHome}
         />
+        <Stack.Screen name="CreateAccountHome" component={CreateAccountHome} />
+        <Stack.Screen name="AdminLogin" component={AdminLogin} />
         <Stack.Screen name="DisclaimerPage" component={DislaimerPage} />
         <Stack.Screen name="StartKeyGeneration" component={SecuityOption} />
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
         <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
-        {/* <Stack.Screen name="AdminLogin" component={AdminLogin} /> */}
+
         <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -90,6 +90,7 @@ export default function NavBar(props) {
         setSystemSettingsPopup={setSystemSettingsPopup}
         isDarkMode={props.isDarkMode}
         setIsDarkMode={props.setIsDarkMode}
+        breezInformation={props.breezInformation}
       />
       <FaucetHome
         breezEvent={props.breezEvent}

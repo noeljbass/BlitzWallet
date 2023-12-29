@@ -28,11 +28,17 @@ export async function removeLocalStorageItem(key) {
 
     if (item !== null) {
       const parsedItem = item;
-      return parsedItem;
+      return new Promise(Response => {
+        Response(true);
+      });
     }
 
-    return item;
+    return new Promise(Response => {
+      Response(false);
+    });
   } catch (error) {
-    return false;
+    return new Promise(Response => {
+      Response(false);
+    });
   }
 }
