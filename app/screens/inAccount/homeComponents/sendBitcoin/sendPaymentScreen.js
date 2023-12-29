@@ -38,7 +38,7 @@ export default function SendPaymentScreen(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
   const [paymentInfo, setPaymentInfo] = useState({});
   const [pressedSend, setPressedSent] = useState(false);
-  console.log(paymentInfo?.invoice?.paymentHash);
+
   // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
@@ -47,8 +47,6 @@ export default function SendPaymentScreen(props) {
       fadeIn();
     } else fadeOut();
   }, [props.isDisplayed]);
-
-  console.log(props.isDisplayed, 'SEND PAYMENT CONFIRM');
 
   return (
     <Animated.View
@@ -306,6 +304,8 @@ export default function SendPaymentScreen(props) {
       });
       if (response) {
         props.setScanned(false);
+        props.setBTCadress('');
+        // navigate.goBack();
       }
     } catch (err) {
       try {

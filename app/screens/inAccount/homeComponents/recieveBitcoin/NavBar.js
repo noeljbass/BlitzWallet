@@ -13,7 +13,6 @@ export default function NavBar(props) {
   const bitcoin = useRef(new Animated.Value(0)).current;
   const lightning = useRef(new Animated.Value(0)).current;
   const liquid = useRef(new Animated.Value(0)).current;
-  console.log(props.selectedRecieveOption);
 
   useEffect(() => {
     fadeOut();

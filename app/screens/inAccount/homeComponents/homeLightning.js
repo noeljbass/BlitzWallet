@@ -12,17 +12,15 @@ import {CENTER, SIZES, FONT, COLORS} from '../../../constants';
 import {UserSatAmount} from '../../../components/admin/userSatAmount';
 import {UserTransactions} from './userTransactions';
 import {SendRecieveBTNs} from './sendReciveBTNs';
-import {ReceivePaymentHome} from './recieveBitcoin';
 import {useEffect, useRef, useState} from 'react';
-import SendPaymentHome from './sendBitcoin.js/home';
 import ConfirmPage from './confirmPage';
 import {getLocalStorageItem} from '../../../functions';
 import TransactionDetials from './transactionDetails';
+import {useNavigation} from '@react-navigation/native';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
-  const [recivePayment, setRecivePayment] = useState(false);
-  const [sendPayment, setSendPayment] = useState(false);
+  const navigate = useNavigation();
   const [confirmPage, setConfirmPage] = useState({
     for: '',
     isDisplayed: false,
@@ -41,8 +39,8 @@ export default function HomeLightning(props) {
       props.breezEvent.type === 'invoicePaid' ||
       props.breezEvent.type === 'paymentSucceed'
     ) {
-      if (props.breezEvent.type === 'invoicePaid') setRecivePayment(false);
-      else setSendPayment(false);
+      if (navigate.canGoBack()) navigate.goBack();
+
       console.log(props.breezEvent.type, 'CONFIRM PAGE');
       setConfirmPage({
         for: props.breezEvent.type,
@@ -73,27 +71,10 @@ export default function HomeLightning(props) {
         showAmount={showAmount}
         setExpandedTransactoin={setExpandedTransactoin}
       />
-      <SendRecieveBTNs
-        setSendPayment={setSendPayment}
-        setRecivePayment={setRecivePayment}
-      />
+      <SendRecieveBTNs isDarkMode={props.isDarkMode} />
 
       {/* POPUPS */}
-      {recivePayment && (
-        <ReceivePaymentHome
-          isDisplayed={recivePayment}
-          setRecivePayment={setRecivePayment}
-          isDarkMode={props.isDarkMode}
-        />
-      )}
-      {sendPayment && (
-        <SendPaymentHome
-          isDisplayed={sendPayment}
-          setSendPayment={setSendPayment}
-          confirmPageDisplayed={confirmPage.isDisplayed}
-          isDarkMode={props.isDarkMode}
-        />
-      )}
+
       {confirmPage.isDisplayed && (
         <ConfirmPage
           information={props.breezEvent}

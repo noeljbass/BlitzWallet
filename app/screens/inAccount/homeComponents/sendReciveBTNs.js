@@ -1,21 +1,23 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../constants';
+import {useNavigation} from '@react-navigation/native';
 
 export function SendRecieveBTNs(props) {
+  const navigate = useNavigation();
   console.log('SEND RECIVE BUTTONS');
   return (
     <View style={styles.globalContainer}>
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            props.setSendPayment(true);
+            navigate.navigate('SendBTC', {isDarkMode: props.isDarkMode});
           }}
           style={combinedStyles.firstButton}>
           <Text style={styles.text}>Send</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            props.setRecivePayment(true);
+            navigate.navigate('ReceiveBTC', {isDarkMode: props.isDarkMode});
           }}
           style={styles.button}>
           <Text style={styles.text}>Receive</Text>

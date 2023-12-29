@@ -65,7 +65,6 @@ export default function BitcoinPage(props) {
       const swapInfo = await receiveOnchain({});
       const swapInProgress = await inProgressSwap();
 
-      console.log(swapInProgress, 'TEST');
       props.setGeneratedAddress(swapInfo.bitcoinAddress);
 
       setGeneratingQrCode(false);

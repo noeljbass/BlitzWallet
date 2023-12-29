@@ -19,7 +19,7 @@ export default function LightningPage(props) {
   const [fiatRate, setFiatRate] = useState(0);
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
   const [errorMessageText, setErrorMessageText] = useState('');
-  console.log('error message text', errorMessageText);
+
   // const props.isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
@@ -120,7 +120,7 @@ export default function LightningPage(props) {
       const channelFee = await openChannelFee({
         amountMsat: props.sendingAmount,
       });
-      console.log(channelFee, channelFee?.usedFeeParams);
+
       setErrorMessageText('');
       setGeneratingQrCode(true);
 
@@ -134,7 +134,7 @@ export default function LightningPage(props) {
         amountMsat: props.sendingAmount,
         description: props.paymentDescription,
       });
-      console.log(invoice);
+
       if (invoice) {
         setGeneratingQrCode(false);
         props.setGeneratedAddress(invoice.lnInvoice.bolt11);

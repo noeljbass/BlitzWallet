@@ -3,30 +3,19 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity,
-  Share,
-  Modal,
   TouchableWithoutFeedback,
-  Animated,
-  useColorScheme,
 } from 'react-native';
-import {
-  BTN,
-  CENTER,
-  COLORS,
-  FONT,
-  ICONS,
-  SIZES,
-  SHADOWS,
-} from '../../../constants';
-import {useEffect, useRef, useState} from 'react';
+import {COLORS, FONT, ICONS, SIZES, SHADOWS} from '../../constants';
+import {useEffect, useState} from 'react';
 import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {useNavigation} from '@react-navigation/native';
 
 export function ConnectionToNode(props) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const [nodeInformation, setNodeInformation] = useState({});
   const [isConnected, setIsConnected] = useState(false);
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const navigate = useNavigation();
+  const isDarkMode = props.route.params?.isDarkMode;
+
   async function getNodeData() {
     try {
       const nodeInformatino = await nodeInfo();
@@ -38,42 +27,17 @@ export function ConnectionToNode(props) {
   }
 
   useEffect(() => {
-    if (!props.isDisplayed) {
-      fadeIn();
-      getNodeData();
-    } else fadeOut();
-  }, [props.isDisplayed]);
-
-  function fadeIn() {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-  function fadeOut() {
-    Animated.timing(fadeAnim, {
-      toValue: -1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
+    getNodeData();
+  }, []);
 
   return (
-    <TouchableWithoutFeedback
-      style={styles.globalContainer}
-      onPress={() => props.hidePopup(true)}>
-      <Animated.View
-        style={[
-          styles.globalContainer,
-          {opacity: fadeAnim},
-          {zIndex: !props.isDisplayed ? 1 : -1},
-        ]}>
+    <TouchableWithoutFeedback onPress={() => navigate.goBack()}>
+      <View style={styles.globalContainer}>
         <View
           style={[
             styles.innerContainer,
             {
-              backgroundColor: props.isDarkMode
+              backgroundColor: isDarkMode
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground,
             },
@@ -87,7 +51,7 @@ export function ConnectionToNode(props) {
               style={[
                 styles.topContainerText,
                 {
-                  color: props.isDarkMode
+                  color: isDarkMode
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -99,9 +63,7 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Block height:{' '}
@@ -113,9 +75,7 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Max Payable:{' '}
@@ -127,9 +87,7 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Max Recivable:{' '}
@@ -141,9 +99,7 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             On-chain Balance:{' '}
@@ -152,20 +108,14 @@ export function ConnectionToNode(props) {
               : 'N/A'}
           </Text>
         </View>
-      </Animated.View>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   globalContainer: {
-    // backgroundColor: COLORS.gray,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
 

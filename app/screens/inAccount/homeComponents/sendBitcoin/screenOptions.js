@@ -18,11 +18,13 @@ import * as ImagePicker from 'expo-image-picker';
 import {useEffect, useState} from 'react';
 
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import {useNavigation} from '@react-navigation/native';
 
 // import {ManualAddressInput} from './manualAddressInput';
 
 export default function SendPaymentScreenOptions(props) {
   console.log('SCREEN OPTIONS PAGE');
+  const navigate = useNavigation();
   const type = CameraType.back;
   const [permission, setPermission] = useState(
     BarCodeScanner.getPermissionsAsync(),
@@ -93,8 +95,6 @@ export default function SendPaymentScreenOptions(props) {
     props.setScanned(true);
     const bitcoinAdress = data;
     props.setBTCadress(data);
-
-    console.log(bitcoinAdress);
   }
 
   return (
@@ -113,7 +113,7 @@ export default function SendPaymentScreenOptions(props) {
             activeOpacity={1}
             style={{width: 20, height: '100%'}}
             onPress={() => {
-              props.setSendPayment(false);
+              navigate.goBack();
             }}>
             <Image
               source={ICONS.leftCheveronIcon}

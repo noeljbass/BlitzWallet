@@ -1,4 +1,17 @@
+import NavBar from './NavBar';
+import BitcoinPage from './bitcoinPage';
+import ButtonsContainer from './buttonsContainer';
 import EditAmountPopup from './editAmount';
-import {ReceivePaymentHome} from './home';
+import LightningPage from './lightningPage';
+import LiquidPage from './liquidPage';
+import TopBar from './topBar';
 
-export {ReceivePaymentHome, EditAmountPopup};
+export {
+  EditAmountPopup,
+  TopBar,
+  ButtonsContainer,
+  BitcoinPage,
+  LightningPage,
+  LiquidPage,
+  NavBar,
+};

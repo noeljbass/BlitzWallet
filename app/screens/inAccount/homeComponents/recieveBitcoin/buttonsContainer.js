@@ -4,11 +4,6 @@ import * as Clipboard from 'expo-clipboard';
 import * as Device from 'expo-device';
 
 export default function ButtonsContainer(props) {
-  console.log(
-    (props.isSwapCreated && props.selectedRecieveOption === 'liquid') ||
-      props.selectedRecieveOption === 'lightning',
-    'TESTTES',
-  );
   return (
     <>
       {((props.isSwapCreated && props.selectedRecieveOption === 'liquid') ||

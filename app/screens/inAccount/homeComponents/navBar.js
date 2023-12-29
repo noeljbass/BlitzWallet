@@ -11,6 +11,7 @@ import {useState} from 'react';
 import {OptionsDropdown} from './optionsDropdown';
 import SystemSettings from './settings';
 import {FaucetHome} from './faucet';
+import {useNavigation} from '@react-navigation/native';
 
 export default function NavBar(props) {
   console.log('NAV BAR PAGE');
@@ -20,6 +21,7 @@ export default function NavBar(props) {
   // const props. = useColorScheme() === 'dark';
   const [systemSettingsPopup, setSystemSettingsPopup] = useState(false);
   const [fucet, setFaucet] = useState(false);
+  const navigate = useNavigation();
 
   return (
     <View style={styles.topBar}>
@@ -36,7 +38,11 @@ export default function NavBar(props) {
       </Text>
       <View style={styles.iconContainer}>
         <TouchableOpacity
-          onPress={() => props.setNodeConnectionPopup(false)}
+          onPress={() =>
+            navigate.navigate('ConnectionToNode', {
+              isDarkMode: props.isDarkMode,
+            })
+          }
           style={{
             ...styles.icons,
             backgroundColor: props.breezInformation.didConnectToNode

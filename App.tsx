@@ -23,6 +23,9 @@ import {retrieveData, userAuth} from './app/functions';
 import AdminLogin from './app/screens/inAccount/login';
 import SplashScreen from 'react-native-splash-screen';
 import RestoreWallet from './app/screens/createAccount/restoreWallet/home';
+import SendPaymentHome from './app/screens/inAccount/sendBTC';
+import {ReceivePaymentHome} from './app/screens/inAccount/receiveBTC';
+import {ConnectionToNode} from './app/screens/inAccount/conectionToNode';
 
 const Stack = createNativeStackNavigator();
 
@@ -83,16 +86,27 @@ function App(): JSX.Element {
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
+        <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
+        {/* admin screens */}
+        <Stack.Screen name="HomeAdmin" component={AdminHome} />
+        <Stack.Screen
+          options={{animation: 'slide_from_bottom'}}
+          name="SendBTC"
+          component={SendPaymentHome}
+        />
+        <Stack.Screen
+          options={{animation: 'slide_from_bottom'}}
+          name="ReceiveBTC"
+          component={ReceivePaymentHome}
+        />
         <Stack.Screen
           options={{
-            animation: 'slide_from_bottom',
-            presentation: 'transparentModal',
+            animation: 'fade',
+            presentation: 'containedTransparentModal',
           }}
-          name="RestoreWallet"
-          component={RestoreWallet}
+          name="ConnectionToNode"
+          component={ConnectionToNode}
         />
-
-        <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -13,7 +13,6 @@ import {
   serviceHealthCheck,
 } from '@breeztech/react-native-breez-sdk';
 import HomeLightning from './homeComponents/homeLightning';
-import {ConnectionToNode} from './homeComponents/conectionToNode';
 import {getTransactions} from '../../functions/SDK';
 
 import NavBar from './homeComponents/navBar';
@@ -25,8 +24,6 @@ export default function AdminHome({navigation: {navigate}}) {
     transactions: [],
     userBalance: 0,
   });
-
-  const [nodeConnectionPopup, setNodeConnectionPopup] = useState(true);
 
   const [breezEvent, setBreezEvent] = useState({});
   const hookDarkMode = useColorScheme() === 'dark';
@@ -46,18 +43,6 @@ export default function AdminHome({navigation: {navigate}}) {
   // console.log(breezInformation, 'HSDVD');
 
   useEffect(() => {
-    // const logHandler = logEntry => {
-    //   if (logEntry.level != 'TRACE') {
-    //     console.log(`[${logEntry.level}]: ${logEntry.line}`);
-    //   }
-    // };
-
-    // (async () => {
-    // const savedBreezInfo = await initBalanceAndTransactions(
-    //   setBreezInformation,
-    // );
-
-    // return;
     initWallet(
       isInitialRender,
       setBreezInformation,
@@ -65,78 +50,6 @@ export default function AdminHome({navigation: {navigate}}) {
       setIsDarkMode,
       onBreezEvent,
     );
-
-    // if (isInitialRender.current) {
-    //   console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
-    //   isInitialRender.current = false;
-
-    //   try {
-    //     const response = await connectToNode(onBreezEvent);
-
-    //     // console.log(response, 'RESPONSE');
-
-    //     if (response) {
-    //       // await setLogStream(logHandler);
-    //       // const healthCheck = await serviceHealthCheck();
-    //       // console.log(healthCheck);
-
-    //       const nodeAmount = await nodeInfo();
-    //       const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-    //       const transactions = await getTransactions();
-    //       const info = await lspInfo();
-    //       const heath = await serviceHealthCheck();
-    //       console.log(heath);
-    //       console.log(info, 'LSPPSSS');
-
-    //       setBreezInformation(prev => {
-    //         return {
-    //           ...prev,
-    //           didConnectToNode: response,
-    //           transactions: transactions,
-    //           userBalance: msatToSat,
-    //         };
-    //       });
-
-    //       if (savedBreezInfo[0].toString() === transactions.toString())
-    //         return;
-
-    //       await setLocalStorageItem(
-    //         'breezInfo',
-    //         JSON.stringify([transactions, msatToSat]),
-    //       );
-    //     }
-    //   } catch (err) {
-    //     console.log(err, 'homepage connection to node err');
-    //   }
-    // } else {
-    //   if (Object.keys(breezEvent).length === 0) return;
-    //   if (
-    //     breezEvent.type === 'invoicePaid' ||
-    //     breezEvent.type === 'paymentSucceed'
-    //   ) {
-    //     const transactions = await getTransactions();
-    //     const nodeAmount = await nodeInfo();
-
-    //     const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-    //     setBreezInformation(prev => {
-    //       return {
-    //         ...prev,
-    //         userBalance: msatToSat,
-    //         transactions: transactions,
-    //       };
-    //     });
-    //     if (savedBreezInfo[0].toString() === transactions.toString()) return;
-
-    //     await setLocalStorageItem(
-    //       'breezInfo',
-    //       JSON.stringify([transactions, msatToSat]),
-    //     );
-
-    //     console.log('HOME RENDER PAID INVOINCE');
-    //   }
-    //   // console.log('HOME RENDER BREEZ EVENT');
-    // }
-    // })();
   }, [breezEvent]);
 
   return (
@@ -152,8 +65,6 @@ export default function AdminHome({navigation: {navigate}}) {
       <SafeAreaView style={styles.container}>
         <NavBar
           breezInformation={breezInformation}
-          nodeConnectionPopup={nodeConnectionPopup}
-          setNodeConnectionPopup={setNodeConnectionPopup}
           breezEvent={breezEvent}
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
@@ -165,16 +76,7 @@ export default function AdminHome({navigation: {navigate}}) {
           breezInformation={breezInformation}
           isDarkMode={isDarkMode}
         />
-
-        {/* <ExpandedTransaction /> */}
       </SafeAreaView>
-      {!nodeConnectionPopup && (
-        <ConnectionToNode
-          isDisplayed={nodeConnectionPopup}
-          hidePopup={setNodeConnectionPopup}
-          isDarkMode={isDarkMode}
-        />
-      )}
     </View>
   );
 }
@@ -219,8 +121,6 @@ async function initWallet(
     try {
       const response = await connectToNode(onBreezEvent);
 
-      // console.log(response, 'RESPONSE');
-
       if (response) {
         // await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
@@ -259,10 +159,7 @@ async function initWallet(
     }
   } else {
     if (Object.keys(breezEvent).length === 0) return;
-    // if (
-    //   breezEvent.type === 'invoicePaid' ||
-    //   breezEvent.type === 'paymentSucceed'
-    // ) {
+
     const transactions = await getTransactions();
     const nodeAmount = await nodeInfo();
 
@@ -274,7 +171,6 @@ async function initWallet(
         transactions: transactions,
       };
     });
-    // if (savedBreezInfo[0]?.toString() === transactions?.toString()) return;
 
     await setLocalStorageItem(
       'breezInfo',
