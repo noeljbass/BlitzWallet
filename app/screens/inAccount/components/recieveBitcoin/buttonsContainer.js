@@ -1,6 +1,7 @@
 import {StyleSheet, View, TouchableOpacity, Text, Share} from 'react-native';
 import {COLORS, CENTER, FONT, SHADOWS, SIZES} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
+import * as Device from 'expo-device';
 
 export default function ButtonsContainer(props) {
   console.log(
@@ -21,6 +22,7 @@ export default function ButtonsContainer(props) {
                 props.selectedRecieveOption != 'liquid'
                   ? '90%'
                   : '60%',
+              marginBottom: Device.osName === 'Android' ? 10 : 0,
             },
           ]}>
           <TouchableOpacity

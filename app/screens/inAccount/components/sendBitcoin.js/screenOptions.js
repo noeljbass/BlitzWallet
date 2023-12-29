@@ -34,7 +34,6 @@ export default function SendPaymentScreenOptions(props) {
 
   const [manualBitcoinInput, setManualBitcoinInput] = useState('');
   const [showManualInpt, setShowManualInput] = useState(false);
-  // const props.isDarkMode = useColorScheme() === 'dark';
 
   function toggleBottom() {
     setBottomExpand(prev => !prev);
@@ -140,7 +139,7 @@ export default function SendPaymentScreenOptions(props) {
           <BarCodeScanner
             type={type}
             onBarCodeScanned={handleBarCodeScanned}
-            style={styles.camera}
+            style={[styles.camera]}
           />
         )}
 

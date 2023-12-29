@@ -168,10 +168,12 @@ export default function ReceievePage(props) {
                     size={250}
                     value={receiveAddress ? receiveAddress : "IT'S COMING"}
                     color={
-                      isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+                      props.isDarkMode
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText
                     }
                     backgroundColor={
-                      isDarkMode
+                      props.isDarkMode
                         ? COLORS.darkModeBackground
                         : COLORS.lightModeBackground
                     }

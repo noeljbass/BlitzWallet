@@ -9,9 +9,12 @@ import {
   Image,
   TextInput,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
+import * as Device from 'expo-device';
 
 export default function SettingsPage(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
@@ -61,6 +64,7 @@ export default function SettingsPage(props) {
       for: null,
       message: '',
     });
+    Keyboard.dismiss();
   }
 
   useEffect(() => {
@@ -80,108 +84,116 @@ export default function SettingsPage(props) {
         },
       ]}>
       <SafeAreaView style={{flex: 1}}>
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-          <View style={styles.topBar}>
-            <TouchableOpacity
-              onPress={() => {
-                props.setUserPath(prev => {
-                  return {...prev, settings: false};
-                });
-                console.log('CLEAR');
-                props.setAmountPerPerson('');
-                props.setNumberOfPeople('');
-                setErrorMessage({
-                  for: null,
-                  message: '',
-                });
-              }}>
-              <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
-            </TouchableOpacity>
-            <Text
-              style={[
-                headerText,
-                {
-                  transform: [{translateX: -12.5}],
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              {props.userPath.type.toLowerCase() === 'receive'
-                ? 'Receive'
-                : 'Send'}{' '}
-              Faucet
-            </Text>
-          </View>
-          <View style={styles.contentContainer}>
-            <View
-              style={[
-                styles.inputsContainer,
-                {marginBottom: errorMessage.message ? 50 : 'auto'},
-              ]}>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  onChangeText={props.setNumberOfPeople}
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor:
-                        errorMessage.for === 'numberOfPeople'
-                          ? COLORS.cancelRed
-                          : COLORS.primary,
-                    },
-                  ]}
-                  value={props.numberOfPeople}
-                  keyboardType="number-pad"
-                />
-                <Text
-                  style={[
-                    styles.descriptionText,
-                    {
-                      color: props.isDarkMode
-                        ? COLORS.darkModeText
-                        : COLORS.lightModeText,
-                    },
-                  ]}>
-                  Number of People
-                </Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  onChangeText={props.setAmountPerPerson}
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor:
-                        errorMessage.for === 'amountPerPerson'
-                          ? COLORS.cancelRed
-                          : COLORS.primary,
-                    },
-                  ]}
-                  value={props.amountPerPerson}
-                  keyboardType="number-pad"
-                />
-                <Text
-                  style={[
-                    styles.descriptionText,
-                    {
-                      color: props.isDarkMode
-                        ? COLORS.darkModeText
-                        : COLORS.lightModeText,
-                    },
-                  ]}>
-                  Amount Per Person
-                </Text>
-              </View>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}
+          style={{flex: 1}}>
+          <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+            <View style={styles.topBar}>
+              <TouchableOpacity
+                onPress={() => {
+                  props.setUserPath(prev => {
+                    return {...prev, settings: false};
+                  });
+                  console.log('CLEAR');
+                  props.setAmountPerPerson('');
+                  props.setNumberOfPeople('');
+                  setErrorMessage({
+                    for: null,
+                    message: '',
+                  });
+                }}>
+                <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
+              </TouchableOpacity>
+              <Text
+                style={[
+                  headerText,
+                  {
+                    transform: [{translateX: -12.5}],
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                {props.userPath.type.toLowerCase() === 'receive'
+                  ? 'Receive'
+                  : 'Send'}{' '}
+                Faucet
+              </Text>
             </View>
-            {errorMessage.message && (
-              <Text style={styles.errorMessage}>{errorMessage.message}</Text>
-            )}
-            <TouchableOpacity onPress={continueFilter} style={styles.button}>
-              <Text style={{color: COLORS.white}}>Create Faucet</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
+            <View style={styles.contentContainer}>
+              <View
+                style={[
+                  styles.inputsContainer,
+                  {marginBottom: errorMessage.message ? 50 : 'auto'},
+                ]}>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    onChangeText={props.setNumberOfPeople}
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor:
+                          errorMessage.for === 'numberOfPeople'
+                            ? COLORS.cancelRed
+                            : COLORS.primary,
+                      },
+                    ]}
+                    value={props.numberOfPeople}
+                    keyboardType="number-pad"
+                  />
+                  <Text
+                    style={[
+                      styles.descriptionText,
+                      {
+                        color: props.isDarkMode
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Number of People
+                  </Text>
+                </View>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    onChangeText={props.setAmountPerPerson}
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor:
+                          errorMessage.for === 'amountPerPerson'
+                            ? COLORS.cancelRed
+                            : COLORS.primary,
+                      },
+                    ]}
+                    value={props.amountPerPerson}
+                    keyboardType="number-pad"
+                  />
+                  <Text
+                    style={[
+                      styles.descriptionText,
+                      {
+                        color: props.isDarkMode
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Amount Per Person
+                  </Text>
+                </View>
+              </View>
+              {errorMessage.message && (
+                <Text style={styles.errorMessage}>{errorMessage.message}</Text>
+              )}
+              <TouchableOpacity
+                onPress={continueFilter}
+                style={[styles.button]}>
+                <Text style={{color: COLORS.white}}>Create Faucet</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
     </Animated.View>
   );

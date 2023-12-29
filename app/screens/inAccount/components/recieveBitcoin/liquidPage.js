@@ -24,6 +24,7 @@ import {
 import QRCode from 'react-native-qrcode-svg';
 import {receivePayment} from '@breeztech/react-native-breez-sdk';
 import RNEventSource from 'react-native-event-source';
+import * as Device from 'expo-device';
 
 export default function LiquidPage(props) {
   const [liquidAmount, setLiquidAmount] = useState('2000');
@@ -59,6 +60,7 @@ export default function LiquidPage(props) {
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
+          marginBottom: Device.osName === 'Android' ? 10 : 0,
         }}>
         {processStage.amount && (
           <EnterAmount

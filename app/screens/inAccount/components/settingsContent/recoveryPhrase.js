@@ -71,36 +71,38 @@ export default function RecoveryPage(props) {
               : COLORS.lightModeBackground,
           },
         ]}>
-        <Text
-          style={[
-            styles.confirmPopupTitle,
-            {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
-            },
-          ]}>
-          Are you sure you want to show your seed phrase
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 50,
-            width: '90%',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity
-            style={[styles.confirmBTN, {backgroundColor: COLORS.primary}]}
-            onPress={() => setShowSeed(true)}>
-            <Text style={styles.confirmBTNText}>Yes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              props.setSettingsContent({isDisplayed: false, for: null})
-            }
-            style={[styles.confirmBTN, {backgroundColor: COLORS.cancelRed}]}>
-            <Text style={styles.confirmBTNText}>No</Text>
-          </TouchableOpacity>
+        <View style={styles.confirmPopupInnerContainer}>
+          <Text
+            style={[
+              styles.confirmPopupTitle,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Are you sure you want to show your seed phrase
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 50,
+              width: '90%',
+              justifyContent: 'space-between',
+            }}>
+            <TouchableOpacity
+              style={[styles.confirmBTN, {backgroundColor: COLORS.primary}]}
+              onPress={() => setShowSeed(true)}>
+              <Text style={styles.confirmBTNText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                props.setSettingsContent({isDisplayed: false, for: null})
+              }
+              style={[styles.confirmBTN, {backgroundColor: COLORS.cancelRed}]}>
+              <Text style={styles.confirmBTNText}>No</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Animated.View>
     </View>
@@ -139,6 +141,11 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     backgroundColor: COLORS.background,
+    alignItems: 'center',
+  },
+  confirmPopupInnerContainer: {
+    width: '90%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },

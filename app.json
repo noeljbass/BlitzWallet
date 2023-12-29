@@ -3,5 +3,12 @@
   "slug": "blitz-wallet",
   "scheme": "blitz-wallet",
   "displayName": "Blitz Wallet",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "f7c412c9-c023-4af6-a03f-79729cf0ece3"
+      }
+    }
+  }
 }

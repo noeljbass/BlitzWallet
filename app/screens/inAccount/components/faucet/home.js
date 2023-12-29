@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
-
+import * as Device from 'expo-device';
 import {useState} from 'react';
 import ReceievePage from './receivePage';
 import SendPage from './sendPage';
@@ -39,7 +39,10 @@ export default function FaucetHome(props) {
               : COLORS.lightModeBackground,
           },
         ]}>
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView
+          style={[
+            {flex: 1, marginVertical: Device.osName === 'Android' ? 10 : 0},
+          ]}>
           <View style={styles.topBar}>
             <TouchableOpacity
               activeOpacity={0.5}
@@ -92,41 +95,42 @@ export default function FaucetHome(props) {
               </TouchableOpacity>
             </View>
           </View>
+
+          {/* popups */}
+          <SettingsPage
+            setUserPath={setUserPath}
+            isDisplayed={userPath.settings}
+            setNumberOfPeople={setNumberOfPeople}
+            setAmountPerPerson={setAmountPerPerson}
+            numberOfPeople={numberOfPeople}
+            amountPerPerson={amountPerPerson}
+            userPath={userPath}
+            isDarkMode={props.isDarkMode}
+          />
+          <ReceievePage
+            setUserPath={setUserPath}
+            isDisplayed={userPath.receive}
+            numberOfPeople={numberOfPeople}
+            amountPerPerson={amountPerPerson}
+            breezEvent={props.breezEvent}
+            setNumberOfPeople={setNumberOfPeople}
+            setAmountPerPerson={setAmountPerPerson}
+            setFaucet={props.setFaucet}
+            isDarkMode={props.isDarkMode}
+          />
+          <SendPage
+            setUserPath={setUserPath}
+            isDisplayed={userPath.send}
+            numberOfPeople={numberOfPeople}
+            amountPerPerson={amountPerPerson}
+            breezEvent={props.breezEvent}
+            setNumberOfPeople={setNumberOfPeople}
+            setAmountPerPerson={setAmountPerPerson}
+            setFaucet={props.setFaucet}
+            isDarkMode={props.isDarkMode}
+          />
+          {/* NEED TO CREATE */}
         </SafeAreaView>
-        {/* popups */}
-        <SettingsPage
-          setUserPath={setUserPath}
-          isDisplayed={userPath.settings}
-          setNumberOfPeople={setNumberOfPeople}
-          setAmountPerPerson={setAmountPerPerson}
-          numberOfPeople={numberOfPeople}
-          amountPerPerson={amountPerPerson}
-          userPath={userPath}
-          isDarkMode={props.isDarkMode}
-        />
-        <ReceievePage
-          setUserPath={setUserPath}
-          isDisplayed={userPath.receive}
-          numberOfPeople={numberOfPeople}
-          amountPerPerson={amountPerPerson}
-          breezEvent={props.breezEvent}
-          setNumberOfPeople={setNumberOfPeople}
-          setAmountPerPerson={setAmountPerPerson}
-          setFaucet={props.setFaucet}
-          isDarkMode={props.isDarkMode}
-        />
-        <SendPage
-          setUserPath={setUserPath}
-          isDisplayed={userPath.send}
-          numberOfPeople={numberOfPeople}
-          amountPerPerson={amountPerPerson}
-          breezEvent={props.breezEvent}
-          setNumberOfPeople={setNumberOfPeople}
-          setAmountPerPerson={setAmountPerPerson}
-          setFaucet={props.setFaucet}
-          isDarkMode={props.isDarkMode}
-        />
-        {/* NEED TO CREATE */}
       </View>
     </Modal>
   );
