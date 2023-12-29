@@ -12,10 +12,17 @@ import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
 import {useEffect, useRef, useState} from 'react';
 import {extractFont} from 'react-native-svg/lib/typescript/lib/extract/extractText';
+import {listLsps, lspInfo} from '@breeztech/react-native-breez-sdk';
 
 export default function LSPPage(props) {
   // const props.isDarkMode = useColorScheme() === 'dark';
   //   const [infoPopup, setInfoPopup] = useState(false);
+  const [lsp, setLsp] = useState({});
+  console.log(lsp);
+
+  useEffect(() => {
+    getLSPInformation();
+  }, []);
   return (
     <View style={styles.globalContainer}>
       <View
@@ -73,7 +80,7 @@ export default function LSPPage(props) {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            copyToClipboard('LSP ID');
+            copyToClipboard(lsp.id);
           }}>
           <Text
             style={[
@@ -82,9 +89,10 @@ export default function LSPPage(props) {
                 color: props.isDarkMode
                   ? COLORS.darkModeText
                   : COLORS.lightModeText,
+                textAlign: 'center',
               },
             ]}>
-            asdfasdfasfasdfasdfasdfasdfafadsfasdfasdfasdfasdfs
+            {Object.keys(lsp).length != 0 ? lsp?.name : 'N/A'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -98,6 +106,15 @@ export default function LSPPage(props) {
       window.alert('LSP Id copied successfully');
     } catch (err) {
       window.alert('Error copying LSP Id');
+    }
+  }
+
+  async function getLSPInformation() {
+    try {
+      const lspInformation = await lspInfo();
+      setLsp(lspInformation);
+    } catch (err) {
+      console.log(err);
     }
   }
 }

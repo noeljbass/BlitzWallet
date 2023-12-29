@@ -10,12 +10,12 @@ import {
   useColorScheme,
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
-import {backArrow} from '../../../../constants/styles';
+import {CENTER, backArrow} from '../../../../constants/styles';
 import {CameraType} from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
 import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
-
+import * as WebBrowser from 'expo-web-browser';
 export default function InfoPopup(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
   // const isDarkMode = useColorScheme() === 'dark';
@@ -94,16 +94,63 @@ function WhatIsAnLSP(props) {
           source={ICONS.leftCheveronIcon}
         />
       </TouchableOpacity>
-      <Text
-        style={[
-          {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
-          },
-        ]}>
-        An lsp is an ____
-      </Text>
+      <View style={{width: '100%', alignItems: 'center'}}>
+        <Text
+          style={[
+            lspPopupStyle.text,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          A Lightning Service Provider (LSP) is a business that enables a more
+          seamless experience on the Lightning Network. Such services include
+          providing liquidity management and payment routing.
+        </Text>
+        <Text
+          style={[
+            lspPopupStyle.text,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          Since the Lightning Network worked based on a series of channels the
+          size of a Lightning channel is naturally constrained. Using an LSP
+          decreases that constraint making larger payments more feasible.
+        </Text>
+        <Text
+          style={[
+            lspPopupStyle.text,
+            {
+              color: props.isDarkMode
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          It’s important to note here that an LSP DOES NOT HAVE ACCESS TO YOUR
+          FUNDS. They are mealy a helper to make the Lightning Networks
+          liquidity constraint have less of an impact.
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            try {
+              WebBrowser.openBrowserAsync(
+                'https://thebitcoinmanual.com/articles/explained-lsp/#:~:text=LSPs%20are%20counterparties%20on%20users%E2%80%99%20payment%20channels%20that,network%20management%20such%20as%3A%20Opening%20and%20closing%20channels',
+              );
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+          style={[BTN, {backgroundColor: COLORS.primary, marginTop: 10}]}>
+          <Text
+            style={{fontSize: SIZES.large, color: COLORS.lightModeBackground}}>
+            Learn More
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -457,7 +504,7 @@ const popupStyles = StyleSheet.create({
   },
 
   popupContentContainer: {
-    width: '80%',
+    width: '95%',
     height: 'auto',
     backgroundColor: COLORS.white,
 
@@ -512,5 +559,14 @@ const confirmPopup = StyleSheet.create({
     fontFamily: FONT.Other_Regular,
     fontSize: SIZES.large,
     color: COLORS.background,
+  },
+});
+
+const lspPopupStyle = StyleSheet.create({
+  text: {
+    width: '95%',
+    fontSize: SIZES.large,
+    marginBottom: 10,
+    fontFamily: FONT.Descriptoin_Regular,
   },
 });

@@ -96,7 +96,6 @@ export default function SettingsPage(props) {
                   props.setUserPath(prev => {
                     return {...prev, settings: false};
                   });
-                  console.log('CLEAR');
                   props.setAmountPerPerson('');
                   props.setNumberOfPeople('');
                   setErrorMessage({

@@ -7,18 +7,14 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  TextInput,
-  KeyboardAvoidingView,
   ActivityIndicator,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
 import QRCode from 'react-native-qrcode-svg';
-import {receivePayment} from '@breeztech/react-native-breez-sdk';
-// import crypto from 'react-native-quick-crypto';
-import {randomUUID} from 'expo-crypto';
-import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
+
 import {removeLocalStorageItem} from '../../../../functions/localStorage';
+import {parseInput, withdrawLnurl} from '@breeztech/react-native-breez-sdk';
 
 export default function SendPage(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
@@ -45,6 +41,7 @@ export default function SendPage(props) {
   useEffect(() => {
     if (props.isDisplayed) {
       fadeIn();
+      generateSendAddress();
     } else fadeOut();
   }, [props.isDisplayed]);
 
@@ -58,7 +55,7 @@ export default function SendPage(props) {
     props.setNumberOfPeople('');
     props.setAmountPerPerson('');
     props.setFaucet(false);
-    removeLocalStorageItem('faucet');
+    // removeLocalStorageItem('faucet');
   }
 
   return (
@@ -161,6 +158,8 @@ export default function SendPage(props) {
       </SafeAreaView>
     </Animated.View>
   );
+
+  async function generateSendAddress() {}
 }
 
 const styles = StyleSheet.create({

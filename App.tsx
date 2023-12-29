@@ -5,33 +5,15 @@
  * @format
  */
 
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
 // import {registerRootComponent} from 'expo';
 
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  AppState,
-  Platform,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {AppState, Platform} from 'react-native';
 
 import {CreateAccountHome, DislaimerPage} from './app/screens/createAccount';
-import {COLORS} from './app/constants';
+
 import SecuityOption from './app/screens/createAccount/keySetup/start';
 import GenerateKey from './app/screens/createAccount/keySetup/generateKey';
 import VerifyKey from './app/screens/createAccount/keySetup/verifyKey';
@@ -69,6 +51,7 @@ function App(): JSX.Element {
       if (appState.current.match(/inactive/) && nextAppState === 'background') {
         console.log('Background!');
         // NAVIGATE TO HOME PAGE
+
         // SplashScreen.show();
       }
 
@@ -93,39 +76,27 @@ function App(): JSX.Element {
           name="Home"
           component={isLoggedIn ? AdminLogin : CreateAccountHome}
         />
-        <Stack.Screen name="CreateAccountHome" component={CreateAccountHome} />
-        <Stack.Screen name="AdminLogin" component={AdminLogin} />
+        {/* <Stack.Screen name="CreateAccountHome" component={CreateAccountHome} /> */}
+        {/* <Stack.Screen name="AdminLogin" component={AdminLogin} /> */}
         <Stack.Screen name="DisclaimerPage" component={DislaimerPage} />
         <Stack.Screen name="StartKeyGeneration" component={SecuityOption} />
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
-        <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
+        <Stack.Screen
+          options={{
+            animation: 'slide_from_bottom',
+            presentation: 'transparentModal',
+          }}
+          name="RestoreWallet"
+          component={RestoreWallet}
+        />
 
         <Stack.Screen name="HomeAdmin" component={AdminHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
 // registerRootComponent(App);

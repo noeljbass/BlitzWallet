@@ -41,10 +41,12 @@ export default function AboutPage(props) {
                 color: props.isDarkMode
                   ? COLORS.darkModeText
                   : COLORS.lightModeText,
+                marginBottom: 0,
+                textAlign: 'center',
               },
             ]}>
             Blitz is a free and open source app under the Apache License,
-            Version 2.0 license.
+            Version 2.0.
           </Text>
         </View>
         <View>
@@ -99,15 +101,11 @@ export default function AboutPage(props) {
               style={[
                 styles.contentText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: COLORS.cancelRed,
+                  textAlign: 'center',
                 },
               ]}>
-              Beware of phishing emials.{' '}
-              <Text style={{color: COLORS.cancelRed}}>
-                DO NOT GIVE OUT YOUR 12 WORD SEED PHRASE.
-              </Text>
+              DO NOT GIVE OUT YOUR 12 WORD SEED PHRASE.
             </Text>
           </View>
         </View>

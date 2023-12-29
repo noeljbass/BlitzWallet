@@ -12,11 +12,11 @@ import {
   nodeInfo,
   serviceHealthCheck,
 } from '@breeztech/react-native-breez-sdk';
-import HomeLightning from './components/homeLightning';
-import {ConnectionToNode} from './components/conectionToNode';
+import HomeLightning from './homeComponents/homeLightning';
+import {ConnectionToNode} from './homeComponents/conectionToNode';
 import {getTransactions} from '../../functions/SDK';
 
-import NavBar from './components/navBar';
+import NavBar from './homeComponents/navBar';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
