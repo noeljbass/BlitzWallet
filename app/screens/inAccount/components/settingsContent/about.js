@@ -43,7 +43,8 @@ export default function AboutPage(props) {
                   : COLORS.lightModeText,
               },
             ]}>
-            Blitz is a free and open source app under the _________ license.
+            Blitz is a free and open source app under the Apache License,
+            Version 2.0 license.
           </Text>
         </View>
         <View>
