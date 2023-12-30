@@ -9,6 +9,7 @@ import {
 
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
+import {useEffect, useState} from 'react';
 
 const MILISECONDSDAYCONSTANT = 86400000;
 
@@ -19,76 +20,80 @@ export function UserTransactions(props) {
     tempGroupedTransactoins: [],
   };
   const navigate = useNavigation();
+  const [txs, setTxs] = useState([]);
 
-  const transactionElements = props.transactions.map((transaction, id) => {
-    const paymentDate = new Date(
-      transaction.paymentTime * 1000 + MILISECONDSDAYCONSTANT,
+  useEffect(() => {
+    setTxs([
+      <View style={[styles.noTransactionsContainer]} key={'noTx'}>
+        <Text style={styles.noTransactionsText}>
+          Send or receive a transaction for it to show up here
+        </Text>
+      </View>,
+    ]);
+
+    setTransactionElements();
+  }, [props.transactions]);
+
+  return <View style={{flex: 1}}>{txs}</View>;
+
+  function setTransactionElements() {
+    const transactionElements = props.transactions.map((transaction, id) => {
+      const paymentDate = new Date(
+        transaction.paymentTime * 1000 + MILISECONDSDAYCONSTANT,
+      );
+
+      if (id === 0)
+        transactionObject.currentDateString = paymentDate.toDateString();
+
+      if (transactionObject.currentDateString === paymentDate.toDateString()) {
+        transactionObject.groupedTransactions.push(
+          <UserTransaction
+            isDarkMode={props.isDarkMode}
+            showAmount={props.showAmount}
+            key={id}
+            {...transaction}
+            navigate={navigate}
+            transactions={props.transactions}
+          />,
+        );
+      } else {
+        transactionObject.currentDateString = paymentDate.toDateString();
+        transactionObject.tempGroupedTransactoins =
+          transactionObject.groupedTransactions;
+        transactionObject.groupedTransactions = [];
+
+        if (transactionObject.tempGroupedTransactoins.length === 0) return;
+
+        return (
+          <View key={paymentDate.toDateString()}>
+            <Text
+              style={[
+                styles.transactionTimeBanner,
+                {
+                  backgroundColor: props.isDarkMode
+                    ? COLORS.darkModeBackgroundOffset
+                    : COLORS.lightModeBackgroundOffset,
+                  color: props.isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              {paymentDate.toDateString()}
+            </Text>
+            {transactionObject.tempGroupedTransactoins}
+          </View>
+        );
+      }
+    });
+
+    const scrollTxs = (
+      <ScrollView key={'hasTxs'} style={{width: '90%', ...CENTER}}>
+        {transactionElements}
+      </ScrollView>
     );
 
-    if (id === 0)
-      transactionObject.currentDateString = paymentDate.toDateString();
-
-    if (transactionObject.currentDateString === paymentDate.toDateString()) {
-      transactionObject.groupedTransactions.push(
-        <UserTransaction
-          isDarkMode={props.isDarkMode}
-          showAmount={props.showAmount}
-          key={id}
-          {...transaction}
-          navigate={navigate}
-          transactions={props.transactions}
-        />,
-      );
-    } else {
-      transactionObject.currentDateString = paymentDate.toDateString();
-      transactionObject.tempGroupedTransactoins =
-        transactionObject.groupedTransactions;
-      transactionObject.groupedTransactions = [];
-
-      if (transactionObject.tempGroupedTransactoins.length === 0) return;
-
-      return (
-        <View key={paymentDate.toDateString()}>
-          <Text
-            style={[
-              styles.transactionTimeBanner,
-              {
-                backgroundColor: props.isDarkMode
-                  ? COLORS.darkModeBackgroundOffset
-                  : COLORS.lightModeBackgroundOffset,
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
-            ]}>
-            {paymentDate.toDateString()}
-          </Text>
-          {transactionObject.tempGroupedTransactoins}
-        </View>
-      );
-    }
-  });
-
-  return (
-    <ScrollView style={styles.scrollContainer}>
-      {transactionElements?.length === 0 && (
-        <View style={styles.noTransactionsContainer}>
-          <Text
-            style={[
-              styles.noTransactionsText,
-              {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
-            ]}>
-            Send or receive a transaction to see your activty here.
-          </Text>
-        </View>
-      )}
-      {transactionElements?.length != 0 && transactionElements}
-    </ScrollView>
-  );
+    setTxs([scrollTxs]);
+  }
 }
 
 function UserTransaction(props) {
@@ -218,14 +223,18 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
+    height: 'auto',
     width: '90%',
     marginTop: 20,
     ...CENTER,
   },
   noTransactionsContainer: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   noTransactionsText: {
+    width: '90%',
     fontSize: SIZES.medium,
     fontWeight: 'bold',
     textAlign: 'center',

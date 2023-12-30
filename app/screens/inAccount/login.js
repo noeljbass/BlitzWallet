@@ -22,6 +22,7 @@ export default function AdminLogin({navigation}) {
   const hookDarkMode = useColorScheme() === 'dark';
   const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
   const [didUsePin, setDidUsePin] = useState(false);
+  console.log(didUsePin);
 
   useEffect(() => {
     (async () => {

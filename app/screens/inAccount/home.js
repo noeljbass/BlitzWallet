@@ -12,10 +12,10 @@ import {
   nodeInfo,
   serviceHealthCheck,
 } from '@breeztech/react-native-breez-sdk';
-import HomeLightning from '../../components/admin/homeComponents/homeLightning';
-import {getTransactions} from '../../functions/SDK';
-
 import NavBar from '../../components/admin/homeComponents/navBar';
+import HomeLightning from '../../components/admin/homeComponents/homeLightning';
+
+import {getTransactions} from '../../functions/SDK';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
@@ -30,17 +30,13 @@ export default function AdminHome({navigation: {navigate}}) {
   const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
 
   // SDK events listener
-  console.log(breezEvent, 'BreezEvent on home screen');
 
   const onBreezEvent = e => {
     console.log(e.type, 'IN FUNCTION EVENT');
     if (e?.type != 'invoicePaid' && e?.type != 'paymentSucceed') return;
 
     setBreezEvent(e);
-
-    // console.log(`Received event ${e.type} did that actually work`);
   };
-  // console.log(breezInformation, 'HSDVD');
 
   useEffect(() => {
     initWallet(
@@ -56,6 +52,7 @@ export default function AdminHome({navigation: {navigate}}) {
     <View
       style={[
         styles.container,
+
         {
           backgroundColor: isDarkMode
             ? COLORS.darkModeBackground
@@ -84,7 +81,6 @@ export default function AdminHome({navigation: {navigate}}) {
 async function initBalanceAndTransactions(setBreezInformation) {
   try {
     const savedBreezInfo = await getLocalStorageItem('breezInfo');
-    console.log(JSON.parse(savedBreezInfo)[0], 'TEST');
 
     if (savedBreezInfo)
       setBreezInformation(prev => {

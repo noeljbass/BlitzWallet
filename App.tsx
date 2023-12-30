@@ -5,10 +5,17 @@
  * @format
  */
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
 // import {registerRootComponent} from 'expo';
+type RootStackParamList = {
+  Home: {someParam?: string};
+  Details: {someParam?: string};
+};
 
 import {AppState, Platform} from 'react-native';
 
@@ -36,8 +43,13 @@ import {
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
+  return <ResetStack />;
+}
+
+function ResetStack(): JSX.Element {
+  const navigationRef =
+    useRef<NativeStackNavigationProp<RootStackParamList> | null>(null);
   const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -57,15 +69,18 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
-      if (appState.current.match(/inactive/) && nextAppState === 'background') {
+      if (appState.current.match(/background/) && nextAppState === 'active') {
         console.log('Background!');
         // NAVIGATE TO HOME PAGE
+        navigationRef?.current?.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
 
         // SplashScreen.show();
       }
 
       appState.current = nextAppState;
-      setAppStateVisible(appState.current);
       console.log('AppState', appState.current);
     });
 
@@ -73,10 +88,9 @@ function App(): JSX.Element {
       subscription.remove();
     };
   }, []);
-  console.log('TEST');
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -95,16 +109,14 @@ function App(): JSX.Element {
         <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
         {/* admin screens */}
         <Stack.Screen name="HomeAdmin" component={AdminHome} />
-        <Stack.Screen
-          options={{animation: 'slide_from_bottom'}}
-          name="SendBTC"
-          component={SendPaymentHome}
-        />
-        <Stack.Screen
-          options={{animation: 'slide_from_bottom'}}
-          name="ReceiveBTC"
-          component={ReceivePaymentHome}
-        />
+        <Stack.Group screenOptions={{animation: 'slide_from_bottom'}}>
+          <Stack.Screen name="SendBTC" component={SendPaymentHome} />
+          <Stack.Screen name="ReceiveBTC" component={ReceivePaymentHome} />
+          <Stack.Group screenOptions={{presentation: 'modal'}}>
+            <Stack.Screen name="ExpandedTx" component={ExpandedTx} />
+            <Stack.Screen name="ConfirmTxPage" component={ConfirmTxPage} />
+          </Stack.Group>
+        </Stack.Group>
         <Stack.Screen
           options={{
             animation: 'fade',
@@ -112,16 +124,6 @@ function App(): JSX.Element {
           }}
           name="ConnectionToNode"
           component={ConnectionToNode}
-        />
-        <Stack.Screen
-          options={{animation: 'slide_from_bottom', presentation: 'modal'}}
-          name="ExpandedTx"
-          component={ExpandedTx}
-        />
-        <Stack.Screen
-          options={{animation: 'slide_from_bottom', presentation: 'modal'}}
-          name="ConfirmTxPage"
-          component={ConfirmTxPage}
         />
       </Stack.Navigator>
     </NavigationContainer>

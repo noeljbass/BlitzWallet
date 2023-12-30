@@ -1,22 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {COLORS, FONT, SIZES} from '../../../../constants';
 
 import {useEffect, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 
-// import {getLocalStorageItem, setLocalStorageItem} from '../global';
-
 export function UserSatAmount(props) {
-  // const isInitialRender = useRef(true);
-  // const [showAmount, setShowAmount] = useState(true);
-  // const props.isDarkMode = useColorScheme() === 'dark';
-
   useEffect(() => {
     (async () => {
       const displayAmount = JSON.parse(
@@ -164,6 +152,7 @@ export function UserSatAmount(props) {
 const styles = StyleSheet.create({
   valueContainer: {
     width: 315,
+    height: 'auto',
     flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'space-between',
@@ -171,6 +160,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 'auto',
     marginTop: 20,
+    paddingBottom: 15,
   },
 
   denominatorText: {

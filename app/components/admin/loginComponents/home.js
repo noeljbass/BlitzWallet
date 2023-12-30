@@ -1,7 +1,6 @@
 import {
   Alert,
   Animated,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -29,14 +28,16 @@ export default function HomeLogin(props) {
     (async () => {
       const canUseFaceID = await hasHardware();
       if (canUseFaceID) {
+        console.log('TEST');
         const hasProfile = await hasSavedProfile();
         if (hasProfile) {
           moveLogo('up');
           const didLogIn = await handleLogin();
           if (didLogIn) {
+            props.setDidUsePin(false);
             moveLogo('down');
             props.navigation.replace('HomeAdmin');
-          } else props.setDidUsePin(true);
+          }
         } else {
           Alert.alert(
             'Biometric record not found',
@@ -61,6 +62,7 @@ export default function HomeLogin(props) {
         source={ICONS.transparentIcon}
       />
       <TouchableOpacity
+        onPress={() => props.setDidUsePin(true)}
         style={[
           BTN,
           {backgroundColor: COLORS.primary, marginTop: 0, marginBottom: 15},

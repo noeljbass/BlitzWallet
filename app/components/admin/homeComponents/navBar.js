@@ -9,7 +9,7 @@ import {
 import {CENTER, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../constants';
 import {useState} from 'react';
 import {OptionsDropdown} from './navBar/optionsDropdown';
-import SystemSettings from './settings';
+import SystemSettings from './navBar/settings';
 import {FaucetHome} from './faucet';
 import {useNavigation} from '@react-navigation/native';
 
@@ -84,6 +84,7 @@ export default function NavBar(props) {
           }}>
           <Image style={styles.imgIcon} source={ICONS.toolsIcon} />
         </TouchableOpacity>
+
         <OptionsDropdown
           setNavViews={setNavViews}
           isDisplayed={navViews.features}
@@ -91,6 +92,7 @@ export default function NavBar(props) {
           isDarkMode={props.isDarkMode}
         />
       </View>
+
       <SystemSettings
         isDisplayed={systemSettingsPopup}
         setSystemSettingsPopup={setSystemSettingsPopup}
@@ -98,6 +100,7 @@ export default function NavBar(props) {
         setIsDarkMode={props.setIsDarkMode}
         breezInformation={props.breezInformation}
       />
+
       <FaucetHome
         breezEvent={props.breezEvent}
         setFaucet={setFaucet}

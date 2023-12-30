@@ -71,7 +71,7 @@ const style = StyleSheet.create({
     borderColor: COLORS.cancelRed,
 
     alignItems: 'center',
-    marginTop: 10,
+    marginBottom: 10,
   },
   errorText: {
     fontFamily: FONT.Title_Bold,

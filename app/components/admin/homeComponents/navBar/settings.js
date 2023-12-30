@@ -11,9 +11,9 @@ import {
   SafeAreaView,
   useColorScheme,
 } from 'react-native';
-import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
+import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
-import SettingsContent from './settingsContent/home';
+import SettingsContent from '../settingsContent/home';
 
 const GENERALOPTIONS = [
   {
