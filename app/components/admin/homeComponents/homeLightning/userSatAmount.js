@@ -5,10 +5,10 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import {COLORS, FONT, SIZES} from '../../constants';
+import {COLORS, FONT, SIZES} from '../../../../constants';
 
 import {useEffect, useState} from 'react';
-import {getLocalStorageItem, setLocalStorageItem} from '../../functions';
+import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 
 // import {getLocalStorageItem, setLocalStorageItem} from '../global';
 

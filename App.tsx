@@ -5,27 +5,33 @@
  * @format
  */
 
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
 // import {registerRootComponent} from 'expo';
 
 import {AppState, Platform} from 'react-native';
 
-import {CreateAccountHome, DislaimerPage} from './app/screens/createAccount';
-
-import SecuityOption from './app/screens/createAccount/keySetup/start';
-import GenerateKey from './app/screens/createAccount/keySetup/generateKey';
-import VerifyKey from './app/screens/createAccount/keySetup/verifyKey';
-import PinSetupPage from './app/screens/createAccount/keySetup/pin';
-import AdminHome from './app/screens/inAccount/home';
 import {retrieveData, userAuth} from './app/functions';
-import AdminLogin from './app/screens/inAccount/login';
 import SplashScreen from 'react-native-splash-screen';
-import RestoreWallet from './app/screens/createAccount/restoreWallet/home';
-import SendPaymentHome from './app/screens/inAccount/sendBTC';
-import {ReceivePaymentHome} from './app/screens/inAccount/receiveBTC';
-import {ConnectionToNode} from './app/screens/inAccount/conectionToNode';
+import {
+  CreateAccountHome,
+  DislaimerPage,
+  GenerateKey,
+  PinSetupPage,
+  SecuityOption,
+  RestoreWallet,
+  VerifyKey,
+} from './app/screens/createAccount';
+import {
+  AdminHome,
+  AdminLogin,
+  ConfirmTxPage,
+  ConnectionToNode,
+  ExpandedTx,
+  ReceivePaymentHome,
+  SendPaymentHome,
+} from './app/screens/inAccount';
 
 const Stack = createNativeStackNavigator();
 
@@ -106,6 +112,16 @@ function App(): JSX.Element {
           }}
           name="ConnectionToNode"
           component={ConnectionToNode}
+        />
+        <Stack.Screen
+          options={{animation: 'slide_from_bottom', presentation: 'modal'}}
+          name="ExpandedTx"
+          component={ExpandedTx}
+        />
+        <Stack.Screen
+          options={{animation: 'slide_from_bottom', presentation: 'modal'}}
+          name="ConfirmTxPage"
+          component={ConfirmTxPage}
         />
       </Stack.Navigator>
     </NavigationContainer>

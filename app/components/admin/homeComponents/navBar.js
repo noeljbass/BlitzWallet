@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../constants';
 import {useState} from 'react';
-import {OptionsDropdown} from './optionsDropdown';
+import {OptionsDropdown} from './navBar/optionsDropdown';
 import SystemSettings from './settings';
 import {FaucetHome} from './faucet';
 import {useNavigation} from '@react-navigation/native';

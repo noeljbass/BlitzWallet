@@ -1,8 +1,8 @@
 import {StyleSheet, View} from 'react-native';
 
 import {useState} from 'react';
-import SendPaymentScreen from './homeComponents/sendBitcoin/sendPaymentScreen';
-import SendPaymentScreenOptions from './homeComponents/sendBitcoin/screenOptions';
+import SendPaymentScreen from '../../components/admin/homeComponents/sendBitcoin/sendPaymentScreen';
+import SendPaymentScreenOptions from '../../components/admin/homeComponents/sendBitcoin/screenOptions';
 
 export default function SendPaymentHome(props) {
   console.log('SEND BITCOIN MAIN PAGE');

@@ -6,7 +6,7 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import {KeyContainer} from '../../../../components/login';
+import {KeyContainer} from '../../../login';
 import {retrieveData} from '../../../../functions';
 import {useEffect, useRef, useState} from 'react';
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';

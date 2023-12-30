@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../constants';
+import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 
 export function SendRecieveBTNs(props) {

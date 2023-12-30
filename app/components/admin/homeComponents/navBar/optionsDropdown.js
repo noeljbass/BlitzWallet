@@ -19,7 +19,7 @@ import {
   ICONS,
   SIZES,
   SHADOWS,
-} from '../../../constants';
+} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
 import * as WebBrowser from 'expo-web-browser';
 

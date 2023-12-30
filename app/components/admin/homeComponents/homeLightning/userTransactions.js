@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../constants';
+import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import {useNavigation} from '@react-navigation/native';
 
 const MILISECONDSDAYCONSTANT = 86400000;
 
@@ -17,6 +18,7 @@ export function UserTransactions(props) {
     groupedTransactions: [],
     tempGroupedTransactoins: [],
   };
+  const navigate = useNavigation();
 
   const transactionElements = props.transactions.map((transaction, id) => {
     const paymentDate = new Date(
@@ -33,7 +35,8 @@ export function UserTransactions(props) {
           showAmount={props.showAmount}
           key={id}
           {...transaction}
-          setExpandedTransactoin={props.setExpandedTransactoin}
+          navigate={navigate}
+          transactions={props.transactions}
         />,
       );
     } else {
@@ -95,9 +98,10 @@ function UserTransaction(props) {
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={() => {
-        props.setExpandedTransactoin({
-          isDisplayed: true,
+        props.navigate.navigate('ExpandedTx', {
+          transactions: props.transactions,
           txId: props.details.data.paymentHash,
+          isDarkMode: props.isDarkMode,
         });
       }}>
       <View style={styles.transactionContainer}>

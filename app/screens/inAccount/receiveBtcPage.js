@@ -8,7 +8,7 @@ import {
   LiquidPage,
   NavBar,
   TopBar,
-} from './homeComponents/recieveBitcoin';
+} from '../../components/admin/homeComponents/recieveBitcoin';
 import {useNavigation} from '@react-navigation/native';
 
 export function ReceivePaymentHome(props) {

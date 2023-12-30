@@ -15,8 +15,8 @@ import {
   terminateAccount,
 } from '../../functions';
 import {COLORS, FONT, SIZES} from '../../constants';
-import PinPage from './loginComponents/pinPage';
-import HomeLogin from './loginComponents/home';
+import PinPage from '../../components/admin/loginComponents/pinPage';
+import HomeLogin from '../../components/admin/loginComponents/home';
 
 export default function AdminLogin({navigation}) {
   const hookDarkMode = useColorScheme() === 'dark';
