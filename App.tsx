@@ -16,10 +16,8 @@ type RootStackParamList = {
   Home: {someParam?: string};
   Details: {someParam?: string};
 };
-
 import {AppState, Platform} from 'react-native';
-
-import {retrieveData, userAuth} from './app/functions';
+import {retrieveData} from './app/functions';
 import SplashScreen from 'react-native-splash-screen';
 import {
   CreateAccountHome,
@@ -46,11 +44,12 @@ function App(): JSX.Element {
   return <ResetStack />;
 }
 
-function ResetStack(): JSX.Element {
+function ResetStack(): JSX.Element | null {
   const navigationRef =
     useRef<NativeStackNavigationProp<RootStackParamList> | null>(null);
   const appState = useRef(AppState.currentState);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isloaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     console.log('refresh');
@@ -60,11 +59,12 @@ function ResetStack(): JSX.Element {
       const mnemonic = await retrieveData('mnemonic');
       if (pin && mnemonic) setIsLoggedIn(true);
       else setIsLoggedIn(false);
-    })();
+      setIsLoaded(true);
 
-    if (Platform.OS === 'android') {
-      SplashScreen.hide();
-    }
+      if (Platform.OS === 'android') {
+        SplashScreen.hide();
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ function ResetStack(): JSX.Element {
       subscription.remove();
     };
   }, []);
-
+  if (!isloaded) return null;
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
@@ -99,6 +99,7 @@ function ResetStack(): JSX.Element {
           name="Home"
           component={isLoggedIn ? AdminLogin : CreateAccountHome}
         />
+
         {/* <Stack.Screen name="CreateAccountHome" component={CreateAccountHome} /> */}
         {/* <Stack.Screen name="AdminLogin" component={AdminLogin} /> */}
         <Stack.Screen name="DisclaimerPage" component={DislaimerPage} />

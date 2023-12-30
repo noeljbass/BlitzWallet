@@ -30,6 +30,7 @@ export default function AdminHome({navigation: {navigate}}) {
   const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
 
   // SDK events listener
+  console.log(breezEvent);
 
   const onBreezEvent = e => {
     console.log(e.type, 'IN FUNCTION EVENT');

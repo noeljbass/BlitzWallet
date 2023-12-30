@@ -16,27 +16,35 @@ export default function HomeLogin(props) {
   const {height} = useWindowDimensions();
   const fadeAnim = useRef(new Animated.Value(height / 2 - 150)).current;
 
-  function moveLogo(type) {
+  async function moveLogo(type) {
     Animated.timing(fadeAnim, {
-      toValue: type === 'up' ? 20 : height / 2 - 150,
+      toValue: type === 'up' ? 20 : height / 2 - 125,
       duration: 200,
       useNativeDriver: true,
     }).start();
+
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, 200);
+    });
   }
 
   useEffect(() => {
     (async () => {
       const canUseFaceID = await hasHardware();
       if (canUseFaceID) {
-        console.log('TEST');
         const hasProfile = await hasSavedProfile();
         if (hasProfile) {
-          moveLogo('up');
-          const didLogIn = await handleLogin();
-          if (didLogIn) {
-            props.setDidUsePin(false);
-            moveLogo('down');
-            props.navigation.replace('HomeAdmin');
+          const didMove = await moveLogo('up');
+          if (didMove) {
+            const didLogIn = await handleLogin();
+            if (didLogIn) {
+              props.setDidUsePin(false);
+              const didMove = await moveLogo('down');
+
+              if (didMove) props.navigation.replace('HomeAdmin');
+            }
           }
         } else {
           Alert.alert(

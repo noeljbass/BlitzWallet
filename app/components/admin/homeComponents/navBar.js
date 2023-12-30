@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     // backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    ...SHADOWS.medium,
+    ...SHADOWS.small,
     borderColor: COLORS.primary,
     borderWidth: 1,
   },

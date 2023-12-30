@@ -32,7 +32,7 @@ export function UserTransactions(props) {
     ]);
 
     setTransactionElements();
-  }, [props.transactions]);
+  }, [props.transactions, props.showAmount, props.isDarkMode]);
 
   return <View style={{flex: 1}}>{txs}</View>;
 
