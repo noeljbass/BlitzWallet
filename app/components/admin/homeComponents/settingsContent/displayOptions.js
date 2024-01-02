@@ -9,6 +9,7 @@ import {
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {CENTER, COLORS, FONT, SIZES} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
+import {setStatusBarStyle} from 'expo-status-bar';
 
 export default function DisplayOptions(props) {
   const sytemColorScheme = useColorScheme();
@@ -116,8 +117,17 @@ export default function DisplayOptions(props) {
   async function switchColorScheme(type) {
     try {
       await setLocalStorageItem('colorScheme', JSON.stringify(type));
-      if (!type) props.setIsDarkMode(sytemColorScheme === 'dark');
-      else props.setIsDarkMode(type === 'dark');
+      if (!type) {
+        const colorSceme = sytemColorScheme === 'dark';
+        if (colorSceme) setStatusBarStyle('light');
+        else setStatusBarStyle('dark');
+        props.setIsDarkMode(colorSceme);
+      } else {
+        const colorSceme = type === 'dark';
+        if (colorSceme) setStatusBarStyle('light');
+        else setStatusBarStyle('dark');
+        props.setIsDarkMode(colorSceme);
+      }
     } catch (err) {
       console.log(err);
     }

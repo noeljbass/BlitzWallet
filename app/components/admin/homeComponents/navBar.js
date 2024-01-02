@@ -45,12 +45,34 @@ export default function NavBar(props) {
           }
           style={{
             ...styles.icons,
-            backgroundColor: props.breezInformation.didConnectToNode
-              ? COLORS.connectedNodeColor
-              : COLORS.notConnectedNodeColor,
+            backgroundColor:
+              props.breezInformation.didConnectToNode == null
+                ? props.isDarkMode
+                  ? COLORS.darkModeBackgroundOffset
+                  : COLORS.lightModeBackgroundOffset
+                : props.breezInformation.didConnectToNode
+                ? COLORS.connectedNodeColor
+                : COLORS.notConnectedNodeColor,
           }}>
           <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
         </TouchableOpacity>
+        {/* <TouchableOpacity
+          onPress={() => {
+            navigate.navigate('ContactsPage', {
+              isDarkMode: props.isDarkMode,
+            });
+          }}
+          activeOpacity={0.5}
+          style={[
+            styles.icons,
+            {
+              backgroundColor: props.isDarkMode
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+            },
+          ]}>
+          <Image style={styles.imgIcon} source={ICONS.contactsIcon} />
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             setSystemSettingsPopup(true);

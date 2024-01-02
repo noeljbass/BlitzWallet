@@ -83,6 +83,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSFaceIDUsageDescription</key>
-<string>Allow Blitz to use FaceID</string>
+	<string>Allow Blitz to use FaceID</string>
 </dict>
 </plist>

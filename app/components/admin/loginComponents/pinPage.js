@@ -33,7 +33,8 @@ export default function PinPage(props) {
       if (JSON.stringify(pin) === JSON.stringify(stored)) {
         clearSettings();
 
-        props.navigation.replace('HomeAdmin');
+        if (props.fromBackground) props.navigation.goBack();
+        else props.navigation.replace('HomeAdmin');
       } else {
         if (pinEnterCount === 8) {
           setTimeout(async () => {

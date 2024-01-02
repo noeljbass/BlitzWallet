@@ -5,7 +5,12 @@
  * @format
  */
 
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  CommonActions,
+  NavigationContainer,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -16,8 +21,8 @@ type RootStackParamList = {
   Home: {someParam?: string};
   Details: {someParam?: string};
 };
-import {AppState, Platform} from 'react-native';
-import {retrieveData} from './app/functions';
+import {AppState, Platform, useColorScheme} from 'react-native';
+import {getLocalStorageItem, retrieveData} from './app/functions';
 import SplashScreen from 'react-native-splash-screen';
 import {
   CreateAccountHome,
@@ -33,10 +38,17 @@ import {
   AdminLogin,
   ConfirmTxPage,
   ConnectionToNode,
+  ContactsPage,
   ExpandedTx,
   ReceivePaymentHome,
   SendPaymentHome,
 } from './app/screens/inAccount';
+import {COLORS} from './app/constants';
+import {
+  setStatusBarBackgroundColor,
+  setStatusBarHidden,
+  setStatusBarStyle,
+} from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,13 +62,23 @@ function ResetStack(): JSX.Element | null {
   const appState = useRef(AppState.currentState);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isloaded, setIsLoaded] = useState(false);
+  const sytemColorScheme = useColorScheme() === 'dark';
 
   useEffect(() => {
-    console.log('refresh');
-
     (async () => {
       const pin = await retrieveData('pin');
       const mnemonic = await retrieveData('mnemonic');
+      const colorScheme = await getLocalStorageItem('colorScheme');
+
+      setStatusBarHidden(false, 'fade');
+      if (!colorScheme) {
+        if (sytemColorScheme) setStatusBarStyle('light');
+        else setStatusBarStyle('dark');
+      } else {
+        if (JSON.parse(colorScheme) === 'dark') setStatusBarStyle('light');
+        else setStatusBarStyle('dark');
+      }
+
       if (pin && mnemonic) setIsLoggedIn(true);
       else setIsLoggedIn(false);
       setIsLoaded(true);
@@ -72,10 +94,8 @@ function ResetStack(): JSX.Element | null {
       if (appState.current.match(/background/) && nextAppState === 'active') {
         console.log('Background!');
         // NAVIGATE TO HOME PAGE
-        navigationRef?.current?.reset({
-          index: 0,
-          routes: [{name: 'Home'}],
-        });
+
+        navigationRef?.current?.navigate('Home', {fromBackground: true});
 
         // SplashScreen.show();
       }
@@ -98,6 +118,7 @@ function ResetStack(): JSX.Element | null {
         <Stack.Screen
           name="Home"
           component={isLoggedIn ? AdminLogin : CreateAccountHome}
+          options={{animation: 'fade', gestureEnabled: false}}
         />
 
         {/* <Stack.Screen name="CreateAccountHome" component={CreateAccountHome} /> */}
@@ -117,7 +138,9 @@ function ResetStack(): JSX.Element | null {
             <Stack.Screen name="ExpandedTx" component={ExpandedTx} />
             <Stack.Screen name="ConfirmTxPage" component={ConfirmTxPage} />
           </Stack.Group>
+          <Stack.Screen name="ContactsPage" component={ContactsPage} />
         </Stack.Group>
+
         <Stack.Screen
           options={{
             animation: 'fade',

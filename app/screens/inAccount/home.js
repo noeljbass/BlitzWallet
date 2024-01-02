@@ -1,4 +1,10 @@
-import {SafeAreaView, StyleSheet, View, useColorScheme} from 'react-native';
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+  useColorScheme,
+} from 'react-native';
 import {COLORS} from '../../constants';
 import {useEffect, useRef, useState} from 'react';
 import {
@@ -20,7 +26,7 @@ import {getTransactions} from '../../functions/SDK';
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
   const [breezInformation, setBreezInformation] = useState({
-    didConnectToNode: false,
+    didConnectToNode: null,
     transactions: [],
     userBalance: 0,
   });
@@ -34,7 +40,12 @@ export default function AdminHome({navigation: {navigate}}) {
 
   const onBreezEvent = e => {
     console.log(e.type, 'IN FUNCTION EVENT');
-    if (e?.type != 'invoicePaid' && e?.type != 'paymentSucceed') return;
+    if (
+      e?.type != 'invoicePaid' &&
+      e?.type != 'paymentSucceed' &&
+      e?.type != 'paymentFailed'
+    )
+      return;
 
     setBreezEvent(e);
   };
@@ -83,7 +94,7 @@ async function initBalanceAndTransactions(setBreezInformation) {
   try {
     const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
-    if (savedBreezInfo)
+    if (savedBreezInfo) {
       setBreezInformation(prev => {
         return {
           ...prev,
@@ -91,9 +102,10 @@ async function initBalanceAndTransactions(setBreezInformation) {
           userBalance: JSON.parse(savedBreezInfo)[1],
         };
       });
-    return new Promise(response => {
-      response(savedBreezInfo);
-    });
+      return new Promise(response => {
+        response(savedBreezInfo);
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -108,6 +120,7 @@ async function initWallet(
 ) {
   let savedBreezInfo;
   if (isInitialRender.current) {
+    console.log('RUNNING');
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
     const setStyle = await setColorScheme();
@@ -117,24 +130,26 @@ async function initWallet(
 
     try {
       const response = await connectToNode(onBreezEvent);
+      console.log(response);
 
-      if (response) {
+      if (response.isConnected && response.reason) {
+        const nodeAmount = await nodeInfo();
+        const transactions = await getTransactions();
+        const info = await lspInfo();
+        const heath = await serviceHealthCheck();
+        const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+
         // await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 
-        const nodeAmount = await nodeInfo();
-        const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-        const transactions = await getTransactions();
-        const info = await lspInfo();
-        const heath = await serviceHealthCheck();
         console.log(heath);
-        console.log(info, 'LSPPSSS');
+        console.log(info.openingFeeParamsList, 'LSPPSSS');
 
         setBreezInformation(prev => {
           return {
             ...prev,
-            didConnectToNode: response,
+            didConnectToNode: response.isConnected,
             transactions: transactions,
             userBalance: msatToSat,
           };
@@ -150,6 +165,14 @@ async function initWallet(
           'breezInfo',
           JSON.stringify([transactions, msatToSat]),
         );
+      } else if (response.isConnected && !response.reason) {
+        setBreezInformation(prev => {
+          return {
+            ...prev,
+
+            didConnectToNode: response.isConnected,
+          };
+        });
       }
     } catch (err) {
       console.log(err, 'homepage connection to node err');
@@ -159,8 +182,8 @@ async function initWallet(
 
     const transactions = await getTransactions();
     const nodeAmount = await nodeInfo();
-
     const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+
     setBreezInformation(prev => {
       return {
         ...prev,

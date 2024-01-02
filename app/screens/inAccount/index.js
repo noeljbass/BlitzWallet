@@ -1,5 +1,6 @@
 import {ConnectionToNode} from './conectionToNode';
 import ConfirmTxPage from './confirmTxPage';
+import ContactsPage from './contactsPage';
 import ExpandedTx from './expandedTxPage';
 import AdminHome from './home';
 import AdminLogin from './login';
@@ -14,4 +15,5 @@ export {
   SendPaymentHome,
   ConnectionToNode,
   ConfirmTxPage,
+  ContactsPage,
 };

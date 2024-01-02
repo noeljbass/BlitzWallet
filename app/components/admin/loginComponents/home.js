@@ -11,6 +11,7 @@ import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import * as Device from 'expo-device';
 import * as LocalAuthentication from 'expo-local-authentication';
 import {useEffect, useRef, useState} from 'react';
+import {StackActions} from '@react-navigation/native';
 
 export default function HomeLogin(props) {
   const {height} = useWindowDimensions();
@@ -43,7 +44,10 @@ export default function HomeLogin(props) {
               props.setDidUsePin(false);
               const didMove = await moveLogo('down');
 
-              if (didMove) props.navigation.replace('HomeAdmin');
+              if (didMove) {
+                if (props.fromBackground) props.navigation.goBack();
+                else props.navigation.replace('HomeAdmin');
+              }
             }
           }
         } else {

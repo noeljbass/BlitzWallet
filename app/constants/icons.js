@@ -29,6 +29,7 @@ import currencyIcon from '../assets/icons/currencyIcon.png';
 import aboutIcon from '../assets/icons/aboutIcon.png';
 import colorIcon from '../assets/icons/colorIcon.png';
 import transparentIcon from '../assets/transparentIcon.png';
+import contactsIcon from '../assets/icons/contactsIcon.png';
 
 export default {
   Xcircle,
@@ -62,4 +63,5 @@ export default {
   aboutIcon,
   colorIcon,
   transparentIcon,
+  contactsIcon,
 };

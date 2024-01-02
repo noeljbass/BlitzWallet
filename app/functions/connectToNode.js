@@ -14,15 +14,16 @@ import {INVITE_KEY1, API_KEY} from '@env';
 export default async function connectToNode(breezEvent) {
   // Create the default config
   // console.log(INVITE_KEY1, API_KEY);
-  console.log(process.env.INVITE_KEY1, process.env.API_KEY);
+
   try {
     const nodeInformation = await nodeInfo();
-    return new Promise((resolve, request) => {
-      if (nodeInformation) resolve(true);
-      else request(false);
+    console.log(nodeInformation);
+    return new Promise(resolve => {
+      resolve({isConnected: true, reason: null});
     });
   } catch (err) {
     try {
+      console.log('ERR');
       const inviteCode = process.env.INVITE_KEY1;
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
@@ -46,19 +47,21 @@ export default async function connectToNode(breezEvent) {
 
         // Connect to the Breez SDK make it ready for use
         await connect(config, seed, breezEvent);
-        return new Promise((resolve, request) => {
-          resolve(true);
-          request(false);
+        return new Promise(resolve => {
+          resolve({isConnected: true, reason: 'Connected through node'});
         });
       } else {
         console.log('no Mneomincs');
-        return new Promise((resolve, request) => {
-          resolve(false);
-          request(true);
+        return new Promise(resolve => {
+          resolve({isConnected: false, reason: 'No mnemonic'});
         });
       }
     } catch (err) {
       console.log(err, 'connect to node err');
+      connectToNode();
+      return new Promise(resolve => {
+        resolve({isConnected: false, reason: 'error connecting'});
+      });
     }
   }
 }

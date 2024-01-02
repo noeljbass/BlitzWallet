@@ -21,11 +21,14 @@ export default function ConfirmTxPage(props) {
   useEffect(() => {
     if (
       props.route.params?.information?.type != 'invoicePaid' &&
-      props.route.params?.information?.type != 'paymentSucceed'
+      props.route.params?.information?.type != 'paymentSucceed' &&
+      props.route.params?.information?.type != 'paymentFailed'
     )
       return;
     setInformation(props.route.params?.information);
   }, []);
+
+  console.log(information);
 
   return (
     <View
@@ -53,7 +56,9 @@ export default function ConfirmTxPage(props) {
                 color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            {props.route.params?.for?.toLowerCase() === 'paymentsucceed'
+            {props.route.params?.for?.toLowerCase() === 'paymentfailed'
+              ? 'Failed'
+              : props.route.params?.for?.toLowerCase() === 'paymentsucceed'
               ? 'Sent'
               : 'Received'}
           </Text>
@@ -64,56 +69,73 @@ export default function ConfirmTxPage(props) {
                 color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            {new Date(
-              props.route.params?.for?.toLowerCase() === 'invoicepaid'
-                ? information.details?.payment?.paymentTime * 1000
-                : information.details?.paymentTime * 1000,
-            ).toLocaleString()}
+            {props.route.params?.for?.toLowerCase() === 'paymentfailed'
+              ? new Date().toLocaleString()
+              : new Date(
+                  props.route.params?.for?.toLowerCase() === 'invoicepaid'
+                    ? information.details?.payment?.paymentTime * 1000
+                    : information.details?.paymentTime * 1000,
+                ).toLocaleString()}
           </Text>
-          <Text
-            style={[
-              styles.amountText,
-              {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            {props.route.params?.for?.toLowerCase() === 'invoicepaid'
-              ? (information.details?.payment?.amountMsat / 1000)?.toFixed(2)
-              : (information.details?.amountMsat / 1000)?.toFixed(2)}
-            <Text style={{color: COLORS.primary, fontFamily: FONT.Title_Bold}}>
-              {' '}
-              sat
+          {props.route.params?.for?.toLowerCase() != 'paymentfailed' && (
+            <Text
+              style={[
+                styles.amountText,
+                {
+                  color: isDarkMode
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              {props.route.params?.for?.toLowerCase() === 'invoicepaid'
+                ? (information.details?.payment?.amountMsat / 1000)?.toFixed(2)
+                : (information.details?.amountMsat / 1000)?.toFixed(2)}
+              <Text
+                style={{color: COLORS.primary, fontFamily: FONT.Title_Bold}}>
+                {' '}
+                sat
+              </Text>
             </Text>
-          </Text>
+          )}
           <View style={styles.seperator}></View>
-          <Text
-            style={[
-              styles.descriptionText,
-              {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            <Text style={styles.descriptor}>Desc</Text>{' '}
-            {props.route.params?.for?.toLowerCase() === 'invoicepaid'
-              ? information.details?.payment?.description
-                ? information.details?.payment.description
-                : 'no description'
-              : information.details?.description
-              ? information.details?.description
-              : 'no description'}
-          </Text>
-          <Text
-            style={[
-              styles.feeText,
-              {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
-            {props.route.params?.for?.toLowerCase() === 'invoicepaid'
-              ? (information.details?.payment?.feeMsat / 1000).toFixed(2)
-              : (information.details?.feeMsat / 1000).toFixed(2)}
-          </Text>
+          {props.route.params?.for?.toLowerCase() === 'paymentfailed' ? (
+            <Text>ERROR</Text>
+          ) : (
+            <>
+              <Text
+                style={[
+                  styles.descriptionText,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                <Text style={styles.descriptor}>Desc</Text>{' '}
+                {props.route.params?.for?.toLowerCase() === 'invoicepaid'
+                  ? information.details?.payment?.description
+                    ? information.details?.payment.description
+                    : 'no description'
+                  : information.details?.description
+                  ? information.details?.description
+                  : 'no description'}
+              </Text>
+              <Text
+                style={[
+                  styles.feeText,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                <Text style={styles.descriptor}>Lightning Fees</Text>{' '}
+                {props.route.params?.for?.toLowerCase() === 'invoicepaid'
+                  ? (information.details?.payment?.feeMsat / 1000).toFixed(2)
+                  : (information.details?.feeMsat / 1000).toFixed(2)}
+              </Text>
+            </>
+          )}
         </View>
       </SafeAreaView>
     </View>

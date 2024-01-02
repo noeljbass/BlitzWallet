@@ -18,10 +18,12 @@ import {COLORS, FONT, SIZES} from '../../constants';
 import PinPage from '../../components/admin/loginComponents/pinPage';
 import HomeLogin from '../../components/admin/loginComponents/home';
 
-export default function AdminLogin({navigation}) {
+export default function AdminLogin({navigation, route}) {
   const hookDarkMode = useColorScheme() === 'dark';
   const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
   const [didUsePin, setDidUsePin] = useState(false);
+  const fromBackground = route.params?.fromBackground;
+  console.log(fromBackground);
   console.log(didUsePin);
 
   useEffect(() => {
@@ -42,13 +44,18 @@ export default function AdminLogin({navigation}) {
       ]}>
       <SafeAreaView style={styles.globalContainer}>
         {didUsePin && (
-          <PinPage navigation={navigation} isDarkMode={isDarkMode} />
+          <PinPage
+            navigation={navigation}
+            isDarkMode={isDarkMode}
+            fromBackground={fromBackground}
+          />
         )}
         {!didUsePin && (
           <HomeLogin
             navigation={navigation}
             isDarkMode={isDarkMode}
             setDidUsePin={setDidUsePin}
+            fromBackground={fromBackground}
           />
         )}
       </SafeAreaView>

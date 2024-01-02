@@ -28,10 +28,6 @@ export default function CreateAccountHome({navigation: {navigate}}) {
   return (
     <View style={Background}>
       <SafeAreaView style={{flex: 1}}>
-        <StatusBar
-          backgroundColor={COLORS.background}
-          barStyle="dark-content"
-        />
         <View style={styles.container}>
           <View style={styles.logo}>
             <Image

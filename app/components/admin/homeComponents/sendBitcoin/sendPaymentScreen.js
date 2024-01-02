@@ -303,7 +303,8 @@ export default function SendPaymentScreen(props) {
         //   : null,
       });
       if (response) {
-        props.setScanned(false);
+        // console.log(response);
+        // props.setScanned(false);
         props.setBTCadress('');
         // navigate.goBack();
       }
@@ -326,6 +327,7 @@ export default function SendPaymentScreen(props) {
       const bitcoinPrice = (await fetchFiatRates()).filter(
         coin => coin.coin === 'USD',
       );
+      // console.log(input.invoice.routingHints[0]);
 
       setPaymentInfo({...input, ...bitcoinPrice});
     } catch (err) {

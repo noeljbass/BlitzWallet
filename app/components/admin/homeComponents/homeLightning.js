@@ -13,20 +13,17 @@ export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
   const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
-  const [lastTxHash, setLastTxHash] = useState('');
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
     if (props.breezEvent?.details?.payment?.description?.includes('bwrfd'))
       return;
-    if (props.breezEvent?.details?.paymentHash === lastTxHash) return;
     if (navigate.canGoBack()) navigate.goBack();
     navigate.navigate('ConfirmTxPage', {
       isDarkMode: props.isDarkMode,
       for: props.breezEvent.type,
       information: props.breezEvent,
     });
-    setLastTxHash(props.breezEvent?.details.paymentHash);
   }, [props.breezEvent]);
 
   return (
