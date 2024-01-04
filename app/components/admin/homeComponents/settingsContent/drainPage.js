@@ -11,13 +11,15 @@ import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
 import {fetchFiatRates} from '@breeztech/react-native-breez-sdk';
 import {getLocalStorageItem} from '../../../../functions';
+import {useTheme} from '../../../../../context-store/context';
 // TEXT INPUT CAUSES LAUNCH SCREEN TO FAIL
 export default function DrainPage(props) {
   const isInitialRender = useRef(true);
   const [wantsToDrain, setWantsToDrain] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [fiatRate, setFiatRate] = useState(0);
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const {theme, toggleTheme} = useTheme();
+  // const theme = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -36,9 +38,7 @@ export default function DrainPage(props) {
           style={[
             styles.balanceDescription,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Current balance
@@ -47,9 +47,7 @@ export default function DrainPage(props) {
           style={[
             styles.balanceNum,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           {Math.floor(props.breezInformation?.userBalance)
@@ -61,9 +59,7 @@ export default function DrainPage(props) {
           style={[
             styles.fiatBalanceNum,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           = $
@@ -77,7 +73,7 @@ export default function DrainPage(props) {
         style={[
           styles.btcAdressContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -86,9 +82,7 @@ export default function DrainPage(props) {
           style={[
             styles.btcAdressHeader,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Enter BTC address
@@ -100,12 +94,8 @@ export default function DrainPage(props) {
             style={[
               styles.input,
               {
-                borderColor: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                borderColor: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}
           />

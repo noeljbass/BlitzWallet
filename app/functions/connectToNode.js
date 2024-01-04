@@ -16,14 +16,12 @@ export default async function connectToNode(breezEvent) {
   // console.log(INVITE_KEY1, API_KEY);
 
   try {
-    const nodeInformation = await nodeInfo();
-    console.log(nodeInformation);
+    await nodeInfo();
     return new Promise(resolve => {
       resolve({isConnected: true, reason: null});
     });
   } catch (err) {
     try {
-      console.log('ERR');
       const inviteCode = process.env.INVITE_KEY1;
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
@@ -58,7 +56,7 @@ export default async function connectToNode(breezEvent) {
       }
     } catch (err) {
       console.log(err, 'connect to node err');
-      connectToNode();
+      // connectToNode();
       return new Promise(resolve => {
         resolve({isConnected: false, reason: 'error connecting'});
       });

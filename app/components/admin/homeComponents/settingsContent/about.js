@@ -6,9 +6,11 @@ import {
   useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
+import {useTheme} from '../../../../../context-store/context';
 
 export default function AboutPage(props) {
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const {theme, toggleTheme} = useTheme();
+
   return (
     <View style={[styles.container]}>
       <View style={styles.innerContainer}>
@@ -17,9 +19,7 @@ export default function AboutPage(props) {
             styles.sectionHeader,
             {
               marginTop: 50,
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Software
@@ -29,7 +29,7 @@ export default function AboutPage(props) {
             styles.contentContainer,
             {
               marginBottom: 30,
-              backgroundColor: props.isDarkMode
+              backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -38,9 +38,7 @@ export default function AboutPage(props) {
             style={[
               styles.contentText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 marginBottom: 0,
                 textAlign: 'center',
               },
@@ -54,9 +52,7 @@ export default function AboutPage(props) {
             style={[
               styles.sectionHeader,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Blitz Wallet
@@ -65,7 +61,7 @@ export default function AboutPage(props) {
             style={[
               styles.contentContainer,
               {
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -74,9 +70,7 @@ export default function AboutPage(props) {
               style={[
                 styles.contentText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               This is a{' '}
@@ -88,9 +82,7 @@ export default function AboutPage(props) {
               style={[
                 styles.contentText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Blitz uses the Breez SDK to send and recive payments on the

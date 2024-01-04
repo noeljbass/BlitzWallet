@@ -30,9 +30,7 @@ export function UserSatAmount(props) {
           style={[
             combinedStyles.bitcoinText,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           BTC
@@ -43,9 +41,7 @@ export function UserSatAmount(props) {
             style={[
               styles.valueText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {formatBitcoinAmoutn(
@@ -58,9 +54,7 @@ export function UserSatAmount(props) {
             style={[
               styles.valueText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             * * * * *

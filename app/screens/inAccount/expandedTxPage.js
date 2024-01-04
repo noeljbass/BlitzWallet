@@ -8,22 +8,26 @@ import {
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
+import {setStatusBarStyle} from 'expo-status-bar';
+import {useTheme} from '../../../context-store/context';
 
 export default function ExpandedTx(props) {
   console.log('Transaction Detials Page');
   const navigate = useNavigation();
-  const isDarkMode = props.route.params.isDarkMode;
+  // const theme = props.route.params.theme;
+  const {theme, toggleTheme} = useTheme();
 
   const [selectedTX] = props.route.params?.transactions?.filter(tx => {
     return props.route.params.txId === tx.details.data.paymentHash;
   });
+  setStatusBarStyle('light');
 
   return (
     <View
       style={[
         styles.popupContainer,
         {
-          backgroundColor: isDarkMode
+          backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
           padding: 10,
@@ -32,6 +36,7 @@ export default function ExpandedTx(props) {
       <SafeAreaView style={{flex: 1}}>
         <TouchableOpacity
           onPress={() => {
+            setStatusBarStyle(theme ? 'light' : 'dark');
             navigate.goBack();
           }}>
           <Image style={styles.backButton} source={ICONS.xSmallIcon} />
@@ -46,7 +51,7 @@ export default function ExpandedTx(props) {
             style={[
               styles.confirmText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {selectedTX.paymentType?.toLowerCase() === 'sent'
@@ -57,7 +62,7 @@ export default function ExpandedTx(props) {
             style={[
               styles.dateText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {new Date(selectedTX.paymentTime * 1000).toLocaleString()}
@@ -66,7 +71,7 @@ export default function ExpandedTx(props) {
             style={[
               styles.amountText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {(selectedTX.amountMsat / 1000).toLocaleString()}
@@ -80,7 +85,7 @@ export default function ExpandedTx(props) {
             style={[
               styles.descriptionText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {selectedTX.description && (
@@ -88,9 +93,7 @@ export default function ExpandedTx(props) {
                 style={[
                   styles.feeText,
                   {
-                    color: isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 <Text style={styles.descriptor}>Desc</Text>{' '}
@@ -104,7 +107,7 @@ export default function ExpandedTx(props) {
             style={[
               styles.feeText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             <Text style={styles.descriptor}>Lightning Fees</Text>{' '}

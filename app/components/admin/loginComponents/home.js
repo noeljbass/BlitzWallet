@@ -11,7 +11,6 @@ import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import * as Device from 'expo-device';
 import * as LocalAuthentication from 'expo-local-authentication';
 import {useEffect, useRef, useState} from 'react';
-import {StackActions} from '@react-navigation/native';
 
 export default function HomeLogin(props) {
   const {height} = useWindowDimensions();
@@ -51,11 +50,12 @@ export default function HomeLogin(props) {
             }
           }
         } else {
-          Alert.alert(
-            'Biometric record not found',
-            'Please verify your identity with your password',
-            [{text: 'Ok', onPress: () => props.setDidUsePin(true)}],
-          );
+          // props.setDidUsePin(true);
+          // Alert.alert(
+          //   'Biometric record not found',
+          //   'Please verify your identity with your password',
+          //   [{text: 'Ok', onPress: () => props.setDidUsePin(true)}],
+          // );
         }
       } else {
         Alert.alert(
@@ -85,9 +85,7 @@ export default function HomeLogin(props) {
         style={[
           styles.appName,
           {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
+            color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             marginBottom: Device.osName === 'Android' ? 15 : 0,
           },
         ]}>

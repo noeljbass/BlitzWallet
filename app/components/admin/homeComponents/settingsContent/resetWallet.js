@@ -10,13 +10,16 @@ import {useState} from 'react';
 import {deleteItem} from '../../../../functions/secureStore';
 import {removeLocalStorageItem} from '../../../../functions/localStorage';
 import RNRestart from 'react-native-restart';
+import {useTheme} from '../../../../../context-store/context';
+
 export default function ResetPage(props) {
   const [selectedOptions, setSelectedOptions] = useState({
     seed: false,
     paymentHistory: false,
     pin: false,
   });
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const {theme, toggleTheme} = useTheme();
+
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
       <View
@@ -24,7 +27,7 @@ export default function ResetPage(props) {
           styles.infoContainer,
           {
             marginTop: 30,
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -35,7 +38,7 @@ export default function ResetPage(props) {
         style={[
           styles.infoContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -44,9 +47,7 @@ export default function ResetPage(props) {
           style={[
             styles.infoTitle,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Select data to delete from this device.
@@ -56,9 +57,7 @@ export default function ResetPage(props) {
             styles.infoDescription,
             {
               marginBottom: 15,
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Any option that is selected will be removed forever. If your seed is
@@ -68,7 +67,7 @@ export default function ResetPage(props) {
           style={[
             styles.borderView,
             {
-              backgroundColor: props.isDarkMode
+              backgroundColor: theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             },
@@ -81,7 +80,7 @@ export default function ResetPage(props) {
                 styles.selectorDot,
                 selectedOptions.seed && styles.isSelectedDot,
                 {
-                  borderColor: props.isDarkMode
+                  borderColor: theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -90,9 +89,7 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Delete seed from my device
@@ -105,7 +102,7 @@ export default function ResetPage(props) {
                 styles.selectorDot,
                 selectedOptions.paymentHistory && styles.isSelectedDot,
                 {
-                  borderColor: props.isDarkMode
+                  borderColor: theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -114,9 +111,7 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Delete payment history from my device
@@ -129,7 +124,7 @@ export default function ResetPage(props) {
                 styles.selectorDot,
                 selectedOptions.pin && styles.isSelectedDot,
                 {
-                  borderColor: props.isDarkMode
+                  borderColor: theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -138,9 +133,7 @@ export default function ResetPage(props) {
               style={[
                 styles.selectorText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Delete pin from my device
@@ -152,7 +145,7 @@ export default function ResetPage(props) {
         style={[
           styles.infoContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -162,9 +155,7 @@ export default function ResetPage(props) {
             styles.infoTitle,
             {
               textAlign: 'center',
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Your balance is
@@ -174,9 +165,7 @@ export default function ResetPage(props) {
             styles.infoDescription,
             {
               textAlign: 'center',
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           {Math.floor(props.breezInformation?.userBalance).toLocaleString()}{' '}

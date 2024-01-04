@@ -42,6 +42,8 @@ import {
   ExpandedTx,
   ReceivePaymentHome,
   SendPaymentHome,
+  SettingsContentIndex,
+  SettingsIndex,
 } from './app/screens/inAccount';
 import {COLORS} from './app/constants';
 import {
@@ -49,11 +51,16 @@ import {
   setStatusBarHidden,
   setStatusBarStyle,
 } from 'expo-status-bar';
+import {ThemeProvider} from './context-store/context';
 
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
-  return <ResetStack />;
+  return (
+    <ThemeProvider>
+      <ResetStack />
+    </ThemeProvider>
+  );
 }
 
 function ResetStack(): JSX.Element | null {
@@ -62,22 +69,11 @@ function ResetStack(): JSX.Element | null {
   const appState = useRef(AppState.currentState);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isloaded, setIsLoaded] = useState(false);
-  const sytemColorScheme = useColorScheme() === 'dark';
 
   useEffect(() => {
     (async () => {
       const pin = await retrieveData('pin');
       const mnemonic = await retrieveData('mnemonic');
-      const colorScheme = await getLocalStorageItem('colorScheme');
-
-      setStatusBarHidden(false, 'fade');
-      if (!colorScheme) {
-        if (sytemColorScheme) setStatusBarStyle('light');
-        else setStatusBarStyle('dark');
-      } else {
-        if (JSON.parse(colorScheme) === 'dark') setStatusBarStyle('light');
-        else setStatusBarStyle('dark');
-      }
 
       if (pin && mnemonic) setIsLoggedIn(true);
       else setIsLoggedIn(false);
@@ -86,6 +82,7 @@ function ResetStack(): JSX.Element | null {
       if (Platform.OS === 'android') {
         SplashScreen.hide();
       }
+      setStatusBarHidden(false, 'fade');
     })();
   }, []);
 
@@ -120,9 +117,7 @@ function ResetStack(): JSX.Element | null {
           component={isLoggedIn ? AdminLogin : CreateAccountHome}
           options={{animation: 'fade', gestureEnabled: false}}
         />
-
-        {/* <Stack.Screen name="CreateAccountHome" component={CreateAccountHome} /> */}
-        {/* <Stack.Screen name="AdminLogin" component={AdminLogin} /> */}
+        {/* Create Account screens */}
         <Stack.Screen name="DisclaimerPage" component={DislaimerPage} />
         <Stack.Screen name="StartKeyGeneration" component={SecuityOption} />
         <Stack.Screen name="GenerateKey" component={GenerateKey} />
@@ -134,13 +129,23 @@ function ResetStack(): JSX.Element | null {
         <Stack.Group screenOptions={{animation: 'slide_from_bottom'}}>
           <Stack.Screen name="SendBTC" component={SendPaymentHome} />
           <Stack.Screen name="ReceiveBTC" component={ReceivePaymentHome} />
-          <Stack.Group screenOptions={{presentation: 'modal'}}>
+          <Stack.Group
+            screenOptions={{presentation: 'modal', gestureEnabled: false}}>
             <Stack.Screen name="ExpandedTx" component={ExpandedTx} />
             <Stack.Screen name="ConfirmTxPage" component={ConfirmTxPage} />
           </Stack.Group>
           <Stack.Screen name="ContactsPage" component={ContactsPage} />
         </Stack.Group>
-
+        <Stack.Group
+          screenOptions={{
+            animation: 'slide_from_right',
+          }}>
+          <Stack.Screen name="SettingsHome" component={SettingsIndex} />
+          <Stack.Screen
+            name="SettingsContentHome"
+            component={SettingsContentIndex}
+          />
+        </Stack.Group>
         <Stack.Screen
           options={{
             animation: 'fade',

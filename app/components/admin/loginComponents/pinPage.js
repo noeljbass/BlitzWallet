@@ -64,9 +64,7 @@ export default function PinPage(props) {
         style={[
           styles.header,
           {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
+            color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
           },
         ]}>
         {error ? 'Wrong PIN, try again' : 'Enter 4-digit PIN'}
@@ -75,9 +73,7 @@ export default function PinPage(props) {
         style={[
           styles.enterText,
           {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
+            color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
           },
         ]}>
         {pinEnterCount}/8 tries left
@@ -88,13 +84,13 @@ export default function PinPage(props) {
             typeof pin[0] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.isDarkMode
+                  backgroundColor: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 }
               : styles.dot,
             {
-              borderColor: props.isDarkMode
+              borderColor: props.theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             },
@@ -104,13 +100,13 @@ export default function PinPage(props) {
             typeof pin[1] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.isDarkMode
+                  backgroundColor: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 }
               : styles.dot,
             {
-              borderColor: props.isDarkMode
+              borderColor: props.theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             },
@@ -120,13 +116,13 @@ export default function PinPage(props) {
             typeof pin[2] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.isDarkMode
+                  backgroundColor: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 }
               : styles.dot,
             {
-              borderColor: props.isDarkMode
+              borderColor: props.theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             },
@@ -136,13 +132,13 @@ export default function PinPage(props) {
             typeof pin[3] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.isDarkMode
+                  backgroundColor: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 }
               : styles.dot,
             {
-              borderColor: props.isDarkMode
+              borderColor: props.theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             },
@@ -155,7 +151,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -168,7 +164,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -181,7 +177,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -196,7 +192,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -209,7 +205,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -222,7 +218,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -237,7 +233,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -250,7 +246,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -263,7 +259,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -278,7 +274,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -291,7 +287,7 @@ export default function PinPage(props) {
               style={[
                 styles.keyText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },

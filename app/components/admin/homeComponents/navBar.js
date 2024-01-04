@@ -29,9 +29,7 @@ export default function NavBar(props) {
         style={[
           styles.topBarName,
           {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
+            color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
           },
         ]}>
         Blitz Wallet
@@ -40,14 +38,14 @@ export default function NavBar(props) {
         <TouchableOpacity
           onPress={() =>
             navigate.navigate('ConnectionToNode', {
-              isDarkMode: props.isDarkMode,
+              isDarkMode: props.theme,
             })
           }
           style={{
             ...styles.icons,
             backgroundColor:
               props.breezInformation.didConnectToNode == null
-                ? props.isDarkMode
+                ? props.theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset
                 : props.breezInformation.didConnectToNode
@@ -59,14 +57,14 @@ export default function NavBar(props) {
         {/* <TouchableOpacity
           onPress={() => {
             navigate.navigate('ContactsPage', {
-              isDarkMode: props.isDarkMode,
+              isDarkMode: props.theme,
             });
           }}
           activeOpacity={0.5}
           style={[
             styles.icons,
             {
-              backgroundColor: props.isDarkMode
+              backgroundColor: props.theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -75,13 +73,13 @@ export default function NavBar(props) {
         </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
-            setSystemSettingsPopup(true);
+            navigate.navigate('SettingsHome');
           }}
           activeOpacity={0.5}
           style={[
             styles.icons,
             {
-              backgroundColor: props.isDarkMode
+              backgroundColor: props.theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -93,7 +91,7 @@ export default function NavBar(props) {
           style={[
             styles.icons,
             {
-              backgroundColor: props.isDarkMode
+              backgroundColor: props.theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -111,14 +109,14 @@ export default function NavBar(props) {
           setNavViews={setNavViews}
           isDisplayed={navViews.features}
           setFaucet={setFaucet}
-          isDarkMode={props.isDarkMode}
+          isDarkMode={props.theme}
         />
       </View>
 
       <SystemSettings
         isDisplayed={systemSettingsPopup}
         setSystemSettingsPopup={setSystemSettingsPopup}
-        isDarkMode={props.isDarkMode}
+        isDarkMode={props.theme}
         setIsDarkMode={props.setIsDarkMode}
         breezInformation={props.breezInformation}
       />
@@ -127,7 +125,7 @@ export default function NavBar(props) {
         breezEvent={props.breezEvent}
         setFaucet={setFaucet}
         isDisplayed={fucet}
-        isDarkMode={props.isDarkMode}
+        isDarkMode={props.theme}
       />
     </View>
   );

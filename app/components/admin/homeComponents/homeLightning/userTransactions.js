@@ -32,7 +32,7 @@ export function UserTransactions(props) {
     ]);
 
     setTransactionElements();
-  }, [props.transactions, props.showAmount, props.isDarkMode]);
+  }, [props.transactions, props.showAmount, props.theme]);
 
   return <View style={{flex: 1}}>{txs}</View>;
 
@@ -48,7 +48,7 @@ export function UserTransactions(props) {
       if (transactionObject.currentDateString === paymentDate.toDateString()) {
         transactionObject.groupedTransactions.push(
           <UserTransaction
-            isDarkMode={props.isDarkMode}
+            theme={props.theme}
             showAmount={props.showAmount}
             key={id}
             {...transaction}
@@ -70,10 +70,10 @@ export function UserTransactions(props) {
               style={[
                 styles.transactionTimeBanner,
                 {
-                  backgroundColor: props.isDarkMode
+                  backgroundColor: props.theme
                     ? COLORS.darkModeBackgroundOffset
                     : COLORS.lightModeBackgroundOffset,
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -106,7 +106,7 @@ function UserTransaction(props) {
         props.navigate.navigate('ExpandedTx', {
           transactions: props.transactions,
           txId: props.details.data.paymentHash,
-          isDarkMode: props.isDarkMode,
+          theme: props.theme,
         });
       }}>
       <View style={styles.transactionContainer}>
@@ -128,9 +128,7 @@ function UserTransaction(props) {
             style={[
               styles.descriptionText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {props.description.includes('bwrfd')
@@ -145,9 +143,7 @@ function UserTransaction(props) {
             style={[
               styles.dateText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {paymentDate}
@@ -170,9 +166,7 @@ function UserTransaction(props) {
               styles.amountText,
               {
                 fontSize: SIZES.medium,
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             *****

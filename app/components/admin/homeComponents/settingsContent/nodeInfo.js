@@ -7,15 +7,16 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
+import {useTheme} from '../../../../../context-store/context';
 
 export default function NodeInfo(props) {
   const [lnNodeInfo, setLNNodeInfo] = useState({});
   const [isInfoSet, stIsInfoSet] = useState(false);
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const {theme, toggleTheme} = useTheme();
+
   useEffect(() => {
     (async () => {
       try {
@@ -49,9 +50,7 @@ export default function NodeInfo(props) {
           style={[
             styles.peerTitle,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Peer ID
@@ -64,9 +63,7 @@ export default function NodeInfo(props) {
             style={[
               styles.descriptionContent,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {peer}
@@ -83,9 +80,7 @@ export default function NodeInfo(props) {
             style={[
               styles.sectionTitle,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Lightning
@@ -94,7 +89,7 @@ export default function NodeInfo(props) {
             style={[
               styles.itemContainer,
               {
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -103,9 +98,7 @@ export default function NodeInfo(props) {
               style={[
                 styles.itemTitle,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Node ID
@@ -119,9 +112,7 @@ export default function NodeInfo(props) {
                   style={[
                     styles.descriptionContent,
                     {
-                      color: props.isDarkMode
-                        ? COLORS.darkModeText
-                        : COLORS.lightModeText,
+                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                     },
                   ]}>
                   {lnNodeInfo?.id}
@@ -133,9 +124,7 @@ export default function NodeInfo(props) {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 N/A
@@ -147,7 +136,7 @@ export default function NodeInfo(props) {
               styles.itemContainer,
               styles.horizontalContainer,
               {
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -157,9 +146,7 @@ export default function NodeInfo(props) {
                 style={[
                   styles.itemTitle,
                   {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 Max Payable
@@ -168,9 +155,7 @@ export default function NodeInfo(props) {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 {isInfoSet
@@ -183,9 +168,7 @@ export default function NodeInfo(props) {
                 style={[
                   styles.itemTitle,
                   {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 Max Receivable
@@ -194,9 +177,7 @@ export default function NodeInfo(props) {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 {isInfoSet
@@ -209,7 +190,7 @@ export default function NodeInfo(props) {
             style={[
               styles.itemContainer,
               {
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -218,9 +199,7 @@ export default function NodeInfo(props) {
               style={[
                 styles.itemTitle,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Connected Peers
@@ -235,9 +214,7 @@ export default function NodeInfo(props) {
                 style={[
                   styles.descriptionContent,
                   {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 N/A
@@ -251,9 +228,7 @@ export default function NodeInfo(props) {
             style={[
               styles.sectionTitle,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Bitcoin
@@ -264,7 +239,7 @@ export default function NodeInfo(props) {
               {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -275,9 +250,7 @@ export default function NodeInfo(props) {
                 {
                   width: 'auto',
                   marginBottom: 0,
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Onchain Balance
@@ -286,9 +259,7 @@ export default function NodeInfo(props) {
               style={[
                 styles.descriptionContent,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               {isInfoSet
@@ -302,7 +273,7 @@ export default function NodeInfo(props) {
               {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -313,9 +284,7 @@ export default function NodeInfo(props) {
                 {
                   width: 'auto',
                   marginBottom: 0,
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Block Height
@@ -324,9 +293,7 @@ export default function NodeInfo(props) {
               style={[
                 styles.descriptionContent,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               {isInfoSet ? lnNodeInfo?.blockHeight?.toLocaleString() : 'N/A'}

@@ -21,8 +21,9 @@ import InfoPopup from './popupContainer';
 import ResetPage from './resetWallet';
 import DrainPage from './drainPage';
 import DisplayOptions from './displayOptions';
+import {useNavigation} from '@react-navigation/native';
 
-export default function SettingsContent(props) {
+export default function SettingsContentIndex(props) {
   const fadeAnim = useRef(new Animated.Value(600)).current;
   const [displayPopup, setDisplayPopup] = useState({
     isDisplayed: false,
@@ -30,6 +31,7 @@ export default function SettingsContent(props) {
     variable: null,
   });
   const [bitcoinAddress, setBitcoinAddress] = useState('');
+  const navigate = useNavigation();
   // const props.isDarkMode = useColorScheme() === 'dark';
 
   function fadeIn() {
@@ -66,9 +68,9 @@ export default function SettingsContent(props) {
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.topbar}>
           <TouchableOpacity
-            onPress={() =>
-              props.setSettingsContent({isDisplayed: false, for: null})
-            }>
+            onPress={() => {
+              props.setSettingsContent({isDisplayed: false, for: null});
+            }}>
             <Image style={styles.topBarIcon} source={ICONS.leftCheveronIcon} />
           </TouchableOpacity>
           <Text

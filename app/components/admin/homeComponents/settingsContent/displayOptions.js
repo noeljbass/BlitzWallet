@@ -8,17 +8,26 @@ import {
 } from 'react-native';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {CENTER, COLORS, FONT, SIZES} from '../../../../constants';
-import {useEffect, useRef, useState} from 'react';
-import {setStatusBarStyle} from 'expo-status-bar';
+import {useContext, useEffect, useRef, useState} from 'react';
+import {useTheme} from '../../../../../context-store/context';
 
-export default function DisplayOptions(props) {
-  const sytemColorScheme = useColorScheme();
+export default function DisplayOptions() {
+  // const sytemColorScheme = useColorScheme();
   const sliderAnim = useRef(new Animated.Value(3)).current;
+  const {theme, toggleTheme} = useTheme();
+  const systemTheme = useColorScheme() === 'dark';
 
   useEffect(() => {
     (async () => {
       const activeColorScheme = await getLocalStorageItem('colorScheme');
-      handleSlide(JSON.parse(activeColorScheme));
+
+      handleSlide(
+        JSON.parse(activeColorScheme) === 'dark'
+          ? 'dark'
+          : JSON.parse(activeColorScheme) === 'system'
+          ? 'system'
+          : 'light',
+      );
     })();
   }, []);
 
@@ -28,9 +37,7 @@ export default function DisplayOptions(props) {
         style={[
           styles.infoHeaders,
           {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
+            color: theme ? COLORS.darkModeText : COLORS.lightModeText,
           },
         ]}>
         Color Scheme
@@ -39,7 +46,7 @@ export default function DisplayOptions(props) {
         style={[
           styles.contentContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
             alignItems: 'center',
@@ -53,23 +60,21 @@ export default function DisplayOptions(props) {
               style={[
                 styles.colorSchemeText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Dark{' '}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={1} onPress={() => handleSlide(null)}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => handleSlide('system')}>
             <Text
               style={[
                 styles.colorSchemeText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               System
@@ -82,9 +87,7 @@ export default function DisplayOptions(props) {
               style={[
                 styles.colorSchemeText,
                 {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Light{' '}
@@ -95,7 +98,7 @@ export default function DisplayOptions(props) {
               styles.activeSchemeStyle,
               {transform: [{translateX: sliderAnim}, {translateY: 3}]},
               {
-                backgroundColor: props.isDarkMode
+                backgroundColor: theme
                   ? COLORS.darkModeBackgroundOffset
                   : COLORS.lightModeBackgroundOffset,
               },
@@ -116,17 +119,16 @@ export default function DisplayOptions(props) {
 
   async function switchColorScheme(type) {
     try {
-      await setLocalStorageItem('colorScheme', JSON.stringify(type));
-      if (!type) {
-        const colorSceme = sytemColorScheme === 'dark';
-        if (colorSceme) setStatusBarStyle('light');
-        else setStatusBarStyle('dark');
-        props.setIsDarkMode(colorSceme);
+      // console.log(setIsDarkMode);
+      if (type === 'system') {
+        toggleTheme(systemTheme);
+        await setLocalStorageItem('colorScheme', JSON.stringify(type));
+      } else if (type === 'dark') {
+        toggleTheme(true);
+        await setLocalStorageItem('colorScheme', JSON.stringify('dark'));
       } else {
-        const colorSceme = type === 'dark';
-        if (colorSceme) setStatusBarStyle('light');
-        else setStatusBarStyle('dark');
-        props.setIsDarkMode(colorSceme);
+        toggleTheme(false);
+        await setLocalStorageItem('colorScheme', JSON.stringify('light'));
       }
     } catch (err) {
       console.log(err);

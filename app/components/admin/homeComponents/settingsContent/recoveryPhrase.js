@@ -10,14 +10,14 @@ import {KeyContainer} from '../../../login';
 import {retrieveData} from '../../../../functions';
 import {useEffect, useRef, useState} from 'react';
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
+import {useTheme} from '../../../../../context-store/context';
 
 export default function RecoveryPage(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const isInitialRender = useRef(true);
   const [mnemonic, setMnemonic] = useState([]);
   const [showSeed, setShowSeed] = useState(false);
-  // const props.isDarkMode = useColorScheme() === 'dark';
-  // console.log(props);
+  const {theme, toggleTheme} = useTheme();
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -44,9 +44,7 @@ export default function RecoveryPage(props) {
               marginBottom: 15,
               fontSize: SIZES.xLarge,
               textAlign: 'center',
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Keep this phrase in a secure and safe place
@@ -66,7 +64,7 @@ export default function RecoveryPage(props) {
           styles.confirmPopup,
           {
             transform: [{translateY: fadeAnim}],
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           },
@@ -76,9 +74,7 @@ export default function RecoveryPage(props) {
             style={[
               styles.confirmPopupTitle,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Are you sure you want to show your seed phrase

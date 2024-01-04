@@ -16,9 +16,10 @@ import {BarCodeScanner} from 'expo-barcode-scanner';
 import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 import * as WebBrowser from 'expo-web-browser';
+import {useTheme} from '../../../../../context-store/context';
 export default function InfoPopup(props) {
   const fadeAnim = useRef(new Animated.Value(900)).current;
-  // const isDarkMode = useColorScheme() === 'dark';
+  const {theme, toggleTheme} = useTheme();
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -50,21 +51,18 @@ export default function InfoPopup(props) {
       ]}>
       <SafeAreaView style={popupStyles.innerContainer}>
         {props.type === 'LSPInfo' && (
-          <WhatIsAnLSP
-            isDarkMode={props.isDarkMode}
-            setDisplayPopup={props.setDisplayPopup}
-          />
+          <WhatIsAnLSP theme={theme} setDisplayPopup={props.setDisplayPopup} />
         )}
         {props.type === 'btcCamera' && (
           <BTCCamera
-            isDarkMode={props.isDarkMode}
+            theme={theme}
             setBitcoinAddress={props.setBitcoinAddress}
             setDisplayPopup={props.setDisplayPopup}
           />
         )}
         {props.type === 'confirmDrain' && (
           <AreYouSure
-            isDarkMode={props.isDarkMode}
+            theme={theme}
             variable={props.variable}
             setDisplayPopup={props.setDisplayPopup}
           />
@@ -80,7 +78,7 @@ function WhatIsAnLSP(props) {
       style={[
         popupStyles.popupContentContainer,
         {
-          backgroundColor: props.isDarkMode
+          backgroundColor: props.theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -99,9 +97,7 @@ function WhatIsAnLSP(props) {
           style={[
             lspPopupStyle.text,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           A Lightning Service Provider (LSP) is a business that enables a more
@@ -112,9 +108,7 @@ function WhatIsAnLSP(props) {
           style={[
             lspPopupStyle.text,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Since the Lightning Network worked based on a series of channels the
@@ -125,9 +119,7 @@ function WhatIsAnLSP(props) {
           style={[
             lspPopupStyle.text,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           It’s important to note here that an LSP DOES NOT HAVE ACCESS TO YOUR
@@ -232,7 +224,7 @@ function BTCCamera(props) {
       style={{
         flex: 1,
         overflow: 'hidden',
-        backgroundColor: props.isDarkMode
+        backgroundColor: props.theme
           ? COLORS.darkModeBackground
           : COLORS.lightModeBackground,
         borderRadius: 8,
@@ -257,9 +249,7 @@ function BTCCamera(props) {
           style={[
             btcCameraStyles.headerText,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Scan A QR code
@@ -279,7 +269,7 @@ function BTCCamera(props) {
         style={{
           ...btcCameraStyles.bottomBar,
           height: bottomExpand ? 100 : 50,
-          backgroundColor: props.isDarkMode
+          backgroundColor: props.theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         }}>
@@ -287,7 +277,7 @@ function BTCCamera(props) {
           onTouchEnd={toggleBottom}
           style={{
             ...btcCameraStyles.arrowIcon,
-            backgroundColor: props.isDarkMode
+            backgroundColor: props.theme
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           }}>
@@ -312,9 +302,7 @@ function BTCCamera(props) {
             style={[
               btcCameraStyles.bottomText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Paste from clipbard
@@ -328,9 +316,7 @@ function BTCCamera(props) {
             style={[
               btcCameraStyles.bottomText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Choose image
@@ -348,7 +334,7 @@ function AreYouSure(props) {
         style={[
           confirmPopup.innerContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: props.theme
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           },
@@ -357,9 +343,7 @@ function AreYouSure(props) {
           style={[
             confirmPopup.headerText,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Are you sure?
@@ -368,9 +352,7 @@ function AreYouSure(props) {
           style={[
             confirmPopup.descriptionText,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Once you drain your wallet this cannot be undone.
@@ -389,7 +371,7 @@ function AreYouSure(props) {
               style={[
                 confirmPopup.buttonText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -401,7 +383,7 @@ function AreYouSure(props) {
             style={{
               height: '100%',
               width: 2,
-              backgroundColor: props.isDarkMode
+              backgroundColor: props.theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             }}></View>
@@ -416,7 +398,7 @@ function AreYouSure(props) {
               style={[
                 confirmPopup.buttonText,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },

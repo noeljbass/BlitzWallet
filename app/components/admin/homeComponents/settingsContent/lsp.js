@@ -11,14 +11,13 @@ import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
 import * as Clipboard from 'expo-clipboard';
 import {useEffect, useRef, useState} from 'react';
-import {extractFont} from 'react-native-svg/lib/typescript/lib/extract/extractText';
-import {listLsps, lspInfo} from '@breeztech/react-native-breez-sdk';
+
+import {lspInfo} from '@breeztech/react-native-breez-sdk';
+import {useTheme} from '../../../../../context-store/context';
 
 export default function LSPPage(props) {
-  // const props.isDarkMode = useColorScheme() === 'dark';
-  //   const [infoPopup, setInfoPopup] = useState(false);
   const [lsp, setLsp] = useState({});
-  console.log(lsp);
+  const {theme, toggleTheme} = useTheme();
 
   useEffect(() => {
     getLSPInformation();
@@ -29,7 +28,7 @@ export default function LSPPage(props) {
         style={[
           styles.contentContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -47,9 +46,7 @@ export default function LSPPage(props) {
             style={[
               styles.titleText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             What is an LSP?
@@ -61,7 +58,7 @@ export default function LSPPage(props) {
         style={[
           styles.contentContainer,
           {
-            backgroundColor: props.isDarkMode
+            backgroundColor: theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
           },
@@ -71,9 +68,7 @@ export default function LSPPage(props) {
             styles.titleText,
             {
               marginBottom: 5,
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Current LSP
@@ -86,9 +81,7 @@ export default function LSPPage(props) {
             style={[
               styles.descriptionText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 textAlign: 'center',
               },
             ]}>

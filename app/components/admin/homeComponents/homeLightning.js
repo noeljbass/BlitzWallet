@@ -20,7 +20,7 @@ export default function HomeLightning(props) {
       return;
     if (navigate.canGoBack()) navigate.goBack();
     navigate.navigate('ConfirmTxPage', {
-      isDarkMode: props.isDarkMode,
+      theme: props.theme,
       for: props.breezEvent.type,
       information: props.breezEvent,
     });
@@ -32,7 +32,7 @@ export default function HomeLightning(props) {
         setShowAmount={setShowAmount}
         showAmount={showAmount}
         breezInformation={props.breezInformation}
-        isDarkMode={props.isDarkMode}
+        theme={props.theme}
       />
       {!props.breezInformation.didConnectToNode && (
         <View style={style.errorContainer}>
@@ -44,10 +44,10 @@ export default function HomeLightning(props) {
 
       <UserTransactions
         transactions={props.breezInformation.transactions}
-        isDarkMode={props.isDarkMode}
+        theme={props.theme}
         showAmount={showAmount}
       />
-      <SendRecieveBTNs isDarkMode={props.isDarkMode} />
+      <SendRecieveBTNs theme={props.theme} />
     </View>
   );
 }

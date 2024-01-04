@@ -6,7 +6,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {COLORS} from '../../constants';
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import {
   connectToNode,
   setLocalStorageItem,
@@ -22,6 +22,7 @@ import NavBar from '../../components/admin/homeComponents/navBar';
 import HomeLightning from '../../components/admin/homeComponents/homeLightning';
 
 import {getTransactions} from '../../functions/SDK';
+import {useTheme} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}}) {
   const isInitialRender = useRef(true);
@@ -30,11 +31,8 @@ export default function AdminHome({navigation: {navigate}}) {
     transactions: [],
     userBalance: 0,
   });
-
   const [breezEvent, setBreezEvent] = useState({});
-  const hookDarkMode = useColorScheme() === 'dark';
-  const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
-
+  const {theme, toggleTheme} = useTheme();
   // SDK events listener
   console.log(breezEvent);
 
@@ -51,13 +49,7 @@ export default function AdminHome({navigation: {navigate}}) {
   };
 
   useEffect(() => {
-    initWallet(
-      isInitialRender,
-      setBreezInformation,
-      breezEvent,
-      setIsDarkMode,
-      onBreezEvent,
-    );
+    initWallet(isInitialRender, setBreezInformation, breezEvent, onBreezEvent);
   }, [breezEvent]);
 
   return (
@@ -66,7 +58,7 @@ export default function AdminHome({navigation: {navigate}}) {
         styles.container,
 
         {
-          backgroundColor: isDarkMode
+          backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -75,15 +67,15 @@ export default function AdminHome({navigation: {navigate}}) {
         <NavBar
           breezInformation={breezInformation}
           breezEvent={breezEvent}
-          isDarkMode={isDarkMode}
-          setIsDarkMode={setIsDarkMode}
+          theme={theme}
+          // settheme={settheme}
 
           // setSystemSettingsPopup={setSystemSettingsPopup}
         />
         <HomeLightning
           breezEvent={breezEvent}
           breezInformation={breezInformation}
-          isDarkMode={isDarkMode}
+          theme={theme}
         />
       </SafeAreaView>
     </View>
@@ -115,7 +107,6 @@ async function initWallet(
   isInitialRender,
   setBreezInformation,
   breezEvent,
-  setIsDarkMode,
   onBreezEvent,
 ) {
   let savedBreezInfo;
@@ -123,8 +114,6 @@ async function initWallet(
     console.log('RUNNING');
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
-    const setStyle = await setColorScheme();
-    if (setStyle) setIsDarkMode(setStyle);
 
     savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
 

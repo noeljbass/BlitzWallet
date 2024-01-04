@@ -11,13 +11,15 @@ import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 
 import {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {setStatusBarStyle} from 'expo-status-bar';
 
 export default function ConfirmTxPage(props) {
+  console.log('CONFIRM PAYMENT SCREEN', information);
   const navigate = useNavigation();
   const [information, setInformation] = useState({});
-  const isDarkMode = props.route.params?.isDarkMode;
+  const {theme, toggleTheme} = useTheme();
+  setStatusBarStyle('light');
 
-  console.log('CONFIRM PAYMENT SCREEN', information);
   useEffect(() => {
     if (
       props.route.params?.information?.type != 'invoicePaid' &&
@@ -35,7 +37,7 @@ export default function ConfirmTxPage(props) {
       style={[
         styles.popupContainer,
         {
-          backgroundColor: isDarkMode
+          backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -43,6 +45,7 @@ export default function ConfirmTxPage(props) {
       <SafeAreaView style={{flex: 1}}>
         <TouchableOpacity
           onPress={() => {
+            setStatusBarStyle(theme ? 'light' : 'dark');
             navigate.goBack();
           }}>
           <Image style={styles.backButton} source={ICONS.xSmallIcon} />
@@ -53,7 +56,7 @@ export default function ConfirmTxPage(props) {
             style={[
               styles.confirmText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {props.route.params?.for?.toLowerCase() === 'paymentfailed'
@@ -66,7 +69,7 @@ export default function ConfirmTxPage(props) {
             style={[
               styles.dateText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {props.route.params?.for?.toLowerCase() === 'paymentfailed'
@@ -82,9 +85,7 @@ export default function ConfirmTxPage(props) {
               style={[
                 styles.amountText,
                 {
-                  color: isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               {props.route.params?.for?.toLowerCase() === 'invoicepaid'
@@ -106,9 +107,7 @@ export default function ConfirmTxPage(props) {
                 style={[
                   styles.descriptionText,
                   {
-                    color: isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 <Text style={styles.descriptor}>Desc</Text>{' '}
@@ -124,9 +123,7 @@ export default function ConfirmTxPage(props) {
                 style={[
                   styles.feeText,
                   {
-                    color: isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 <Text style={styles.descriptor}>Lightning Fees</Text>{' '}

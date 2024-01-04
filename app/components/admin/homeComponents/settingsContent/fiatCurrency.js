@@ -10,6 +10,8 @@ import {COLORS, FONT, SIZES} from '../../../../constants';
 import {listFiatCurrencies} from '@breeztech/react-native-breez-sdk';
 import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
+import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../../../../context-store/context';
 
 export default function FiatCurrencyPage(props) {
   const isInitialRender = useRef(true);
@@ -17,7 +19,10 @@ export default function FiatCurrencyPage(props) {
   const [textInput, setTextInput] = useState('');
   const [listData, setListData] = useState([]);
   const [currentCurrency, setCurrentCurrency] = useState('');
-  // const props.isDarkMode = useColorScheme() === 'dark';
+  const navigate = useNavigation();
+  const {theme, toggleTheme} = useTheme();
+
+  // const theme = useColorScheme() === 'dark';
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -68,7 +73,7 @@ export default function FiatCurrencyPage(props) {
             style={[
               styles.currencyTitle,
               {
-                color: props.isDarkMode
+                color: theme
                   ? currency.item.id?.toLowerCase() ===
                     currentCurrency?.toLowerCase()
                     ? 'green'
@@ -85,7 +90,7 @@ export default function FiatCurrencyPage(props) {
             style={[
               styles.currencyID,
               {
-                color: props.isDarkMode
+                color: theme
                   ? currency.item.id?.toLowerCase() ===
                     currentCurrency?.toLowerCase()
                     ? 'green'
@@ -115,17 +120,15 @@ export default function FiatCurrencyPage(props) {
           style={[
             styles.input,
             {
-              backgroundColor: props.isDarkMode
+              backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
 
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}
           placeholderTextColor={
-            props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            theme ? COLORS.darkModeText : COLORS.lightModeText
           }
           placeholder="Search currency"
         />
@@ -181,7 +184,7 @@ export default function FiatCurrencyPage(props) {
   async function saveCurrencySettings(selectedCurrency) {
     const didSave = await setLocalStorageItem('currency', selectedCurrency);
     if (didSave) {
-      props.setSettingsContent({isDisplayed: false, for: null});
+      navigate.goBack();
     } else {
       console.log('NOOO');
     }

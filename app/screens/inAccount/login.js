@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,27 +17,21 @@ import {
 import {COLORS, FONT, SIZES} from '../../constants';
 import PinPage from '../../components/admin/loginComponents/pinPage';
 import HomeLogin from '../../components/admin/loginComponents/home';
+import {useTheme} from '../../../context-store/context';
 
 export default function AdminLogin({navigation, route}) {
-  const hookDarkMode = useColorScheme() === 'dark';
-  const [isDarkMode, setIsDarkMode] = useState(hookDarkMode);
   const [didUsePin, setDidUsePin] = useState(false);
   const fromBackground = route.params?.fromBackground;
-  console.log(fromBackground);
-  console.log(didUsePin);
+  const {theme, setTheme} = useTheme();
+  // const theme = theme === 'dark';
+  // console.log(theme, 'TESTIG THEME');
 
-  useEffect(() => {
-    (async () => {
-      const setStyle = await setColorScheme();
-      if (setStyle) setIsDarkMode(setStyle);
-    })();
-  }, [hookDarkMode]);
   return (
     <View
       style={[
         styles.globalContainer,
         {
-          backgroundColor: isDarkMode
+          backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -46,14 +40,14 @@ export default function AdminLogin({navigation, route}) {
         {didUsePin && (
           <PinPage
             navigation={navigation}
-            isDarkMode={isDarkMode}
+            theme={theme}
             fromBackground={fromBackground}
           />
         )}
         {!didUsePin && (
           <HomeLogin
             navigation={navigation}
-            isDarkMode={isDarkMode}
+            theme={theme}
             setDidUsePin={setDidUsePin}
             fromBackground={fromBackground}
           />

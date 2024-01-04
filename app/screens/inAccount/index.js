@@ -6,6 +6,8 @@ import AdminHome from './home';
 import AdminLogin from './login';
 import {ReceivePaymentHome} from './receiveBtcPage';
 import SendPaymentHome from './sendBtcPage';
+import SettingsContentIndex from './settingsContent';
+import SettingsIndex from './settingsIndex';
 
 export {
   ExpandedTx,
@@ -16,4 +18,6 @@ export {
   ConnectionToNode,
   ConfirmTxPage,
   ContactsPage,
+  SettingsContentIndex,
+  SettingsIndex,
 };
