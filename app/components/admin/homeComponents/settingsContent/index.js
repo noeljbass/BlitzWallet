@@ -2,7 +2,7 @@ import AboutPage from './about';
 import DisplayOptions from './displayOptions';
 import DrainPage from './drainPage';
 import FiatCurrencyPage from './fiatCurrency';
-import SettingsContent from './home';
+// import SettingsContent from './home';
 import LSPPage from './lsp';
 import NodeInfo from './nodeInfo';
 import InfoPopup from './popupContainer';
@@ -19,5 +19,5 @@ export {
   InfoPopup,
   RecoveryPage,
   ResetPage,
-  SettingsContent,
+  // SettingsContent,
 };

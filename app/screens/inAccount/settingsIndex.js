@@ -12,7 +12,6 @@ import {
   useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
-import SettingsContentIndex from '../../components/admin/homeComponents/settingsContent/home';
 import {useTheme} from '../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 
@@ -189,10 +188,6 @@ export default function SettingsIndex(props) {
       </SafeAreaView>
 
       {/* popups */}
-      <SettingsContentIndex
-        theme={theme}
-        breezInformation={props.breezInformation}
-      />
     </View>
   );
 }
