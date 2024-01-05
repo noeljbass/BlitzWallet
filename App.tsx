@@ -32,6 +32,7 @@ import {
   SecuityOption,
   RestoreWallet,
   VerifyKey,
+  RestoreWalletError,
 } from './app/screens/createAccount';
 import {
   AdminHome,
@@ -153,6 +154,14 @@ function ResetStack(): JSX.Element | null {
           }}
           name="ConnectionToNode"
           component={ConnectionToNode}
+        />
+        <Stack.Screen
+          options={{
+            animation: 'fade',
+            presentation: 'containedTransparentModal',
+          }}
+          name="RestoreWalletError"
+          component={RestoreWalletError}
         />
       </Stack.Navigator>
     </NavigationContainer>

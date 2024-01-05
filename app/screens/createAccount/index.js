@@ -5,6 +5,7 @@ import PinSetupPage from './keySetup/pin';
 import SecuityOption from './keySetup/secrityOption';
 import VerifyKey from './keySetup/verifyKey';
 import RestoreWallet from './restoreWallet/home';
+import RestoreWalletError from './restoreWallet/errorScreen';
 
 export {
   CreateAccountHome,
@@ -14,4 +15,5 @@ export {
   SecuityOption,
   VerifyKey,
   RestoreWallet,
+  RestoreWalletError,
 };

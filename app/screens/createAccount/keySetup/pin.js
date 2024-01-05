@@ -7,12 +7,301 @@ import {
   View,
 } from 'react-native';
 
-import {FONT, SIZES} from '../../../constants';
-import {storeData} from '../../../functions';
+import {retrieveData, storeData, terminateAccount} from '../../../functions';
+import {CENTER, COLORS, FONT, SIZES} from '../../../constants';
+import {useNavigation} from '@react-navigation/native';
 
-export default function PinSetupPage({navigation: navigate}) {
+export default function PinPage(props) {
   const [pin, setPin] = useState([null, null, null, null]);
-  const [error, setError] = useState(false);
+  const [confirmPin, setConfirmPin] = useState([]);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [pinEnterCount, setPinEnterCount] = useState(0);
+  const navigate = useNavigation();
+
+  useEffect(() => {
+    const filteredPin = pin.filter(pin => {
+      if (typeof pin === 'number') return true;
+    });
+
+    if (filteredPin.length != 4) return;
+    if (confirmPin.length === 0) {
+      setConfirmPin(pin);
+      setPin([null, null, null, null]);
+      setIsConfirming(true);
+      return;
+    }
+    (async () => {
+      if (pin.toString() === confirmPin.toString()) {
+        storeData('pin', JSON.stringify(confirmPin));
+        clearSettings();
+        navigate.navigate('HomeAdmin');
+        return;
+      } else {
+        if (pinEnterCount === 8) {
+          setTimeout(async () => {
+            const deleted = await terminateAccount();
+
+            if (deleted) {
+              clearSettings();
+              navigate.reset('Home');
+            } else console.log('ERRROR');
+          }, 2000);
+        } else {
+          if (isConfirming) return;
+          setIsConfirming(true);
+          setPinEnterCount(prev => (prev += 1));
+          setTimeout(() => {
+            setIsConfirming(false);
+            setPin([null, null, null, null]);
+          }, 500);
+        }
+      }
+    })();
+  }, [pin]);
+
+  return (
+    <View style={{flex: 1, backgroundColor: COLORS.lightModeBackground}}>
+      <SafeAreaView style={styles.contentContainer}>
+        <Text
+          style={[
+            styles.header,
+            {
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
+          {isConfirming ? 'Confirm Pin' : 'Enter 4-digit PIN'}
+        </Text>
+        <Text
+          style={[
+            styles.enterText,
+            {
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
+          {pinEnterCount}/8 tries left
+        </Text>
+        <View style={styles.dotContainer}>
+          <View
+            style={[
+              typeof pin[0] === 'number'
+                ? {
+                    ...styles.dot_active,
+                    backgroundColor: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  }
+                : styles.dot,
+              {
+                borderColor: props.theme
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}></View>
+          <View
+            style={[
+              typeof pin[1] === 'number'
+                ? {
+                    ...styles.dot_active,
+                    backgroundColor: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  }
+                : styles.dot,
+              {
+                borderColor: props.theme
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}></View>
+          <View
+            style={[
+              typeof pin[2] === 'number'
+                ? {
+                    ...styles.dot_active,
+                    backgroundColor: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  }
+                : styles.dot,
+              {
+                borderColor: props.theme
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}></View>
+          <View
+            style={[
+              typeof pin[3] === 'number'
+                ? {
+                    ...styles.dot_active,
+                    backgroundColor: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  }
+                : styles.dot,
+              {
+                borderColor: props.theme
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}></View>
+        </View>
+        <View style={styles.keyboardContainer}>
+          <View style={styles.keyboard_row}>
+            <TouchableOpacity onPress={() => addPin(1)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                1
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(2)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                2
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(3)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                3
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.keyboard_row}>
+            <TouchableOpacity onPress={() => addPin(4)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                4
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(5)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                5
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(6)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                6
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.keyboard_row}>
+            <TouchableOpacity onPress={() => addPin(7)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                7
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(8)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                8
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(9)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                9
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.keyboard_row}>
+            <TouchableOpacity onPress={() => addPin(0)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                0
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => addPin(null)} style={styles.key}>
+              <Text
+                style={[
+                  styles.keyText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                {'<--'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
+    </View>
+  );
 
   function addPin(id) {
     if (typeof id != 'number') {
@@ -39,111 +328,15 @@ export default function PinSetupPage({navigation: navigate}) {
       });
     }
   }
-
-  useEffect(() => {
-    const filteredPin = pin.filter(pin => {
-      if (typeof pin === 'number') return true;
-    });
-
-    if (filteredPin.length != 4) return;
-    (async () => {
-      const stored = await storeData('pin', JSON.stringify(pin));
-      console.log(stored);
-
-      if (stored) {
-        console.log('TEST');
-
-        return navigate('HomeAdmin');
-      } else {
-        setError(true);
-        setTimeout(() => {
-          setError(false);
-          setPin([null, null, null, null]);
-        }, 1000);
-      }
-    })();
-  }, [pin]);
-
-  return (
-    <SafeAreaView style={styles.globalContainer}>
-      <View style={styles.contentContainer}>
-        <Text style={styles.header}>
-          {error ? 'Error saving data, try again' : 'Choose a 4-digit PIN'}
-        </Text>
-        <Text style={styles.subHeader}>
-          PIN entry will be required for wallet access. Write it down as it
-          cannot be recovered.
-        </Text>
-        <View style={styles.dotContainer}>
-          <View
-            style={
-              typeof pin[0] === 'number' ? styles.dot_active : styles.dot
-            }></View>
-          <View
-            style={
-              typeof pin[1] === 'number' ? styles.dot_active : styles.dot
-            }></View>
-          <View
-            style={
-              typeof pin[2] === 'number' ? styles.dot_active : styles.dot
-            }></View>
-          <View
-            style={
-              typeof pin[3] === 'number' ? styles.dot_active : styles.dot
-            }></View>
-        </View>
-        <View style={styles.keyboardContainer}>
-          <View style={styles.keyboard_row}>
-            <TouchableOpacity onPress={() => addPin(1)} style={styles.key}>
-              <Text style={styles.keyText}>1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(2)} style={styles.key}>
-              <Text style={styles.keyText}>2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(3)} style={styles.key}>
-              <Text style={styles.keyText}>3</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.keyboard_row}>
-            <TouchableOpacity onPress={() => addPin(4)} style={styles.key}>
-              <Text style={styles.keyText}>4</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(5)} style={styles.key}>
-              <Text style={styles.keyText}>5</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(6)} style={styles.key}>
-              <Text style={styles.keyText}>6</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.keyboard_row}>
-            <TouchableOpacity onPress={() => addPin(7)} style={styles.key}>
-              <Text style={styles.keyText}>7</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(8)} style={styles.key}>
-              <Text style={styles.keyText}>8</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(9)} style={styles.key}>
-              <Text style={styles.keyText}>9</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.keyboard_row}>
-            <TouchableOpacity onPress={() => addPin(0)} style={styles.key}>
-              <Text style={styles.keyText}>0</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addPin(null)} style={styles.key}>
-              <Text style={styles.keyText}>{'<--'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </SafeAreaView>
-  );
+  function clearSettings() {
+    setPin([null, null, null, null]);
+    setConfirmPin([]);
+    setIsConfirming(false);
+    setPinEnterCount(0);
+  }
 }
 
 const styles = StyleSheet.create({
-  globalContainer: {
-    flex: 1,
-  },
   contentContainer: {
     width: '90%',
     flex: 1,
@@ -158,32 +351,31 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: FONT.Title_Bold,
   },
-  subHeader: {
-    fontSize: SIZES.medium,
-    textAlign: 'center',
-    opacity: 0.5,
-    fontFamily: FONT.Descriptoin_Regular,
-
+  enterText: {
+    fontSize: SIZES.small,
+    fontWeight: 'bold',
     marginBottom: 30,
+    fontFamily: FONT.Descriptoin_Bold,
   },
+
   dotContainer: {
-    width: 120,
+    width: 150,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   dot: {
-    width: 20,
-    height: 20,
-    borderRadius: '50%',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     borderWidth: 1,
   },
   dot_active: {
-    width: 20,
-    height: 20,
-    borderRadius: '50%',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     borderWidth: 1,
-    backgroundColor: 'black',
+    // backgroundColor: 'black',
   },
   keyboardContainer: {
     width: '100%',
