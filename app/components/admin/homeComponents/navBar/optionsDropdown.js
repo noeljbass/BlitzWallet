@@ -39,6 +39,13 @@ const NAVITEMS = [
     inApp: false,
   },
   {
+    name: 'Merchants',
+    link: 'https://btcmap.org/map#3/0.00000/0.00000',
+    icon: ICONS.locationIcon,
+    inApp: false,
+  },
+
+  {
     name: 'View Code',
     link: 'https://github.com/BlakeKaufman/BlitzWallet',
     icon: ICONS.githubIcon,
@@ -51,7 +58,7 @@ export function OptionsDropdown(props) {
   const navElements = NAVITEMS.map((item, id) => {
     return (
       <View
-        style={[styles.navItem, {borderBottomWidth: id == 3 ? 0 : 1}]}
+        style={[styles.navItem, {borderBottomWidth: id == 4 ? 0 : 1}]}
         key={id}>
         <TouchableOpacity
           onPress={() => {
@@ -100,7 +107,7 @@ export function OptionsDropdown(props) {
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
-      toValue: 160,
+      toValue: 200,
       duration: 400,
       useNativeDriver: false,
     }).start();
