@@ -45,6 +45,7 @@ export default async function connectToNode(breezEvent) {
 
         // Connect to the Breez SDK make it ready for use
         await connect(config, seed, breezEvent);
+
         return new Promise(resolve => {
           resolve({isConnected: true, reason: 'Connected through node'});
         });

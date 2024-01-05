@@ -40,14 +40,9 @@ export default function NavBar(props) {
           }
           style={{
             ...styles.icons,
-            backgroundColor:
-              props.breezInformation.didConnectToNode == null
-                ? props.theme
-                  ? COLORS.darkModeBackgroundOffset
-                  : COLORS.lightModeBackgroundOffset
-                : props.breezInformation.didConnectToNode
-                ? COLORS.connectedNodeColor
-                : COLORS.notConnectedNodeColor,
+            backgroundColor: props.breezInformation.didConnectToNode
+              ? COLORS.connectedNodeColor
+              : COLORS.notConnectedNodeColor,
           }}>
           <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
         </TouchableOpacity>

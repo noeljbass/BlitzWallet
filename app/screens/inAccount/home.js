@@ -14,6 +14,8 @@ import {
   setColorScheme,
 } from '../../functions';
 import {
+  listLsps,
+  lspId,
   lspInfo,
   nodeInfo,
   serviceHealthCheck,
@@ -44,6 +46,7 @@ export default function AdminHome({navigation: {navigate}}) {
       e?.type != 'paymentFailed'
     )
       return;
+    console.log('PASSED LOGIC');
 
     setBreezEvent(e);
   };
@@ -133,7 +136,9 @@ async function initWallet(
         // console.log(healthCheck);
 
         console.log(heath);
-        console.log(info.openingFeeParamsList, 'LSPPSSS');
+        console.log(info, 'LSPPSSS');
+
+        if (!info.id) reconnectToLSP();
 
         setBreezInformation(prev => {
           return {
@@ -188,6 +193,15 @@ async function initWallet(
 
     console.log('HOME RENDER PAID INVOINCE');
     // }
+  }
+}
+
+async function reconnectToLSP() {
+  try {
+    const [availableLsps] = await listLsps();
+    await connectLsp(availableLsps.id);
+  } catch (err) {
+    console.log(err);
   }
 }
 
