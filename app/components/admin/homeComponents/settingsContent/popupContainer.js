@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useColorScheme,
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {CENTER, backArrow} from '../../../../constants/styles';
@@ -54,13 +53,6 @@ export default function InfoPopup(props) {
           <BTCCamera
             theme={theme}
             setBitcoinAddress={props.setBitcoinAddress}
-            setDisplayPopup={props.setDisplayPopup}
-          />
-        )}
-        {props.type === 'confirmDrain' && (
-          <AreYouSure
-            theme={theme}
-            variable={props.variable}
             setDisplayPopup={props.setDisplayPopup}
           />
         )}
@@ -249,90 +241,6 @@ function BTCCamera(props) {
   );
 }
 
-// function AreYouSure(props) {
-//   return (
-//     <View style={[confirmPopup.container]}>
-//       <View
-//         style={[
-//           confirmPopup.innerContainer,
-//           {
-//             backgroundColor: props.theme
-//               ? COLORS.darkModeBackground
-//               : COLORS.lightModeBackground,
-//           },
-//         ]}>
-//         <Text
-//           style={[
-//             confirmPopup.headerText,
-//             {
-//               color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-//             },
-//           ]}>
-//           Are you sure?
-//         </Text>
-//         <Text
-//           style={[
-//             confirmPopup.descriptionText,
-//             {
-//               color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-//             },
-//           ]}>
-//           Once you drain your wallet this cannot be undone.
-//         </Text>
-
-//         <View style={confirmPopup.buttonContainer}>
-//           <TouchableOpacity
-//             onPress={() => {
-//               props.variable(true);
-//               props.setDisplayPopup(prev => {
-//                 return {...prev, isDisplayed: false};
-//               });
-//             }}
-//             style={[confirmPopup.button]}>
-//             <Text
-//               style={[
-//                 confirmPopup.buttonText,
-//                 {
-//                   color: props.theme
-//                     ? COLORS.darkModeText
-//                     : COLORS.lightModeText,
-//                 },
-//               ]}>
-//               Yes
-//             </Text>
-//           </TouchableOpacity>
-//           <View
-//             style={{
-//               height: '100%',
-//               width: 2,
-//               backgroundColor: props.theme
-//                 ? COLORS.darkModeText
-//                 : COLORS.lightModeText,
-//             }}></View>
-//           <TouchableOpacity
-//             onPress={() => {
-//               props.setDisplayPopup(prev => {
-//                 return {...prev, isDisplayed: false};
-//               });
-//             }}
-//             style={confirmPopup.button}>
-//             <Text
-//               style={[
-//                 confirmPopup.buttonText,
-//                 {
-//                   color: props.theme
-//                     ? COLORS.darkModeText
-//                     : COLORS.lightModeText,
-//                 },
-//               ]}>
-//               No
-//             </Text>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-//     </View>
-//   );
-// }
 const btcCameraStyles = StyleSheet.create({
   topBar: {
     width: '100%',
@@ -416,52 +324,3 @@ const popupStyles = StyleSheet.create({
     borderRadius: 8,
   },
 });
-
-// const confirmPopup = StyleSheet.create({
-//   container: {
-//     width: '100%',
-//     height: '100%',
-//     position: 'absolute',
-//     zIndex: 1,
-
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   innerContainer: {
-//     maxWidth: '90%',
-//     backgroundColor: COLORS.primary,
-//     padding: 8,
-//     borderRadius: 8,
-//     ...SHADOWS.medium,
-//   },
-
-//   headerText: {
-//     fontFamily: FONT.Title_Bold,
-//     fontSize: SIZES.large,
-//     textAlign: 'center',
-//     color: COLORS.background,
-//     marginBottom: 5,
-//   },
-//   descriptionText: {
-//     maxWidth: '90%',
-//     fontFamily: FONT.Descriptoin_Regular,
-//     fontSize: SIZES.medium,
-//     textAlign: 'center',
-//     color: COLORS.background,
-//     marginBottom: 25,
-//   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-//   },
-//   button: {
-//     width: '50%',
-//     height: 30,
-//     alignItems: 'center',
-//   },
-//   buttonText: {
-//     fontFamily: FONT.Other_Regular,
-//     fontSize: SIZES.large,
-//     color: COLORS.background,
-//   },
-// });

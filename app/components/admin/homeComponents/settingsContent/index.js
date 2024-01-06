@@ -7,6 +7,7 @@ import LSPPage from './lsp';
 import NodeInfo from './nodeInfo';
 import InfoPopup from './popupContainer';
 import ConfirmDrainPage from './popups/confirmDrain';
+import DrainWalletAddress from './popups/drainWalletAddress';
 import LspDescriptionPopup from './popups/lspDescription';
 import RecoveryPage from './recoveryPhrase';
 import ResetPage from './resetWallet';
@@ -23,5 +24,6 @@ export {
   ResetPage,
   LspDescriptionPopup,
   ConfirmDrainPage,
+  DrainWalletAddress,
   // SettingsContent,
 };

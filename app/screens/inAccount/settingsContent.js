@@ -108,12 +108,12 @@ export default function SettingsContentIndex(props) {
         )}
         {/* </View> */}
       </SafeAreaView>
-      <InfoPopup
+      {/* <InfoPopup
         setDisplayPopup={setDisplayPopup}
         {...displayPopup}
         setBitcoinAddress={setBitcoinAddress}
         theme={theme}
-      />
+      /> */}
     </View>
   );
 }

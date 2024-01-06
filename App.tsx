@@ -55,6 +55,7 @@ import {
 import {ThemeProvider} from './context-store/context';
 import {
   ConfirmDrainPage,
+  DrainWalletAddress,
   LspDescriptionPopup,
 } from './app/components/admin/homeComponents/settingsContent';
 
@@ -140,6 +141,10 @@ function ResetStack(): JSX.Element | null {
             <Stack.Screen name="ConfirmTxPage" component={ConfirmTxPage} />
           </Stack.Group>
           <Stack.Screen name="ContactsPage" component={ContactsPage} />
+          <Stack.Screen
+            name="DrainWalletAddress"
+            component={DrainWalletAddress}
+          />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
