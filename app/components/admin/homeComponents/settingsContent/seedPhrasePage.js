@@ -11,13 +11,15 @@ import {retrieveData} from '../../../../functions';
 import {useEffect, useRef, useState} from 'react';
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
 import {useTheme} from '../../../../../context-store/context';
+import {useNavigation} from '@react-navigation/native';
 
-export default function RecoveryPage(props) {
+export default function SeedPhrasePage() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const isInitialRender = useRef(true);
   const [mnemonic, setMnemonic] = useState([]);
   const [showSeed, setShowSeed] = useState(false);
   const {theme, toggleTheme} = useTheme();
+  const navigate = useNavigation();
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -92,9 +94,7 @@ export default function RecoveryPage(props) {
               <Text style={styles.confirmBTNText}>Yes</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                props.setSettingsContent({isDisplayed: false, for: null})
-              }
+              onPress={() => navigate.goBack()}
               style={[styles.confirmBTN, {backgroundColor: COLORS.cancelRed}]}>
               <Text style={styles.confirmBTNText}>No</Text>
             </TouchableOpacity>

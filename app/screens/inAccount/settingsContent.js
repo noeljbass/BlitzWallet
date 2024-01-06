@@ -1,14 +1,11 @@
 import {useEffect, useRef, useState} from 'react';
 import {
-  Animated,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Image,
-  ScrollView,
   SafeAreaView,
-  useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {
@@ -16,11 +13,10 @@ import {
   DisplayOptions,
   DrainPage,
   FiatCurrencyPage,
-  InfoPopup,
   LSPPage,
   NodeInfo,
-  RecoveryPage,
   ResetPage,
+  SeedPhrasePage,
 } from '../../components/admin/homeComponents/settingsContent';
 
 import {useNavigation} from '@react-navigation/native';
@@ -28,12 +24,6 @@ import {useTheme} from '../../../context-store/context';
 import FaceIdPage from '../../components/admin/homeComponents/settingsContent/faceId';
 
 export default function SettingsContentIndex(props) {
-  const [displayPopup, setDisplayPopup] = useState({
-    isDisplayed: false,
-    type: '',
-    variable: null,
-  });
-  const [bitcoinAddress, setBitcoinAddress] = useState('');
   const navigate = useNavigation();
   const {theme, toggleTheme} = useTheme();
   const selectedPage = props.route.params.for;
@@ -71,10 +61,7 @@ export default function SettingsContentIndex(props) {
         {selectedPage?.toLowerCase() === 'about' && <AboutPage theme={theme} />}
 
         {selectedPage?.toLowerCase() === 'fiat currency' && (
-          <FiatCurrencyPage
-            theme={theme}
-            setSettingsContent={props.setSettingsContent}
-          />
+          <FiatCurrencyPage theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'node info' && (
           <NodeInfo theme={theme} />
@@ -85,35 +72,18 @@ export default function SettingsContentIndex(props) {
         {selectedPage?.toLowerCase() === 'face id' && (
           <FaceIdPage theme={theme} />
         )}
-
         {selectedPage?.toLowerCase() === 'recovery phrase' && (
-          <RecoveryPage
-            theme={theme}
-            setSettingsContent={props.setSettingsContent}
-          />
+          <SeedPhrasePage theme={theme} />
         )}
-        {selectedPage?.toLowerCase() === 'lsp' && (
-          <LSPPage theme={theme} setDisplayPopup={setDisplayPopup} />
-        )}
+        {selectedPage?.toLowerCase() === 'lsp' && <LSPPage theme={theme} />}
         {selectedPage?.toLowerCase() === 'reset wallet' && (
           <ResetPage theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'drain wallet' && (
-          <DrainPage
-            setBitcoinAddress={setBitcoinAddress}
-            bitcoinAddress={bitcoinAddress}
-            setDisplayPopup={setDisplayPopup}
-            theme={theme}
-          />
+          <DrainPage theme={theme} />
         )}
         {/* </View> */}
       </SafeAreaView>
-      {/* <InfoPopup
-        setDisplayPopup={setDisplayPopup}
-        {...displayPopup}
-        setBitcoinAddress={setBitcoinAddress}
-        theme={theme}
-      /> */}
     </View>
   );
 }
