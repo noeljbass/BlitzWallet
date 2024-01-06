@@ -53,6 +53,10 @@ import {
   setStatusBarStyle,
 } from 'expo-status-bar';
 import {ThemeProvider} from './context-store/context';
+import {
+  ConfirmDrainPage,
+  LspDescriptionPopup,
+} from './app/components/admin/homeComponents/settingsContent';
 
 const Stack = createNativeStackNavigator();
 
@@ -147,22 +151,27 @@ function ResetStack(): JSX.Element | null {
             component={SettingsContentIndex}
           />
         </Stack.Group>
-        <Stack.Screen
-          options={{
+        <Stack.Group
+          screenOptions={{
             animation: 'fade',
             presentation: 'containedTransparentModal',
-          }}
-          name="ConnectionToNode"
-          component={ConnectionToNode}
-        />
-        <Stack.Screen
-          options={{
-            animation: 'fade',
-            presentation: 'containedTransparentModal',
-          }}
-          name="RestoreWalletError"
-          component={RestoreWalletError}
-        />
+          }}>
+          <Stack.Screen name="ConnectionToNode" component={ConnectionToNode} />
+          <Stack.Screen
+            name="RestoreWalletError"
+            component={RestoreWalletError}
+          />
+          <Stack.Screen name="ConfirmDrainPage" component={ConfirmDrainPage} />
+        </Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            presentation: 'modal',
+          }}>
+          <Stack.Screen
+            name="LspDescriptionPopup"
+            component={LspDescriptionPopup}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );

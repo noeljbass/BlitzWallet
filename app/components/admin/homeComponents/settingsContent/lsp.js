@@ -14,10 +14,12 @@ import {useEffect, useRef, useState} from 'react';
 
 import {lspInfo} from '@breeztech/react-native-breez-sdk';
 import {useTheme} from '../../../../../context-store/context';
+import {useNavigation} from '@react-navigation/native';
 
 export default function LSPPage(props) {
   const [lsp, setLsp] = useState({});
   const {theme, toggleTheme} = useTheme();
+  const navigate = useNavigation();
 
   useEffect(() => {
     getLSPInformation();
@@ -35,7 +37,8 @@ export default function LSPPage(props) {
         ]}>
         <TouchableOpacity
           onPress={() =>
-            props.setDisplayPopup({isDisplayed: true, type: 'LSPInfo'})
+            // props.setDisplayPopup({isDisplayed: true, type: 'LSPInfo'})
+            navigate.navigate('LspDescriptionPopup')
           }
           style={{
             flexDirection: 'row',

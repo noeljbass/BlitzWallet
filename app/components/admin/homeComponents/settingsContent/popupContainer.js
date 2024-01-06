@@ -50,9 +50,6 @@ export default function InfoPopup(props) {
         },
       ]}>
       <SafeAreaView style={popupStyles.innerContainer}>
-        {props.type === 'LSPInfo' && (
-          <WhatIsAnLSP theme={theme} setDisplayPopup={props.setDisplayPopup} />
-        )}
         {props.type === 'btcCamera' && (
           <BTCCamera
             theme={theme}
@@ -69,81 +66,6 @@ export default function InfoPopup(props) {
         )}
       </SafeAreaView>
     </Animated.View>
-  );
-}
-
-function WhatIsAnLSP(props) {
-  return (
-    <View
-      style={[
-        popupStyles.popupContentContainer,
-        {
-          backgroundColor: props.theme
-            ? COLORS.darkModeBackground
-            : COLORS.lightModeBackground,
-        },
-      ]}>
-      <TouchableOpacity
-        onPress={() =>
-          props.setDisplayPopup({isDisplayed: false, type: 'LSPInfo'})
-        }>
-        <Image
-          style={[backArrow, {marginBottom: 20, marginLeft: 0}]}
-          source={ICONS.leftCheveronIcon}
-        />
-      </TouchableOpacity>
-      <View style={{width: '100%', alignItems: 'center'}}>
-        <Text
-          style={[
-            lspPopupStyle.text,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          A Lightning Service Provider (LSP) is a business that enables a more
-          seamless experience on the Lightning Network. Such services include
-          providing liquidity management and payment routing.
-        </Text>
-        <Text
-          style={[
-            lspPopupStyle.text,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          Since the Lightning Network worked based on a series of channels the
-          size of a Lightning channel is naturally constrained. Using an LSP
-          decreases that constraint making larger payments more feasible.
-        </Text>
-        <Text
-          style={[
-            lspPopupStyle.text,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          It’s important to note here that an LSP DOES NOT HAVE ACCESS TO YOUR
-          FUNDS. They are mealy a helper to make the Lightning Networks
-          liquidity constraint have less of an impact.
-        </Text>
-        <TouchableOpacity
-          onPress={() => {
-            try {
-              WebBrowser.openBrowserAsync(
-                'https://thebitcoinmanual.com/articles/explained-lsp/#:~:text=LSPs%20are%20counterparties%20on%20users%E2%80%99%20payment%20channels%20that,network%20management%20such%20as%3A%20Opening%20and%20closing%20channels',
-              );
-            } catch (err) {
-              console.log(err);
-            }
-          }}
-          style={[BTN, {backgroundColor: COLORS.primary, marginTop: 10}]}>
-          <Text
-            style={{fontSize: SIZES.large, color: COLORS.lightModeBackground}}>
-            Learn More
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
   );
 }
 
@@ -327,90 +249,90 @@ function BTCCamera(props) {
   );
 }
 
-function AreYouSure(props) {
-  return (
-    <View style={[confirmPopup.container]}>
-      <View
-        style={[
-          confirmPopup.innerContainer,
-          {
-            backgroundColor: props.theme
-              ? COLORS.darkModeBackground
-              : COLORS.lightModeBackground,
-          },
-        ]}>
-        <Text
-          style={[
-            confirmPopup.headerText,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          Are you sure?
-        </Text>
-        <Text
-          style={[
-            confirmPopup.descriptionText,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          Once you drain your wallet this cannot be undone.
-        </Text>
+// function AreYouSure(props) {
+//   return (
+//     <View style={[confirmPopup.container]}>
+//       <View
+//         style={[
+//           confirmPopup.innerContainer,
+//           {
+//             backgroundColor: props.theme
+//               ? COLORS.darkModeBackground
+//               : COLORS.lightModeBackground,
+//           },
+//         ]}>
+//         <Text
+//           style={[
+//             confirmPopup.headerText,
+//             {
+//               color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+//             },
+//           ]}>
+//           Are you sure?
+//         </Text>
+//         <Text
+//           style={[
+//             confirmPopup.descriptionText,
+//             {
+//               color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+//             },
+//           ]}>
+//           Once you drain your wallet this cannot be undone.
+//         </Text>
 
-        <View style={confirmPopup.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              props.variable(true);
-              props.setDisplayPopup(prev => {
-                return {...prev, isDisplayed: false};
-              });
-            }}
-            style={[confirmPopup.button]}>
-            <Text
-              style={[
-                confirmPopup.buttonText,
-                {
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              Yes
-            </Text>
-          </TouchableOpacity>
-          <View
-            style={{
-              height: '100%',
-              width: 2,
-              backgroundColor: props.theme
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
-            }}></View>
-          <TouchableOpacity
-            onPress={() => {
-              props.setDisplayPopup(prev => {
-                return {...prev, isDisplayed: false};
-              });
-            }}
-            style={confirmPopup.button}>
-            <Text
-              style={[
-                confirmPopup.buttonText,
-                {
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              No
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
-}
+//         <View style={confirmPopup.buttonContainer}>
+//           <TouchableOpacity
+//             onPress={() => {
+//               props.variable(true);
+//               props.setDisplayPopup(prev => {
+//                 return {...prev, isDisplayed: false};
+//               });
+//             }}
+//             style={[confirmPopup.button]}>
+//             <Text
+//               style={[
+//                 confirmPopup.buttonText,
+//                 {
+//                   color: props.theme
+//                     ? COLORS.darkModeText
+//                     : COLORS.lightModeText,
+//                 },
+//               ]}>
+//               Yes
+//             </Text>
+//           </TouchableOpacity>
+//           <View
+//             style={{
+//               height: '100%',
+//               width: 2,
+//               backgroundColor: props.theme
+//                 ? COLORS.darkModeText
+//                 : COLORS.lightModeText,
+//             }}></View>
+//           <TouchableOpacity
+//             onPress={() => {
+//               props.setDisplayPopup(prev => {
+//                 return {...prev, isDisplayed: false};
+//               });
+//             }}
+//             style={confirmPopup.button}>
+//             <Text
+//               style={[
+//                 confirmPopup.buttonText,
+//                 {
+//                   color: props.theme
+//                     ? COLORS.darkModeText
+//                     : COLORS.lightModeText,
+//                 },
+//               ]}>
+//               No
+//             </Text>
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     </View>
+//   );
+// }
 const btcCameraStyles = StyleSheet.create({
   topBar: {
     width: '100%',
@@ -495,60 +417,51 @@ const popupStyles = StyleSheet.create({
   },
 });
 
-const confirmPopup = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    zIndex: 1,
+// const confirmPopup = StyleSheet.create({
+//   container: {
+//     width: '100%',
+//     height: '100%',
+//     position: 'absolute',
+//     zIndex: 1,
 
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  innerContainer: {
-    maxWidth: '90%',
-    backgroundColor: COLORS.primary,
-    padding: 8,
-    borderRadius: 8,
-    ...SHADOWS.medium,
-  },
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   innerContainer: {
+//     maxWidth: '90%',
+//     backgroundColor: COLORS.primary,
+//     padding: 8,
+//     borderRadius: 8,
+//     ...SHADOWS.medium,
+//   },
 
-  headerText: {
-    fontFamily: FONT.Title_Bold,
-    fontSize: SIZES.large,
-    textAlign: 'center',
-    color: COLORS.background,
-    marginBottom: 5,
-  },
-  descriptionText: {
-    maxWidth: '90%',
-    fontFamily: FONT.Descriptoin_Regular,
-    fontSize: SIZES.medium,
-    textAlign: 'center',
-    color: COLORS.background,
-    marginBottom: 25,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  button: {
-    width: '50%',
-    height: 30,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontFamily: FONT.Other_Regular,
-    fontSize: SIZES.large,
-    color: COLORS.background,
-  },
-});
-
-const lspPopupStyle = StyleSheet.create({
-  text: {
-    width: '95%',
-    fontSize: SIZES.large,
-    marginBottom: 10,
-    fontFamily: FONT.Descriptoin_Regular,
-  },
-});
+//   headerText: {
+//     fontFamily: FONT.Title_Bold,
+//     fontSize: SIZES.large,
+//     textAlign: 'center',
+//     color: COLORS.background,
+//     marginBottom: 5,
+//   },
+//   descriptionText: {
+//     maxWidth: '90%',
+//     fontFamily: FONT.Descriptoin_Regular,
+//     fontSize: SIZES.medium,
+//     textAlign: 'center',
+//     color: COLORS.background,
+//     marginBottom: 25,
+//   },
+//   buttonContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//   },
+//   button: {
+//     width: '50%',
+//     height: 30,
+//     alignItems: 'center',
+//   },
+//   buttonText: {
+//     fontFamily: FONT.Other_Regular,
+//     fontSize: SIZES.large,
+//     color: COLORS.background,
+//   },
+// });
