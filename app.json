@@ -1,5 +1,5 @@
 {
-  "name": "BlitzWallet",
+  "name": "blitz-wallet",
   "slug": "blitz-wallet",
   "scheme": "blitz-wallet",
   "displayName": "Blitz Wallet",
@@ -7,8 +7,9 @@
   "expo": {
     "extra": {
       "eas": {
-        "projectId": "f7c412c9-c023-4af6-a03f-79729cf0ece3"
+        "projectId": "66fb5c9e-88ad-4e50-8840-caf83e1c78ba"
       }
-    }
+    },
+    "owner": "bkaufman20"
   }
 }
