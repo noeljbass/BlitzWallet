@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -12,6 +13,7 @@ import {useEffect, useRef, useState} from 'react';
 import {fetchFiatRates} from '@breeztech/react-native-breez-sdk';
 import {getLocalStorageItem} from '../../../../functions';
 import {useTheme} from '../../../../../context-store/context';
+import {useNavigation} from '@react-navigation/native';
 // TEXT INPUT CAUSES LAUNCH SCREEN TO FAIL
 export default function DrainPage(props) {
   const isInitialRender = useRef(true);
@@ -19,7 +21,7 @@ export default function DrainPage(props) {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [fiatRate, setFiatRate] = useState(0);
   const {theme, toggleTheme} = useTheme();
-  // const theme = useColorScheme() === 'dark';
+  const navigate = useNavigation();
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -28,7 +30,11 @@ export default function DrainPage(props) {
     }
     if (!wantsToDrain) return;
 
-    console.log('DRAINING WALLET');
+    Alert.alert('This function does not work yet', '', [
+      {text: 'Ok', onPress: () => navigate.goBack()},
+    ]);
+
+    // console.log('DRAINING WALLET');
   }, [wantsToDrain]);
 
   return (
@@ -114,12 +120,16 @@ export default function DrainPage(props) {
       <TouchableOpacity
         onPress={() => {
           if (!props.bitcoinAddress) return;
-          setShowConfirmPopup(true);
-          props.setDisplayPopup({
-            isDisplayed: true,
-            type: 'confirmDrain',
-            variable: setWantsToDrain,
+          navigate.navigate('ConfirmDrainPage', {
+            wantsToDrainFunc: setWantsToDrain,
           });
+          // setShowConfirmPopup(true);
+
+          // props.setDisplayPopup({
+          //   isDisplayed: true,
+          //   type: 'confirmDrain',
+          //   variable: setWantsToDrain,
+          // });
         }}
         style={[
           BTN,

@@ -1,14 +1,18 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {COLORS, FONT, SHADOWS, SIZES} from '../../../../../constants';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ConfirmDrainPage(props) {
+  const navigate = useNavigation();
+  const {theme, toggleTheme} = useTheme();
+
   return (
     <View style={[confirmPopup.container]}>
       <View
         style={[
           confirmPopup.innerContainer,
           {
-            backgroundColor: props.theme
+            backgroundColor: theme
               ? COLORS.darkModeBackground
               : COLORS.lightModeBackground,
           },
@@ -17,7 +21,7 @@ export default function ConfirmDrainPage(props) {
           style={[
             confirmPopup.headerText,
             {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Are you sure?
@@ -26,7 +30,7 @@ export default function ConfirmDrainPage(props) {
           style={[
             confirmPopup.descriptionText,
             {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Once you drain your wallet this cannot be undone.
@@ -35,19 +39,15 @@ export default function ConfirmDrainPage(props) {
         <View style={confirmPopup.buttonContainer}>
           <TouchableOpacity
             onPress={() => {
-              props.variable(true);
-              props.setDisplayPopup(prev => {
-                return {...prev, isDisplayed: false};
-              });
+              props.route.params.wantsToDrainFunc(true);
+              navigate.goBack();
             }}
             style={[confirmPopup.button]}>
             <Text
               style={[
                 confirmPopup.buttonText,
                 {
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               Yes
@@ -57,24 +57,20 @@ export default function ConfirmDrainPage(props) {
             style={{
               height: '100%',
               width: 2,
-              backgroundColor: props.theme
+              backgroundColor: theme
                 ? COLORS.darkModeText
                 : COLORS.lightModeText,
             }}></View>
           <TouchableOpacity
             onPress={() => {
-              props.setDisplayPopup(prev => {
-                return {...prev, isDisplayed: false};
-              });
+              navigate.goBack();
             }}
             style={confirmPopup.button}>
             <Text
               style={[
                 confirmPopup.buttonText,
                 {
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
               No
