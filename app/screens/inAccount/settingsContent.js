@@ -25,6 +25,7 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../context-store/context';
+import FaceIdPage from '../../components/admin/homeComponents/settingsContent/faceId';
 
 export default function SettingsContentIndex(props) {
   const [displayPopup, setDisplayPopup] = useState({
@@ -81,6 +82,10 @@ export default function SettingsContentIndex(props) {
         {selectedPage?.toLowerCase() === 'display options' && (
           <DisplayOptions theme={theme} />
         )}
+        {selectedPage?.toLowerCase() === 'face id' && (
+          <FaceIdPage theme={theme} />
+        )}
+
         {selectedPage?.toLowerCase() === 'recovery phrase' && (
           <RecoveryPage
             theme={theme}

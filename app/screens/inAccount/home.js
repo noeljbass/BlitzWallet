@@ -1,17 +1,10 @@
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants';
 import {useContext, useEffect, useRef, useState} from 'react';
 import {
   connectToNode,
   setLocalStorageItem,
   getLocalStorageItem,
-  setColorScheme,
 } from '../../functions';
 import {
   listLsps,
@@ -46,7 +39,6 @@ export default function AdminHome({navigation: {navigate}}) {
       e?.type != 'paymentFailed'
     )
       return;
-    console.log('PASSED LOGIC');
 
     setBreezEvent(e);
   };
@@ -59,7 +51,6 @@ export default function AdminHome({navigation: {navigate}}) {
     <View
       style={[
         styles.container,
-
         {
           backgroundColor: theme
             ? COLORS.darkModeBackground

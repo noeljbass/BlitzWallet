@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import * as Device from 'expo-device';
-import * as LocalAuthentication from 'expo-local-authentication';
 import {useEffect, useRef, useState} from 'react';
+import {handleLogin} from '../../../functions/faceId';
+import {getLocalStorageItem} from '../../../functions';
 
 export default function HomeLogin(props) {
   const {height} = useWindowDimensions();
@@ -32,37 +33,30 @@ export default function HomeLogin(props) {
 
   useEffect(() => {
     (async () => {
-      const canUseFaceID = await hasHardware();
-      if (canUseFaceID) {
-        const hasProfile = await hasSavedProfile();
-        if (hasProfile) {
-          const didMove = await moveLogo('up');
-          if (didMove) {
-            const didLogIn = await handleLogin();
-            if (didLogIn) {
-              props.setDidUsePin(false);
-              const didMove = await moveLogo('down');
+      const isBiometricEnabled = await getLocalStorageItem(
+        'userFaceIDPereferance',
+      );
+      if (!JSON.parse(isBiometricEnabled)) return;
 
-              if (didMove) {
-                if (props.fromBackground) props.navigation.goBack();
-                else props.navigation.replace('HomeAdmin');
-              }
-            }
+      const didMove = await moveLogo('up');
+      if (didMove) {
+        const didLogIn = await handleLogin();
+        if (didLogIn) {
+          props.setDidUsePin(false);
+          const didMove = await moveLogo('down');
+          if (didMove) {
+            if (props.fromBackground) props.navigation.goBack();
+            else props.navigation.replace('HomeAdmin');
           }
-        } else {
-          // props.setDidUsePin(true);
-          // Alert.alert(
-          //   'Biometric record not found',
-          //   'Please verify your identity with your password',
-          //   [{text: 'Ok', onPress: () => props.setDidUsePin(true)}],
-          // );
         }
-      } else {
-        Alert.alert(
-          'Device does not support Biometric login',
-          'Please verify your identity with your password',
-          [{text: 'Ok', onPress: () => props.setDidUsePin(true)}],
-        );
+        // else {
+        //   props.setDidUsePin(true);
+        //   Alert.alert(
+        //     'Biometric record not found',
+        //     'Please verify your identity with your password',
+        //     [{text: 'Ok', onPress: () => props.setDidUsePin(true)}],
+        //   );
+        // }
       }
     })();
   }, []);
@@ -93,54 +87,6 @@ export default function HomeLogin(props) {
       </Text>
     </View>
   );
-
-  async function hasHardware() {
-    try {
-      const compatible = await LocalAuthentication.hasHardwareAsync();
-      return new Promise(resolve => {
-        resolve(compatible);
-      });
-    } catch (err) {
-      console.log(err);
-      return new Promise(resolve => {
-        resolve(false);
-      });
-    }
-  }
-  async function hasSavedProfile() {
-    try {
-      const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
-
-      return new Promise(resolve => {
-        resolve(savedBiometrics);
-      });
-    } catch (err) {
-      return new Promise(resolve => {
-        resolve(false);
-      });
-    }
-  }
-  async function handleLogin() {
-    const LocalAuthenticationOptions = {
-      promptMessage: 'Face ID',
-      cancelLabel: 'Cancel',
-      disableDeviceFallback: false,
-      fallbackLabel: 'Login with pin',
-    };
-    try {
-      const didAuthenticate = await LocalAuthentication.authenticateAsync(
-        LocalAuthenticationOptions,
-      );
-
-      return new Promise(resolve => {
-        resolve(didAuthenticate.success);
-      });
-    } catch (err) {
-      return new Promise(resolve => {
-        resolve(false);
-      });
-    }
-  }
 }
 
 const styles = StyleSheet.create({

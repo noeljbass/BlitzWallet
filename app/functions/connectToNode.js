@@ -1,5 +1,4 @@
 import {
-  BreezEvent,
   defaultConfig,
   EnvironmentType,
   NodeConfigVariant,
@@ -9,7 +8,8 @@ import {
 } from '@breeztech/react-native-breez-sdk';
 // import Config from 'react-native-config';
 import {retrieveData} from './secureStore';
-import {INVITE_KEY1, API_KEY} from '@env';
+
+import * as FileSystem from 'expo-file-system';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
@@ -23,10 +23,21 @@ export default async function connectToNode(breezEvent) {
   } catch (err) {
     try {
       const inviteCode = process.env.INVITE_KEY1;
+      const deviceCert = await FileSystem.readAsStringAsync(
+        process.env.GL_CUSTOM_NOBODY_CERT,
+      );
+      const deviceKey = await FileSystem.readAsStringAsync(
+        process.env.GL_CUSTOM_NOBODY_KEY,
+      );
+
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          inviteCode: inviteCode,
+          // inviteCode: inviteCode,
+          partnerCredentials: {
+            deviceKey: deviceKey,
+            deviceCert: deviceCert,
+          },
         },
       };
 
@@ -35,9 +46,9 @@ export default async function connectToNode(breezEvent) {
         process.env.API_KEY,
         nodeConfig,
       );
+      // console.log(config);
 
       const mnemonic = await retrieveData('mnemonic');
-      console.log(mnemonic);
 
       if (mnemonic) {
         const seed = await mnemonicToSeed(mnemonic);

@@ -1,13 +1,13 @@
 {
-  "name": "blitz-wallet",
-  "slug": "blitz-wallet",
-  "scheme": "blitz-wallet",
+  "name": "BlitzWallet",
+  "slug": "blitzwallet",
+  "scheme": "BlitzWallet",
   "displayName": "Blitz Wallet",
   "version": "0.0.1",
   "expo": {
     "extra": {
       "eas": {
-        "projectId": "66fb5c9e-88ad-4e50-8840-caf83e1c78ba"
+        "projectId": "edf13405-7014-4f88-aee5-ec131bfc217d"
       }
     },
     "owner": "bkaufman20"

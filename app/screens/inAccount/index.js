@@ -1,3 +1,4 @@
+import FaceIdPage from '../../components/admin/homeComponents/settingsContent/faceId';
 import {ConnectionToNode} from './conectionToNode';
 import ConfirmTxPage from './confirmTxPage';
 import ContactsPage from './contactsPage';
@@ -20,4 +21,5 @@ export {
   ContactsPage,
   SettingsContentIndex,
   SettingsIndex,
+  FaceIdPage,
 };
