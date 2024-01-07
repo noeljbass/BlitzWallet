@@ -153,11 +153,11 @@ function UserTransaction(props) {
         {props.showAmount ? (
           props.paymentType != 'received' ? (
             <Text style={combinedStyles.wasSent}>
-              -{props.amountMsat / 1000} Sat
+              -{(props.amountMsat / 1000).toLocaleString()} Sat
             </Text>
           ) : (
             <Text style={combinedStyles.wasRecived}>
-              +{props.amountMsat / 1000} Sat
+              +{(props.amountMsat / 1000).toLocaleString()} Sat
             </Text>
           )
         ) : (

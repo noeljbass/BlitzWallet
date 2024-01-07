@@ -8,12 +8,12 @@ import {SendRecieveBTNs} from './homeLightning/sendReciveBTNs';
 import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem} from '../../../functions';
 import {useNavigation} from '@react-navigation/native';
+import LiquidityIndicator from './homeLightning/liquidityIndicator';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
   const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
-  console.log(props.theme);
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
@@ -35,12 +35,17 @@ export default function HomeLightning(props) {
         breezInformation={props.breezInformation}
         theme={props.theme}
       />
-      {!props.breezInformation.didConnectToNode && (
+      {!props.breezInformation.didConnectToNode ? (
         <View style={style.errorContainer}>
           <Text style={style.errorText}>
             Not connected to node. Balances and transactions may not be updated
           </Text>
         </View>
+      ) : (
+        <LiquidityIndicator
+          breezInformation={props.breezInformation}
+          theme={props.theme}
+        />
       )}
 
       <UserTransactions

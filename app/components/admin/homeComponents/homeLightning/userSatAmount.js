@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 'auto',
     marginTop: 20,
-    paddingBottom: 15,
+    marginBottom: 5,
   },
 
   denominatorText: {
