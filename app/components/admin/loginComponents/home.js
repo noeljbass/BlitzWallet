@@ -11,7 +11,7 @@ import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import * as Device from 'expo-device';
 import {useEffect, useRef, useState} from 'react';
 import {handleLogin} from '../../../functions/faceId';
-import {getLocalStorageItem} from '../../../functions';
+import {getLocalStorageItem, setLocalStorageItem} from '../../../functions';
 
 export default function HomeLogin(props) {
   const {height} = useWindowDimensions();
@@ -36,6 +36,8 @@ export default function HomeLogin(props) {
       const isBiometricEnabled = await getLocalStorageItem(
         'userFaceIDPereferance',
       );
+
+      console.log(isBiometricEnabled);
       if (!JSON.parse(isBiometricEnabled)) return;
 
       const didMove = await moveLogo('up');

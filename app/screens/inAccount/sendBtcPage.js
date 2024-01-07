@@ -9,6 +9,7 @@ export default function SendPaymentHome(props) {
   const [scanned, setScanned] = useState(false);
   const [BTCadress, setBTCadress] = useState('');
   const isDarkMode = props.route.params.isDarkMode;
+  console.log(props);
 
   return (
     <View style={styles.container}>

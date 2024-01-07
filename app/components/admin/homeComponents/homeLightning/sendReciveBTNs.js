@@ -10,14 +10,14 @@ export function SendRecieveBTNs(props) {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            navigate.navigate('SendBTC', {isDarkMode: props.isDarkMode});
+            navigate.navigate('SendBTC', {isDarkMode: props.theme});
           }}
           style={combinedStyles.firstButton}>
           <Text style={styles.text}>Send</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigate.navigate('ReceiveBTC', {isDarkMode: props.isDarkMode});
+            navigate.navigate('ReceiveBTC', {isDarkMode: props.theme});
           }}
           style={styles.button}>
           <Text style={styles.text}>Receive</Text>

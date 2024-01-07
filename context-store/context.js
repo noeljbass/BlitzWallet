@@ -14,24 +14,20 @@ const ThemeProvider = ({children}) => {
     setStatusBarStyle(peram ? 'light' : 'dark');
     setTheme(peram);
   }
-  // const colorScheme = await getLocalStorageItem('colorScheme');
-
-  // setStatusBarHidden(false, 'fade');
-  // if (!colorScheme) {
-  //   if (sytemColorScheme) setStatusBarStyle('light');
-  //   else setStatusBarStyle('dark');
-  // } else {
-  //   if (JSON.parse(colorScheme) === 'dark') setStatusBarStyle('light');
-  //   else setStatusBarStyle('dark');
-  // }
-  //   NEED TO SQITCH COLOR SCHEME OF STYLEBAR
 
   useEffect(() => {
     (async () => {
       const storedTheme = await getLocalStorageItem('colorScheme');
-      if (JSON.parse(storedTheme) === 'system') setTheme(useSystemTheme);
-      else if (JSON.parse(storedTheme) === 'dark') setTheme(true);
-      else setTheme(false);
+      if (JSON.parse(storedTheme) === 'system') {
+        setTheme(useSystemTheme);
+        setStatusBarStyle(useSystemTheme ? 'light' : 'dark');
+      } else if (JSON.parse(storedTheme) === 'dark') {
+        setTheme(true);
+        setStatusBarStyle('light');
+      } else {
+        setTheme(false);
+        setStatusBarStyle('dark');
+      }
     })();
   }, []);
 

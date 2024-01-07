@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../constants';
 import {useContext, useEffect, useRef, useState} from 'react';
 import {
@@ -26,6 +26,7 @@ export default function AdminHome({navigation: {navigate}}) {
     transactions: [],
     userBalance: 0,
   });
+  const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
   const {theme, toggleTheme} = useTheme();
   // SDK events listener
@@ -44,7 +45,13 @@ export default function AdminHome({navigation: {navigate}}) {
   };
 
   useEffect(() => {
-    initWallet(isInitialRender, setBreezInformation, breezEvent, onBreezEvent);
+    initWallet(
+      isInitialRender,
+      setBreezInformation,
+      breezEvent,
+      onBreezEvent,
+      setErrMessage,
+    );
   }, [breezEvent]);
 
   return (
@@ -62,9 +69,6 @@ export default function AdminHome({navigation: {navigate}}) {
           breezInformation={breezInformation}
           breezEvent={breezEvent}
           theme={theme}
-          // settheme={settheme}
-
-          // setSystemSettingsPopup={setSystemSettingsPopup}
         />
         <HomeLightning
           breezEvent={breezEvent}
@@ -102,6 +106,7 @@ async function initWallet(
   setBreezInformation,
   breezEvent,
   onBreezEvent,
+  setErrMessage,
 ) {
   let savedBreezInfo;
   if (isInitialRender.current) {
@@ -114,6 +119,7 @@ async function initWallet(
     try {
       const response = await connectToNode(onBreezEvent);
       console.log(response);
+      setErrMessage(response.errMessage);
 
       if (response.isConnected && response.reason) {
         const nodeAmount = await nodeInfo();

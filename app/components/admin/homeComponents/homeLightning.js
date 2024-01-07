@@ -13,6 +13,7 @@ export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
   const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
+  console.log(props.theme);
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;

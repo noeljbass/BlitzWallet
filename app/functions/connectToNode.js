@@ -33,11 +33,11 @@ export default async function connectToNode(breezEvent) {
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          // inviteCode: inviteCode,
-          partnerCredentials: {
-            deviceKey: deviceKey,
-            deviceCert: deviceCert,
-          },
+          inviteCode: inviteCode,
+          // partnerCredentials: {
+          //   deviceKey: deviceKey,
+          //   deviceCert: deviceCert,
+          // },
         },
       };
 
@@ -70,7 +70,11 @@ export default async function connectToNode(breezEvent) {
       console.log(err, 'connect to node err');
       // connectToNode();
       return new Promise(resolve => {
-        resolve({isConnected: false, reason: 'error connecting'});
+        resolve({
+          isConnected: false,
+          errMessage: JSON.stringify(err),
+          reason: 'error connecting',
+        });
       });
     }
   }
