@@ -2,6 +2,7 @@ import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
 import {CENTER, FONT, COLORS, SIZES} from '../../constants';
 import {useEffect, useState} from 'react';
 import {
+  BitcoinPage,
   ButtonsContainer,
   EditAmountPopup,
   LightningPage,
@@ -72,12 +73,12 @@ export function ReceivePaymentHome(props) {
           setGeneratedAddress={setGeneratedAddress}
           isDarkMode={isDarkMode}
         />
-        {/* <BitcoinPage
-              selectedRecieveOption={selectedRecieveOption}
-              setGeneratedAddress={setGeneratedAddress}
-              generatedAddress={generatedAddress}
-              isDarkMode={isDarkMode}
-            /> */}
+        <BitcoinPage
+          selectedRecieveOption={selectedRecieveOption}
+          setGeneratedAddress={setGeneratedAddress}
+          generatedAddress={generatedAddress}
+          isDarkMode={isDarkMode}
+        />
         <LiquidPage
           selectedRecieveOption={selectedRecieveOption}
           isDarkMode={isDarkMode}

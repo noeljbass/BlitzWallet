@@ -1,5 +1,6 @@
 import {
   inProgressSwap,
+  openChannelFee,
   receiveOnchain,
 } from '@breeztech/react-native-breez-sdk';
 import {useEffect, useState} from 'react';
@@ -11,18 +12,28 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from 'react-native';
-import {COLORS, CENTER} from '../../../../constants';
+import {COLORS, CENTER, FONT, SIZES} from '../../../../constants';
 import QRCode from 'react-native-qrcode-svg';
+import Slider from '@react-native-community/slider';
 
 export default function BitcoinPage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
-  // const props.isDarkMode = useColorScheme() === 'dark';
-  // const [swapInfo, setSwapInfo] = useState({});
+  const [bitcoinSwapInfo, setBitcoinSwapInfo] = useState({
+    minAllowedDeposit: 0,
+    maxAllowedDeposit: 0,
+  });
+  const [lnFee, setLnFee] = useState({
+    receivingAmount: 0,
+    lnFee: 0,
+  });
+
   useEffect(() => {
     if (props.selectedRecieveOption != 'bitcoin') return;
 
-    // generateSwapAddress();
+    initSwap();
+    monitorSwap();
   }, [props.selectedRecieveOption]);
+
   return (
     <View
       style={{
@@ -56,21 +67,102 @@ export default function BitcoinPage(props) {
           />
         )}
       </View>
+      {!generatingQrCode && (
+        <View style={styles.sliderContainer}>
+          <Text style={styles.feeHeaderText}>Fee Calculator</Text>
+          <Slider
+            onSlidingComplete={handleFeeSlider}
+            style={styles.sliderStyle}
+            minimumValue={bitcoinSwapInfo.minAllowedDeposit}
+            maximumValue={bitcoinSwapInfo.maxAllowedDeposit}
+            minimumTrackTintColor={COLORS.primary}
+            maximumTrackTintColor={
+              props.theme
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset
+            }
+          />
+          <View style={styles.feeeBreakdownContainer}>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={styles.feeBreakdownDescriptor}>
+                Min Receivable (sat)
+              </Text>
+              <Text style={styles.feeBreakdownValue}>
+                {bitcoinSwapInfo.minAllowedDeposit.toLocaleString()}
+              </Text>
+            </View>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={styles.feeBreakdownDescriptor}>
+                Max Receivable (sat)
+              </Text>
+              <Text style={styles.feeBreakdownValue}>
+                {bitcoinSwapInfo.maxAllowedDeposit.toLocaleString()}
+              </Text>
+            </View>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={styles.feeBreakdownDescriptor}>
+                Receiving amount (sat)
+              </Text>
+              <Text style={styles.feeBreakdownValue}>
+                {lnFee.receivingAmount.toLocaleString()}
+              </Text>
+            </View>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={styles.feeBreakdownDescriptor}>Lightning Fee</Text>
+              <Text style={styles.feeBreakdownValue}>
+                {lnFee.lnFee.toLocaleString()}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 
-  async function generateSwapAddress() {
+  async function initSwap() {
     try {
       setGeneratingQrCode(true);
       const swapInfo = await receiveOnchain({});
-      const swapInProgress = await inProgressSwap();
+      console.log(swapInfo.minAllowedDeposit);
+      console.log(swapInfo.maxAllowedDeposit);
+      const openChannelFeeResponse = await openChannelFee({
+        amountMsat: swapInfo.minAllowedDeposit * 1000,
+      });
 
       props.setGeneratedAddress(swapInfo.bitcoinAddress);
+      setBitcoinSwapInfo({
+        minAllowedDeposit: swapInfo.minAllowedDeposit,
+        maxAllowedDeposit: swapInfo.maxAllowedDeposit,
+      });
+      setLnFee({
+        lnFee: openChannelFeeResponse.feeMsat / 1000,
+        receivingAmount: swapInfo.minAllowedDeposit,
+      });
 
       setGeneratingQrCode(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function monitorSwap() {
+    try {
+      const swapInfo = await inProgressSwap();
+      console.log(swapInfo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function handleFeeSlider(e) {
+    console.log(Math.round(e));
 
-      // Send your funds to the below bitcoin address
-      // const address = swapInfo.bitcoinAddress;
+    try {
+      const openChannelFeeResponse = await openChannelFee({
+        amountMsat: Number(Math.round(e)) * 1000,
+      });
+      setLnFee({
+        lnFee: openChannelFeeResponse.feeMsat / 1000,
+        receivingAmount: Number(Math.round(e)),
+      });
     } catch (err) {
       console.log(err);
     }
@@ -88,5 +180,38 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  sliderStyle: {width: 200, height: 40, ...CENTER},
+  sliderContainer: {
+    width: '90%',
+    ...CENTER,
+    marginTop: 30,
+  },
+  feeHeaderText: {
+    fontFamily: FONT.Title_Bold,
+    fontSize: SIZES.large,
+
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+
+  feeeBreakdownContainer: {
+    width: '70%',
+    ...CENTER,
+  },
+
+  feeBreakdownRow: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
+  feeBreakdownDescriptor: {
+    fontFamily: FONT.Title_Regular,
+    fontSize: SIZES.medium,
+  },
+  feeBreakdownValue: {
+    fontFamily: FONT.Descriptoin_Bold,
+    fontSize: SIZES.medium,
   },
 });
