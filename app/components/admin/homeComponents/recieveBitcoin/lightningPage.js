@@ -20,8 +20,6 @@ export default function LightningPage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
   const [errorMessageText, setErrorMessageText] = useState('');
 
-  // const props.isDarkMode = useColorScheme() === 'dark';
-
   useEffect(() => {
     if (props.selectedRecieveOption != 'lightning') {
       setErrorMessageText('');
@@ -29,19 +27,30 @@ export default function LightningPage(props) {
       setGeneratingQrCode(true);
       return;
     }
+    if (!props.userSelectedCurrency) return;
 
     generateLightningInvoice();
 
     (async () => {
       try {
         const fiatRates = await getFiatRates();
-        const [selectedPrice] = fiatRates.filter(rate => rate.coin === 'USD');
+        // console.log(props.userSelectedCurrency, 'IN LIGHTNING PAGE');
+        const [selectedPrice] = fiatRates.filter(
+          rate =>
+            rate.coin.toLowerCase() ===
+            props.userSelectedCurrency.toLowerCase(),
+        );
+        // console.log(selectedPrice);
         setFiatRate(selectedPrice.value);
       } catch (err) {
         console.log(err);
       }
     })();
-  }, [props.selectedRecieveOption, props.updateQRCode]);
+  }, [
+    props.selectedRecieveOption,
+    props.updateQRCode,
+    props.userSelectedCurrency,
+  ]);
   return (
     <View
       style={{
@@ -87,7 +96,7 @@ export default function LightningPage(props) {
           ]}>
           {(props.sendingAmount / 1000).toLocaleString()} sat /{' '}
           {((fiatRate / 100000000) * (props.sendingAmount / 1000)).toFixed(2)}{' '}
-          {'USD'}
+          {props.userSelectedCurrency}
         </Text>
         <Text
           style={[

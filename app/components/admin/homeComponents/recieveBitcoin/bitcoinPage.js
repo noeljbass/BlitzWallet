@@ -20,7 +20,6 @@ export default function BitcoinPage(props) {
     lnFee: 0,
   });
   const [inPorgressSwapInfo, setInProgressSwapInfo] = useState({});
-  console.log(inPorgressSwapInfo, 'IN PROGRESS SWAP INFO');
 
   useEffect(() => {
     if (props.selectedRecieveOption != 'bitcoin') return;
@@ -170,7 +169,7 @@ export default function BitcoinPage(props) {
                       : COLORS.lightModeText,
                   },
                 ]}>
-                Lightning Fee
+                Lightning Fee (sat)
               </Text>
               <Text
                 style={[

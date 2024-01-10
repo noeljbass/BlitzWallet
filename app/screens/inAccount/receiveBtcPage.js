@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
 import {CENTER, FONT, COLORS, SIZES} from '../../constants';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   BitcoinPage,
   ButtonsContainer,
@@ -12,8 +12,10 @@ import {
 } from '../../components/admin/homeComponents/recieveBitcoin';
 import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
+import {getLocalStorageItem} from '../../functions';
 
 export function ReceivePaymentHome(props) {
+  const isInitialRender = useRef(true);
   const [generatedAddress, setGeneratedAddress] = useState('');
   const [sendingAmount, setSendingAmount] = useState({
     lightning: 1000,
@@ -32,8 +34,22 @@ export function ReceivePaymentHome(props) {
   const [isSwapCreated, setIsSwapCreated] = useState(false);
   const navigate = useNavigation();
   const isDarkMode = props.route.params.isDarkMode;
+  const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
 
   useEffect(() => {
+    if (isInitialRender.current) {
+      (async () => {
+        try {
+          const currency = await getLocalStorageItem('currency');
+          setUserSelectedCurrency(currency);
+          console.log(currency);
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+      isInitialRender.current = false;
+      console;
+    }
     clear('navChange');
   }, [selectedRecieveOption]);
 
@@ -74,6 +90,7 @@ export function ReceivePaymentHome(props) {
           paymentDescription={paymentDescription.lightning}
           setGeneratedAddress={setGeneratedAddress}
           isDarkMode={isDarkMode}
+          userSelectedCurrency={userSelectedCurrency}
         />
         <BitcoinPage
           selectedRecieveOption={selectedRecieveOption}

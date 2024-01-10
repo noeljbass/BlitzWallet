@@ -221,6 +221,7 @@ function EnterAmount(props) {
             props.liquidAmount * props.feeInfo.boltzFeePercent}
         </Text>
       </View>
+      <Text style={styles.disclaimerText}>All values are in sats</Text>
       <TouchableOpacity
         onPress={() => {
           if (props.liquidAmount > maxAmount || props.liquidAmount < minAmount)
@@ -434,6 +435,12 @@ const styles = StyleSheet.create({
   feeText: {
     fontSize: SIZES.medium,
     fontFamily: FONT.Descriptoin_Regular,
+  },
+  disclaimerText: {
+    fontFamily: FONT.Descriptoin_Regular,
+    fontSize: SIZES.medium,
+    color: COLORS.cancelRed,
+    marginTop: 10,
   },
 
   createSwapBTN: {

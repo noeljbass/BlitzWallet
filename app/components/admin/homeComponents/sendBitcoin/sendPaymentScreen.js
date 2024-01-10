@@ -4,41 +4,28 @@ import {
   View,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  TextInput,
-  TouchableWithoutFeedback,
   Image,
   SafeAreaView,
-  Modal,
-  useColorScheme,
   ActivityIndicator,
 } from 'react-native';
-import {
-  BTN,
-  CENTER,
-  COLORS,
-  FONT,
-  ICONS,
-  SHADOWS,
-  SIZES,
-} from '../../../../constants';
+import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 
 import {useEffect, useRef, useState} from 'react';
 import {
-  InputTypeVariant,
   ReportIssueRequestVariant,
   fetchFiatRates,
-  listFiatCurrencies,
   parseInput,
   reportIssue,
   sendPayment,
 } from '@breeztech/react-native-breez-sdk';
+import {getLocalStorageItem} from '../../../../functions';
 
 export default function SendPaymentScreen(props) {
   console.log('CONFIRM SEND PAYMENT SCREEN');
   const fadeAnim = useRef(new Animated.Value(900)).current;
   const [paymentInfo, setPaymentInfo] = useState({});
-  const [pressedSend, setPressedSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
 
   // const props.isDarkMode = useColorScheme() === 'dark';
 
@@ -61,27 +48,24 @@ export default function SendPaymentScreen(props) {
         },
       ]}>
       <SafeAreaView style={{flex: 1, position: 'relative'}}>
-        {!pressedSend && (
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => props.setScanned(false)}>
+            <Image style={styles.backButton} source={ICONS.leftCheveronIcon} />
+          </TouchableOpacity>
+          <Text
+            style={[
+              styles.headerText,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Confirm Payment
+          </Text>
+        </View>
+        {!isLoading && (
           <>
-            <View style={styles.topBar}>
-              <TouchableOpacity onPress={() => props.setScanned(false)}>
-                <Image
-                  style={styles.backButton}
-                  source={ICONS.leftCheveronIcon}
-                />
-              </TouchableOpacity>
-              <Text
-                style={[
-                  styles.headerText,
-                  {
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                Confirm Payment
-              </Text>
-            </View>
             <View style={styles.innerContainer}>
               <Text
                 style={[
@@ -144,7 +128,7 @@ export default function SendPaymentScreen(props) {
                         (paymentInfo?.invoice?.amountMsat / 1000) *
                         (paymentInfo[0]?.value / 100000000)
                       ).toLocaleString()}{' '}
-                      usd
+                      {userSelectedCurrency}
                     </Text>
                   </View>
                 </View>
@@ -189,7 +173,7 @@ export default function SendPaymentScreen(props) {
                             : COLORS.lightModeText,
                         },
                       ]}>
-                      0.00 usd
+                      0.00 {userSelectedCurrency}
                     </Text>
                   </View>
                 </View>
@@ -242,7 +226,7 @@ export default function SendPaymentScreen(props) {
                         (paymentInfo?.invoice?.amountMsat / 1000 + 0) *
                         (paymentInfo[0]?.value / 100000000)
                       ).toLocaleString()}{' '}
-                      usd
+                      {userSelectedCurrency}
                     </Text>
                   </View>
                 </View>
@@ -250,7 +234,10 @@ export default function SendPaymentScreen(props) {
               {/* Buttons */}
               <View style={styles.buttonsContainer}>
                 <TouchableOpacity
-                  onPress={() => props.setScanned(false)}
+                  onPress={() => {
+                    props.setScanned(false);
+                    props.setBTCadress('');
+                  }}
                   style={[styles.button, {backgroundColor: COLORS.cancelRed}]}>
                   <Text style={styles.buttonText}>cancel</Text>
                 </TouchableOpacity>
@@ -263,7 +250,7 @@ export default function SendPaymentScreen(props) {
             </View>
           </>
         )}
-        {pressedSend && (
+        {isLoading && (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <ActivityIndicator
@@ -296,7 +283,7 @@ export default function SendPaymentScreen(props) {
 
   async function sendPaymentFunction() {
     try {
-      setPressedSent(true);
+      setIsLoading(true);
       const response = await sendPayment({
         bolt11: paymentInfo?.invoice?.bolt11,
         // amountMsat: paymentInfo?.invoice?.amountMsat
@@ -324,13 +311,18 @@ export default function SendPaymentScreen(props) {
 
   async function decodeLNAdress() {
     try {
+      setIsLoading(true);
       const input = await parseInput(props.BTCadress);
+      const currency = await getLocalStorageItem('currency');
+
       const bitcoinPrice = (await fetchFiatRates()).filter(
-        coin => coin.coin === 'USD',
+        coin => coin.coin === currency,
       );
       // console.log(input.invoice.routingHints[0]);
 
       setPaymentInfo({...input, ...bitcoinPrice});
+      setUserSelectedCurrency(currency);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
