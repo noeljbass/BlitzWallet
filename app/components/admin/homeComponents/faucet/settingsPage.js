@@ -81,6 +81,7 @@ export default function SettingsPage(props) {
           backgroundColor: props.isDarkMode
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
+          paddingVertical: Device.osName === 'ios' ? 0 : 10,
         },
       ]}>
       <SafeAreaView style={{flex: 1}}>
@@ -89,7 +90,9 @@ export default function SettingsPage(props) {
             Keyboard.dismiss();
           }}
           style={{flex: 1}}>
-          <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+          <KeyboardAvoidingView
+            behavior={Device.osName === 'ios' ? 'padding' : 'height'}
+            style={{flex: 1}}>
             <View style={styles.topBar}>
               <TouchableOpacity
                 onPress={() => {
@@ -102,6 +105,7 @@ export default function SettingsPage(props) {
                     for: null,
                     message: '',
                   });
+                  Keyboard.dismiss();
                 }}>
                 <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
               </TouchableOpacity>
@@ -187,8 +191,8 @@ export default function SettingsPage(props) {
               )}
               <TouchableOpacity
                 onPress={continueFilter}
-                style={[styles.button]}>
-                <Text style={{color: COLORS.white}}>Create Faucet</Text>
+                style={[BTN, {backgroundColor: COLORS.primary}]}>
+                <Text style={styles.BTNText}>Create Faucet</Text>
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
@@ -252,12 +256,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  button: {
-    width: '40%',
-    height: 35,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.primary,
-    borderRadius: 8,
+  BTNText: {
+    fontFamily: FONT.Other_Regular,
+    fontSize: SIZES.medium,
+    color: COLORS.white,
   },
 });

@@ -18,6 +18,7 @@ import {
   ResetPage,
   SeedPhrasePage,
 } from '../../components/admin/homeComponents/settingsContent';
+import * as Device from 'expo-device';
 
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../context-store/context';
@@ -36,6 +37,7 @@ export default function SettingsContentIndex(props) {
           backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
+          paddingVertical: Device.osName === 'ios' ? 0 : 10,
         },
       ]}>
       <SafeAreaView style={{flex: 1}}>

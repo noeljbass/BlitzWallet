@@ -14,6 +14,7 @@ import {
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {useTheme} from '../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
+import * as Device from 'expo-device';
 
 const GENERALOPTIONS = [
   {
@@ -163,6 +164,7 @@ export default function SettingsIndex(props) {
           backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
+          paddingVertical: Device.osName === 'ios' ? 0 : 10,
         },
       ]}>
       <SafeAreaView style={[styles.innerContainer]}>
@@ -195,8 +197,10 @@ export default function SettingsIndex(props) {
 const styles = StyleSheet.create({
   globalContainer: {
     flex: 1,
+    // alignItems: 'center',
   },
   innerContainer: {
+    // width: '95%',
     flex: 1,
   },
   topbar: {

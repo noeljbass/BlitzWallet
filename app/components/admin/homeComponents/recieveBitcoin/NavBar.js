@@ -1,6 +1,7 @@
 import {
   Animated,
   Image,
+  Keyboard,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,6 +20,7 @@ export default function NavBar(props) {
     if (props.selectedRecieveOption === 'bitcoin') fadeIn('bitcoin');
     else if (props.selectedRecieveOption === 'lightning') fadeIn('lightning');
     else fadeIn('liquid');
+    Keyboard.dismiss();
   }, [props.selectedRecieveOption]);
 
   return (

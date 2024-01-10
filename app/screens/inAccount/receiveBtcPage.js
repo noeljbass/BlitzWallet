@@ -11,6 +11,7 @@ import {
   TopBar,
 } from '../../components/admin/homeComponents/recieveBitcoin';
 import {useNavigation} from '@react-navigation/native';
+import * as Device from 'expo-device';
 
 export function ReceivePaymentHome(props) {
   const [generatedAddress, setGeneratedAddress] = useState('');
@@ -43,9 +44,10 @@ export function ReceivePaymentHome(props) {
         backgroundColor: isDarkMode
           ? COLORS.darkModeBackground
           : COLORS.lightModeBackground,
+        paddingVertical: Device.osName === 'ios' ? 0 : 10,
       }}>
       <SafeAreaView style={{flex: 1}}>
-        <TopBar clear={clear} />
+        <TopBar isDarkMode={isDarkMode} clear={clear} />
         <Text
           style={[
             styles.title,

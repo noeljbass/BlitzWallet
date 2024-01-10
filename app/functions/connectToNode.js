@@ -30,23 +30,36 @@ export default async function connectToNode(breezEvent) {
         process.env.GL_CUSTOM_NOBODY_KEY,
       );
 
+      // const nodeConfig = {
+      //   type: NodeConfigVariant.GREENLIGHT,
+      //   config: {
+      //     // inviteCode: inviteCode,
+      //     partnerCredentials: {
+      //       deviceKey: deviceKey,
+      //       deviceCert: deviceCert,
+      //     },
+      //   },
+      // };
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          inviteCode: inviteCode,
-          // partnerCredentials: {
-          //   deviceKey: deviceKey,
-          //   deviceCert: deviceCert,
-          // },
+          partnerCredentials: {
+            deviceKey: deviceKey,
+            deviceCert: deviceCert,
+          },
         },
       };
 
+      // const config = await defaultConfig(
+      //   EnvironmentType.PRODUCTION,
+      //   process.env.API_KEY,
+      //   nodeConfig,
+      // );
       const config = await defaultConfig(
         EnvironmentType.PRODUCTION,
         process.env.API_KEY,
         nodeConfig,
       );
-      // console.log(config);
 
       const mnemonic = await retrieveData('mnemonic');
 

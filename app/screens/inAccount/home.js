@@ -146,12 +146,6 @@ async function initWallet(
           };
         });
 
-        if (
-          savedBreezInfo &&
-          savedBreezInfo[0]?.toString() === transactions?.toString()
-        )
-          return;
-
         await setLocalStorageItem(
           'breezInfo',
           JSON.stringify([transactions, msatToSat]),
@@ -173,6 +167,7 @@ async function initWallet(
 
     const transactions = await getTransactions();
     const nodeAmount = await nodeInfo();
+    console.log(nodeAmount);
     const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
 
     setBreezInformation(prev => {

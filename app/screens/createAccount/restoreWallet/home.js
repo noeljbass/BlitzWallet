@@ -8,13 +8,17 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import {Back_BTN} from '../../../components/login';
 import {storeData} from '../../../functions';
 import {BTN, CENTER, COLORS, FONT, SIZES} from '../../../constants';
 import {useState} from 'react';
 import isValidMnemonic from '../../../functions/isValidMnemonic';
+
+import * as Device from 'expo-device';
 const NUMKEYS = Array.from(new Array(12), (val, index) => index + 1);
+
 export default function RestoreWallet({navigation: {navigate}}) {
   // navigate('DisclaimerPage');
 
@@ -41,6 +45,7 @@ export default function RestoreWallet({navigation: {navigate}}) {
     key11: null,
     key12: null,
   });
+
   const keyElements = createInputKeys();
 
   return (
@@ -50,16 +55,25 @@ export default function RestoreWallet({navigation: {navigate}}) {
           Keyboard.dismiss();
         }}
         style={{flex: 1}}>
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <KeyboardAvoidingView
+          behavior={Device.osName === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}>
           <SafeAreaView style={{flex: 1}}>
             <Back_BTN navigation={navigate} destination="Home" />
             <Text style={styles.headerText}>Enter your seed phrase</Text>
-            <View style={styles.contentContainer}>
+            <ScrollView style={styles.contentContainer}>
               <View style={styles.seedContainer}>{keyElements}</View>
-            </View>
+            </ScrollView>
             <TouchableOpacity
               onPress={keyValidation}
-              style={[BTN, {backgroundColor: COLORS.primary}, CENTER]}>
+              style={[
+                BTN,
+                {
+                  backgroundColor: COLORS.primary,
+                  marginBottom: Device.osName === 'ios' ? 0 : 30,
+                },
+                CENTER,
+              ]}>
               <Text style={styles.continueBTN}>Restore wallet</Text>
             </TouchableOpacity>
           </SafeAreaView>
@@ -142,12 +156,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   seedContainer: {
     width: '80%',
     height: 'auto',
+    ...CENTER,
   },
   seedRow: {
     width: '100%',
@@ -160,7 +173,7 @@ const styles = StyleSheet.create({
 
     borderBottomWidth: 1,
     flexDirection: 'row',
-    paddingBottom: 10,
+    alignItems: 'center',
   },
   numberText: {
     width: '25%',
@@ -169,6 +182,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     width: '75%',
+
     fontSize: SIZES.large,
   },
   continueBTN: {

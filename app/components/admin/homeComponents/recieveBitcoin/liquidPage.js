@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   useColorScheme,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   COLORS,
@@ -60,7 +61,7 @@ export default function LiquidPage(props) {
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: Device.osName === 'Android' ? 10 : 0,
+          // marginBottom: Device.osName === 'Android' ? 10 : 0,
         }}>
         {processStage.amount && (
           <EnterAmount

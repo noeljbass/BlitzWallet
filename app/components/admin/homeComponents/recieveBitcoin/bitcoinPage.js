@@ -4,14 +4,7 @@ import {
   receiveOnchain,
 } from '@breeztech/react-native-breez-sdk';
 import {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, View, Text} from 'react-native';
 import {COLORS, CENTER, FONT, SIZES} from '../../../../constants';
 import QRCode from 'react-native-qrcode-svg';
 import Slider from '@react-native-community/slider';
@@ -26,6 +19,8 @@ export default function BitcoinPage(props) {
     receivingAmount: 0,
     lnFee: 0,
   });
+  const [inPorgressSwapInfo, setInProgressSwapInfo] = useState({});
+  console.log(inPorgressSwapInfo, 'IN PROGRESS SWAP INFO');
 
   useEffect(() => {
     if (props.selectedRecieveOption != 'bitcoin') return;
@@ -69,7 +64,17 @@ export default function BitcoinPage(props) {
       </View>
       {!generatingQrCode && (
         <View style={styles.sliderContainer}>
-          <Text style={styles.feeHeaderText}>Fee Calculator</Text>
+          <Text
+            style={[
+              styles.feeHeaderText,
+              {
+                color: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
+            ]}>
+            Lightning Fee Calculator
+          </Text>
           <Slider
             onSlidingComplete={handleFeeSlider}
             style={styles.sliderStyle}
@@ -84,32 +89,98 @@ export default function BitcoinPage(props) {
           />
           <View style={styles.feeeBreakdownContainer}>
             <View style={styles.feeBreakdownRow}>
-              <Text style={styles.feeBreakdownDescriptor}>
+              <Text
+                style={[
+                  styles.feeBreakdownDescriptor,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 Min Receivable (sat)
               </Text>
-              <Text style={styles.feeBreakdownValue}>
+              <Text
+                style={[
+                  styles.feeBreakdownValue,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 {bitcoinSwapInfo.minAllowedDeposit.toLocaleString()}
               </Text>
             </View>
             <View style={styles.feeBreakdownRow}>
-              <Text style={styles.feeBreakdownDescriptor}>
+              <Text
+                style={[
+                  styles.feeBreakdownDescriptor,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 Max Receivable (sat)
               </Text>
-              <Text style={styles.feeBreakdownValue}>
+              <Text
+                style={[
+                  styles.feeBreakdownValue,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 {bitcoinSwapInfo.maxAllowedDeposit.toLocaleString()}
               </Text>
             </View>
             <View style={styles.feeBreakdownRow}>
-              <Text style={styles.feeBreakdownDescriptor}>
+              <Text
+                style={[
+                  styles.feeBreakdownDescriptor,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 Receiving amount (sat)
               </Text>
-              <Text style={styles.feeBreakdownValue}>
+              <Text
+                style={[
+                  styles.feeBreakdownValue,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 {lnFee.receivingAmount.toLocaleString()}
               </Text>
             </View>
             <View style={styles.feeBreakdownRow}>
-              <Text style={styles.feeBreakdownDescriptor}>Lightning Fee</Text>
-              <Text style={styles.feeBreakdownValue}>
+              <Text
+                style={[
+                  styles.feeBreakdownDescriptor,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                Lightning Fee
+              </Text>
+              <Text
+                style={[
+                  styles.feeBreakdownValue,
+                  {
+                    color: props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
                 {lnFee.lnFee.toLocaleString()}
               </Text>
             </View>
@@ -147,7 +218,8 @@ export default function BitcoinPage(props) {
   async function monitorSwap() {
     try {
       const swapInfo = await inProgressSwap();
-      console.log(swapInfo);
+      if (!swapInfo) return;
+      setInProgressSwapInfo(swapInfo);
     } catch (err) {
       console.log(err);
     }
