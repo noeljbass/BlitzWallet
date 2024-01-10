@@ -5,12 +5,7 @@
  * @format
  */
 
-import {
-  CommonActions,
-  NavigationContainer,
-  StackActions,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -21,7 +16,7 @@ type RootStackParamList = {
   Home: {someParam?: string};
   Details: {someParam?: string};
 };
-import {AppState, Platform, useColorScheme} from 'react-native';
+import {AppState, Platform} from 'react-native';
 import {getLocalStorageItem, retrieveData} from './app/functions';
 import SplashScreen from 'react-native-splash-screen';
 import {
@@ -46,12 +41,8 @@ import {
   SettingsContentIndex,
   SettingsIndex,
 } from './app/screens/inAccount';
-import {COLORS} from './app/constants';
-import {
-  setStatusBarBackgroundColor,
-  setStatusBarHidden,
-  setStatusBarStyle,
-} from 'expo-status-bar';
+
+import {setStatusBarHidden} from 'expo-status-bar';
 import {ThemeProvider} from './context-store/context';
 import {
   ConfirmDrainPage,
@@ -75,14 +66,22 @@ function ResetStack(): JSX.Element | null {
   const appState = useRef(AppState.currentState);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isloaded, setIsLoaded] = useState(false);
+  const [savedBalanceInfo, setSavedBalanceInfo] = useState({
+    didConnectToNode: null,
+    transactions: [],
+    userBalance: 0,
+  });
 
   useEffect(() => {
     (async () => {
       const pin = await retrieveData('pin');
       const mnemonic = await retrieveData('mnemonic');
+      const savedBreezInfo = await initBalanceAndTransactions();
 
-      if (pin && mnemonic) setIsLoggedIn(true);
-      else setIsLoggedIn(false);
+      if (pin && mnemonic) {
+        setIsLoggedIn(true);
+      } else setIsLoggedIn(false);
+      setSavedBalanceInfo(savedBreezInfo);
       setIsLoaded(true);
 
       if (Platform.OS === 'android') {
@@ -96,15 +95,11 @@ function ResetStack(): JSX.Element | null {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (appState.current.match(/background/) && nextAppState === 'active') {
         console.log('Background!');
-        // NAVIGATE TO HOME PAGE
 
         navigationRef?.current?.navigate('Home', {fromBackground: true});
-
-        // SplashScreen.show();
       }
 
       appState.current = nextAppState;
-      console.log('AppState', appState.current);
     });
 
     return () => {
@@ -131,7 +126,11 @@ function ResetStack(): JSX.Element | null {
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
         <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
         {/* admin screens */}
-        <Stack.Screen name="HomeAdmin" component={AdminHome} />
+        <Stack.Screen
+          name="HomeAdmin"
+          component={AdminHome}
+          initialParams={{savedBalanceInfo: savedBalanceInfo}}
+        />
         <Stack.Group screenOptions={{animation: 'slide_from_bottom'}}>
           <Stack.Screen name="SendBTC" component={SendPaymentHome} />
           <Stack.Screen name="ReceiveBTC" component={ReceivePaymentHome} />
@@ -180,6 +179,26 @@ function ResetStack(): JSX.Element | null {
       </Stack.Navigator>
     </NavigationContainer>
   );
+}
+
+async function initBalanceAndTransactions() {
+  try {
+    const savedBreezInfo = await getLocalStorageItem('breezInfo');
+
+    if (savedBreezInfo) {
+      const tempObject = {
+        didConnectToNode: null,
+        transactions: JSON.parse(savedBreezInfo)[0],
+        userBalance: JSON.parse(savedBreezInfo)[1],
+      };
+
+      return new Promise(response => {
+        response(tempObject);
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export default App;

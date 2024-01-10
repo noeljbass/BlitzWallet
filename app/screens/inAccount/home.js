@@ -1,6 +1,6 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants';
-import {useContext, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   connectToNode,
   setLocalStorageItem,
@@ -8,7 +8,6 @@ import {
 } from '../../functions';
 import {
   listLsps,
-  lspId,
   lspInfo,
   nodeInfo,
   serviceHealthCheck,
@@ -19,18 +18,15 @@ import HomeLightning from '../../components/admin/homeComponents/homeLightning';
 import {getTransactions} from '../../functions/SDK';
 import {useTheme} from '../../../context-store/context';
 
-export default function AdminHome({navigation: {navigate}}) {
+export default function AdminHome({navigation: {navigate}, route}) {
   const isInitialRender = useRef(true);
-  const [breezInformation, setBreezInformation] = useState({
-    didConnectToNode: null,
-    transactions: [],
-    userBalance: 0,
-  });
+  const [breezInformation, setBreezInformation] = useState(
+    route.params?.savedBalanceInfo,
+  );
   const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useTheme();
   // SDK events listener
-  console.log(breezEvent);
 
   const onBreezEvent = e => {
     console.log(e.type, 'IN FUNCTION EVENT');
@@ -80,26 +76,26 @@ export default function AdminHome({navigation: {navigate}}) {
   );
 }
 
-async function initBalanceAndTransactions(setBreezInformation) {
-  try {
-    const savedBreezInfo = await getLocalStorageItem('breezInfo');
+// async function initBalanceAndTransactions(setBreezInformation) {
+//   try {
+//     const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
-    if (savedBreezInfo) {
-      setBreezInformation(prev => {
-        return {
-          ...prev,
-          transactions: JSON.parse(savedBreezInfo)[0],
-          userBalance: JSON.parse(savedBreezInfo)[1],
-        };
-      });
-      return new Promise(response => {
-        response(savedBreezInfo);
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-}
+//     if (savedBreezInfo) {
+//       setBreezInformation(prev => {
+//         return {
+//           ...prev,
+//           transactions: JSON.parse(savedBreezInfo)[0],
+//           userBalance: JSON.parse(savedBreezInfo)[1],
+//         };
+//       });
+//       return new Promise(response => {
+//         response(savedBreezInfo);
+//       });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
 async function initWallet(
   isInitialRender,
@@ -108,13 +104,13 @@ async function initWallet(
   onBreezEvent,
   setErrMessage,
 ) {
-  let savedBreezInfo;
+  // let savedBreezInfo;
   if (isInitialRender.current) {
     console.log('RUNNING');
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
 
-    savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
+    // savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
 
     try {
       const response = await connectToNode(onBreezEvent);
@@ -167,7 +163,7 @@ async function initWallet(
 
     const transactions = await getTransactions();
     const nodeAmount = await nodeInfo();
-    console.log(nodeAmount);
+
     const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
 
     setBreezInformation(prev => {

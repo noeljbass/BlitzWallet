@@ -87,7 +87,7 @@ export function UserTransactions(props) {
     });
 
     const scrollTxs = (
-      <ScrollView key={'hasTxs'} style={{width: '90%', ...CENTER}}>
+      <ScrollView key={'hasTxs'} style={{width: '95%', ...CENTER}}>
         {transactionElements}
       </ScrollView>
     );

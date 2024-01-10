@@ -6,7 +6,7 @@ export function SendRecieveBTNs(props) {
   const navigate = useNavigation();
   console.log('SEND RECIVE BUTTONS');
   return (
-    <View style={styles.globalContainer}>
+    <View style={[styles.globalContainer]}>
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
@@ -30,10 +30,10 @@ export function SendRecieveBTNs(props) {
 const styles = StyleSheet.create({
   globalContainer: {
     width: '100%',
-    height: 60,
+    height: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
-    // borderTopWidth: 1,
+    paddingTop: 10,
   },
 
   container: {

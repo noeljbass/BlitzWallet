@@ -43,10 +43,11 @@ export default async function connectToNode(breezEvent) {
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          partnerCredentials: {
-            deviceKey: deviceKey,
-            deviceCert: deviceCert,
-          },
+          inviteCode: inviteCode,
+          // partnerCredentials: {
+          //   deviceKey: deviceKey,
+          //   deviceCert: deviceCert,
+          // },
         },
       };
 
