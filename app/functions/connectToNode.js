@@ -10,6 +10,7 @@ import {
 import {retrieveData} from './secureStore';
 
 import * as FileSystem from 'expo-file-system';
+import {btoa, atob, toByteArray} from 'react-native-quick-base64';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
@@ -22,40 +23,31 @@ export default async function connectToNode(breezEvent) {
     });
   } catch (err) {
     try {
-      const inviteCode = process.env.INVITE_KEY1;
+      // const inviteCode = process.env.INVITE_KEY1;
       const deviceCert = await FileSystem.readAsStringAsync(
         process.env.GL_CUSTOM_NOBODY_CERT,
+        {
+          encoding: FileSystem.EncodingType.Base64,
+        },
       );
       const deviceKey = await FileSystem.readAsStringAsync(
         process.env.GL_CUSTOM_NOBODY_KEY,
+        {
+          encoding: FileSystem.EncodingType.Base64,
+        },
       );
 
-      // const nodeConfig = {
-      //   type: NodeConfigVariant.GREENLIGHT,
-      //   config: {
-      //     // inviteCode: inviteCode,
-      //     partnerCredentials: {
-      //       deviceKey: deviceKey,
-      //       deviceCert: deviceCert,
-      //     },
-      //   },
-      // };
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          inviteCode: inviteCode,
-          // partnerCredentials: {
-          //   deviceKey: deviceKey,
-          //   deviceCert: deviceCert,
-          // },
+          // inviteCode: inviteCode,
+          partnerCredentials: {
+            deviceKey: unit8ArrayConverter(toByteArray(deviceKey)),
+            deviceCert: unit8ArrayConverter(toByteArray(deviceCert)),
+          },
         },
       };
 
-      // const config = await defaultConfig(
-      //   EnvironmentType.PRODUCTION,
-      //   process.env.API_KEY,
-      //   nodeConfig,
-      // );
       const config = await defaultConfig(
         EnvironmentType.PRODUCTION,
         process.env.API_KEY,
@@ -92,4 +84,10 @@ export default async function connectToNode(breezEvent) {
       });
     }
   }
+}
+
+function unit8ArrayConverter(unitArray) {
+  return Array.from(
+    unitArray.filter(num => Number.isInteger(num) && num >= 0 && num <= 255),
+  );
 }

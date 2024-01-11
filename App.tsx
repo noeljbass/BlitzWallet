@@ -76,12 +76,12 @@ function ResetStack(): JSX.Element | null {
     (async () => {
       const pin = await retrieveData('pin');
       const mnemonic = await retrieveData('mnemonic');
-      const savedBreezInfo = await initBalanceAndTransactions();
+      // const savedBreezInfo = await initBalanceAndTransactions();
 
       if (pin && mnemonic) {
         setIsLoggedIn(true);
       } else setIsLoggedIn(false);
-      setSavedBalanceInfo(savedBreezInfo);
+      // setSavedBalanceInfo(savedBreezInfo);
       setIsLoaded(true);
 
       if (Platform.OS === 'android') {
@@ -106,6 +106,7 @@ function ResetStack(): JSX.Element | null {
       subscription.remove();
     };
   }, []);
+
   if (!isloaded) return null;
   return (
     <NavigationContainer ref={navigationRef}>
@@ -129,7 +130,7 @@ function ResetStack(): JSX.Element | null {
         <Stack.Screen
           name="HomeAdmin"
           component={AdminHome}
-          initialParams={{savedBalanceInfo: savedBalanceInfo}}
+          // initialParams={{savedBalanceInfo: savedBalanceInfo}}
         />
         <Stack.Group screenOptions={{animation: 'slide_from_bottom'}}>
           <Stack.Screen name="SendBTC" component={SendPaymentHome} />

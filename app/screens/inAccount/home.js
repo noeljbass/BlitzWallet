@@ -20,9 +20,11 @@ import {useTheme} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const isInitialRender = useRef(true);
-  const [breezInformation, setBreezInformation] = useState(
-    route.params?.savedBalanceInfo,
-  );
+  const [breezInformation, setBreezInformation] = useState({
+    didConnectToNode: null,
+    transactions: [],
+    userBalance: 0,
+  });
   const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
   const {theme} = useTheme();
@@ -114,8 +116,8 @@ async function initWallet(
 
     try {
       const response = await connectToNode(onBreezEvent);
-      console.log(response);
-      setErrMessage(response.errMessage);
+      // console.log(response);
+      // setErrMessage(response.errMessage);
 
       if (response.isConnected && response.reason) {
         const nodeAmount = await nodeInfo();
