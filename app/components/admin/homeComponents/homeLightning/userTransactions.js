@@ -11,16 +11,9 @@ import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
 
-const MILISECONDSDAYCONSTANT = 86400000;
-
 export function UserTransactions(props) {
-  const transactionObject = {
-    currentDateString: '',
-    groupedTransactions: [],
-    tempGroupedTransactoins: [],
-  };
-  const navigate = useNavigation();
   const [txs, setTxs] = useState([]);
+  const navigate = useNavigation();
 
   useEffect(() => {
     setTxs([
@@ -31,69 +24,89 @@ export function UserTransactions(props) {
       </View>,
     ]);
 
-    setTransactionElements();
+    setTransactionElements(setTxs, props, navigate, props?.setIsLoaded);
   }, [props.transactions, props.showAmount, props.theme]);
 
   return <View style={{flex: 1}}>{txs}</View>;
+}
 
-  function setTransactionElements() {
-    const transactionElements = props.transactions.map((transaction, id) => {
-      const paymentDate = new Date(
-        transaction.paymentTime * 1000 + MILISECONDSDAYCONSTANT,
-      );
+function setTransactionElements(setTxs, props, navigate, setIsLoaded) {
+  let formattedTxs = [];
+  let currentGroupedDate = '';
 
-      if (id === 0)
-        transactionObject.currentDateString = paymentDate.toDateString();
+  const amountOfTxArr =
+    typeof props.numTx === 'number'
+      ? props.transactions.slice(0, props.numTx)
+      : props.transactions;
 
-      if (transactionObject.currentDateString === paymentDate.toDateString()) {
-        transactionObject.groupedTransactions.push(
-          <UserTransaction
-            theme={props.theme}
-            showAmount={props.showAmount}
-            key={id}
-            {...transaction}
-            navigate={navigate}
-            transactions={props.transactions}
-          />,
-        );
-      } else {
-        transactionObject.currentDateString = paymentDate.toDateString();
-        transactionObject.tempGroupedTransactoins =
-          transactionObject.groupedTransactions;
-        transactionObject.groupedTransactions = [];
-
-        if (transactionObject.tempGroupedTransactoins.length === 0) return;
-
-        return (
-          <View key={paymentDate.toDateString()}>
-            <Text
-              style={[
-                styles.transactionTimeBanner,
-                {
-                  backgroundColor: props.theme
-                    ? COLORS.darkModeBackgroundOffset
-                    : COLORS.lightModeBackgroundOffset,
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              {paymentDate.toDateString()}
-            </Text>
-            {transactionObject.tempGroupedTransactoins}
-          </View>
-        );
-      }
-    });
-
-    const scrollTxs = (
-      <ScrollView key={'hasTxs'} style={{width: '95%', ...CENTER}}>
-        {transactionElements}
-      </ScrollView>
+  amountOfTxArr.forEach((tx, id) => {
+    const paymentDate = new Date(tx.paymentTime * 1000);
+    const styledTx = (
+      <UserTransaction
+        theme={props.theme}
+        showAmount={props.showAmount}
+        key={id}
+        {...tx}
+        navigate={navigate}
+        transactions={props.transactions}
+      />
     );
+    if (id === 0 || currentGroupedDate != paymentDate.toDateString()) {
+      currentGroupedDate = paymentDate.toDateString();
 
-    setTxs([scrollTxs]);
-  }
+      formattedTxs.push(dateBanner(paymentDate.toDateString(), props.theme));
+    }
+
+    formattedTxs.push(styledTx);
+  });
+
+  const scrollTxs = (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      key={'hasTxs'}
+      style={{width: '95%', ...CENTER}}>
+      {formattedTxs}
+      {props?.from != 'viewAll' && formattedTxs.length != 0 && (
+        <View style={styles.mostRecentTxContainer}>
+          <Text
+            style={{
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+            }}>
+            Most recent {props.numTx} transactions
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigate.navigate('ViewAllTxPage', {
+                breezInformation: props.breezInformation,
+              });
+            }}>
+            <Text style={{color: COLORS.primary}}>See all transactions</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </ScrollView>
+  );
+
+  setTxs(scrollTxs);
+}
+
+function dateBanner(date, theme) {
+  return (
+    <View key={date}>
+      <Text
+        style={[
+          styles.transactionTimeBanner,
+          {
+            backgroundColor: theme
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+            color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+          },
+        ]}>
+        {date}
+      </Text>
+    </View>
+  );
 }
 
 function UserTransaction(props) {
@@ -110,19 +123,14 @@ function UserTransaction(props) {
         });
       }}>
       <View style={styles.transactionContainer}>
-        {props.status === 'complete' ? (
-          <Image
-            source={ICONS.Checkcircle}
-            style={styles.icons}
-            resizeMode="contain"
-          />
-        ) : (
-          <Image
-            source={ICONS.Xcircle}
-            style={styles.icons}
-            resizeMode="contain"
-          />
-        )}
+        <Image
+          source={
+            props.status === 'complete' ? ICONS.Checkcircle : ICONS.Xcircle
+          }
+          style={styles.icons}
+          resizeMode="contain"
+        />
+
         <View>
           <Text
             style={[
@@ -149,29 +157,25 @@ function UserTransaction(props) {
             {paymentDate}
           </Text>
         </View>
-
-        {props.showAmount ? (
-          props.paymentType != 'received' ? (
-            <Text style={combinedStyles.wasSent}>
-              -{(props.amountMsat / 1000).toLocaleString()} Sat
-            </Text>
-          ) : (
-            <Text style={combinedStyles.wasRecived}>
-              +{(props.amountMsat / 1000).toLocaleString()} Sat
-            </Text>
-          )
-        ) : (
-          <Text
-            style={[
-              styles.amountText,
-              {
-                fontSize: SIZES.medium,
-                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            *****
-          </Text>
-        )}
+        <Text
+          style={[
+            styles.amountText,
+            {
+              color: props.showAmount
+                ? props.paymentType === 'received'
+                  ? 'green'
+                  : 'red'
+                : props.theme
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
+          ]}>
+          {props.showAmount
+            ? (props.paymentType === 'received' ? '+' : '-') +
+              (props.amountMsat / 1000).toLocaleString() +
+              ' Sat'
+            : ' *****'}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -234,15 +238,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: FONT.Descriptoin_Regular,
   },
-});
 
-const combinedStyles = StyleSheet.create({
-  wasSent: {
-    ...styles.amountText,
-    color: 'red',
-  },
-  wasRecived: {
-    ...styles.amountText,
-    color: 'green',
+  mostRecentTxContainer: {
+    width: 'auto',
+    ...CENTER,
+    alignItems: 'center',
   },
 });

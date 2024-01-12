@@ -46,6 +46,23 @@ export default function NavBar(props) {
           }}>
           <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigate.navigate('ViewAllTxPage', {
+              breezInformation: props.breezInformation,
+            });
+          }}
+          activeOpacity={0.5}
+          style={[
+            styles.icons,
+            {
+              backgroundColor: props.theme
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+            },
+          ]}>
+          <Image style={styles.imgIcon} source={ICONS.receiptIcon} />
+        </TouchableOpacity>
         {/* <TouchableOpacity
           onPress={() => {
             navigate.navigate('ContactsPage', {
@@ -132,7 +149,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
   },
   iconContainer: {
-    width: 130,
+    width: 165,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

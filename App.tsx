@@ -40,6 +40,7 @@ import {
   SendPaymentHome,
   SettingsContentIndex,
   SettingsIndex,
+  ViewAllTxPage,
 } from './app/screens/inAccount';
 
 import {setStatusBarHidden} from 'expo-status-bar';
@@ -66,22 +67,15 @@ function ResetStack(): JSX.Element | null {
   const appState = useRef(AppState.currentState);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isloaded, setIsLoaded] = useState(false);
-  const [savedBalanceInfo, setSavedBalanceInfo] = useState({
-    didConnectToNode: null,
-    transactions: [],
-    userBalance: 0,
-  });
 
   useEffect(() => {
     (async () => {
       const pin = await retrieveData('pin');
       const mnemonic = await retrieveData('mnemonic');
-      // const savedBreezInfo = await initBalanceAndTransactions();
 
       if (pin && mnemonic) {
         setIsLoggedIn(true);
       } else setIsLoggedIn(false);
-      // setSavedBalanceInfo(savedBreezInfo);
       setIsLoaded(true);
 
       if (Platform.OS === 'android') {
@@ -127,11 +121,7 @@ function ResetStack(): JSX.Element | null {
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
         <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
         {/* admin screens */}
-        <Stack.Screen
-          name="HomeAdmin"
-          component={AdminHome}
-          // initialParams={{savedBalanceInfo: savedBalanceInfo}}
-        />
+        <Stack.Screen name="HomeAdmin" component={AdminHome} />
         <Stack.Group screenOptions={{animation: 'slide_from_bottom'}}>
           <Stack.Screen name="SendBTC" component={SendPaymentHome} />
           <Stack.Screen name="ReceiveBTC" component={ReceivePaymentHome} />
@@ -141,6 +131,7 @@ function ResetStack(): JSX.Element | null {
             <Stack.Screen name="ConfirmTxPage" component={ConfirmTxPage} />
           </Stack.Group>
           <Stack.Screen name="ContactsPage" component={ContactsPage} />
+          <Stack.Screen name="ViewAllTxPage" component={ViewAllTxPage} />
           <Stack.Screen
             name="DrainWalletAddress"
             component={DrainWalletAddress}
@@ -180,26 +171,6 @@ function ResetStack(): JSX.Element | null {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
-
-async function initBalanceAndTransactions() {
-  try {
-    const savedBreezInfo = await getLocalStorageItem('breezInfo');
-
-    if (savedBreezInfo) {
-      const tempObject = {
-        didConnectToNode: null,
-        transactions: JSON.parse(savedBreezInfo)[0],
-        userBalance: JSON.parse(savedBreezInfo)[1],
-      };
-
-      return new Promise(response => {
-        response(tempObject);
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
 }
 
 export default App;

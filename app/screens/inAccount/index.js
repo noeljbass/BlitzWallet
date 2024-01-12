@@ -9,6 +9,7 @@ import {ReceivePaymentHome} from './receiveBtcPage';
 import SendPaymentHome from './sendBtcPage';
 import SettingsContentIndex from './settingsContent';
 import SettingsIndex from './settingsIndex';
+import ViewAllTxPage from './viewAllTxPage';
 
 export {
   ExpandedTx,
@@ -22,4 +23,5 @@ export {
   SettingsContentIndex,
   SettingsIndex,
   FaceIdPage,
+  ViewAllTxPage,
 };

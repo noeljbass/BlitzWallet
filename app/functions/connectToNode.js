@@ -23,28 +23,31 @@ export default async function connectToNode(breezEvent) {
     });
   } catch (err) {
     try {
-      // const inviteCode = process.env.INVITE_KEY1;
-      const deviceCert = await FileSystem.readAsStringAsync(
-        process.env.GL_CUSTOM_NOBODY_CERT,
-        {
-          encoding: FileSystem.EncodingType.Base64,
-        },
-      );
-      const deviceKey = await FileSystem.readAsStringAsync(
-        process.env.GL_CUSTOM_NOBODY_KEY,
-        {
-          encoding: FileSystem.EncodingType.Base64,
-        },
-      );
+      // console.log(process.env.GL_CUSTOM_NOBODY_CERT, 'IN FUNCTION');
+      const inviteCode = process.env.INVITE_KEY1;
+      console.log(inviteCode);
+      console.log(process.env.API_KEY);
+      // const deviceCert = await FileSystem.readAsStringAsync(
+      //   `file:${process.env.GL_CUSTOM_NOBODY_CERT}`,
+      //   {
+      //     encoding: FileSystem.EncodingType.Base64,
+      //   },
+      // );
+      // const deviceKey = await FileSystem.readAsStringAsync(
+      //   `file:${process.env.GL_CUSTOM_NOBODY_KEY}`,
+      //   {
+      //     encoding: FileSystem.EncodingType.Base64,
+      //   },
+      // );
 
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          // inviteCode: inviteCode,
-          partnerCredentials: {
-            deviceKey: unit8ArrayConverter(toByteArray(deviceKey)),
-            deviceCert: unit8ArrayConverter(toByteArray(deviceCert)),
-          },
+          inviteCode: inviteCode,
+          // partnerCredentials: {
+          //   deviceKey: unit8ArrayConverter(toByteArray(deviceKey)),
+          //   deviceCert: unit8ArrayConverter(toByteArray(deviceCert)),
+          // },
         },
       };
 
@@ -78,16 +81,9 @@ export default async function connectToNode(breezEvent) {
       return new Promise(resolve => {
         resolve({
           isConnected: false,
-          errMessage: JSON.stringify(err),
           reason: 'error connecting',
         });
       });
     }
   }
-}
-
-function unit8ArrayConverter(unitArray) {
-  return Array.from(
-    unitArray.filter(num => Number.isInteger(num) && num >= 0 && num <= 255),
-  );
 }

@@ -1,12 +1,17 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
+import * as Device from 'expo-device';
 
 export function SendRecieveBTNs(props) {
   const navigate = useNavigation();
   console.log('SEND RECIVE BUTTONS');
   return (
-    <View style={[styles.globalContainer]}>
+    <View
+      style={[
+        styles.globalContainer,
+        {paddingBottom: Device.osName === 'IOS' ? 0 : 10},
+      ]}>
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {

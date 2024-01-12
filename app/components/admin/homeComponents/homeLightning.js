@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {CENTER, SIZES, FONT, COLORS} from '../../../constants';
 
@@ -9,11 +9,17 @@ import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem} from '../../../functions';
 import {useNavigation} from '@react-navigation/native';
 import LiquidityIndicator from './homeLightning/liquidityIndicator';
+import * as FileSystem from 'expo-file-system';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
   const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
+  const [certValues, setCertValues] = useState({
+    key: '',
+    cert: '',
+    apiKey: '',
+  });
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
@@ -26,6 +32,23 @@ export default function HomeLightning(props) {
       information: props.breezEvent,
     });
   }, [props.breezEvent]);
+
+  useEffect(() => {
+    (async () => {
+      return;
+      const deviceCert = await FileSystem.readAsStringAsync(
+        process.env.GL_CUSTOM_NOBODY_CERT,
+      );
+      const deviceKey = await FileSystem.readAsStringAsync(
+        process.env.GL_CUSTOM_NOBODY_KEY,
+      );
+      setCertValues({
+        key: deviceKey,
+        cert: deviceCert,
+        apiKey: process.env.API_KEY,
+      });
+    })();
+  }, []);
 
   return (
     <View style={style.globalContainer}>
@@ -47,11 +70,18 @@ export default function HomeLightning(props) {
           theme={props.theme}
         />
       )}
+      {/* <ScrollView>
+        <Text>{certValues.cert}</Text>
+        <Text>{certValues.key}</Text>
+        <Text>{certValues.apiKey}</Text>
+      </ScrollView> */}
 
       <UserTransactions
         transactions={props.breezInformation.transactions}
+        breezInformation={props.breezInformation}
         theme={props.theme}
         showAmount={showAmount}
+        numTx={15}
       />
       <SendRecieveBTNs theme={props.theme} />
     </View>

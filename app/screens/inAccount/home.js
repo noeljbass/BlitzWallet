@@ -25,7 +25,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
     transactions: [],
     userBalance: 0,
   });
-  const [errorMessage, setErrMessage] = useState('');
+  // const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
   const {theme} = useTheme();
   // SDK events listener
@@ -48,7 +48,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
       setBreezInformation,
       breezEvent,
       onBreezEvent,
-      setErrMessage,
+      // setErrMessage,
     );
   }, [breezEvent]);
 
@@ -78,33 +78,33 @@ export default function AdminHome({navigation: {navigate}, route}) {
   );
 }
 
-// async function initBalanceAndTransactions(setBreezInformation) {
-//   try {
-//     const savedBreezInfo = await getLocalStorageItem('breezInfo');
+async function initBalanceAndTransactions(setBreezInformation) {
+  try {
+    const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
-//     if (savedBreezInfo) {
-//       setBreezInformation(prev => {
-//         return {
-//           ...prev,
-//           transactions: JSON.parse(savedBreezInfo)[0],
-//           userBalance: JSON.parse(savedBreezInfo)[1],
-//         };
-//       });
-//       return new Promise(response => {
-//         response(savedBreezInfo);
-//       });
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
+    if (savedBreezInfo) {
+      setBreezInformation(prev => {
+        return {
+          ...prev,
+          transactions: JSON.parse(savedBreezInfo)[0],
+          userBalance: JSON.parse(savedBreezInfo)[1],
+        };
+      });
+      return new Promise(response => {
+        response(savedBreezInfo);
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 async function initWallet(
   isInitialRender,
   setBreezInformation,
   breezEvent,
   onBreezEvent,
-  setErrMessage,
+  // setErrMessage,
 ) {
   // let savedBreezInfo;
   if (isInitialRender.current) {
@@ -112,7 +112,7 @@ async function initWallet(
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
 
-    // savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
+    savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
 
     try {
       const response = await connectToNode(onBreezEvent);
@@ -152,7 +152,6 @@ async function initWallet(
         setBreezInformation(prev => {
           return {
             ...prev,
-
             didConnectToNode: response.isConnected,
           };
         });
