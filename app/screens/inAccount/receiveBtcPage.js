@@ -42,13 +42,12 @@ export function ReceivePaymentHome(props) {
         try {
           const currency = await getLocalStorageItem('currency');
           setUserSelectedCurrency(currency);
-          console.log(currency);
+          console.log(currency, 'TEST');
         } catch (err) {
           console.log(err);
         }
       })();
       isInitialRender.current = false;
-      console;
     }
     clear('navChange');
   }, [selectedRecieveOption]);

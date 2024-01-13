@@ -11,7 +11,7 @@ import {retrieveData} from './secureStore';
 
 import * as FileSystem from 'expo-file-system';
 import {btoa, atob, toByteArray} from 'react-native-quick-base64';
-import generateMnemnoic from './seed';
+import {androidFileReader} from './readFiles';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
@@ -28,33 +28,44 @@ export default async function connectToNode(breezEvent) {
       //   process.env.GL_CUSTOM_NOBODY_CERT,
       // );
 
-      const inviteCode = process.env.INVITE_KEY1;
-      console.log(process.env.INVITE_KEY1);
-      console.log(process.env.GL_CUSTOM_NOBODY_CERT);
-      console.log(process.env.GL_CUSTOM_NOBODY_KEY);
-      console.log(process.env.API_KEY);
+      // const inviteCode = process.env.INVITE_KEY1;
+      // console.log(process.env.INVITE_KEY1);
+      // console.log(process.env.GL_CUSTOM_NOBODY_CERT);
+      // console.log(process.env.GL_CUSTOM_NOBODY_KEY);
+      // console.log(process.env.API_KEY);
 
       // const deviceCert = await FileSystem.readAsStringAsync(
-      //   `${process.env.GL_CUSTOM_NOBODY_CERT}`,
+      //   `/Users/blakekaufman/Desktop/Bliltz Wallet, LLC/Green light certifications/gl-certs/client.crt`,
       //   {
       //     encoding: FileSystem.EncodingType.Base64,
       //   },
       // );
       // const deviceKey = await FileSystem.readAsStringAsync(
-      //   `file://${process.env.GL_CUSTOM_NOBODY_KEY}`,
+      //   `/Users/blakekaufman/Desktop/Bliltz Wallet, LLC/Green light certifications/gl-certs/client-key.pem`,
       //   {
       //     encoding: FileSystem.EncodingType.Base64,
       //   },
       // );
 
+      // const test = btoa(process.env.GL_CUSTOM_NOBODY_KEY);
+
+      // console.log(
+      //   toByteArray(deviceCert).toString() === toByteArray(test).toString(),
+      //   'TESTING',
+      // );
+
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {
-          inviteCode: inviteCode,
-          // partnerCredentials: {
-          //   deviceKey: unit8ArrayConverter(toByteArray(deviceKey)),
-          //   deviceCert: unit8ArrayConverter(toByteArray(deviceCert)),
-          // },
+          // inviteCode: inviteCode,
+          partnerCredentials: {
+            deviceKey: unit8ArrayConverter(
+              toByteArray(btoa(process.env.GL_CUSTOM_NOBODY_KEY)),
+            ),
+            deviceCert: unit8ArrayConverter(
+              toByteArray(btoa(process.env.GL_CUSTOM_NOBODY_CERT)),
+            ),
+          },
         },
       };
 

@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
 import {COLORS} from '../../constants';
 import {useEffect, useRef, useState} from 'react';
 import {
@@ -28,6 +28,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
   // const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
   const {theme} = useTheme();
+
   // SDK events listener
 
   const onBreezEvent = e => {
@@ -68,6 +69,11 @@ export default function AdminHome({navigation: {navigate}, route}) {
           breezEvent={breezEvent}
           theme={theme}
         />
+        {/* <ScrollView>
+          <Text>{process.env.GL_CUSTOM_NOBODY_CERT}</Text>
+          <Text>{process.env.GL_CUSTOM_NOBODY_KEY}</Text>
+        </ScrollView> */}
+
         <HomeLightning
           breezEvent={breezEvent}
           breezInformation={breezInformation}

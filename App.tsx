@@ -89,8 +89,16 @@ function ResetStack(): JSX.Element | null {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (appState.current.match(/background/) && nextAppState === 'active') {
         console.log('Background!');
+        (async () => {
+          const pin = await retrieveData('pin');
+          const mnemonic = await retrieveData('mnemonic');
 
-        navigationRef?.current?.navigate('Home', {fromBackground: true});
+          if (pin && mnemonic) {
+            setIsLoggedIn(true);
+          } else setIsLoggedIn(false);
+
+          navigationRef?.current?.navigate('Home', {fromBackground: true});
+        })();
       }
 
       appState.current = nextAppState;

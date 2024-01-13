@@ -2,10 +2,12 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
+import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
+import {removeLocalStorageItem} from '../../../../functions/localStorage';
 
 export function SendRecieveBTNs(props) {
   const navigate = useNavigation();
-  console.log('SEND RECIVE BUTTONS');
+
   return (
     <View
       style={[
@@ -15,14 +17,22 @@ export function SendRecieveBTNs(props) {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            navigate.navigate('SendBTC', {isDarkMode: props.theme});
+            (async () => {
+              const areSettingsSet = await handleSettingsCheck();
+              if (!areSettingsSet) return;
+              navigate.navigate('SendBTC', {isDarkMode: props.theme});
+            })();
           }}
           style={combinedStyles.firstButton}>
           <Text style={styles.text}>Send</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigate.navigate('ReceiveBTC', {isDarkMode: props.theme});
+            (async () => {
+              const areSettingsSet = await handleSettingsCheck();
+              if (!areSettingsSet) return;
+              navigate.navigate('ReceiveBTC', {isDarkMode: props.theme});
+            })();
           }}
           style={styles.button}>
           <Text style={styles.text}>Receive</Text>
@@ -30,6 +40,14 @@ export function SendRecieveBTNs(props) {
       </View>
     </View>
   );
+}
+
+async function handleSettingsCheck() {
+  const currency = await getLocalStorageItem('currency');
+  if (!currency) setLocalStorageItem('currency', 'USD');
+  return new Promise(resolve => {
+    resolve(true);
+  });
 }
 
 const styles = StyleSheet.create({
