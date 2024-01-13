@@ -18,19 +18,25 @@ export function UserTransactions(props) {
   useEffect(() => {
     setTxs([
       <View style={[styles.noTransactionsContainer]} key={'noTx'}>
-        <Text style={styles.noTransactionsText}>
+        <Text
+          style={[
+            styles.noTransactionsText,
+            {color: props.theme ? COLORS.darkModeText : COLORS.lightModeText},
+          ]}>
           Send or receive a transaction for it to show up here
         </Text>
       </View>,
     ]);
 
-    setTransactionElements(setTxs, props, navigate, props?.setIsLoaded);
+    if (props.transactions.length === 0) return;
+
+    setTransactionElements(setTxs, props, navigate);
   }, [props.transactions, props.showAmount, props.theme]);
 
   return <View style={{flex: 1}}>{txs}</View>;
 }
 
-function setTransactionElements(setTxs, props, navigate, setIsLoaded) {
+function setTransactionElements(setTxs, props, navigate) {
   let formattedTxs = [];
   let currentGroupedDate = '';
 

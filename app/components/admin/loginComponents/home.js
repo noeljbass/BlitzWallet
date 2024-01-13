@@ -15,11 +15,11 @@ import {getLocalStorageItem, setLocalStorageItem} from '../../../functions';
 
 export default function HomeLogin(props) {
   const {height} = useWindowDimensions();
-  const fadeAnim = useRef(new Animated.Value(height / 2 - 150)).current;
+  const fadeAnim = useRef(new Animated.Value(height / 2 - 75)).current;
 
   async function moveLogo(type) {
     Animated.timing(fadeAnim, {
-      toValue: type === 'up' ? 20 : height / 2 - 125,
+      toValue: type === 'up' ? 20 : height / 2 - 75,
       duration: 200,
       useNativeDriver: true,
     }).start();
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 250,
-    height: 250,
+    width: 150,
+    height: 150,
     position: 'absolute',
     top: 0,
   },

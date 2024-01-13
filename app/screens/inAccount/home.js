@@ -122,18 +122,16 @@ async function initWallet(
       if (response.isConnected && response.reason) {
         const nodeAmount = await nodeInfo();
         const transactions = await getTransactions();
-        const info = await lspInfo();
         const heath = await serviceHealthCheck();
         const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+
+        if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
 
         // await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 
-        console.log(heath);
-        console.log(info, 'LSPPSSS');
-
-        if (!info.id) reconnectToLSP();
+        console.log(nodeAmount);
 
         setBreezInformation(prev => {
           return {

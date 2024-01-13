@@ -11,6 +11,7 @@ import {retrieveData} from './secureStore';
 
 import * as FileSystem from 'expo-file-system';
 import {btoa, atob, toByteArray} from 'react-native-quick-base64';
+import generateMnemnoic from './seed';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
@@ -23,18 +24,24 @@ export default async function connectToNode(breezEvent) {
     });
   } catch (err) {
     try {
-      // console.log(process.env.GL_CUSTOM_NOBODY_CERT, 'IN FUNCTION');
+      // const fileInfo = await FileSystem.getInfoAsync(
+      //   process.env.GL_CUSTOM_NOBODY_CERT,
+      // );
+
       const inviteCode = process.env.INVITE_KEY1;
-      console.log(inviteCode);
+      console.log(process.env.INVITE_KEY1);
+      console.log(process.env.GL_CUSTOM_NOBODY_CERT);
+      console.log(process.env.GL_CUSTOM_NOBODY_KEY);
       console.log(process.env.API_KEY);
+
       // const deviceCert = await FileSystem.readAsStringAsync(
-      //   `file:${process.env.GL_CUSTOM_NOBODY_CERT}`,
+      //   `${process.env.GL_CUSTOM_NOBODY_CERT}`,
       //   {
       //     encoding: FileSystem.EncodingType.Base64,
       //   },
       // );
       // const deviceKey = await FileSystem.readAsStringAsync(
-      //   `file:${process.env.GL_CUSTOM_NOBODY_KEY}`,
+      //   `file://${process.env.GL_CUSTOM_NOBODY_KEY}`,
       //   {
       //     encoding: FileSystem.EncodingType.Base64,
       //   },
@@ -61,7 +68,6 @@ export default async function connectToNode(breezEvent) {
 
       if (mnemonic) {
         const seed = await mnemonicToSeed(mnemonic);
-        // console.log(mnemonic);
 
         // Connect to the Breez SDK make it ready for use
         await connect(config, seed, breezEvent);
@@ -81,9 +87,16 @@ export default async function connectToNode(breezEvent) {
       return new Promise(resolve => {
         resolve({
           isConnected: false,
+          errMessage: JSON.stringify(err),
           reason: 'error connecting',
         });
       });
     }
   }
+}
+
+function unit8ArrayConverter(unitArray) {
+  return Array.from(
+    unitArray.filter(num => Number.isInteger(num) && num >= 0 && num <= 255),
+  );
 }
