@@ -1,5 +1,6 @@
 import {
   Animated,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -7,14 +8,15 @@ import {
   useColorScheme,
 } from 'react-native';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
-import {CENTER, COLORS, FONT, SIZES} from '../../../../constants';
+import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useContext, useEffect, useRef, useState} from 'react';
 import {useTheme} from '../../../../../context-store/context';
 
 export default function DisplayOptions() {
   // const sytemColorScheme = useColorScheme();
   const sliderAnim = useRef(new Animated.Value(3)).current;
-  const {theme, toggleTheme} = useTheme();
+  const {theme, toggleTheme, userTxPreferance, toggleUserTxPreferance} =
+    useTheme();
   const systemTheme = useColorScheme() === 'dark';
 
   useEffect(() => {
@@ -31,78 +33,176 @@ export default function DisplayOptions() {
     })();
   }, []);
 
-  return (
-    <View style={{flex: 1, paddingTop: 25, alignItems: 'center'}}>
-      <Text
-        style={[
-          styles.infoHeaders,
-          {
-            color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-          },
-        ]}>
-        Color Scheme
-      </Text>
-      <View
-        style={[
-          styles.contentContainer,
-          {
-            backgroundColor: theme
-              ? COLORS.darkModeBackgroundOffset
-              : COLORS.lightModeBackgroundOffset,
-            alignItems: 'center',
-          },
-        ]}>
-        <View style={[styles.colorSchemeContainer]}>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => handleSlide('dark')}>
-            <Text
-              style={[
-                styles.colorSchemeText,
-                {
-                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                },
-              ]}>
-              Dark{' '}
-            </Text>
-          </TouchableOpacity>
+  const homeScreenTxElements = createHomepageTxOptions(
+    userTxPreferance,
+    toggleUserTxPreferance,
+  );
 
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => handleSlide('system')}>
+  return (
+    <View style={{flex: 1}}>
+      <View style={{paddingTop: 25, alignItems: 'center'}}>
+        <Text
+          style={[
+            styles.infoHeaders,
+            {
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
+          Color Scheme
+        </Text>
+        <View
+          style={[
+            styles.contentContainer,
+            {
+              backgroundColor: theme
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+              alignItems: 'center',
+            },
+          ]}>
+          <View style={[styles.colorSchemeContainer]}>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => handleSlide('dark')}>
+              <Text
+                style={[
+                  styles.colorSchemeText,
+                  {
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  },
+                ]}>
+                Dark{' '}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => handleSlide('system')}>
+              <Text
+                style={[
+                  styles.colorSchemeText,
+                  {
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  },
+                ]}>
+                System
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => handleSlide('light')}>
+              <Text
+                style={[
+                  styles.colorSchemeText,
+                  {
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  },
+                ]}>
+                Light{' '}
+              </Text>
+            </TouchableOpacity>
+            <Animated.View
+              style={[
+                styles.activeSchemeStyle,
+                {transform: [{translateX: sliderAnim}, {translateY: 3}]},
+                {
+                  backgroundColor: theme
+                    ? COLORS.darkModeBackgroundOffset
+                    : COLORS.lightModeBackgroundOffset,
+                },
+              ]}></Animated.View>
+          </View>
+        </View>
+      </View>
+      {/*  */}
+      <View style={{paddingTop: 25, alignItems: 'center'}}>
+        <Text
+          style={[
+            styles.infoHeaders,
+            {
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+            },
+          ]}>
+          Home Screen Transactions
+        </Text>
+        <View
+          style={[
+            styles.contentContainer,
+            {
+              backgroundColor: theme
+                ? COLORS.darkModeBackgroundOffset
+                : COLORS.lightModeBackgroundOffset,
+              alignItems: 'center',
+            },
+          ]}>
+          <View style={[styles.homeScreenTxOptionContainer]}>
             <Text
               style={[
-                styles.colorSchemeText,
-                {
-                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                },
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Bold},
               ]}>
-              System
+              Show recent:
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => handleSlide('light')}>
+          </View>
+          {/* <View style={[styles.homeScreenTxOptionContainer]}>
             <Text
               style={[
-                styles.colorSchemeText,
-                {
-                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                },
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Regular},
               ]}>
-              Light{' '}
+              3 payments
             </Text>
-          </TouchableOpacity>
-          <Animated.View
+          </View>
+          <View style={[styles.homeScreenTxOptionContainer]}>
+            <Text
+              style={[
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Regular},
+              ]}>
+              5 payments
+            </Text>
+          </View>
+          <View style={[styles.homeScreenTxOptionContainer]}>
+            <Text
+              style={[
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Regular},
+              ]}>
+              10 payments
+            </Text>
+          </View>
+          <View style={[styles.homeScreenTxOptionContainer]}>
+            <Text
+              style={[
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Regular},
+              ]}>
+              15 payments
+            </Text>
+          </View>
+          <View style={[styles.homeScreenTxOptionContainer]}>
+            <Text
+              style={[
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Regular},
+              ]}>
+              20 payments
+            </Text>
+          </View>
+          <View
             style={[
-              styles.activeSchemeStyle,
-              {transform: [{translateX: sliderAnim}, {translateY: 3}]},
-              {
-                backgroundColor: theme
-                  ? COLORS.darkModeBackgroundOffset
-                  : COLORS.lightModeBackgroundOffset,
-              },
-            ]}></Animated.View>
+              styles.homeScreenTxOptionContainer,
+              {borderBottomWidth: 0},
+            ]}>
+            <Text
+              style={[
+                styles.homeScreenTxOption,
+                {fontFamily: FONT.Descriptoin_Regular},
+              ]}>
+              25 payments
+            </Text>
+          </View> */}
+          {homeScreenTxElements}
         </View>
       </View>
     </View>
@@ -134,6 +234,44 @@ export default function DisplayOptions() {
       console.log(err);
     }
   }
+}
+
+function createHomepageTxOptions(activeNum, setActiveNum) {
+  const USEROPTIONS = [3, 5, 10, 15, 20, 25];
+  if (!activeNum) return;
+
+  return USEROPTIONS.map((num, id) => {
+    return (
+      <TouchableOpacity
+        style={{width: '100%'}}
+        onPress={() => {
+          setActiveNum(num);
+          handleSwitch(num);
+        }}
+        key={id}>
+        <View
+          style={[
+            styles.homeScreenTxOptionContainer,
+            {borderBottomWidth: id + 1 === USEROPTIONS.length ? 0 : 1},
+          ]}>
+          <Text
+            style={[
+              styles.homeScreenTxOption,
+              {fontFamily: FONT.Descriptoin_Regular},
+            ]}>
+            {num} payments
+          </Text>
+          {num === activeNum && (
+            <Image style={{width: 20, height: 20}} source={ICONS.checkIcon} />
+          )}
+        </View>
+      </TouchableOpacity>
+    );
+  });
+}
+
+function handleSwitch(num) {
+  setLocalStorageItem('homepageTxPreferace', JSON.stringify(num));
 }
 
 const styles = StyleSheet.create({
@@ -175,5 +313,17 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
     borderRadius: 3,
     zIndex: -1,
+  },
+  homeScreenTxOptionContainer: {
+    width: '100%',
+    height: 45,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    paddingHorizontal: 5,
+  },
+  homeScreenTxOption: {
+    fontSize: SIZES.large,
   },
 });

@@ -32,6 +32,7 @@ import transparentIcon from '../assets/transparentIcon.png';
 import contactsIcon from '../assets/icons/contactsIcon.png';
 import locationIcon from '../assets/icons/locationIcon.png';
 import receiptIcon from '../assets/icons/receipt.png';
+import checkIcon from '../assets/icons/check.png';
 
 export default {
   Xcircle,
@@ -68,4 +69,5 @@ export default {
   contactsIcon,
   locationIcon,
   receiptIcon,
+  checkIcon,
 };

@@ -10,6 +10,7 @@ import {
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
+import {getLocalStorageItem} from '../../../../functions';
 
 export function UserTransactions(props) {
   const [txs, setTxs] = useState([]);
@@ -31,7 +32,7 @@ export function UserTransactions(props) {
     if (props.transactions.length === 0) return;
 
     setTransactionElements(setTxs, props, navigate);
-  }, [props.transactions, props.showAmount, props.theme]);
+  }, [props.transactions, props.showAmount, props.theme, props.numTx]);
 
   return <View style={{flex: 1}}>{txs}</View>;
 }

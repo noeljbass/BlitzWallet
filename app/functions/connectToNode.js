@@ -6,12 +6,9 @@ import {
   mnemonicToSeed,
   nodeInfo,
 } from '@breeztech/react-native-breez-sdk';
-// import Config from 'react-native-config';
 import {retrieveData} from './secureStore';
 
-import * as FileSystem from 'expo-file-system';
 import {btoa, atob, toByteArray} from 'react-native-quick-base64';
-import {androidFileReader} from './readFiles';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config

@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants';
 import {useEffect, useRef, useState} from 'react';
 import {
@@ -14,7 +14,6 @@ import {
 } from '@breeztech/react-native-breez-sdk';
 import NavBar from '../../components/admin/homeComponents/navBar';
 import HomeLightning from '../../components/admin/homeComponents/homeLightning';
-
 import {getTransactions} from '../../functions/SDK';
 import {useTheme} from '../../../context-store/context';
 
@@ -69,11 +68,6 @@ export default function AdminHome({navigation: {navigate}, route}) {
           breezEvent={breezEvent}
           theme={theme}
         />
-        {/* <ScrollView>
-          <Text>{process.env.GL_CUSTOM_NOBODY_CERT}</Text>
-          <Text>{process.env.GL_CUSTOM_NOBODY_KEY}</Text>
-        </ScrollView> */}
-
         <HomeLightning
           breezEvent={breezEvent}
           breezInformation={breezInformation}

@@ -10,14 +10,21 @@ const ThemeProvider = ({children}) => {
   // Manage theme state
   const useSystemTheme = useColorScheme() === 'dark';
   const [theme, setTheme] = useState(null);
+  const [userTxPreferance, setUserTxPereferance] = useState(null);
+
   function toggleTheme(peram) {
     setStatusBarStyle(peram ? 'light' : 'dark');
     setTheme(peram);
   }
-
+  function toggleUserTxPreferance(num) {
+    setUserTxPereferance(num);
+  }
   useEffect(() => {
     (async () => {
       const storedTheme = await getLocalStorageItem('colorScheme');
+      const storedUserTxPereferance = await getLocalStorageItem(
+        'homepageTxPreferace',
+      );
       if (JSON.parse(storedTheme) === 'system') {
         setTheme(useSystemTheme);
         setStatusBarStyle(useSystemTheme ? 'light' : 'dark');
@@ -28,13 +35,20 @@ const ThemeProvider = ({children}) => {
         setTheme(false);
         setStatusBarStyle('dark');
       }
+
+      if (storedUserTxPereferance) {
+        setUserTxPereferance(JSON.parse(storedUserTxPereferance));
+      } else {
+        setUserTxPereferance(15);
+      }
     })();
   }, []);
 
-  if (theme === null) return;
+  if (theme === null || userTxPreferance === null) return;
 
   return (
-    <ThemeContext.Provider value={{theme, toggleTheme}}>
+    <ThemeContext.Provider
+      value={{theme, toggleTheme, userTxPreferance, toggleUserTxPreferance}}>
       {children}
     </ThemeContext.Provider>
   );
