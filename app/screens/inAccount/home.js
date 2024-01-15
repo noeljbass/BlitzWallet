@@ -90,9 +90,6 @@ async function initBalanceAndTransactions(setBreezInformation) {
           userBalance: JSON.parse(savedBreezInfo)[1],
         };
       });
-      return new Promise(response => {
-        response(savedBreezInfo);
-      });
     }
   } catch (err) {
     console.log(err);
@@ -112,7 +109,7 @@ async function initWallet(
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
 
-    savedBreezInfo = await initBalanceAndTransactions(setBreezInformation);
+    initBalanceAndTransactions(setBreezInformation);
 
     try {
       const response = await connectToNode(onBreezEvent);
@@ -131,7 +128,7 @@ async function initWallet(
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 
-        console.log(nodeAmount);
+        // console.log(nodeAmount);
 
         setBreezInformation(prev => {
           return {
@@ -179,7 +176,6 @@ async function initWallet(
     );
 
     console.log('HOME RENDER PAID INVOINCE');
-    // }
   }
 }
 

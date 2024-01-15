@@ -193,7 +193,7 @@ function EnterAmount(props) {
                   : COLORS.lightModeText,
               },
             ]}>
-            {props.feeInfo.boltzFeePercent * props.liquidAmount}
+            {(props.feeInfo.boltzFeePercent * props.liquidAmount).toFixed(2)}
           </Text>
         </View>
       </View>
@@ -214,12 +214,18 @@ function EnterAmount(props) {
           />
           <Text style={styles.labelText}>Lightning</Text>
         </View>
-
-        <Text style={styles.inputField}>
-          {props.liquidAmount -
-            props.feeInfo.liquidFee -
-            props.liquidAmount * props.feeInfo.boltzFeePercent}
-        </Text>
+        <View
+          style={{
+            height: '100%',
+            width: 'auto',
+            justifyContent: 'center',
+          }}>
+          <Text style={[styles.inputField, {width: 'auto', height: 'auto'}]}>
+            {props.liquidAmount -
+              props.feeInfo.liquidFee -
+              props.liquidAmount * props.feeInfo.boltzFeePercent}
+          </Text>
+        </View>
       </View>
       <Text style={styles.disclaimerText}>All values are in sats</Text>
       <TouchableOpacity
@@ -392,8 +398,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   labelContainer: {
+    width: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.primary,
@@ -401,10 +411,10 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     borderRadius: 8,
 
-    position: 'absolute',
-    zIndex: 1,
-    top: 7.5,
-    left: 7.5,
+    // position: 'absolute',
+    // zIndex: 1,
+    // top: 7.5,
+    // left: 7.5,
   },
   labelText: {
     color: COLORS.white,
@@ -412,11 +422,13 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
   },
   inputField: {
-    width: '100%',
+    width: '50%',
     height: '100%',
     textAlign: 'right',
-    fontSize: SIZES.huge,
+    fontSize: SIZES.large,
     fontFamily: FONT.Descriptoin_Regular,
+
+    padding: 0,
   },
   feeContainer: {
     width: '90%',
