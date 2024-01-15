@@ -8,15 +8,15 @@ import {
   useColorScheme,
 } from 'react-native';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
-import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
-import {useContext, useEffect, useRef, useState} from 'react';
-import {useTheme} from '../../../../../context-store/context';
+import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import {useEffect, useRef} from 'react';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function DisplayOptions() {
   // const sytemColorScheme = useColorScheme();
   const sliderAnim = useRef(new Animated.Value(3)).current;
   const {theme, toggleTheme, userTxPreferance, toggleUserTxPreferance} =
-    useTheme();
+    useGlobalContextProvider();
   const systemTheme = useColorScheme() === 'dark';
 
   useEffect(() => {

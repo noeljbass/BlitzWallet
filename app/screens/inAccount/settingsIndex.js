@@ -12,7 +12,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
-import {useTheme} from '../../../context-store/context';
+import {useGlobalContextProvider} from '../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
 
@@ -95,7 +95,7 @@ const SETTINGSOPTIONS = [
 ];
 
 export default function SettingsIndex(props) {
-  const {theme, toggleTheme} = useTheme();
+  const {theme, toggleTheme} = useGlobalContextProvider();
   const navigate = useNavigation();
 
   const settingsElements = SETTINGSOPTIONS.map((element, id) => {

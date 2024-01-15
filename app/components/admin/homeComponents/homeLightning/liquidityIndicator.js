@@ -10,7 +10,6 @@ export default function LiquidityIndicator(props) {
     (async () => {
       try {
         const {channelsBalanceMsat, inboundLiquidityMsats} = await nodeInfo();
-        console.log(channelsBalanceMsat, inboundLiquidityMsats);
         const calculatedWidth = (
           (channelsBalanceMsat /
             (channelsBalanceMsat + inboundLiquidityMsats)) *

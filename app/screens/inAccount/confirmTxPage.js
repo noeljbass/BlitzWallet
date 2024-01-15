@@ -12,13 +12,13 @@ import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {setStatusBarStyle} from 'expo-status-bar';
-import {useTheme} from '../../../context-store/context';
+import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function ConfirmTxPage(props) {
   console.log('CONFIRM PAYMENT SCREEN', information);
   const navigate = useNavigation();
   const [information, setInformation] = useState({});
-  const {theme, toggleTheme} = useTheme();
+  const {theme, toggleTheme} = useGlobalContextProvider();
   setStatusBarStyle('light');
 
   useEffect(() => {

@@ -9,13 +9,13 @@ import {
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {setStatusBarStyle} from 'expo-status-bar';
-import {useTheme} from '../../../context-store/context';
+import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function ExpandedTx(props) {
   console.log('Transaction Detials Page');
   const navigate = useNavigation();
   // const theme = props.route.params.theme;
-  const {theme, toggleTheme} = useTheme();
+  const {theme, toggleTheme} = useGlobalContextProvider();
 
   const [selectedTX] = props.route.params?.transactions?.filter(tx => {
     return props.route.params.txId === tx.details.data.paymentHash;

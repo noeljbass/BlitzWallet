@@ -15,7 +15,7 @@ import {
 import NavBar from '../../components/admin/homeComponents/navBar';
 import HomeLightning from '../../components/admin/homeComponents/homeLightning';
 import {getTransactions} from '../../functions/SDK';
-import {useTheme} from '../../../context-store/context';
+import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const isInitialRender = useRef(true);
@@ -26,7 +26,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
   });
   // const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme} = useTheme();
+  const {theme} = useGlobalContextProvider();
 
   // SDK events listener
 

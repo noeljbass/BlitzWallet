@@ -3,7 +3,6 @@ import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
-import {removeLocalStorageItem} from '../../../../functions/localStorage';
 
 export function SendRecieveBTNs(props) {
   const navigate = useNavigation();

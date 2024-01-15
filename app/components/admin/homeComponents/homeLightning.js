@@ -8,13 +8,13 @@ import {SendRecieveBTNs} from './homeLightning/sendReciveBTNs';
 import {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import LiquidityIndicator from './homeLightning/liquidityIndicator';
-import {useTheme} from '../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../context-store/context';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
   const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
-  const {userTxPreferance} = useTheme();
+  const {userTxPreferance} = useGlobalContextProvider();
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;

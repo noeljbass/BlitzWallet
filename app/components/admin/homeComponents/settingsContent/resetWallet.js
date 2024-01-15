@@ -10,7 +10,7 @@ import {useState} from 'react';
 import {deleteItem} from '../../../../functions/secureStore';
 import {removeLocalStorageItem} from '../../../../functions/localStorage';
 import RNRestart from 'react-native-restart';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function ResetPage(props) {
   const [selectedOptions, setSelectedOptions] = useState({
@@ -18,7 +18,7 @@ export default function ResetPage(props) {
     paymentHistory: false,
     pin: false,
   });
-  const {theme, toggleTheme} = useTheme();
+  const {theme, toggleTheme} = useGlobalContextProvider();
 
   return (
     <View style={{flex: 1, alignItems: 'center'}}>

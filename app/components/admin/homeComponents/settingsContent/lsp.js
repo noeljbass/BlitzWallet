@@ -1,24 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Animated,
-  useColorScheme,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
 import * as Clipboard from 'expo-clipboard';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {lspInfo} from '@breeztech/react-native-breez-sdk';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 
-export default function LSPPage(props) {
+export default function LSPPage() {
   const [lsp, setLsp] = useState({});
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
   const navigate = useNavigation();
 
   useEffect(() => {

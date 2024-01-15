@@ -9,12 +9,12 @@ import {
 
 import * as WebBrowser from 'expo-web-browser';
 import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../../../constants';
-import {useTheme} from '../../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 import {backArrow} from '../../../../../constants/styles';
 
 export default function LspDescriptionPopup() {
-  const {theme} = useTheme();
+  const {theme} = useGlobalContextProvider();
   const navigate = useNavigation();
   return (
     <View

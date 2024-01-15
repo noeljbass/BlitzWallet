@@ -1,15 +1,9 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  useColorScheme,
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
-export default function AboutPage(props) {
-  const {theme, toggleTheme} = useTheme();
+export default function AboutPage() {
+  const {theme} = useGlobalContextProvider();
 
   return (
     <View style={[styles.container]}>

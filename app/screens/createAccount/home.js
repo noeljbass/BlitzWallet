@@ -6,25 +6,11 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  StatusBar,
 } from 'react-native';
 
-import {
-  COLORS,
-  FONT,
-  ICONS,
-  SIZES,
-  BTN,
-  SHADOWS,
-  Background,
-} from '../../constants';
+import {COLORS, FONT, ICONS, SIZES, BTN, Background} from '../../constants';
 
 export default function CreateAccountHome({navigation: {navigate}}) {
-  const handlePress = () => {
-    // Action to perform when the button is pressed
-    console.log('Button pressed!');
-  };
-
   return (
     <View style={Background}>
       <SafeAreaView style={{flex: 1}}>

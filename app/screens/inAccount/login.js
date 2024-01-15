@@ -1,28 +1,15 @@
 import {useContext, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 
-import {
-  getLocalStorageItem,
-  retrieveData,
-  setColorScheme,
-  terminateAccount,
-} from '../../functions';
 import {COLORS, FONT, SIZES} from '../../constants';
 import PinPage from '../../components/admin/loginComponents/pinPage';
 import HomeLogin from '../../components/admin/loginComponents/home';
-import {useTheme} from '../../../context-store/context';
+import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminLogin({navigation, route}) {
   const [didUsePin, setDidUsePin] = useState(false);
   const fromBackground = route.params?.fromBackground;
-  const {theme, setTheme} = useTheme();
+  const {theme, setTheme} = useGlobalContextProvider();
   // const theme = theme === 'dark';
   // console.log(theme, 'TESTIG THEME');
 

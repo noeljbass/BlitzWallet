@@ -10,7 +10,6 @@ import {
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import {getLocalStorageItem} from '../../../../functions';
 
 export function UserTransactions(props) {
   const [txs, setTxs] = useState([]);

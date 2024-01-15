@@ -11,24 +11,21 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  useColorScheme,
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
 import {fetchFiatRates} from '@breeztech/react-native-breez-sdk';
 import {getLocalStorageItem} from '../../../../functions';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 // TEXT INPUT CAUSES LAUNCH SCREEN TO FAIL
 export default function DrainPage(props) {
   const isInitialRender = useRef(true);
   const [wantsToDrain, setWantsToDrain] = useState(false);
-  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [fiatRate, setFiatRate] = useState(0);
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
   const navigate = useNavigation();
   const [bitcoinAddress, setBitcoinAddress] = useState('');
-  console.log(props);
 
   useEffect(() => {
     if (isInitialRender.current) {

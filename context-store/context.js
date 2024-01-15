@@ -4,9 +4,9 @@ import {useColorScheme} from 'react-native';
 import {setStatusBarStyle} from 'expo-status-bar';
 
 // Initiate context
-const ThemeContext = createContext();
+const GlobalContextManger = createContext();
 
-const ThemeProvider = ({children}) => {
+const GlobalContextProvider = ({children}) => {
   // Manage theme state
   const useSystemTheme = useColorScheme() === 'dark';
   const [theme, setTheme] = useState(null);
@@ -19,6 +19,7 @@ const ThemeProvider = ({children}) => {
   function toggleUserTxPreferance(num) {
     setUserTxPereferance(num);
   }
+
   useEffect(() => {
     (async () => {
       const storedTheme = await getLocalStorageItem('colorScheme');
@@ -47,19 +48,21 @@ const ThemeProvider = ({children}) => {
   if (theme === null || userTxPreferance === null) return;
 
   return (
-    <ThemeContext.Provider
+    <GlobalContextManger.Provider
       value={{theme, toggleTheme, userTxPreferance, toggleUserTxPreferance}}>
       {children}
-    </ThemeContext.Provider>
+    </GlobalContextManger.Provider>
   );
 };
 
-function useTheme() {
-  const context = useContext(ThemeContext);
+function useGlobalContextProvider() {
+  const context = useContext(GlobalContextManger);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error(
+      'useGlobalContextProvider must be used within a GlobalContextProvider',
+    );
   }
   return context;
 }
 
-export {ThemeContext, ThemeProvider, useTheme};
+export {GlobalContextManger, GlobalContextProvider, useGlobalContextProvider};

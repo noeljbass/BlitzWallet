@@ -44,7 +44,7 @@ import {
 } from './app/screens/inAccount';
 
 import {setStatusBarHidden} from 'expo-status-bar';
-import {ThemeProvider} from './context-store/context';
+import {GlobalContextProvider} from './context-store/context';
 import {
   ConfirmDrainPage,
   DrainWalletAddress,
@@ -55,9 +55,9 @@ const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
   return (
-    <ThemeProvider>
+    <GlobalContextProvider>
       <ResetStack />
-    </ThemeProvider>
+    </GlobalContextProvider>
   );
 }
 

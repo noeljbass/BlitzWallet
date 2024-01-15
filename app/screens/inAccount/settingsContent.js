@@ -21,12 +21,12 @@ import {
 import * as Device from 'expo-device';
 
 import {useNavigation} from '@react-navigation/native';
-import {useTheme} from '../../../context-store/context';
+import {useGlobalContextProvider} from '../../../context-store/context';
 import FaceIdPage from '../../components/admin/homeComponents/settingsContent/faceId';
 
 export default function SettingsContentIndex(props) {
   const navigate = useNavigation();
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
   const selectedPage = props.route.params.for;
 
   return (

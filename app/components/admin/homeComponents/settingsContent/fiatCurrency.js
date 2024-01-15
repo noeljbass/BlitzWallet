@@ -11,7 +11,7 @@ import {listFiatCurrencies} from '@breeztech/react-native-breez-sdk';
 import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {useNavigation} from '@react-navigation/native';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function FiatCurrencyPage(props) {
   const isInitialRender = useRef(true);
@@ -20,7 +20,7 @@ export default function FiatCurrencyPage(props) {
   const [listData, setListData] = useState([]);
   const [currentCurrency, setCurrentCurrency] = useState('');
   const navigate = useNavigation();
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
 
   // const theme = useColorScheme() === 'dark';
 

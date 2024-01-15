@@ -1,16 +1,9 @@
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {KeyContainer} from '../../../login';
 import {retrieveData} from '../../../../functions';
 import {useEffect, useRef, useState} from 'react';
 import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 
 export default function SeedPhrasePage() {
@@ -18,7 +11,7 @@ export default function SeedPhrasePage() {
   const isInitialRender = useRef(true);
   const [mnemonic, setMnemonic] = useState([]);
   const [showSeed, setShowSeed] = useState(false);
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
   const navigate = useNavigation();
 
   useEffect(() => {

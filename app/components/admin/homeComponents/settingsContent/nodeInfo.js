@@ -1,21 +1,20 @@
 import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 import {useEffect, useState} from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS, FONT, SIZES, SHADOWS} from '../../../../constants';
+import {COLORS, FONT, SIZES} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
-import {useTheme} from '../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function NodeInfo(props) {
   const [lnNodeInfo, setLNNodeInfo] = useState({});
   const [isInfoSet, stIsInfoSet] = useState(false);
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
 
   useEffect(() => {
     (async () => {

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   useWindowDimensions,
 } from 'react-native';
@@ -17,12 +16,12 @@ import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 
 import {COLORS, FONT, ICONS, SIZES} from '../../../../../constants';
-import {useTheme} from '../../../../../../context-store/context';
+import {useGlobalContextProvider} from '../../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 
 export default function DrainWalletAddress(props) {
   const {width} = useWindowDimensions();
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useGlobalContextProvider();
   const type = CameraType.back;
   const [permission, setPermission] = useState(
     BarCodeScanner.getPermissionsAsync(),
