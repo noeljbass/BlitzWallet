@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Back_BTN} from '../../../components/login';
-import {storeData} from '../../../functions';
+import {retrieveData, storeData} from '../../../functions';
 import {BTN, CENTER, COLORS, FONT, SIZES} from '../../../constants';
 import {useState} from 'react';
 import isValidMnemonic from '../../../functions/isValidMnemonic';
@@ -20,17 +20,6 @@ import * as Device from 'expo-device';
 const NUMKEYS = Array.from(new Array(12), (val, index) => index + 1);
 
 export default function RestoreWallet({navigation: {navigate}}) {
-  // navigate('DisclaimerPage');
-
-  // function login() {
-  //   storeData(
-  //     'mnemonic',
-  //     'enroll common snap embody ritual element exhaust start glove safe grunt quantum',
-  //   );
-  //   storeData('pin', JSON.stringify([1, 2, 3, 4]));
-  //   navigate('HomeAdmin');
-
-  // }
   const [key, setKey] = useState({
     key1: null,
     key2: null,
@@ -129,6 +118,8 @@ export default function RestoreWallet({navigation: {navigate}}) {
     const mnemonic = Object.values(key).map(val => val.toLowerCase());
 
     const hasAccount = await isValidMnemonic(mnemonic);
+    const hasPin = await retrieveData('pin');
+
     if (!hasAccount) {
       navigate('RestoreWalletError', {
         reason: 'This is not a valid mnemoinc.',
@@ -136,8 +127,9 @@ export default function RestoreWallet({navigation: {navigate}}) {
       });
       return;
     } else {
-      navigate('PinSetup');
       storeData('mnemonic', mnemonic.join(' '));
+      if (hasPin) navigate('HomeAdmin');
+      else navigate('PinSetup');
     }
   }
 }
