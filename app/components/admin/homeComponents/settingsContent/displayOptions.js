@@ -36,6 +36,7 @@ export default function DisplayOptions() {
   const homeScreenTxElements = createHomepageTxOptions(
     userTxPreferance,
     toggleUserTxPreferance,
+    theme,
   );
 
   return (
@@ -135,73 +136,26 @@ export default function DisplayOptions() {
               alignItems: 'center',
             },
           ]}>
-          <View style={[styles.homeScreenTxOptionContainer]}>
-            <Text
-              style={[
-                styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Bold},
-              ]}>
-              Show recent:
-            </Text>
-          </View>
-          {/* <View style={[styles.homeScreenTxOptionContainer]}>
-            <Text
-              style={[
-                styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Regular},
-              ]}>
-              3 payments
-            </Text>
-          </View>
-          <View style={[styles.homeScreenTxOptionContainer]}>
-            <Text
-              style={[
-                styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Regular},
-              ]}>
-              5 payments
-            </Text>
-          </View>
-          <View style={[styles.homeScreenTxOptionContainer]}>
-            <Text
-              style={[
-                styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Regular},
-              ]}>
-              10 payments
-            </Text>
-          </View>
-          <View style={[styles.homeScreenTxOptionContainer]}>
-            <Text
-              style={[
-                styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Regular},
-              ]}>
-              15 payments
-            </Text>
-          </View>
-          <View style={[styles.homeScreenTxOptionContainer]}>
-            <Text
-              style={[
-                styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Regular},
-              ]}>
-              20 payments
-            </Text>
-          </View>
           <View
             style={[
               styles.homeScreenTxOptionContainer,
-              {borderBottomWidth: 0},
+              {
+                borderBottomColor: theme
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+              },
             ]}>
             <Text
               style={[
                 styles.homeScreenTxOption,
-                {fontFamily: FONT.Descriptoin_Regular},
+                {
+                  fontFamily: FONT.Descriptoin_Bold,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                },
               ]}>
-              25 payments
+              Show recent:
             </Text>
-          </View> */}
+          </View>
           {homeScreenTxElements}
         </View>
       </View>
@@ -236,7 +190,7 @@ export default function DisplayOptions() {
   }
 }
 
-function createHomepageTxOptions(activeNum, setActiveNum) {
+function createHomepageTxOptions(activeNum, setActiveNum, theme) {
   const USEROPTIONS = [3, 5, 10, 15, 20, 25];
   if (!activeNum) return;
 
@@ -252,12 +206,20 @@ function createHomepageTxOptions(activeNum, setActiveNum) {
         <View
           style={[
             styles.homeScreenTxOptionContainer,
-            {borderBottomWidth: id + 1 === USEROPTIONS.length ? 0 : 1},
+            {
+              borderBottomWidth: id + 1 === USEROPTIONS.length ? 0 : 1,
+              borderBottomColor: theme
+                ? COLORS.darkModeText
+                : COLORS.lightModeText,
+            },
           ]}>
           <Text
             style={[
               styles.homeScreenTxOption,
-              {fontFamily: FONT.Descriptoin_Regular},
+              {
+                fontFamily: FONT.Descriptoin_Regular,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+              },
             ]}>
             {num} payments
           </Text>
@@ -307,7 +269,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: '100%',
     width: 107,
-
     top: 0,
     left: 0,
     backgroundColor: COLORS.black,
