@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import SendPaymentScreen from '../../components/admin/homeComponents/sendBitcoin/sendPaymentScreen';
 import SendPaymentScreenOptions from '../../components/admin/homeComponents/sendBitcoin/screenOptions';
 
@@ -9,7 +9,11 @@ export default function SendPaymentHome(props) {
   const [scanned, setScanned] = useState(false);
   const [BTCadress, setBTCadress] = useState('');
   const isDarkMode = props.route.params.isDarkMode;
-  console.log(props);
+
+  useEffect(() => {
+    setScanned(false);
+    setBTCadress('');
+  }, []);
 
   return (
     <View style={styles.container}>

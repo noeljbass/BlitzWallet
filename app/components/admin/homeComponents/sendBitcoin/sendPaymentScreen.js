@@ -7,6 +7,12 @@ import {
   Image,
   SafeAreaView,
   ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 
@@ -14,6 +20,7 @@ import {useEffect, useRef, useState} from 'react';
 import {
   ReportIssueRequestVariant,
   fetchFiatRates,
+  nodeInfo,
   parseInput,
   reportIssue,
   sendPayment,
@@ -26,6 +33,8 @@ export default function SendPaymentScreen(props) {
   const [paymentInfo, setPaymentInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
+  const [sendingAmount, setSendingAmount] = useState(0);
+  console.log(sendingAmount, 'TTTT');
 
   // const props.isDarkMode = useColorScheme() === 'dark';
 
@@ -47,63 +56,37 @@ export default function SendPaymentScreen(props) {
             : COLORS.lightModeBackground,
         },
       ]}>
-      <SafeAreaView style={{flex: 1, position: 'relative'}}>
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => props.setScanned(false)}>
-            <Image style={styles.backButton} source={ICONS.leftCheveronIcon} />
-          </TouchableOpacity>
-          <Text
-            style={[
-              styles.headerText,
-              {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
-            ]}>
-            Confirm Payment
-          </Text>
-        </View>
-        {!isLoading && (
-          <>
-            <View style={styles.innerContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <SafeAreaView style={{flex: 1, position: 'relative'}}>
+            <View style={styles.topBar}>
+              <TouchableOpacity onPress={() => props.setScanned(false)}>
+                <Image
+                  style={styles.backButton}
+                  source={ICONS.leftCheveronIcon}
+                />
+              </TouchableOpacity>
               <Text
                 style={[
-                  styles.sendingAmtBTC,
+                  styles.headerText,
                   {
                     color: props.isDarkMode
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
                 ]}>
-                {(paymentInfo?.invoice?.amountMsat / 1000).toLocaleString()}{' '}
-                <Text style={{color: COLORS.primary}}>sat</Text>
+                Confirm Payment
               </Text>
-              <View style={styles.feeBreakdownContainer}>
-                <View style={styles.feeBreakdownRow}>
-                  <Text
-                    style={[
-                      styles.feeBreakdownItem,
-                      {
-                        color: props.isDarkMode
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}>
-                    Amount
-                  </Text>
-                  <View
-                    style={[
-                      styles.feeBreakdownItem,
-                      {
-                        color: props.isDarkMode
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}>
+            </View>
+            {!isLoading && (
+              <>
+                <View style={styles.innerContainer}>
+                  {paymentInfo.invoice.amountMsat ? (
                     <Text
                       style={[
-                        styles.feeBreakdownValue,
+                        styles.sendingAmtBTC,
                         {
                           color: props.isDarkMode
                             ? COLORS.darkModeText
@@ -113,156 +96,249 @@ export default function SendPaymentScreen(props) {
                       {(
                         paymentInfo?.invoice?.amountMsat / 1000
                       ).toLocaleString()}{' '}
-                      sat
+                      <Text style={{color: COLORS.primary}}>sat</Text>
                     </Text>
-                    <Text
+                  ) : (
+                    <View style={styles.sendingAmountInputContainer}>
+                      <TextInput
+                        style={[
+                          styles.sendingAmtBTC,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                            marginTop: 0,
+                          },
+                        ]}
+                        // value={String(sendingAmount / 1000)}
+                        keyboardType="numeric"
+                        placeholder="0"
+                        onChangeText={e => {
+                          if (isNaN(e)) return;
+                          setSendingAmount(Number(e) * 1000);
+                        }}
+                      />
+
+                      <Text
+                        style={[
+                          styles.sendingAmtBTC,
+                          {
+                            color: COLORS.primary,
+                            marginTop: 0,
+                          },
+                        ]}>
+                        {' '}
+                        sat
+                      </Text>
+                    </View>
+                  )}
+                  <View style={styles.feeBreakdownContainer}>
+                    <View style={styles.feeBreakdownRow}>
+                      <Text
+                        style={[
+                          styles.feeBreakdownItem,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>
+                        Amount
+                      </Text>
+                      <View
+                        style={[
+                          styles.feeBreakdownItem,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>
+                        <Text
+                          style={[
+                            styles.feeBreakdownValue,
+                            {
+                              color: props.isDarkMode
+                                ? COLORS.darkModeText
+                                : COLORS.lightModeText,
+                            },
+                          ]}>
+                          {(
+                            paymentInfo?.invoice?.amountMsat / 1000
+                          ).toLocaleString()}{' '}
+                          sat
+                        </Text>
+                        <Text
+                          style={[
+                            styles.feeBreakdownValue,
+                            {
+                              color: props.isDarkMode
+                                ? COLORS.darkModeText
+                                : COLORS.lightModeText,
+                            },
+                          ]}>
+                          {(
+                            (paymentInfo?.invoice?.amountMsat / 1000) *
+                            (paymentInfo[0]?.value / 100000000)
+                          ).toLocaleString()}{' '}
+                          {userSelectedCurrency}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.feeBreakdownRow}>
+                      <Text
+                        style={[
+                          styles.feeBreakdownItem,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>
+                        Lightning Fee
+                      </Text>
+                      <View
+                        style={[
+                          styles.feeBreakdownItem,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>
+                        <Text
+                          style={[
+                            styles.feeBreakdownValue,
+                            {
+                              color: props.isDarkMode
+                                ? COLORS.darkModeText
+                                : COLORS.lightModeText,
+                            },
+                          ]}>
+                          {0} sat
+                        </Text>
+                        <Text
+                          style={[
+                            styles.feeBreakdownValue,
+                            {
+                              color: props.isDarkMode
+                                ? COLORS.darkModeText
+                                : COLORS.lightModeText,
+                            },
+                          ]}>
+                          0.00 {userSelectedCurrency}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.feeBreakdownRow}>
+                      <Text
+                        style={[
+                          styles.feeBreakdownItem,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>
+                        Total
+                      </Text>
+                      <View
+                        style={[
+                          styles.feeBreakdownItem,
+                          {
+                            color: props.isDarkMode
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>
+                        <Text
+                          style={[
+                            styles.feeBreakdownValue,
+                            {
+                              color: props.isDarkMode
+                                ? COLORS.darkModeText
+                                : COLORS.lightModeText,
+                            },
+                          ]}>
+                          {(
+                            paymentInfo?.invoice?.amountMsat / 1000 +
+                            0
+                          ).toLocaleString()}{' '}
+                          sat
+                        </Text>
+                        <Text
+                          style={[
+                            styles.feeBreakdownValue,
+                            {
+                              color: props.isDarkMode
+                                ? COLORS.darkModeText
+                                : COLORS.lightModeText,
+                            },
+                          ]}>
+                          {(
+                            (paymentInfo?.invoice?.amountMsat / 1000 + 0) *
+                            (paymentInfo[0]?.value / 100000000)
+                          ).toLocaleString()}{' '}
+                          {userSelectedCurrency}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  {/* Buttons */}
+                  <View style={styles.buttonsContainer}>
+                    <TouchableOpacity
+                      activeOpacity={0.3}
+                      onPress={() => {
+                        props.setScanned(false);
+                        props.setBTCadress('');
+                      }}
                       style={[
-                        styles.feeBreakdownValue,
+                        styles.button,
+                        {backgroundColor: COLORS.cancelRed},
+                      ]}>
+                      <Text style={styles.buttonText}>cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={!sendingAmount ? 0.5 : 0.3}
+                      onPress={() => {
+                        if (!sendingAmount) return;
+
+                        sendPaymentFunction();
+                      }}
+                      style={[
+                        styles.button,
                         {
-                          color: props.isDarkMode
-                            ? COLORS.darkModeText
-                            : COLORS.lightModeText,
+                          backgroundColor: COLORS.primary,
+                          opacity: !sendingAmount ? 0.5 : 1,
                         },
                       ]}>
-                      {(
-                        (paymentInfo?.invoice?.amountMsat / 1000) *
-                        (paymentInfo[0]?.value / 100000000)
-                      ).toLocaleString()}{' '}
-                      {userSelectedCurrency}
-                    </Text>
+                      <Text style={styles.buttonText}>send</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <View style={styles.feeBreakdownRow}>
-                  <Text
-                    style={[
-                      styles.feeBreakdownItem,
-                      {
-                        color: props.isDarkMode
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}>
-                    Lightning Fee
-                  </Text>
-                  <View
-                    style={[
-                      styles.feeBreakdownItem,
-                      {
-                        color: props.isDarkMode
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}>
-                    <Text
-                      style={[
-                        styles.feeBreakdownValue,
-                        {
-                          color: props.isDarkMode
-                            ? COLORS.darkModeText
-                            : COLORS.lightModeText,
-                        },
-                      ]}>
-                      {0} sat
-                    </Text>
-                    <Text
-                      style={[
-                        styles.feeBreakdownValue,
-                        {
-                          color: props.isDarkMode
-                            ? COLORS.darkModeText
-                            : COLORS.lightModeText,
-                        },
-                      ]}>
-                      0.00 {userSelectedCurrency}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.feeBreakdownRow}>
-                  <Text
-                    style={[
-                      styles.feeBreakdownItem,
-                      {
-                        color: props.isDarkMode
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}>
-                    Total
-                  </Text>
-                  <View
-                    style={[
-                      styles.feeBreakdownItem,
-                      {
-                        color: props.isDarkMode
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}>
-                    <Text
-                      style={[
-                        styles.feeBreakdownValue,
-                        {
-                          color: props.isDarkMode
-                            ? COLORS.darkModeText
-                            : COLORS.lightModeText,
-                        },
-                      ]}>
-                      {(
-                        paymentInfo?.invoice?.amountMsat / 1000 +
-                        0
-                      ).toLocaleString()}{' '}
-                      sat
-                    </Text>
-                    <Text
-                      style={[
-                        styles.feeBreakdownValue,
-                        {
-                          color: props.isDarkMode
-                            ? COLORS.darkModeText
-                            : COLORS.lightModeText,
-                        },
-                      ]}>
-                      {(
-                        (paymentInfo?.invoice?.amountMsat / 1000 + 0) *
-                        (paymentInfo[0]?.value / 100000000)
-                      ).toLocaleString()}{' '}
-                      {userSelectedCurrency}
-                    </Text>
-                  </View>
-                </View>
+              </>
+            )}
+            {isLoading && (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <ActivityIndicator
+                  size="large"
+                  color={
+                    props.isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText
+                  }
+                />
               </View>
-              {/* Buttons */}
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                  onPress={() => {
-                    props.setScanned(false);
-                    props.setBTCadress('');
-                  }}
-                  style={[styles.button, {backgroundColor: COLORS.cancelRed}]}>
-                  <Text style={styles.buttonText}>cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={sendPaymentFunction}
-                  style={[styles.button, {backgroundColor: COLORS.primary}]}>
-                  <Text style={styles.buttonText}>send</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </>
-        )}
-        {isLoading && (
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <ActivityIndicator
-              size="large"
-              color={
-                props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-              }
-            />
-          </View>
-        )}
-        {/* popups */}
-      </SafeAreaView>
+            )}
+            {/* popups */}
+          </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Animated.View>
   );
 
@@ -284,14 +360,16 @@ export default function SendPaymentScreen(props) {
   async function sendPaymentFunction() {
     try {
       setIsLoading(true);
-      const response = await sendPayment({
-        bolt11: paymentInfo?.invoice?.bolt11,
-        // amountMsat: paymentInfo?.invoice?.amountMsat
-        //   ? paymentInfo?.invoice?.amountMsat
-        //   : null,
-      });
+      const response = paymentInfo?.invoice?.amountMsat
+        ? await sendPayment({
+            bolt11: paymentInfo?.invoice?.bolt11,
+          })
+        : await sendPayment({
+            bolt11: paymentInfo?.invoice?.bolt11,
+            amountMsat: Number(sendingAmount),
+          });
+      console.log(response);
       if (response) {
-        // console.log(response);
         // props.setScanned(false);
         props.setBTCadress('');
         // navigate.goBack();
@@ -314,16 +392,32 @@ export default function SendPaymentScreen(props) {
       setIsLoading(true);
       const input = await parseInput(props.BTCadress);
       const currency = await getLocalStorageItem('currency');
+      const node_info = await nodeInfo();
 
       const bitcoinPrice = (await fetchFiatRates()).filter(
         coin => coin.coin === currency,
       );
-      // console.log(input.invoice.routingHints[0]);
+
+      if (node_info.channelsBalanceMsat + 100 < input.invoice.amountMsat) {
+        Alert.alert(
+          'Your balance is too low to send this payment',
+          'Please add funds to your account',
+          [{text: 'Ok', onPress: () => props.setScanned(false)}],
+        );
+        return;
+      }
 
       setPaymentInfo({...input, ...bitcoinPrice});
       setUserSelectedCurrency(currency);
+      setSendingAmount(input.invoice.amountMsat);
       setIsLoading(false);
     } catch (err) {
+      Alert.alert(
+        'Not a valid LN Address',
+        'Please try again with a bolt 11 address',
+        [{text: 'Ok', onPress: () => props.setScanned(false)}],
+      );
+
       console.log(err);
     }
   }
@@ -365,6 +459,10 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
 
     transform: [{translateX: -15}],
+  },
+  sendingAmountInputContainer: {
+    flexDirection: 'row',
+    marginTop: 'auto',
   },
   sendingAmtBTC: {
     fontSize: SIZES.xxLarge,

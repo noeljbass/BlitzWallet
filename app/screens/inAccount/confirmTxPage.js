@@ -15,23 +15,22 @@ import {setStatusBarStyle} from 'expo-status-bar';
 import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function ConfirmTxPage(props) {
-  console.log('CONFIRM PAYMENT SCREEN', information);
   const navigate = useNavigation();
-  const [information, setInformation] = useState({});
-  const {theme, toggleTheme} = useGlobalContextProvider();
+  const information = props.route.params?.information;
+  const {theme} = useGlobalContextProvider();
   setStatusBarStyle('light');
 
-  useEffect(() => {
-    if (
-      props.route.params?.information?.type != 'invoicePaid' &&
-      props.route.params?.information?.type != 'paymentSucceed' &&
-      props.route.params?.information?.type != 'paymentFailed'
-    )
-      return;
-    setInformation(props.route.params?.information);
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     props.route.params?.information?.type != 'invoicePaid' &&
+  //     props.route.params?.information?.type != 'paymentSucceed' &&
+  //     props.route.params?.information?.type != 'paymentFailed'
+  //   )
+  //     return;
+  //   setInformation(props.route.params?.information);
+  // }, []);
 
-  console.log(information);
+  // console.log(information);
 
   return (
     <View
