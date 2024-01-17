@@ -22,7 +22,8 @@ export default function NavBar(props) {
 
   return (
     <View style={styles.topBar}>
-      <Text
+      <Image source={ICONS.wordmark} style={{width: 150, height: 17}} />
+      {/* <Text
         style={[
           styles.topBarName,
           {
@@ -30,7 +31,7 @@ export default function NavBar(props) {
           },
         ]}>
         Blitz Wallet
-      </Text>
+      </Text> */}
       <View style={styles.iconContainer}>
         <TouchableOpacity
           onPress={() =>
@@ -95,7 +96,6 @@ export default function NavBar(props) {
           ]}>
           <Image style={styles.imgIcon} source={ICONS.settingsIcon} />
         </TouchableOpacity>
-        {/* <View style={styles.icons}></View> */}
         <TouchableOpacity
           style={[
             styles.icons,
@@ -157,10 +157,8 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 17.5,
-    // backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    ...SHADOWS.small,
     borderColor: COLORS.primary,
     borderWidth: 1,
   },

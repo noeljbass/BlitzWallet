@@ -84,15 +84,14 @@ export default function SettingsPage(props) {
           paddingVertical: Device.osName === 'ios' ? 0 : 10,
         },
       ]}>
-      <SafeAreaView style={{flex: 1}}>
+      <KeyboardAvoidingView
+        behavior={Device.osName === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
         <TouchableWithoutFeedback
           onPress={() => {
             Keyboard.dismiss();
-          }}
-          style={{flex: 1}}>
-          <KeyboardAvoidingView
-            behavior={Device.osName === 'ios' ? 'padding' : 'height'}
-            style={{flex: 1}}>
+          }}>
+          <SafeAreaView style={{flex: 1}}>
             <View style={styles.topBar}>
               <TouchableOpacity
                 onPress={() => {
@@ -143,6 +142,7 @@ export default function SettingsPage(props) {
                             : COLORS.primary,
                       },
                     ]}
+                    cursorColor={COLORS.white}
                     value={props.numberOfPeople}
                     keyboardType="number-pad"
                   />
@@ -170,6 +170,7 @@ export default function SettingsPage(props) {
                             : COLORS.primary,
                       },
                     ]}
+                    cursorColor={COLORS.white}
                     value={props.amountPerPerson}
                     keyboardType="number-pad"
                   />
@@ -191,13 +192,16 @@ export default function SettingsPage(props) {
               )}
               <TouchableOpacity
                 onPress={continueFilter}
-                style={[BTN, {backgroundColor: COLORS.primary}]}>
+                style={[
+                  BTN,
+                  {backgroundColor: COLORS.primary, marginBottom: 10},
+                ]}>
                 <Text style={styles.BTNText}>Create Faucet</Text>
               </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
+          </SafeAreaView>
         </TouchableWithoutFeedback>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </Animated.View>
   );
 }

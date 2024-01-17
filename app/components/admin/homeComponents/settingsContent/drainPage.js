@@ -40,124 +40,118 @@ export default function DrainPage(props) {
 
     // console.log('DRAINING WALLET');
   }, [wantsToDrain]);
-
+  console.log(Platform.OS);
   return (
-    <View style={styles.globalContainer}>
-      <SafeAreaView style={{flex: 1}}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}
-          style={{flex: 1}}>
-          <KeyboardAvoidingView
-            style={{flex: 1}}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={{flex: 1, alignItems: 'center'}}>
-              <View style={styles.balanceContainer}>
-                <Text
-                  style={[
-                    styles.balanceDescription,
-                    {
-                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                    },
-                  ]}>
-                  Current balance
-                </Text>
-                <Text
-                  style={[
-                    styles.balanceNum,
-                    {
-                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                    },
-                  ]}>
-                  {Math.floor(props.breezInformation?.userBalance)
-                    .toLocaleString()
-                    .toLocaleString()}{' '}
-                  sats
-                </Text>
-                <Text
-                  style={[
-                    styles.fiatBalanceNum,
-                    {
-                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                    },
-                  ]}>
-                  = $
-                  {props.breezInformation?.userBalance *
-                    (fiatRate / 100000000).toFixed(5)}{' '}
-                  usd
-                </Text>
-              </View>
-
-              <View
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}>
+        <SafeAreaView style={{flex: 1}}>
+          <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={styles.balanceContainer}>
+              <Text
                 style={[
-                  styles.btcAdressContainer,
+                  styles.balanceDescription,
                   {
-                    backgroundColor: theme
-                      ? COLORS.darkModeBackgroundOffset
-                      : COLORS.lightModeBackgroundOffset,
-                    marginBottom: 'auto',
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
-                <Text
-                  style={[
-                    styles.btcAdressHeader,
-                    {
-                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                    },
-                  ]}>
-                  Enter BTC address
-                </Text>
-                <View style={[styles.inputContainer]}>
-                  <TextInput
-                    value={bitcoinAddress}
-                    onChangeText={setBitcoinAddress}
-                    style={[
-                      styles.input,
-                      {
-                        borderColor: theme
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                        color: theme
-                          ? COLORS.darkModeText
-                          : COLORS.lightModeText,
-                      },
-                    ]}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigate.navigate('DrainWalletAddress', {
-                        updateBitcoinAdressFunc: setBitcoinAddress,
-                      });
-                    }}>
-                    <Image style={styles.scanIcon} source={ICONS.faceIDIcon} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <TouchableOpacity
-                onPress={() => {
-                  if (!bitcoinAddress) return;
-                  navigate.navigate('ConfirmDrainPage', {
-                    wantsToDrainFunc: setWantsToDrain,
-                  });
-                }}
+                Current balance
+              </Text>
+              <Text
                 style={[
-                  BTN,
+                  styles.balanceNum,
                   {
-                    backgroundColor: COLORS.primary,
-                    opacity: !bitcoinAddress ? 0.5 : 1,
-
-                    marginBottom: 80,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
-                <Text style={styles.buttonText}>Drain</Text>
-              </TouchableOpacity>
+                {Math.floor(props.breezInformation?.userBalance)
+                  .toLocaleString()
+                  .toLocaleString()}{' '}
+                sats
+              </Text>
+              <Text
+                style={[
+                  styles.fiatBalanceNum,
+                  {
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  },
+                ]}>
+                = $
+                {props.breezInformation?.userBalance *
+                  (fiatRate / 100000000).toFixed(5)}{' '}
+                usd
+              </Text>
             </View>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
-    </View>
+
+            <View
+              style={[
+                styles.btcAdressContainer,
+                {
+                  backgroundColor: theme
+                    ? COLORS.darkModeBackgroundOffset
+                    : COLORS.lightModeBackgroundOffset,
+                  marginBottom: 'auto',
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.btcAdressHeader,
+                  {
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  },
+                ]}>
+                Enter BTC address
+              </Text>
+              <View style={[styles.inputContainer]}>
+                <TextInput
+                  value={bitcoinAddress}
+                  onChangeText={setBitcoinAddress}
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: theme
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                    },
+                  ]}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    navigate.navigate('DrainWalletAddress', {
+                      updateBitcoinAdressFunc: setBitcoinAddress,
+                    });
+                  }}>
+                  <Image style={styles.scanIcon} source={ICONS.faceIDIcon} />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => {
+                if (!bitcoinAddress) return;
+                navigate.navigate('ConfirmDrainPage', {
+                  wantsToDrainFunc: setWantsToDrain,
+                });
+              }}
+              style={[
+                BTN,
+                {
+                  backgroundColor: COLORS.primary,
+                  opacity: !bitcoinAddress ? 0.5 : 1,
+                  marginBottom: 15,
+                },
+              ]}>
+              <Text style={styles.buttonText}>Drain</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 
   async function getFiatConversion() {

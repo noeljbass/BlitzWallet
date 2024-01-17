@@ -196,7 +196,6 @@ function createHomepageTxOptions(activeNum, setActiveNum, theme) {
   if (!activeNum) return;
 
   return USEROPTIONS.map((num, id) => {
-    console.log(id, USEROPTIONS.length);
     return (
       <View
         key={id}

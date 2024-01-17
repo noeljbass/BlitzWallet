@@ -1,7 +1,6 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
-import * as Device from 'expo-device';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 
 export function SendRecieveBTNs(props) {
@@ -11,7 +10,7 @@ export function SendRecieveBTNs(props) {
     <View
       style={[
         styles.globalContainer,
-        {paddingBottom: Device.osName === 'IOS' ? 0 : 10},
+        {paddingBottom: Platform.OS === 'ios' ? 0 : 10},
       ]}>
       <View style={styles.container}>
         <TouchableOpacity
@@ -22,7 +21,7 @@ export function SendRecieveBTNs(props) {
               navigate.navigate('SendBTC', {isDarkMode: props.theme});
             })();
           }}
-          style={combinedStyles.firstButton}>
+          style={styles.button}>
           <Text style={styles.text}>Send</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -73,18 +72,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
-    // overflow: "hidden",
     ...SHADOWS.medium,
   },
   text: {
     fontFamily: FONT.Other_Regular,
     fontSize: SIZES.medium,
     color: COLORS.background,
-  },
-});
-
-const combinedStyles = StyleSheet.create({
-  firstButton: {
-    ...styles.button,
   },
 });
