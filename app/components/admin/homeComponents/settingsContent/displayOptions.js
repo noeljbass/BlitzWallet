@@ -133,6 +133,7 @@ export default function DisplayOptions() {
               backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
+              paddingVertical: 0,
               alignItems: 'center',
             },
           ]}>
@@ -149,7 +150,7 @@ export default function DisplayOptions() {
               style={[
                 styles.homeScreenTxOption,
                 {
-                  fontFamily: FONT.Descriptoin_Bold,
+                  fontFamily: FONT.Title_Bold,
                   color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
@@ -195,39 +196,43 @@ function createHomepageTxOptions(activeNum, setActiveNum, theme) {
   if (!activeNum) return;
 
   return USEROPTIONS.map((num, id) => {
+    console.log(id, USEROPTIONS.length);
     return (
-      <TouchableOpacity
-        style={{width: '100%'}}
-        onPress={() => {
-          setActiveNum(num);
-          handleSwitch(num);
-        }}
-        key={id}>
-        <View
+      <View
+        key={id}
+        style={[
+          styles.homeScreenTxOptionContainer,
+          {
+            borderBottomWidth: id + 1 === USEROPTIONS.length ? 0 : 1,
+            borderBottomColor: theme
+              ? COLORS.darkModeText
+              : COLORS.lightModeText,
+          },
+        ]}>
+        <TouchableOpacity
           style={[
             styles.homeScreenTxOptionContainer,
-            {
-              borderBottomWidth: id + 1 === USEROPTIONS.length ? 0 : 1,
-              borderBottomColor: theme
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
-            },
-          ]}>
+            {borderBottomWidth: 0, padding: 0},
+          ]}
+          onPress={() => {
+            setActiveNum(num);
+            handleSwitch(num);
+          }}>
           <Text
             style={[
               styles.homeScreenTxOption,
               {
-                fontFamily: FONT.Descriptoin_Regular,
+                fontFamily: FONT.Title_Regular,
                 color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {num} payments
           </Text>
           {num === activeNum && (
-            <Image style={{width: 20, height: 20}} source={ICONS.checkIcon} />
+            <Image style={{width: 15, height: 15}} source={ICONS.checkIcon} />
           )}
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   });
 }
@@ -282,9 +287,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    paddingHorizontal: 5,
   },
   homeScreenTxOption: {
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
   },
 });
