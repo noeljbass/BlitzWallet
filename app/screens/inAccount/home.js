@@ -7,6 +7,7 @@ import {
   getLocalStorageItem,
 } from '../../functions';
 import {
+  connectLsp,
   listLsps,
   lspInfo,
   nodeInfo,

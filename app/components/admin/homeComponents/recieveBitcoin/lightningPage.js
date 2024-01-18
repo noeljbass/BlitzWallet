@@ -121,7 +121,6 @@ export default function LightningPage(props) {
   async function generateLightningInvoice() {
     try {
       if (props.sendingAmount === 0) {
-        console.log('reciving zero');
         setGeneratingQrCode(true);
         setErrorMessageText('Must recieve more than 0 sats');
         return;
@@ -135,7 +134,9 @@ export default function LightningPage(props) {
 
       if (channelFee?.usedFeeParams) {
         setErrorMessageText(
-          'Amount is above your reciveing capacity. Sending this payment will incur a 2,500 sat fee',
+          `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
+            channelFee.feeMsat / 1000,
+          ).toLocaleString()} sat fee`,
         );
       }
 
