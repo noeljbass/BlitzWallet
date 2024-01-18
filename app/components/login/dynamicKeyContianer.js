@@ -4,8 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from "react-native";
-import { COLORS, SIZES, FONT } from "../../constants";
+} from 'react-native';
+import {COLORS, SIZES, FONT} from '../../constants';
 
 export function DynamicKeyContainer(props) {
   //   let keyElements = [];
@@ -31,16 +31,14 @@ export function DynamicKeyContainer(props) {
                   ? styles.number_correct
                   : styles.number_wrong
                 : styles.number
-            }
-          >
-            {keys[0][0][3] ? keys[0][0][3] : " "}
+            }>
+            {keys[0][0][3] ? keys[0][0][3] : ' '}
           </Text>
           <ScrollView horizontal style={styles.scrollView}>
             <TouchableOpacity
               onPress={() => props.countGuesses(keys[0][0][0])}
               activeOpacity={1}
-              style={styles.opacityContainer}
-            >
+              style={styles.opacityContainer}>
               <Text style={styles.text}>{keys[0][0][0]}</Text>
             </TouchableOpacity>
           </ScrollView>
@@ -53,16 +51,14 @@ export function DynamicKeyContainer(props) {
                   ? styles.number_correct
                   : styles.number_wrong
                 : styles.number
-            }
-          >
-            {keys[1][0][3] || keys[1][0][3] === 0 ? keys[1][0][3] : " "}
+            }>
+            {keys[1][0][3] || keys[1][0][3] === 0 ? keys[1][0][3] : ' '}
           </Text>
           <ScrollView horizontal style={styles.scrollView}>
             <TouchableOpacity
               onPress={() => props.countGuesses(keys[1][0][0])}
               activeOpacity={1}
-              style={styles.opacityContainer}
-            >
+              style={styles.opacityContainer}>
               <Text style={styles.text}>{keys[1][0][0]}</Text>
             </TouchableOpacity>
           </ScrollView>
@@ -76,81 +72,81 @@ export function DynamicKeyContainer(props) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
     maxHeight: 500,
-    marginLeft: "auto",
-    marginRight: "auto",
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   row: {
-    width: "100%",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    width: '100%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
   },
   key: {
-    width: "47%",
+    width: '47%',
     height: 50,
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
 
-    alignItems: "center",
-    justifyContent: "space-between",
+    alignItems: 'center',
+    justifyContent: 'space-between',
 
     borderRadius: 25,
-    overflow: "hidden",
+    overflow: 'hidden',
 
     marginBottom: 15,
   },
 
   number: {
-    width: "30%",
-    height: "100%",
+    width: '30%',
+    height: '100%',
     fontSize: SIZES.large,
     color: COLORS.white,
-    backgroundColor: COLORS.gray,
-    textAlign: "center",
+    backgroundColor: COLORS.primary,
+    textAlign: 'center',
     lineHeight: 50,
     fontFamily: FONT.Other_Regular,
   },
   scrollView: {
-    height: "100%",
-    width: "69%",
-    backgroundColor: COLORS.gray,
+    height: '100%',
+    width: '69%',
+    backgroundColor: COLORS.primary,
     marginLeft: 2,
   },
   text: {
-    height: "100%",
+    height: '100%',
     fontSize: SIZES.large,
     color: COLORS.white,
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FONT.Descriptoin_Regular,
   },
   number_correct: {
-    width: "30%",
+    width: '30%',
     fontSize: SIZES.large,
     color: COLORS.white,
     backgroundColor: COLORS.gray,
     padding: 13,
-    textAlign: "center",
-    backgroundColor: "green",
+    textAlign: 'center',
+    backgroundColor: 'green',
   },
   number_wrong: {
-    width: "30%",
+    width: '30%',
     fontSize: SIZES.large,
     color: COLORS.white,
     backgroundColor: COLORS.gray,
     padding: 13,
-    textAlign: "center",
-    backgroundColor: "red",
+    textAlign: 'center',
+    backgroundColor: 'red',
   },
   opacityContainer: {
-    width: "100%",
+    width: '100%',
   },
   text: {
-    width: "100%",
+    width: '100%',
     fontSize: SIZES.large,
     color: COLORS.white,
-    backgroundColor: COLORS.gray,
+    backgroundColor: COLORS.primary,
     padding: 13,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

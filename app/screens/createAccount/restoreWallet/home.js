@@ -166,11 +166,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 5,
   },
   numberText: {
-    width: '25%',
+    width: 'auto',
     fontSize: SIZES.large,
     fontFamily: FONT.Title_Regular,
+    paddingRight: 10,
   },
   textInputStyle: {
     width: '75%',

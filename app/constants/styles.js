@@ -28,6 +28,6 @@ const backArrow = {
 
 const Background = {
   flex: 1,
-  backgroundColor: COLORS.background,
+  backgroundColor: COLORS.lightModeBackground,
 };
 export {CENTER, BTN, Background, headerText, backArrow};

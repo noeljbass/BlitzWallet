@@ -3,7 +3,6 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {BTN, COLORS, FONT, SIZES} from '../../constants';
 
 export default function Continue_BTN(props) {
-  // const router = useRouter();
   let style;
   let canContinue;
   if (props.for === 'disclaimer') {

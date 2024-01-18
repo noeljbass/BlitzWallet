@@ -4,7 +4,7 @@ import ecc from '@bitcoinerlab/secp256k1';
 import {ECPairFactory} from 'ecpair';
 const ECPair = ECPairFactory(ecc);
 
-export async function getSwapFee() {
+async function getSwapFee() {
   try {
     const request = await axios.get(
       'https://api.boltz.exchange/getfeeestimation',
@@ -18,7 +18,7 @@ export async function getSwapFee() {
     });
   }
 }
-export async function getSwapPairInformation() {
+async function getSwapPairInformation() {
   try {
     const request = await axios.get('https://api.boltz.exchange/getpairs');
     const data = request.data.pairs['L-BTC/BTC'];
@@ -33,7 +33,7 @@ export async function getSwapPairInformation() {
   }
 }
 
-export async function createLiquidSwap(invoice, hash) {
+async function createLiquidSwap(invoice, hash) {
   try {
     const randomBytesArray = await generateSecureRandom(32);
     const privateKey = Buffer.from(randomBytesArray);
@@ -69,3 +69,5 @@ export async function createLiquidSwap(invoice, hash) {
     });
   }
 }
+
+export {getSwapFee, getSwapPairInformation, createLiquidSwap};

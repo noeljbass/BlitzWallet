@@ -25,9 +25,9 @@ import {
 import QRCode from 'react-native-qrcode-svg';
 import {receivePayment} from '@breeztech/react-native-breez-sdk';
 import RNEventSource from 'react-native-event-source';
-import * as Device from 'expo-device';
 
 export default function LiquidPage(props) {
+  if (props.selectedRecieveOption != 'liquid') return;
   const [liquidAmount, setLiquidAmount] = useState('2000');
   const [feeInfo, setFeeInfo] = useState({
     boltzFeePercent: 0,
@@ -39,43 +39,60 @@ export default function LiquidPage(props) {
     amount: true,
     qrCode: false,
   });
+  const [maxAmount, setMaxAmount] = useState('');
+  const [minAmount, setMinAmount] = useState('');
 
   useEffect(() => {
-    if (props.selectedRecieveOption === 'liquid') return;
     setProcessStage({
       amount: true,
       qrCode: false,
     });
     setLiquidAmount('2000');
     props.setIsSwapCreated(false);
-  }, [props.selectedRecieveOption]);
+
+    (async () => {
+      const swapInfo = await getSwapPairInformation();
+      // THE GLITCH HAS SOMETHING TO DO WITH THIS LINE ^^^^^^^^^
+      console.log(swapInfo);
+      return;
+
+      if (!swapInfo) return;
+      setMaxAmount(swapInfo.limits.maximal);
+      setMinAmount(swapInfo.limits.minimal + 1000);
+      setFeeInfo({
+        boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
+        liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
+        hash: swapInfo.hash,
+      });
+    })();
+  }, []);
 
   return (
+    // <View
+    //   style={{
+    //     flex: 1,
+    //   }}>
     <View
       style={{
         flex: 1,
-        display: props.selectedRecieveOption === 'liquid' ? 'flex' : 'none',
+        alignItems: 'center',
+        justifyContent: 'center',
+        // marginBottom: Device.osName === 'Android' ? 10 : 0,
       }}>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          // marginBottom: Device.osName === 'Android' ? 10 : 0,
-        }}>
-        {processStage.amount && (
-          <EnterAmount
-            setLiquidAmount={setLiquidAmount}
-            liquidAmount={liquidAmount}
-            selectedRecieveOption={props.selectedRecieveOption}
-            setProcessStage={setProcessStage}
-            feeInfo={feeInfo}
-            setFeeInfo={setFeeInfo}
-            isDarkMode={props.isDarkMode}
-            setIsSwapCreated={props.setIsSwapCreated}
-          />
-        )}
-        {processStage.qrCode && (
+      <EnterAmount
+        setLiquidAmount={setLiquidAmount}
+        liquidAmount={liquidAmount}
+        selectedRecieveOption={props.selectedRecieveOption}
+        setProcessStage={setProcessStage}
+        feeInfo={feeInfo}
+        setFeeInfo={setFeeInfo}
+        isDarkMode={props.isDarkMode}
+        setIsSwapCreated={props.setIsSwapCreated}
+        maxAmount={maxAmount}
+        minAmount={minAmount}
+      />
+
+      {/* {processStage.qrCode && (
           <QrCodePage
             liquidAmount={liquidAmount}
             feeInfo={feeInfo}
@@ -83,33 +100,31 @@ export default function LiquidPage(props) {
             setGeneratedAddress={props.setGeneratedAddress}
             generatedAddress={props.generatedAddress}
           />
-        )}
-      </View>
+        )} */}
     </View>
+    // </View>
   );
 }
 
 function EnterAmount(props) {
-  const [maxAmount, setMaxAmount] = useState('');
-  const [minAmount, setMinAmount] = useState('');
+  // const [maxAmount, setMaxAmount] = useState('');
+  // const [minAmount, setMinAmount] = useState('');
 
-  useEffect(() => {
-    if (props.selectedRecieveOption != 'liquid') return;
+  // useEffect(() => {
+  // (async () => {
+  //   const swapInfo = await getSwapPairInformation();
 
-    (async () => {
-      const swapInfo = await getSwapPairInformation();
-      if (!swapInfo) return;
-      setMaxAmount(swapInfo.limits.maximal);
-      setMinAmount(swapInfo.limits.minimal + 1000);
-      props.setFeeInfo({
-        boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
-        liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
-        hash: swapInfo.hash,
-      });
-    })();
+  //   if (!swapInfo) return;
+  //   setMaxAmount(swapInfo.limits.maximal);
+  //   setMinAmount(swapInfo.limits.minimal + 1000);
+  //   props.setFeeInfo({
+  //     boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
+  //     liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
+  //     hash: swapInfo.hash,
+  //   });
+  // })();
+  // }, []);
 
-    // generateSwapAddress();
-  }, [props.selectedRecieveOption]);
   return (
     <>
       <View
@@ -230,7 +245,10 @@ function EnterAmount(props) {
       <Text style={styles.disclaimerText}>All values are in sats</Text>
       <TouchableOpacity
         onPress={() => {
-          if (props.liquidAmount > maxAmount || props.liquidAmount < minAmount)
+          if (
+            props.liquidAmount > props.maxAmount ||
+            props.liquidAmount < props.minAmount
+          )
             return;
           props.setProcessStage(prev => {
             return {...prev, amount: false, qrCode: true};
@@ -241,7 +259,8 @@ function EnterAmount(props) {
           styles.createSwapBTN,
           {
             opacity:
-              props.liquidAmount > maxAmount || props.liquidAmount < minAmount
+              props.liquidAmount > props.maxAmount ||
+              props.liquidAmount < props.minAmount
                 ? 0.4
                 : 1,
           },
@@ -380,12 +399,6 @@ function QrCodePage(props) {
           </Text>
         </View>
       </View>
-
-      {/* <View style={styles.amountContainer}>
-        <Text style={styles.valueAmountText}>
-          {props.liquidAmount?.toLocaleString()} sat
-        </Text>
-      </View> */}
     </>
   );
 }
@@ -410,11 +423,6 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingRight: 10,
     borderRadius: 8,
-
-    // position: 'absolute',
-    // zIndex: 1,
-    // top: 7.5,
-    // left: 7.5,
   },
   labelText: {
     color: COLORS.white,

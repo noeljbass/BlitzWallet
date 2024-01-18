@@ -4,16 +4,16 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {Back_BTN, DynamicKeyContainer} from '../../../components/login';
-import {BTN, COLORS, FONT, SIZES} from '../../../constants';
+import {BTN, Background, COLORS, FONT, SIZES} from '../../../constants';
 import {useEffect, useState} from 'react';
 import {retrieveData, shuffleArray} from '../../../functions';
 
 export default function VerifyKey({navigation: {navigate}}) {
   const [mnemonic, setMnemonic] = useState([]);
   const [validationMnemonic, setValidationMnemonic] = useState([]);
-
   const [currentGuess, setCurrentGuess] = useState(['', 0]);
   const [headerText, setHeaderText] = useState('');
   const [isValid, setIsValid] = useState(false);
@@ -36,6 +36,7 @@ export default function VerifyKey({navigation: {navigate}}) {
 
   function countGuesses(id) {
     validationMnemonic.forEach(item => {
+      console.log(item);
       if (item[0] === id) {
         if (!item[1]) setCurrentGuess(prev => [id, (prev[1] += 1)]);
         else setCurrentGuess(prev => [id, (prev[1] -= 1)]);
@@ -78,6 +79,43 @@ export default function VerifyKey({navigation: {navigate}}) {
     );
   }, [validationMnemonic, currentGuess]);
 
+  return (
+    <View style={[Background, {paddingBottom: Platform.OS === 'ios' ? 0 : 15}]}>
+      <SafeAreaView style={styles.global_container}>
+        <Back_BTN navigation={navigate} destination="GenerateKey" />
+        <View style={styles.container}>
+          <Text style={styles.header}>{headerText}</Text>
+          <DynamicKeyContainer
+            countGuesses={countGuesses}
+            for="keyVarify"
+            keys={validationMnemonic}
+          />
+          <TouchableOpacity
+            onPress={() => navigate('GenerateKey')}
+            style={[
+              styles.showMe_container,
+              BTN,
+              {backgroundColor: COLORS.lightModeBackground, marginTop: 'auto'},
+            ]}>
+            <Text style={[styles.showMeText]}>Show me again</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={nextPage}
+            style={[
+              BTN,
+              isValid
+                ? styles.container_withClick
+                : styles.container_withoutClick,
+              {marginTop: 0},
+            ]}>
+            <Text style={styles.continueText}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
+  );
+
   function numToStringNum(num) {
     switch (num) {
       case 1:
@@ -112,37 +150,6 @@ export default function VerifyKey({navigation: {navigate}}) {
     if (!isValid) return;
     navigate('PinSetup');
   }
-
-  return (
-    <SafeAreaView style={styles.global_container}>
-      <Back_BTN navigation={navigate} destination="GenerateKey" />
-      <View style={styles.container}>
-        <Text style={styles.header}>{headerText}</Text>
-        <DynamicKeyContainer
-          countGuesses={countGuesses}
-          for="keyVarify"
-          keys={validationMnemonic}
-        />
-        <TouchableOpacity
-          onPress={() => navigate('GenerateKey')}
-          style={[styles.showMe_container, BTN]}>
-          <Text style={[styles.showMeText]}>Show me again</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={nextPage}
-          style={[
-            BTN,
-            isValid
-              ? styles.container_withClick
-              : styles.container_withoutClick,
-            {marginTop: 0},
-          ]}>
-          <Text style={styles.continueText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
 }
 
 const styles = StyleSheet.create({

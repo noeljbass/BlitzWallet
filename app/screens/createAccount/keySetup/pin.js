@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -60,7 +61,12 @@ export default function PinPage(props) {
   }, [pin]);
 
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.lightModeBackground}}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.lightModeBackground,
+        paddingBottom: Platform.OS === 'ios' ? 0 : 15,
+      }}>
       <SafeAreaView style={styles.contentContainer}>
         <Text
           style={[
