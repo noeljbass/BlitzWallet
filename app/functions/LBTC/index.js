@@ -19,7 +19,6 @@ async function getSwapFee() {
   }
 }
 async function getSwapPairInformation() {
-  console.log('RUNNING');
   try {
     const request = await axios.get('https://api.boltz.exchange/getpairs');
     const data = request.data.pairs['L-BTC/BTC'];

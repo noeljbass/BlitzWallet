@@ -1,16 +1,12 @@
-import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, View, Text} from 'react-native';
 import {COLORS, FONT, SHADOWS, SIZES, CENTER} from '../../../../../constants';
 
-import {generateSecureRandom} from 'react-native-securerandom';
-import ecc from '@bitcoinerlab/secp256k1';
-import {ECPairFactory} from 'ecpair';
 import QRCode from 'react-native-qrcode-svg';
 import {receivePayment} from '@breeztech/react-native-breez-sdk';
 
 import RNEventSource from 'react-native-event-source';
-const ECPair = ECPairFactory(ecc);
+import {createLiquidSwap} from '../../../../../functions/LBTC';
 
 export default function QrCodePage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
@@ -18,6 +14,7 @@ export default function QrCodePage(props) {
   const [evenSource, setEventSource] = useState({});
 
   useEffect(() => {
+    console.log('QR CODE PAGE');
     (async () => {
       try {
         const satAmount =
@@ -144,42 +141,6 @@ export default function QrCodePage(props) {
   );
 }
 
-async function createLiquidSwap(invoice, hash) {
-  try {
-    const randomBytesArray = await generateSecureRandom(32);
-    const privateKey = Buffer.from(randomBytesArray);
-    // Create a public key from the private key
-    const publicKey =
-      ECPair.fromPrivateKey(privateKey).publicKey.toString('hex');
-
-    const url = 'https://api.boltz.exchange/createswap';
-    // Set the Content-Type header to application/json
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-    const postData = {
-      type: 'submarine',
-      pairId: 'L-BTC/BTC',
-      orderSide: 'sell',
-      invoice: invoice,
-      //   pairHash: hash,
-      refundPublicKey: publicKey,
-    };
-
-    const request = await axios.post(url, postData);
-
-    return new Promise(resolve => {
-      resolve(request.data);
-    });
-
-    // console.log(request.data);
-  } catch (err) {
-    console.log(err);
-    return new Promise(resolve => {
-      resolve(false);
-    });
-  }
-}
 const styles = StyleSheet.create({
   qrcodeContainer: {
     width: '90%',

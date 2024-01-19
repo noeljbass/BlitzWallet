@@ -132,6 +132,7 @@ export default function LightningPage(props) {
 
       setErrorMessageText('');
       setGeneratingQrCode(true);
+      console.log(channelFee);
 
       if (channelFee?.usedFeeParams) {
         setErrorMessageText(

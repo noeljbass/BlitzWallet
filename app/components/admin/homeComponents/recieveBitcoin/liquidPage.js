@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import axios from 'axios';
 import {CannotSwapPage, EnterAmount, QrCodePage} from './liquidPagesComponents';
 import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {CENTER, COLORS, SIZES} from '../../../../constants';
+import {getSwapPairInformation} from '../../../../functions/LBTC';
 
 export default function LiquidPage(props) {
   const [liquidAmount, setLiquidAmount] = useState('2000');
@@ -10,36 +12,30 @@ export default function LiquidPage(props) {
     boltzFeePercent: 0,
     liquidFee: 0,
     hash: '',
+    minAmount: 0,
+    maxAmount: 0,
   });
 
   const [processStage, setProcessStage] = useState({
     amount: true,
     qrCode: false,
   });
-  const [maxAmount, setMaxAmount] = useState('');
-  const [minAmount, setMinAmount] = useState('');
+
   const [canSwap, setCanSwap] = useState(false);
   const [swapErrorMessage, setSwapErrorMessage] = useState('');
 
   useEffect(() => {
-    setProcessStage({
-      amount: true,
-      qrCode: false,
-    });
-    setLiquidAmount('2000');
-    props.setIsSwapCreated(false);
-
     (async () => {
       try {
         await nodeInfo();
         const swapInfo = await getSwapPairInformation();
         if (!swapInfo) return;
-        setMaxAmount(swapInfo.limits.maximal);
-        setMinAmount(swapInfo.limits.minimal + 1000);
         setFeeInfo({
           boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
           liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
           hash: swapInfo.hash,
+          minAmount: swapInfo.limits.minimal + 1000,
+          maxAmount: swapInfo.limits.maximal,
         });
         setCanSwap(true);
       } catch (err) {
@@ -51,28 +47,50 @@ export default function LiquidPage(props) {
 
   return (
     <View style={[styles.container]}>
-      {!canSwap ? (
-        <CannotSwapPage
-          swapErrorMessage={swapErrorMessage}
-          isDarkMode={props.isDarkMode}
-        />
-      ) : (
+      {/* CANNOT SWAP PAGE WHEN NOT CONNECTED TO NODE */}
+      {!canSwap && (
+        <View
+          style={[
+            styles.qrcodeContainer,
+            {
+              marginBottom: 'auto',
+              marginVertical: 20,
+              justifyContent: 'space-between',
+            },
+          ]}>
+          <ActivityIndicator
+            size="large"
+            color={
+              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+            }
+            style={{
+              marginTop: 'auto',
+              marginBottom: 'auto',
+              transform: [{translateY: 12}],
+            }}
+          />
+          <Text
+            style={{
+              fontSize: SIZES.large,
+              color: COLORS.cancelRed,
+            }}>
+            {swapErrorMessage ? swapErrorMessage : ' '}
+          </Text>
+        </View>
+      )}
+
+      {canSwap && (
         <>
           {processStage.amount && (
             <EnterAmount
               setLiquidAmount={setLiquidAmount}
               liquidAmount={liquidAmount}
-              selectedRecieveOption={props.selectedRecieveOption}
               setProcessStage={setProcessStage}
               feeInfo={feeInfo}
-              setFeeInfo={setFeeInfo}
               isDarkMode={props.isDarkMode}
               setIsSwapCreated={props.setIsSwapCreated}
-              maxAmount={maxAmount}
-              minAmount={minAmount}
             />
           )}
-
           {processStage.qrCode && (
             <QrCodePage
               liquidAmount={liquidAmount}
@@ -88,26 +106,22 @@ export default function LiquidPage(props) {
   );
 }
 
-async function getSwapPairInformation() {
-  console.log('RUNNING');
-  try {
-    const request = await axios.get('https://api.boltz.exchange/getpairs');
-    const data = request.data.pairs['L-BTC/BTC'];
-    return new Promise(resolve => {
-      resolve(data);
-    });
-  } catch (err) {
-    console.log(err);
-    return new Promise(resolve => {
-      resolve(false);
-    });
-  }
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  //
+  qrcodeContainer: {
+    width: '90%',
+    maxWidth: 250,
+    height: 250,
+    ...CENTER,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 50,
   },
 });

@@ -62,17 +62,17 @@ export default function NavBar(props) {
     }).start();
   }
   function fadeOut() {
+    Animated.timing(liquid, {
+      toValue: 0.5,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
     Animated.timing(bitcoin, {
       toValue: 0.5,
       duration: 200,
       useNativeDriver: true,
     }).start();
     Animated.timing(lightning, {
-      toValue: 0.5,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(liquid, {
       toValue: 0.5,
       duration: 200,
       useNativeDriver: true,

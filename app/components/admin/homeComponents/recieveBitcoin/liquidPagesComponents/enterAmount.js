@@ -137,8 +137,8 @@ export default function EnterAmount(props) {
       <TouchableOpacity
         onPress={() => {
           if (
-            props.liquidAmount > props.maxAmount ||
-            props.liquidAmount < props.minAmount
+            props.liquidAmount > props.feeInfo.maxAmount ||
+            props.liquidAmount < props.feeInfo.minAmount
           )
             return;
           props.setProcessStage(prev => {
@@ -150,8 +150,8 @@ export default function EnterAmount(props) {
           styles.createSwapBTN,
           {
             opacity:
-              props.liquidAmount > props.maxAmount ||
-              props.liquidAmount < props.minAmount
+              props.liquidAmount > props.feeInfo.maxAmount ||
+              props.liquidAmount < props.feeInfo.minAmount
                 ? 0.4
                 : 1,
             marginBottom: 40,
