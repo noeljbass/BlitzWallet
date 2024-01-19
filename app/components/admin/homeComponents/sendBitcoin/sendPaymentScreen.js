@@ -163,8 +163,9 @@ export default function SendPaymentScreen(props) {
                                 : COLORS.lightModeText,
                             },
                           ]}>
-                          {(
-                            paymentInfo?.invoice?.amountMsat / 1000
+                          {(paymentInfo.invoice.amountMsat
+                            ? paymentInfo?.invoice?.amountMsat
+                            : sendingAmount / 1000
                           ).toLocaleString()}{' '}
                           sat
                         </Text>
@@ -178,7 +179,9 @@ export default function SendPaymentScreen(props) {
                             },
                           ]}>
                           {(
-                            (paymentInfo?.invoice?.amountMsat / 1000) *
+                            (paymentInfo.invoice.amountMsat
+                              ? paymentInfo?.invoice?.amountMsat
+                              : sendingAmount / 1000) *
                             (paymentInfo[0]?.value / 100000000)
                           ).toLocaleString()}{' '}
                           {userSelectedCurrency}
@@ -260,9 +263,9 @@ export default function SendPaymentScreen(props) {
                                 : COLORS.lightModeText,
                             },
                           ]}>
-                          {(
-                            paymentInfo?.invoice?.amountMsat / 1000 +
-                            0
+                          {(paymentInfo.invoice.amountMsat
+                            ? paymentInfo?.invoice?.amountMsat
+                            : sendingAmount / 1000
                           ).toLocaleString()}{' '}
                           sat
                         </Text>
@@ -276,7 +279,9 @@ export default function SendPaymentScreen(props) {
                             },
                           ]}>
                           {(
-                            (paymentInfo?.invoice?.amountMsat / 1000 + 0) *
+                            (paymentInfo.invoice.amountMsat
+                              ? paymentInfo?.invoice?.amountMsat
+                              : sendingAmount / 1000) *
                             (paymentInfo[0]?.value / 100000000)
                           ).toLocaleString()}{' '}
                           {userSelectedCurrency}
