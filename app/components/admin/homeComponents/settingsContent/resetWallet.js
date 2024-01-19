@@ -1,16 +1,11 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {BTN, COLORS, FONT, SIZES} from '../../../../constants';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {deleteItem} from '../../../../functions/secureStore';
 import {removeLocalStorageItem} from '../../../../functions/localStorage';
 import RNRestart from 'react-native-restart';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
+import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
 export default function ResetPage(props) {
   const [selectedOptions, setSelectedOptions] = useState({
@@ -18,7 +13,19 @@ export default function ResetPage(props) {
     paymentHistory: false,
     pin: false,
   });
-  const {theme, toggleTheme} = useGlobalContextProvider();
+  const {theme} = useGlobalContextProvider();
+  const [node_info, setNode_info] = useState({});
+  console.log(props);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const nodeInformation = await nodeInfo();
+        setNode_info(nodeInformation);
+        // console.log(nodeInformation);
+      } catch (err) {}
+    })();
+  }, []);
 
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
@@ -168,7 +175,7 @@ export default function ResetPage(props) {
               color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
-          {Math.floor(props.breezInformation?.userBalance).toLocaleString()}{' '}
+          {Math.round(node_info.channelsBalanceMsat / 1000).toLocaleString()}{' '}
           sats
         </Text>
       </View>
