@@ -9,6 +9,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {
+  fetchFiatRates,
   openChannelFee,
   receivePayment,
 } from '@breeztech/react-native-breez-sdk';
@@ -33,7 +34,7 @@ export default function LightningPage(props) {
 
     (async () => {
       try {
-        const fiatRates = await getFiatRates();
+        const fiatRates = await fetchFiatRates();
         // console.log(props.userSelectedCurrency, 'IN LIGHTNING PAGE');
         const [selectedPrice] = fiatRates.filter(
           rate =>

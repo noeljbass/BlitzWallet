@@ -142,7 +142,7 @@ export default function SettingsPage(props) {
                             : COLORS.primary,
                       },
                     ]}
-                    cursorColor={COLORS.white}
+                    selectionColor={COLORS.lightModeBackground}
                     value={props.numberOfPeople}
                     keyboardType="number-pad"
                   />
@@ -170,7 +170,7 @@ export default function SettingsPage(props) {
                             : COLORS.primary,
                       },
                     ]}
-                    cursorColor={COLORS.white}
+                    selectionColor={COLORS.lightModeBackground}
                     value={props.amountPerPerson}
                     keyboardType="number-pad"
                   />

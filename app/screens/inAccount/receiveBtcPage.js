@@ -1,4 +1,12 @@
-import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {CENTER, FONT, COLORS, SIZES} from '../../constants';
 import {useEffect, useRef, useState} from 'react';
 import {
@@ -12,6 +20,7 @@ import {
 } from '../../components/admin/homeComponents/recieveBitcoin';
 import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
+
 import {getLocalStorageItem} from '../../functions';
 
 export function ReceivePaymentHome(props) {
@@ -42,7 +51,6 @@ export function ReceivePaymentHome(props) {
         try {
           const currency = await getLocalStorageItem('currency');
           setUserSelectedCurrency(currency);
-          console.log(currency, 'TEST');
         } catch (err) {
           console.log(err);
         }
@@ -61,68 +69,87 @@ export function ReceivePaymentHome(props) {
           : COLORS.lightModeBackground,
         paddingVertical: Device.osName === 'ios' ? 0 : 10,
       }}>
-      <SafeAreaView style={{flex: 1}}>
-        <TopBar isDarkMode={isDarkMode} clear={clear} />
-        <Text
-          style={[
-            styles.title,
-            {
-              color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          {selectedRecieveOption[0].toUpperCase() +
-            selectedRecieveOption.slice(1)}
-        </Text>
+      <KeyboardAvoidingView
+        behavior={Device.osName === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}>
+          <View style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1}}>
+              <TopBar isDarkMode={isDarkMode} clear={clear} />
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color: isDarkMode
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                {selectedRecieveOption[0].toUpperCase() +
+                  selectedRecieveOption.slice(1)}
+              </Text>
 
-        <NavBar
-          selectedRecieveOption={selectedRecieveOption}
-          setSelectedRecieveOption={setSelectedRecieveOption}
-          isDarkMode={isDarkMode}
-        />
+              <NavBar
+                selectedRecieveOption={selectedRecieveOption}
+                setSelectedRecieveOption={setSelectedRecieveOption}
+                isDarkMode={isDarkMode}
+              />
 
-        {/*PAGES*/}
-        <LightningPage
-          selectedRecieveOption={selectedRecieveOption}
-          sendingAmount={sendingAmount.lightning}
-          updateQRCode={updateQRCode}
-          generatedAddress={generatedAddress}
-          paymentDescription={paymentDescription.lightning}
-          setGeneratedAddress={setGeneratedAddress}
-          isDarkMode={isDarkMode}
-          userSelectedCurrency={userSelectedCurrency}
-        />
-        <BitcoinPage
-          selectedRecieveOption={selectedRecieveOption}
-          setGeneratedAddress={setGeneratedAddress}
-          generatedAddress={generatedAddress}
-          isDarkMode={isDarkMode}
-        />
-        <LiquidPage
-          selectedRecieveOption={selectedRecieveOption}
-          isDarkMode={isDarkMode}
-          setIsSwapCreated={setIsSwapCreated}
-          setGeneratedAddress={setGeneratedAddress}
-          generatedAddress={generatedAddress}
-        />
+              {/*PAGES*/}
+              {selectedRecieveOption === 'lightning' && (
+                <LightningPage
+                  selectedRecieveOption={selectedRecieveOption}
+                  sendingAmount={sendingAmount.lightning}
+                  updateQRCode={updateQRCode}
+                  generatedAddress={generatedAddress}
+                  paymentDescription={paymentDescription.lightning}
+                  setGeneratedAddress={setGeneratedAddress}
+                  isDarkMode={isDarkMode}
+                  userSelectedCurrency={userSelectedCurrency}
+                />
+              )}
+              {selectedRecieveOption === 'bitcoin' && (
+                <BitcoinPage
+                  selectedRecieveOption={selectedRecieveOption}
+                  setGeneratedAddress={setGeneratedAddress}
+                  generatedAddress={generatedAddress}
+                  isDarkMode={isDarkMode}
+                />
+              )}
+              {selectedRecieveOption === 'liquid' && (
+                <LiquidPage
+                  selectedRecieveOption={selectedRecieveOption}
+                  isDarkMode={isDarkMode}
+                  setIsSwapCreated={setIsSwapCreated}
+                  setGeneratedAddress={setGeneratedAddress}
+                  generatedAddress={generatedAddress}
+                />
+              )}
 
-        <ButtonsContainer
-          selectedRecieveOption={selectedRecieveOption}
-          generatedAddress={generatedAddress}
-          setEditPaymentPopup={setEditPaymentPopup}
-          isSwapCreated={isSwapCreated}
-        />
+              <ButtonsContainer
+                selectedRecieveOption={selectedRecieveOption}
+                generatedAddress={generatedAddress}
+                setEditPaymentPopup={setEditPaymentPopup}
+                isSwapCreated={isSwapCreated}
+              />
 
-        {/* popups */}
-      </SafeAreaView>
+              {/* popups */}
+            </SafeAreaView>
 
-      <EditAmountPopup
-        type={selectedRecieveOption}
-        setSendingAmount={setSendingAmount}
-        setPaymentDescription={setPaymentDescription}
-        isDisplayed={editPaymentPopup}
-        setIsDisplayed={setEditPaymentPopup}
-        setUpdateQRCode={setUpdateQRCode}
-      />
+            <EditAmountPopup
+              type={selectedRecieveOption}
+              setSendingAmount={setSendingAmount}
+              setPaymentDescription={setPaymentDescription}
+              isDisplayed={editPaymentPopup}
+              setIsDisplayed={setEditPaymentPopup}
+              setUpdateQRCode={setUpdateQRCode}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 

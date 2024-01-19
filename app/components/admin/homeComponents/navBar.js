@@ -134,7 +134,7 @@ export default function NavBar(props) {
 const styles = StyleSheet.create({
   //   topBar
   topBar: {
-    width: '90%',
+    width: '95%',
     height: 50,
     display: 'flex',
 
