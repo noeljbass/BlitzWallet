@@ -49,7 +49,12 @@ const GlobalContextProvider = ({children}) => {
 
   return (
     <GlobalContextManger.Provider
-      value={{theme, toggleTheme, userTxPreferance, toggleUserTxPreferance}}>
+      value={{
+        theme,
+        toggleTheme,
+        userTxPreferance,
+        toggleUserTxPreferance,
+      }}>
       {children}
     </GlobalContextManger.Provider>
   );

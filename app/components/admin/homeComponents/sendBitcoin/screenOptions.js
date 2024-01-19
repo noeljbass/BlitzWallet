@@ -9,8 +9,10 @@ import {
   SafeAreaView,
   Animated,
   useColorScheme,
+  AppState,
+  Platform,
 } from 'react-native';
-import {CameraType} from 'expo-camera';
+import * as ExpoCamera from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
 import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
@@ -25,21 +27,15 @@ import {useNavigation} from '@react-navigation/native';
 export default function SendPaymentScreenOptions(props) {
   console.log('SCREEN OPTIONS PAGE');
   const navigate = useNavigation();
-  const type = CameraType.back;
-  const [permission, setPermission] = useState(
-    BarCodeScanner.getPermissionsAsync(),
-  );
-  // const [scanned, setScanned] = useState(false);
+  const type = ExpoCamera.CameraType.back;
+  const [permission, setPermission] = ExpoCamera.Camera.useCameraPermissions();
+  const [photoesPermission, setPhotoesPermission] =
+    ImagePicker.useMediaLibraryPermissions();
+
   const [bottomExpand, setBottomExpand] = useState(false);
-  // const [BTCadress, setBTCadress] = useState('');
-  const [photoesPermission, setPhotoesPermission] = useState({});
 
   const [manualBitcoinInput, setManualBitcoinInput] = useState('');
   const [showManualInpt, setShowManualInput] = useState(false);
-
-  function toggleBottom() {
-    setBottomExpand(prev => !prev);
-  }
 
   async function getClipboardText() {
     const text = await Clipboard.getStringAsync();
@@ -51,6 +47,7 @@ export default function SendPaymentScreenOptions(props) {
     if (!photoesPermission) {
       return;
     }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
@@ -68,9 +65,10 @@ export default function SendPaymentScreenOptions(props) {
 
   useEffect(() => {
     (async () => {
-      const status = await BarCodeScanner.requestPermissionsAsync();
-
-      setPermission(status.granted);
+      const status = await ExpoCamera.Camera.getCameraPermissionsAsync();
+      const photoStatus = await ImagePicker.getMediaLibraryPermissionsAsync();
+      setPhotoesPermission(photoStatus);
+      setPermission(status);
     })();
   }, []);
 
@@ -91,9 +89,9 @@ export default function SendPaymentScreenOptions(props) {
       props.setScanned(false);
       return;
     }
+    console.log(data);
 
     props.setScanned(true);
-    const bitcoinAdress = data;
     props.setBTCadress(data);
   }
 
@@ -105,6 +103,7 @@ export default function SendPaymentScreenOptions(props) {
           backgroundColor: props.isDarkMode
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
+          paddingTop: Platform.OS === 'ios' ? 0 : 5,
         },
       ]}>
       <SafeAreaView style={{flex: 1}}>
@@ -134,13 +133,37 @@ export default function SendPaymentScreenOptions(props) {
           </Text>
         </View>
 
-        {!permission && <Text>No access to camera</Text>}
-        {permission && (
-          <BarCodeScanner
+        {!permission?.granted && (
+          <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <Text
+              style={{
+                fontFamily: FONT.Title_Regular,
+                fontSize: SIZES.large,
+                marginBottom: 5,
+              }}>
+              No access to camera
+            </Text>
+            <Text
+              style={{
+                fontFamily: FONT.Title_Regular,
+                fontSize: SIZES.medium,
+                textAlign: 'center',
+              }}>
+              Go to settings to let Blitz Wallet access your camera
+            </Text>
+          </View>
+        )}
+        {permission?.granted && (
+          <ExpoCamera.Camera
             type={type}
             onBarCodeScanned={handleBarCodeScanned}
             style={[styles.camera]}
-          />
+            barCodeScannerSettings={{
+              barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+            }}
+            focusDepth={1}
+            autoFocus={true}></ExpoCamera.Camera>
         )}
 
         <View
@@ -155,33 +178,38 @@ export default function SendPaymentScreenOptions(props) {
               : COLORS.lightModeText,
             borderTopWidth: 2,
           }}>
-          <View
-            onTouchEnd={toggleBottom}
-            style={{
-              ...styles.arrowIcon,
-              backgroundColor: props.isDarkMode
-                ? COLORS.darkModeBackground
-                : COLORS.lightModeBackground,
-
-              borderColor: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
-              borderTopWidth: 2,
-              borderLeftWidth: 2,
-              borderRightWidth: 2,
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              setBottomExpand(prev => !prev);
             }}>
-            <Animated.Image
-              source={ICONS.angleUpIcon}
+            <View
               style={{
-                width: 30,
-                height: 20,
-                transform: bottomExpand
-                  ? [{rotate: '180deg'}]
-                  : [{rotate: '0deg'}],
-              }}
-              resizeMode="contain"
-            />
-          </View>
+                ...styles.arrowIcon,
+                backgroundColor: props.isDarkMode
+                  ? COLORS.darkModeBackground
+                  : COLORS.lightModeBackground,
+
+                borderColor: props.isDarkMode
+                  ? COLORS.darkModeText
+                  : COLORS.lightModeText,
+                borderTopWidth: 2,
+                borderLeftWidth: 2,
+                borderRightWidth: 2,
+              }}>
+              <Animated.Image
+                source={ICONS.angleUpIcon}
+                style={{
+                  width: 30,
+                  height: 20,
+                  transform: bottomExpand
+                    ? [{rotate: '180deg'}]
+                    : [{rotate: '0deg'}],
+                }}
+                resizeMode="contain"
+              />
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={getClipboardText}
             style={{backgroundColor: 'transparent'}}
@@ -244,9 +272,9 @@ const styles = StyleSheet.create({
   },
   topBar: {
     width: '100%',
-
     paddingBottom: 10,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   headerText: {
     color: 'black',

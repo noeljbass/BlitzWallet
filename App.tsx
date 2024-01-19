@@ -44,7 +44,10 @@ import {
 } from './app/screens/inAccount';
 
 import {setStatusBarHidden} from 'expo-status-bar';
-import {GlobalContextProvider} from './context-store/context';
+import {
+  GlobalContextProvider,
+  useGlobalContextProvider,
+} from './context-store/context';
 import {
   ConfirmDrainPage,
   DrainWalletAddress,
@@ -68,6 +71,8 @@ function ResetStack(): JSX.Element | null {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isloaded, setIsLoaded] = useState(false);
 
+  const {isCameraActive} = useGlobalContextProvider();
+
   useEffect(() => {
     (async () => {
       const pin = await retrieveData('pin');
@@ -87,19 +92,20 @@ function ResetStack(): JSX.Element | null {
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
-      if (appState.current.match(/background/) && nextAppState === 'active') {
-        console.log('Background!');
-        (async () => {
-          const pin = await retrieveData('pin');
-          const mnemonic = await retrieveData('mnemonic');
+      console.log(nextAppState, 'HOME APP STATE');
+      // if (appState.current.match(/background/) && nextAppState === 'active') {
+      //   console.log('Background!');
+      //   (async () => {
+      //     const pin = await retrieveData('pin');
+      //     const mnemonic = await retrieveData('mnemonic');
 
-          if (pin && mnemonic) {
-            setIsLoggedIn(true);
-          } else setIsLoggedIn(false);
+      //     if (pin && mnemonic) {
+      //       setIsLoggedIn(true);
+      //     } else setIsLoggedIn(false);
 
-          navigationRef?.current?.navigate('Home', {fromBackground: true});
-        })();
-      }
+      //     navigationRef?.current?.navigate('Home', {fromBackground: true});
+      //   })();
+      // }
 
       appState.current = nextAppState;
     });

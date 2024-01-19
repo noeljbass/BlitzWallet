@@ -34,7 +34,6 @@ export default function SendPaymentScreen(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
   const [sendingAmount, setSendingAmount] = useState(0);
-  console.log(sendingAmount, 'TTTT');
 
   // const props.isDarkMode = useColorScheme() === 'dark';
 
@@ -163,9 +162,10 @@ export default function SendPaymentScreen(props) {
                                 : COLORS.lightModeText,
                             },
                           ]}>
-                          {(paymentInfo.invoice.amountMsat
-                            ? paymentInfo?.invoice?.amountMsat
-                            : sendingAmount / 1000
+                          {(
+                            (paymentInfo?.invoice?.amountMsat
+                              ? paymentInfo?.invoice?.amountMsat
+                              : sendingAmount) / 1000
                           ).toLocaleString()}{' '}
                           sat
                         </Text>
@@ -179,9 +179,10 @@ export default function SendPaymentScreen(props) {
                             },
                           ]}>
                           {(
-                            (paymentInfo.invoice.amountMsat
+                            ((paymentInfo?.invoice?.amountMsat
                               ? paymentInfo?.invoice?.amountMsat
-                              : sendingAmount / 1000) *
+                              : sendingAmount) /
+                              1000) *
                             (paymentInfo[0]?.value / 100000000)
                           ).toLocaleString()}{' '}
                           {userSelectedCurrency}
@@ -263,9 +264,10 @@ export default function SendPaymentScreen(props) {
                                 : COLORS.lightModeText,
                             },
                           ]}>
-                          {(paymentInfo.invoice.amountMsat
-                            ? paymentInfo?.invoice?.amountMsat
-                            : sendingAmount / 1000
+                          {(
+                            (paymentInfo?.invoice?.amountMsat
+                              ? paymentInfo?.invoice?.amountMsat
+                              : sendingAmount) / 1000
                           ).toLocaleString()}{' '}
                           sat
                         </Text>
@@ -279,9 +281,10 @@ export default function SendPaymentScreen(props) {
                             },
                           ]}>
                           {(
-                            (paymentInfo.invoice.amountMsat
+                            ((paymentInfo?.invoice?.amountMsat
                               ? paymentInfo?.invoice?.amountMsat
-                              : sendingAmount / 1000) *
+                              : sendingAmount) /
+                              1000) *
                             (paymentInfo[0]?.value / 100000000)
                           ).toLocaleString()}{' '}
                           {userSelectedCurrency}
@@ -307,7 +310,6 @@ export default function SendPaymentScreen(props) {
                       activeOpacity={!sendingAmount ? 0.5 : 0.3}
                       onPress={() => {
                         if (!sendingAmount) return;
-
                         sendPaymentFunction();
                       }}
                       style={[
@@ -393,36 +395,43 @@ export default function SendPaymentScreen(props) {
   }
 
   async function decodeLNAdress() {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const input = await parseInput(props.BTCadress);
-      const currency = await getLocalStorageItem('currency');
       const node_info = await nodeInfo();
 
-      const bitcoinPrice = (await fetchFiatRates()).filter(
-        coin => coin.coin === currency,
-      );
+      try {
+        const input = await parseInput(props.BTCadress);
+        const currency = await getLocalStorageItem('currency');
 
-      if (node_info.channelsBalanceMsat + 100 < input.invoice.amountMsat) {
+        const bitcoinPrice = (await fetchFiatRates()).filter(
+          coin => coin.coin === currency,
+        );
+
+        if (node_info.channelsBalanceMsat + 100 < input.invoice.amountMsat) {
+          Alert.alert(
+            'Your balance is too low to send this payment',
+            'Please add funds to your account',
+            [{text: 'Ok', onPress: () => props.setScanned(false)}],
+          );
+          return;
+        }
+
+        setPaymentInfo({...input, ...bitcoinPrice});
+        setUserSelectedCurrency(currency);
+        setSendingAmount(input.invoice.amountMsat);
+        setIsLoading(false);
+      } catch (err) {
         Alert.alert(
-          'Your balance is too low to send this payment',
-          'Please add funds to your account',
+          'Not a valid LN Address',
+          'Please try again with a bolt 11 address',
           [{text: 'Ok', onPress: () => props.setScanned(false)}],
         );
-        return;
+        console.log(err);
       }
-
-      setPaymentInfo({...input, ...bitcoinPrice});
-      setUserSelectedCurrency(currency);
-      setSendingAmount(input.invoice.amountMsat);
-      setIsLoading(false);
     } catch (err) {
-      Alert.alert(
-        'Not a valid LN Address',
-        'Please try again with a bolt 11 address',
-        [{text: 'Ok', onPress: () => props.setScanned(false)}],
-      );
-
+      Alert.alert('Error not connected to node', '', [
+        {text: 'Ok', onPress: () => props.setScanned(false)},
+      ]);
       console.log(err);
     }
   }
@@ -467,6 +476,7 @@ const styles = StyleSheet.create({
   },
   sendingAmountInputContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 'auto',
   },
   sendingAmtBTC: {
@@ -501,6 +511,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 20,
   },
   button: {
     width: '48%',

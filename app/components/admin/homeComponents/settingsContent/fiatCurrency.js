@@ -56,8 +56,6 @@ export default function FiatCurrencyPage(props) {
     }
   }, [textInput]);
 
-  // useEffect(() => {}, [textInput]);
-
   const CurrencyElements = currency => {
     return (
       <TouchableOpacity
