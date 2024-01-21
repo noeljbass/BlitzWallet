@@ -12,7 +12,7 @@ import {retrieveData, storeData, terminateAccount} from '../../../functions';
 import {CENTER, COLORS, FONT, SIZES} from '../../../constants';
 import {useNavigation} from '@react-navigation/native';
 
-export default function PinPage(props) {
+export default function PinPage() {
   const [pin, setPin] = useState([null, null, null, null]);
   const [confirmPin, setConfirmPin] = useState([]);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -68,240 +68,88 @@ export default function PinPage(props) {
         paddingBottom: Platform.OS === 'ios' ? 0 : 15,
       }}>
       <SafeAreaView style={styles.contentContainer}>
-        <Text
-          style={[
-            styles.header,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
+        <Text style={[styles.header]}>
           {isConfirming ? 'Confirm Pin' : 'Enter 4-digit PIN'}
         </Text>
-        <Text
-          style={[
-            styles.enterText,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          {pinEnterCount}/8 tries left
-        </Text>
+        <Text style={[styles.enterText]}>{pinEnterCount}/8 tries left</Text>
         <View style={styles.dotContainer}>
           <View
             style={[
               typeof pin[0] === 'number'
                 ? {
                     ...styles.dot_active,
-                    backgroundColor: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
                   }
                 : styles.dot,
-              {
-                borderColor: props.theme
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
+              {},
             ]}></View>
           <View
             style={[
               typeof pin[1] === 'number'
                 ? {
                     ...styles.dot_active,
-                    backgroundColor: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
                   }
                 : styles.dot,
-              {
-                borderColor: props.theme
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
+              {},
             ]}></View>
           <View
             style={[
               typeof pin[2] === 'number'
                 ? {
                     ...styles.dot_active,
-                    backgroundColor: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
                   }
                 : styles.dot,
-              {
-                borderColor: props.theme
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
+              {},
             ]}></View>
           <View
             style={[
               typeof pin[3] === 'number'
                 ? {
                     ...styles.dot_active,
-                    backgroundColor: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
                   }
                 : styles.dot,
-              {
-                borderColor: props.theme
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
-              },
+              {},
             ]}></View>
         </View>
         <View style={styles.keyboardContainer}>
           <View style={styles.keyboard_row}>
             <TouchableOpacity onPress={() => addPin(1)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                1
-              </Text>
+              <Text style={[styles.keyText, {}]}>1</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(2)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                2
-              </Text>
+              <Text style={[styles.keyText, {}]}>2</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(3)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                3
-              </Text>
+              <Text style={[styles.keyText, {}]}>3</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.keyboard_row}>
             <TouchableOpacity onPress={() => addPin(4)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                4
-              </Text>
+              <Text style={[styles.keyText, {}]}>4</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(5)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                5
-              </Text>
+              <Text style={[styles.keyText, {}]}>5</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(6)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                6
-              </Text>
+              <Text style={[styles.keyText, {}]}>6</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.keyboard_row}>
             <TouchableOpacity onPress={() => addPin(7)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                7
-              </Text>
+              <Text style={[styles.keyText, {}]}>7</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(8)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                8
-              </Text>
+              <Text style={[styles.keyText, {}]}>8</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(9)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                9
-              </Text>
+              <Text style={[styles.keyText, {}]}>9</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.keyboard_row}>
             <TouchableOpacity onPress={() => addPin(0)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                0
-              </Text>
+              <Text style={[styles.keyText, {}]}>0</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => addPin(null)} style={styles.key}>
-              <Text
-                style={[
-                  styles.keyText,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                {'<--'}
-              </Text>
+              <Text style={[styles.keyText, {}]}>{'<--'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -356,12 +204,14 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 10,
     fontFamily: FONT.Title_Bold,
+    color: COLORS.lightModeText,
   },
   enterText: {
     fontSize: SIZES.small,
     fontWeight: 'bold',
     marginBottom: 30,
     fontFamily: FONT.Descriptoin_Bold,
+    color: COLORS.lightModeText,
   },
 
   dotContainer: {
@@ -381,6 +231,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     borderWidth: 1,
+    backgroundColor: COLORS.primary,
     // backgroundColor: 'black',
   },
   keyboardContainer: {
@@ -403,5 +254,6 @@ const styles = StyleSheet.create({
   keyText: {
     fontSize: SIZES.xLarge,
     fontFamily: FONT.Other_Regular,
+    color: COLORS.lightModeText,
   },
 });

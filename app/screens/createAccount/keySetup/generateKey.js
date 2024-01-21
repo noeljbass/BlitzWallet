@@ -1,6 +1,6 @@
 import {SafeAreaView, StyleSheet, Text, View, Platform} from 'react-native';
 import {Back_BTN, Continue_BTN, KeyContainer} from '../../../components/login';
-import {Background, FONT, SIZES} from '../../../constants';
+import {Background, COLORS, FONT, SIZES} from '../../../constants';
 import {useState} from 'react';
 import {storeData, retrieveData} from '../../../functions/secureStore';
 import generateMnemnoic from '../../../functions/seed';
@@ -30,7 +30,7 @@ export default function GenerateKey({navigation: {navigate}}) {
       setFetchError(true);
     }
   }
-  console.log(mnemonic);
+
   return (
     <View style={Background}>
       <SafeAreaView
@@ -82,12 +82,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 10,
+    color: COLORS.lightModeText,
   },
   subHeader: {
     fontSize: SIZES.medium,
     fontFamily: FONT.Descriptoin_Regular,
     textAlign: 'center',
-    opacity: 0.5,
     marginBottom: 20,
+    color: COLORS.lightModeText,
   },
 });

@@ -62,7 +62,6 @@ export default function DislaimerPage({navigation: {navigate}}) {
 const styles = StyleSheet.create({
   globalContainer: {
     flex: 1,
-    backgroundColor: COLORS.background,
     paddingBottom: 15,
   },
   contentContainer: {

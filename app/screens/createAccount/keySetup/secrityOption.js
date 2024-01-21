@@ -52,11 +52,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 20,
+    color: COLORS.lightModeText,
   },
   subHeader: {
     fontSize: SIZES.medium,
     fontFamily: FONT.Descriptoin_Regular,
     textAlign: 'center',
-    opacity: 0.5,
+
+    color: COLORS.lightModeText,
   },
 });

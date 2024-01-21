@@ -85,6 +85,7 @@ export default function RestoreWallet({navigation: {navigate}}) {
         <View key={number} style={styles.seedItem}>
           <Text style={styles.numberText}>{number}.</Text>
           <TextInput
+            cursorColor={COLORS.lightModeText}
             onChangeText={e => handleInputElement(e, number)}
             style={styles.textInputStyle}
           />
@@ -145,6 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
     textAlign: 'center',
     marginBottom: 10,
+    color: COLORS.lightModeText,
   },
   contentContainer: {
     flex: 1,
@@ -173,11 +175,13 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontFamily: FONT.Title_Regular,
     paddingRight: 10,
+    color: COLORS.primary,
   },
   textInputStyle: {
     width: '75%',
 
     fontSize: SIZES.large,
+    color: COLORS.lightModeText,
   },
   continueBTN: {
     fontSize: SIZES.large,

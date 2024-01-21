@@ -48,7 +48,13 @@ export default function GiftWalletHome() {
 
         <View style={[styles.contentContainer]}>
           <View style={[styles.contentItem]}>
-            <Text style={styles.contentHeader}>What is this?</Text>
+            <Text
+              style={[
+                styles.contentHeader,
+                {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
+              ]}>
+              What is this?
+            </Text>
             <View
               style={[
                 styles.contentDescriptionContainer,
@@ -93,7 +99,13 @@ export default function GiftWalletHome() {
             </View>
           </View>
           <View style={[styles.contentItem]}>
-            <Text style={styles.contentHeader}>Importent to know?</Text>
+            <Text
+              style={[
+                styles.contentHeader,
+                {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
+              ]}>
+              Importent to know?
+            </Text>
             <View
               style={[
                 styles.contentDescriptionContainer,

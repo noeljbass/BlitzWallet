@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import { COLORS, FONT, SIZES, ICONS } from "../../constants";
+import {StyleSheet, Text, View, Image} from 'react-native';
+import {COLORS, FONT, SIZES, ICONS} from '../../constants';
 
 export default function Image_header(props) {
   return (
@@ -12,11 +12,11 @@ export default function Image_header(props) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
     maxWidth: 320,
-    alignItems: "center",
-    marginLeft: "auto",
-    marginRight: "auto",
+    alignItems: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginBottom: 30,
     marginTop: 50,
   },
@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: SIZES.xxLarge,
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FONT.Title_Bold,
+    color: COLORS.lightModeText,
   },
 });
