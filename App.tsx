@@ -55,6 +55,8 @@ import {
   LspDescriptionPopup,
 } from './app/components/admin/homeComponents/settingsContent';
 import AmountToGift from './app/components/admin/homeComponents/giftWallet/amountToGift';
+import GiftWalletConfirmation from './app/components/admin/homeComponents/giftWallet/popups/giftWalletConfirmation';
+import ShareWallet from './app/components/admin/homeComponents/giftWallet/shareWallet';
 
 const Stack = createNativeStackNavigator();
 
@@ -166,6 +168,7 @@ function ResetStack(): JSX.Element | null {
           {/* GIFT WALLET PATH */}
           <Stack.Screen name="GiftWalletHome" component={GiftWalletHome} />
           <Stack.Screen name="AmountToGift" component={AmountToGift} />
+          <Stack.Screen name="ShareWallet" component={ShareWallet} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
@@ -178,6 +181,11 @@ function ResetStack(): JSX.Element | null {
             component={RestoreWalletError}
           />
           <Stack.Screen name="ConfirmDrainPage" component={ConfirmDrainPage} />
+
+          <Stack.Screen
+            name="GiftWalletConfirmation"
+            component={GiftWalletConfirmation}
+          />
         </Stack.Group>
         <Stack.Group
           screenOptions={{

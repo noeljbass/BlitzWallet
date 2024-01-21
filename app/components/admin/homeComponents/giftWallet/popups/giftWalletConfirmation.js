@@ -3,7 +3,7 @@ import {COLORS, FONT, SHADOWS, SIZES, CENTER} from '../../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {useGlobalContextProvider} from '../../../../../../context-store/context';
 
-export default function ConfirmDrainPage(props) {
+export default function GiftWalletConfirmation(props) {
   const navigate = useNavigation();
   const {theme} = useGlobalContextProvider();
 
@@ -40,7 +40,7 @@ export default function ConfirmDrainPage(props) {
         <View style={confirmPopup.buttonContainer}>
           <TouchableOpacity
             onPress={() => {
-              props.route.params.wantsToDrainFunc(true);
+              props.route.params.wantsToCreateWallet(true);
               navigate.goBack();
             }}
             style={[confirmPopup.button]}>
@@ -64,6 +64,7 @@ export default function ConfirmDrainPage(props) {
             }}></View>
           <TouchableOpacity
             onPress={() => {
+              props.route.params.wantsToCreateWallet(false);
               navigate.goBack();
             }}
             style={confirmPopup.button}>

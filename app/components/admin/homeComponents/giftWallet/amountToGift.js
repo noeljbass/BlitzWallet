@@ -16,23 +16,35 @@ import {
 
 import {BTN, CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {getFiatRates} from '../../../../functions/SDK';
 
 export default function AmountToGift() {
+  const isInitialRender = useRef(true);
   const navigate = useNavigation();
   const {theme} = useGlobalContextProvider();
 
-  const [enteredSatAmount, setEnteredSatAmount] = useState(0);
   const [currencyInfo, setCurrencyInfo] = useState({
     currency: '',
     value: 0,
   });
+  const [wantsToCreateWallet, setWantsToCreateWallet] = useState(false);
 
   useEffect(() => {
-    getUserSelectedCurrency();
-  }, []);
+    if (isInitialRender.current) {
+      getUserSelectedCurrency();
+      isInitialRender.current = false;
+    }
+
+    if (wantsToCreateWallet) {
+      navigate.navigate('ShareWallet', {
+        walletAmount: currencyInfo.value,
+        wantsToCreateWallet: setWantsToCreateWallet,
+      });
+    }
+  }, [wantsToCreateWallet]);
+
   return (
     <View
       style={[
@@ -72,7 +84,13 @@ export default function AmountToGift() {
             <Text
               style={[
                 styles.topBarText,
-                {fontWeight: 'normal', fontSize: SIZES.medium, marginTop: 10},
+                {
+                  fontWeight: 'normal',
+                  fontSize: SIZES.medium,
+                  marginTop: 10,
+                  transform: [{translateX: 0}],
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                },
               ]}>
               How much would you like to load?
             </Text>
@@ -87,12 +105,17 @@ export default function AmountToGift() {
                       marginTop: 0,
                     },
                   ]}
+                  placeholderTextColor={
+                    theme ? COLORS.darkModeText : COLORS.lightModeText
+                  }
                   // value={String(sendingAmount / 1000)}
                   keyboardType="numeric"
                   placeholder="0"
                   onChangeText={e => {
                     if (isNaN(e)) return;
-                    setEnteredSatAmount(Number(e) * 1000);
+                    setCurrencyInfo(prev => {
+                      return {...prev, value: Number(e) * 1000};
+                    });
                   }}
                 />
                 <Text style={styles.satText}>Sat</Text>
@@ -105,7 +128,9 @@ export default function AmountToGift() {
             </View>
             <TouchableOpacity
               onPress={() => {
-                navigate.navigate('AmountToGift');
+                navigate.navigate('GiftWalletConfirmation', {
+                  wantsToCreateWallet: setWantsToCreateWallet,
+                });
                 return;
                 Alert.alert('This does not work yet');
               }}
@@ -114,11 +139,11 @@ export default function AmountToGift() {
                 {
                   backgroundColor: COLORS.primary,
                   marginTop: 'auto',
-                  marginBottom: 0,
+                  marginBottom: 10,
                   ...CENTER,
                 },
               ]}>
-              <Text style={styles.buttonText}>Continue</Text>
+              <Text style={styles.buttonText}>Create Wallet</Text>
             </TouchableOpacity>
           </SafeAreaView>
         </TouchableWithoutFeedback>

@@ -136,7 +136,7 @@ export default function GiftWalletHome() {
             onPress={() => {
               (async () => {
                 try {
-                  await nodeInfo();
+                  // await nodeInfo();
                   navigate.navigate('AmountToGift');
                 } catch (err) {
                   Alert.alert(
