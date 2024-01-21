@@ -9,6 +9,7 @@ import refreshIcon from '../assets/icons/refresh.png';
 import logoIcon from '../assets/icon.png';
 import leftCheveronIcon from '../assets/icons/left-chevron.png';
 import walletIcon from '../assets/icons/wallet.png';
+import walletBlueIcon from '../assets/icons/wallet_blue.png';
 import connectionIcon from '../assets/icons/connection.png';
 import toolsIcon from '../assets/icons/tools.png';
 import settingsIcon from '../assets/icons/settings.png';
@@ -72,4 +73,5 @@ export default {
   receiptIcon,
   checkIcon,
   wordmark,
+  walletBlueIcon,
 };

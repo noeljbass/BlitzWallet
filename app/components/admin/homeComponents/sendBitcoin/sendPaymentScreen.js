@@ -199,7 +199,7 @@ export default function SendPaymentScreen(props) {
                               : COLORS.lightModeText,
                           },
                         ]}>
-                        Lightning Fee
+                        Blitz Fee
                       </Text>
                       <View
                         style={[

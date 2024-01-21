@@ -36,6 +36,7 @@ import {
   ConnectionToNode,
   ContactsPage,
   ExpandedTx,
+  GiftWalletHome,
   ReceivePaymentHome,
   SendPaymentHome,
   SettingsContentIndex,
@@ -53,6 +54,7 @@ import {
   DrainWalletAddress,
   LspDescriptionPopup,
 } from './app/components/admin/homeComponents/settingsContent';
+import AmountToGift from './app/components/admin/homeComponents/giftWallet/amountToGift';
 
 const Stack = createNativeStackNavigator();
 
@@ -160,6 +162,10 @@ function ResetStack(): JSX.Element | null {
             name="SettingsContentHome"
             component={SettingsContentIndex}
           />
+
+          {/* GIFT WALLET PATH */}
+          <Stack.Screen name="GiftWalletHome" component={GiftWalletHome} />
+          <Stack.Screen name="AmountToGift" component={AmountToGift} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{

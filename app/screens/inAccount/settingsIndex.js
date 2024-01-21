@@ -41,12 +41,13 @@ const GENERALOPTIONS = [
     icon: ICONS.colorIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  // {
-  //   for: 'general',
-  //   name: 'Notifications',
-  //   icon: ICONS.notificationsIcon,
-  //   arrowIcon: ICONS.leftCheveronIcon,
-  // },
+  {
+    for: 'general',
+    name: 'Gift Wallet',
+    icon: ICONS.walletBlueIcon,
+    arrowIcon: ICONS.leftCheveronIcon,
+    usesStandAlonePath: true,
+  },
 ];
 const SECURITYOPTIONS = [
   {
@@ -106,6 +107,10 @@ export default function SettingsIndex(props) {
           style={styles.listContainer}
           key={id}
           onPress={() => {
+            if (element?.usesStandAlonePath) {
+              navigate.navigate('GiftWalletHome');
+              return;
+            }
             navigate.navigate('SettingsContentHome', {for: element.name});
             // setSettingsContent({isDisplayed: true, for: element.name});
           }}>
