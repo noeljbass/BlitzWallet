@@ -118,7 +118,17 @@ export default function AmountToGift() {
                     });
                   }}
                 />
-                <Text style={styles.satText}>Sat</Text>
+                <Text
+                  style={[
+                    styles.satText,
+                    {
+                      transform: [
+                        {translateY: Platform.OS === 'ios' ? 0 : -10},
+                      ],
+                    },
+                  ]}>
+                  Sat
+                </Text>
               </View>
               <View>
                 <Text>
@@ -139,7 +149,7 @@ export default function AmountToGift() {
                 {
                   backgroundColor: COLORS.primary,
                   marginTop: 'auto',
-                  marginBottom: 10,
+                  marginBottom: Platform.OS === 'ios' ? 10 : 35,
                   ...CENTER,
                 },
               ]}>
@@ -205,11 +215,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  inputContainer: {flexDirection: 'row', alignItems: 'baseline'},
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
 
   sendingAmtBTC: {
     fontSize: SIZES.xxLarge,
     fontFamily: FONT.Title_Regular,
+
+    padding: 0,
   },
 
   satText: {
