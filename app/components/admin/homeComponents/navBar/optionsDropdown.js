@@ -86,9 +86,7 @@ export function OptionsDropdown(props) {
             style={[
               styles.navItemName,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {item.name}
@@ -126,7 +124,7 @@ export function OptionsDropdown(props) {
         styles.globalContainer,
         {height: fadeAnim},
         {
-          backgroundColor: props.isDarkMode
+          backgroundColor: props.theme
             ? COLORS.darkModeBackgroundOffset
             : COLORS.lightModeBackgroundOffset,
         },

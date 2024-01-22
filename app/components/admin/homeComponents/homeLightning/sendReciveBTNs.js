@@ -3,7 +3,7 @@ import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 
-export function SendRecieveBTNs(props) {
+export function SendRecieveBTNs() {
   const navigate = useNavigation();
 
   return (
@@ -18,7 +18,7 @@ export function SendRecieveBTNs(props) {
             (async () => {
               const areSettingsSet = await handleSettingsCheck();
               if (!areSettingsSet) return;
-              navigate.navigate('SendBTC', {isDarkMode: props.theme});
+              navigate.navigate('SendBTC');
             })();
           }}
           style={styles.button}>
@@ -29,7 +29,7 @@ export function SendRecieveBTNs(props) {
             (async () => {
               const areSettingsSet = await handleSettingsCheck();
               if (!areSettingsSet) return;
-              navigate.navigate('ReceiveBTC', {isDarkMode: props.theme});
+              navigate.navigate('ReceiveBTC');
             })();
           }}
           style={styles.button}>

@@ -16,10 +16,9 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 import {useEffect, useState} from 'react';
 import {createExcellWorkbook, getLocalStorageItem} from '../../functions';
 
-export default function ViewAllTxPage(props) {
-  const breezInformation = props.route.params.breezInformation;
+export default function ViewAllTxPage() {
   const navigate = useNavigation();
-  const {theme} = useGlobalContextProvider();
+  const {theme, nodeInformation} = useGlobalContextProvider();
   const [showAmount, setShowAmount] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -77,7 +76,7 @@ export default function ViewAllTxPage(props) {
         </View>
 
         <UserTransactions
-          transactions={breezInformation.transactions}
+          transactions={nodeInformation.transactions}
           theme={theme}
           showAmount={showAmount}
           numTx={'all'}

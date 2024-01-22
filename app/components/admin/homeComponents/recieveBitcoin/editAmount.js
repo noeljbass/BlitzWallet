@@ -18,7 +18,6 @@ export default function EditAmountPopup(props) {
   const [numSats, setNumSats] = useState('');
   const [description, setdescription] = useState('');
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  // const props.isDarkMode = useColorScheme() === 'dark';
 
   function fadeIn() {
     Animated.timing(fadeAnim, {
@@ -64,7 +63,7 @@ export default function EditAmountPopup(props) {
             style={[
               styles.inputContainer,
               {
-                backgroundColor: props.isDarkMode
+                backgroundColor: props.theme
                   ? COLORS.darkModeBackground
                   : COLORS.lightModeBackground,
               },
@@ -73,7 +72,7 @@ export default function EditAmountPopup(props) {
               style={[
                 styles.inputHeader,
                 {
-                  color: props.isDarkMode
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
@@ -84,14 +83,17 @@ export default function EditAmountPopup(props) {
               style={[
                 styles.input,
                 {
-                  borderColor: props.isDarkMode
+                  borderColor: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                  color: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
               ]}
               placeholder="Amount (sat)"
               placeholderTextColor={
-                props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+                props.theme ? COLORS.darkModeText : COLORS.lightModeText
               }
               onChangeText={setNumSats}
               keyboardType="numeric"
@@ -101,14 +103,14 @@ export default function EditAmountPopup(props) {
               style={[
                 styles.input,
                 {
-                  borderColor: props.isDarkMode
+                  borderColor: props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
                 },
               ]}
               placeholder="Description (optional)"
               placeholderTextColor={
-                props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
+                props.theme ? COLORS.darkModeText : COLORS.lightModeText
               }
               onChangeText={setdescription}
               value={description}

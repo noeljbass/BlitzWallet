@@ -61,9 +61,7 @@ export default function LightningPage(props) {
         {generatingQrCode && (
           <ActivityIndicator
             size="large"
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
           />
         )}
         {!generatingQrCode && (
@@ -74,11 +72,9 @@ export default function LightningPage(props) {
                 ? props.generatedAddress
                 : 'Thanks for using Blitz!'
             }
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
             backgroundColor={
-              props.isDarkMode
+              props.theme
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground
             }
@@ -90,9 +86,7 @@ export default function LightningPage(props) {
           style={[
             styles.valueAmountText,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           {(props.sendingAmount / 1000).toLocaleString()} sat /{' '}
@@ -103,9 +97,7 @@ export default function LightningPage(props) {
           style={[
             styles.valueAmountText,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           {props.paymentDescription

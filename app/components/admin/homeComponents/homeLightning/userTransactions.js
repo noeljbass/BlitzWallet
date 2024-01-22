@@ -10,9 +10,11 @@ import {
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export function UserTransactions(props) {
   const [txs, setTxs] = useState([]);
+  const {nodeInformation, theme} = useGlobalContextProvider();
   const navigate = useNavigation();
 
   useEffect(() => {
@@ -21,35 +23,41 @@ export function UserTransactions(props) {
         <Text
           style={[
             styles.noTransactionsText,
-            {color: props.theme ? COLORS.darkModeText : COLORS.lightModeText},
+            {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
           ]}>
           Send or receive a transaction for it to show up here
         </Text>
       </View>,
     ]);
 
-    if (props.transactions.length === 0) return;
+    if (nodeInformation.transactions.length === 0) return;
 
-    setTransactionElements(setTxs, props, navigate);
-  }, [props.transactions, props.showAmount, props.theme, props.numTx]);
+    setTransactionElements(setTxs, props, navigate, nodeInformation, theme);
+  }, [nodeInformation, props.showAmount, theme, props.numTx]);
 
   return <View style={{flex: 1}}>{txs}</View>;
 }
 
-function setTransactionElements(setTxs, props, navigate) {
+function setTransactionElements(
+  setTxs,
+  props,
+  navigate,
+  nodeInformation,
+  theme,
+) {
   let formattedTxs = [];
   let currentGroupedDate = '';
 
   const amountOfTxArr =
     typeof props.numTx === 'number'
-      ? props.transactions.slice(0, props.numTx)
-      : props.transactions;
+      ? nodeInformation.transactions.slice(0, props.numTx)
+      : nodeInformation.transactions;
 
   amountOfTxArr.forEach((tx, id) => {
     const paymentDate = new Date(tx.paymentTime * 1000);
     const styledTx = (
       <UserTransaction
-        theme={props.theme}
+        theme={theme}
         showAmount={props.showAmount}
         key={id}
         {...tx}
@@ -60,7 +68,7 @@ function setTransactionElements(setTxs, props, navigate) {
     if (id === 0 || currentGroupedDate != paymentDate.toDateString()) {
       currentGroupedDate = paymentDate.toDateString();
 
-      formattedTxs.push(dateBanner(paymentDate.toDateString(), props.theme));
+      formattedTxs.push(dateBanner(paymentDate.toDateString(), theme));
     }
 
     formattedTxs.push(styledTx);
@@ -76,15 +84,13 @@ function setTransactionElements(setTxs, props, navigate) {
         <View style={styles.mostRecentTxContainer}>
           <Text
             style={{
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             }}>
             Most recent {props.numTx} transactions
           </Text>
           <TouchableOpacity
             onPress={() => {
-              navigate.navigate('ViewAllTxPage', {
-                breezInformation: props.breezInformation,
-              });
+              navigate.navigate('ViewAllTxPage');
             }}>
             <Text style={{color: COLORS.primary}}>See all transactions</Text>
           </TouchableOpacity>
@@ -123,9 +129,7 @@ function UserTransaction(props) {
       activeOpacity={0.5}
       onPress={() => {
         props.navigate.navigate('ExpandedTx', {
-          transactions: props.transactions,
           txId: props.details.data.paymentHash,
-          theme: props.theme,
         });
       }}>
       <View style={styles.transactionContainer}>

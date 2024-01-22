@@ -20,14 +20,9 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const isInitialRender = useRef(true);
-  const [breezInformation, setBreezInformation] = useState({
-    didConnectToNode: null,
-    transactions: [],
-    userBalance: 0,
-  });
   // const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme} = useGlobalContextProvider();
+  const {theme, setNodeInformation} = useGlobalContextProvider();
 
   // SDK events listener
 
@@ -39,6 +34,8 @@ export default function AdminHome({navigation: {navigate}, route}) {
       e?.type != 'paymentFailed'
     )
       return;
+    console.log('DID MAKE IT THROUGH LOGIC');
+    console.log(e);
 
     setBreezEvent(e);
   };
@@ -46,7 +43,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
   useEffect(() => {
     initWallet(
       isInitialRender,
-      setBreezInformation,
+      setNodeInformation,
       breezEvent,
       onBreezEvent,
       // setErrMessage,
@@ -64,31 +61,26 @@ export default function AdminHome({navigation: {navigate}, route}) {
         },
       ]}>
       <SafeAreaView style={styles.container}>
-        <NavBar
-          breezInformation={breezInformation}
-          breezEvent={breezEvent}
-          theme={theme}
-        />
-        <HomeLightning
-          breezEvent={breezEvent}
-          breezInformation={breezInformation}
-          theme={theme}
-        />
+        <NavBar breezEvent={breezEvent} />
+        <HomeLightning breezEvent={breezEvent} />
       </SafeAreaView>
     </View>
   );
 }
 
-async function initBalanceAndTransactions(setBreezInformation) {
+async function initBalanceAndTransactions(setNodeInformation) {
   try {
     const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
     if (savedBreezInfo) {
-      setBreezInformation(prev => {
+      setNodeInformation(prev => {
         return {
           ...prev,
           transactions: JSON.parse(savedBreezInfo)[0],
           userBalance: JSON.parse(savedBreezInfo)[1],
+          inboundLiquidityMsat: JSON.parse(savedBreezInfo)[2],
+          blockHeight: JSON.parse(savedBreezInfo)[3],
+          onChainBalance: JSON.parse(savedBreezInfo)[4],
         };
       });
     }
@@ -96,10 +88,9 @@ async function initBalanceAndTransactions(setBreezInformation) {
     console.log(err);
   }
 }
-
 async function initWallet(
   isInitialRender,
-  setBreezInformation,
+  setNodeInformation,
   breezEvent,
   onBreezEvent,
   // setErrMessage,
@@ -110,7 +101,7 @@ async function initWallet(
     console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
     isInitialRender.current = false;
 
-    initBalanceAndTransactions(setBreezInformation);
+    initBalanceAndTransactions(setNodeInformation);
 
     try {
       const response = await connectToNode(onBreezEvent);
@@ -124,28 +115,36 @@ async function initWallet(
         const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
 
         if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
-
         // await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 
         // console.log(nodeAmount);
 
-        setBreezInformation(prev => {
+        setNodeInformation(prev => {
           return {
             ...prev,
             didConnectToNode: response.isConnected,
             transactions: transactions,
             userBalance: msatToSat,
+            inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
+            blockHeight: nodeAmount.blockHeight,
+            onChainBalance: nodeAmount.onchainBalanceMsat,
           };
         });
 
         await setLocalStorageItem(
           'breezInfo',
-          JSON.stringify([transactions, msatToSat]),
+          JSON.stringify([
+            transactions,
+            msatToSat,
+            nodeAmount.inboundLiquidityMsats,
+            nodeAmount.blockHeight,
+            nodeAmount.onchainBalanceMsat,
+          ]),
         );
       } else if (response.isConnected && !response.reason) {
-        setBreezInformation(prev => {
+        setNodeInformation(prev => {
           return {
             ...prev,
             didConnectToNode: response.isConnected,
@@ -163,17 +162,26 @@ async function initWallet(
 
     const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
 
-    setBreezInformation(prev => {
+    setNodeInformation(prev => {
       return {
         ...prev,
-        userBalance: msatToSat,
         transactions: transactions,
+        userBalance: msatToSat,
+        inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
+        blockHeight: nodeAmount.blockHeight,
+        onChainBalance: nodeAmount.onchainBalanceMsat,
       };
     });
 
     await setLocalStorageItem(
       'breezInfo',
-      JSON.stringify([transactions, msatToSat]),
+      JSON.stringify([
+        transactions,
+        msatToSat,
+        nodeAmount.inboundLiquidityMsats,
+        nodeAmount.blockHeight,
+        nodeAmount.onchainBalanceMsat,
+      ]),
     );
 
     console.log('HOME RENDER PAID INVOINCE');

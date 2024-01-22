@@ -37,9 +37,7 @@ export default function BitcoinPage(props) {
         {generatingQrCode && (
           <ActivityIndicator
             size="large"
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
           />
         )}
         {!generatingQrCode && (
@@ -50,11 +48,9 @@ export default function BitcoinPage(props) {
                 ? props.generatedAddress
                 : 'Thanks for using Blitz!'
             }
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
             backgroundColor={
-              props.isDarkMode
+              props.theme
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground
             }
@@ -67,9 +63,7 @@ export default function BitcoinPage(props) {
             style={[
               styles.feeHeaderText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Lightning Fee Calculator
@@ -92,7 +86,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownDescriptor,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -103,7 +97,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownValue,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -116,7 +110,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownDescriptor,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -127,7 +121,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownValue,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -140,7 +134,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownDescriptor,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -151,7 +145,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownValue,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -164,7 +158,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownDescriptor,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },
@@ -175,7 +169,7 @@ export default function BitcoinPage(props) {
                 style={[
                   styles.feeBreakdownValue,
                   {
-                    color: props.isDarkMode
+                    color: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
                   },

@@ -23,10 +23,10 @@ export default function EnterAmount(props) {
           styles.inputContainer,
           {
             marginTop: 'auto',
-            backgroundColor: props.isDarkMode
+            backgroundColor: props.theme
               ? COLORS.darkModeBackgroundOffset
               : COLORS.lightModeBackgroundOffset,
-            borderColor: props.isDarkMode
+            borderColor: props.theme
               ? COLORS.darkModeText
               : COLORS.lightModeText,
           },
@@ -43,9 +43,7 @@ export default function EnterAmount(props) {
           style={[
             styles.inputField,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}
           keyboardType="number-pad"
@@ -59,9 +57,7 @@ export default function EnterAmount(props) {
             style={[
               styles.feeLabel,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Network Fee
@@ -70,9 +66,7 @@ export default function EnterAmount(props) {
             style={[
               styles.feeText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {props.feeInfo.liquidFee}
@@ -83,9 +77,7 @@ export default function EnterAmount(props) {
             style={[
               styles.feeLabel,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Boltz Fee (0.1%)
@@ -94,9 +86,7 @@ export default function EnterAmount(props) {
             style={[
               styles.feeText,
               {
-                color: props.isDarkMode
-                  ? COLORS.darkModeText
-                  : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             {(props.feeInfo.boltzFeePercent * props.liquidAmount).toFixed(2)}
@@ -108,7 +98,7 @@ export default function EnterAmount(props) {
           styles.inputContainer,
           {
             backgroundColor: COLORS.opaicityGray,
-            borderColor: props.isDarkMode
+            borderColor: props.theme
               ? COLORS.darkModeText
               : COLORS.lightModeText,
           },

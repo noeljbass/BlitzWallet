@@ -9,7 +9,6 @@ import {
 import {FONT, SIZES, CENTER, ICONS, COLORS} from '../../../../constants';
 
 export default function TopBar(props) {
-  // const props.isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.topbar}>
       <TouchableOpacity activeOpacity={1} onPress={props.clear}>
@@ -23,9 +22,7 @@ export default function TopBar(props) {
         style={[
           styles.navText,
           {
-            color: props.isDarkMode
-              ? COLORS.darkModeText
-              : COLORS.lightModeText,
+            color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
           },
         ]}>
         Receive

@@ -11,6 +11,7 @@ import {useState} from 'react';
 import {OptionsDropdown} from './navBar/optionsDropdown';
 import {FaucetHome} from './faucet';
 import {useNavigation} from '@react-navigation/native';
+import {useGlobalContextProvider} from '../../../../context-store/context';
 
 export default function NavBar(props) {
   console.log('NAV BAR PAGE');
@@ -19,29 +20,17 @@ export default function NavBar(props) {
   });
   const [fucet, setFaucet] = useState(false);
   const navigate = useNavigation();
+  const {nodeInformation, theme} = useGlobalContextProvider();
 
   return (
     <View style={styles.topBar}>
       <Image source={ICONS.wordmark} style={{width: 150, height: 17}} />
-      {/* <Text
-        style={[
-          styles.topBarName,
-          {
-            color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-          },
-        ]}>
-        Blitz Wallet
-      </Text> */}
       <View style={styles.iconContainer}>
         <TouchableOpacity
-          onPress={() =>
-            navigate.navigate('ConnectionToNode', {
-              isDarkMode: props.theme,
-            })
-          }
+          onPress={() => navigate.navigate('ConnectionToNode')}
           style={{
             ...styles.icons,
-            backgroundColor: props.breezInformation.didConnectToNode
+            backgroundColor: nodeInformation.didConnectToNode
               ? COLORS.connectedNodeColor
               : COLORS.notConnectedNodeColor,
           }}>
@@ -49,15 +38,13 @@ export default function NavBar(props) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigate.navigate('ViewAllTxPage', {
-              breezInformation: props.breezInformation,
-            });
+            navigate.navigate('ViewAllTxPage');
           }}
           activeOpacity={0.5}
           style={[
             styles.icons,
             {
-              backgroundColor: props.theme
+              backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -67,14 +54,14 @@ export default function NavBar(props) {
         {/* <TouchableOpacity
           onPress={() => {
             navigate.navigate('ContactsPage', {
-              isDarkMode: props.theme,
+              isDarkMode: theme,
             });
           }}
           activeOpacity={0.5}
           style={[
             styles.icons,
             {
-              backgroundColor: props.theme
+              backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -89,7 +76,7 @@ export default function NavBar(props) {
           style={[
             styles.icons,
             {
-              backgroundColor: props.theme
+              backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -100,7 +87,7 @@ export default function NavBar(props) {
           style={[
             styles.icons,
             {
-              backgroundColor: props.theme
+              backgroundColor: theme
                 ? COLORS.darkModeBackgroundOffset
                 : COLORS.lightModeBackgroundOffset,
             },
@@ -118,7 +105,7 @@ export default function NavBar(props) {
           setNavViews={setNavViews}
           isDisplayed={navViews.features}
           setFaucet={setFaucet}
-          isDarkMode={props.theme}
+          theme={theme}
         />
       </View>
 
@@ -126,7 +113,7 @@ export default function NavBar(props) {
         breezEvent={props.breezEvent}
         setFaucet={setFaucet}
         isDisplayed={fucet}
-        isDarkMode={props.theme}
+        isDarkMode={theme}
       />
     </View>
   );

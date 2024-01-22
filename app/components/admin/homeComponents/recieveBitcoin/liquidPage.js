@@ -60,9 +60,7 @@ export default function LiquidPage(props) {
           ]}>
           <ActivityIndicator
             size="large"
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
             style={{
               marginTop: 'auto',
               marginBottom: 'auto',
@@ -87,7 +85,7 @@ export default function LiquidPage(props) {
               liquidAmount={liquidAmount}
               setProcessStage={setProcessStage}
               feeInfo={feeInfo}
-              isDarkMode={props.isDarkMode}
+              theme={props.theme}
               setIsSwapCreated={props.setIsSwapCreated}
             />
           )}
@@ -95,7 +93,7 @@ export default function LiquidPage(props) {
             <QrCodePage
               liquidAmount={liquidAmount}
               feeInfo={feeInfo}
-              isDarkMode={props.isDarkMode}
+              theme={props.theme}
               setGeneratedAddress={props.setGeneratedAddress}
               generatedAddress={props.generatedAddress}
             />

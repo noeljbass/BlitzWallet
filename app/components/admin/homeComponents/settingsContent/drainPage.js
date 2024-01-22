@@ -14,21 +14,19 @@ import {
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
-import {fetchFiatRates, nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {fetchFiatRates} from '@breeztech/react-native-breez-sdk';
 import {getLocalStorageItem} from '../../../../functions';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
-// TEXT INPUT CAUSES LAUNCH SCREEN TO FAIL
-export default function DrainPage(props) {
+
+export default function DrainPage() {
   const isInitialRender = useRef(true);
   const [wantsToDrain, setWantsToDrain] = useState(false);
   const [fiatRate, setFiatRate] = useState(0);
-  const {theme} = useGlobalContextProvider();
+  const {theme, nodeInformation} = useGlobalContextProvider();
   const navigate = useNavigation();
   const [bitcoinAddress, setBitcoinAddress] = useState('');
-  const [node_info, setNode_info] = useState({});
 
-  console.log(fiatRate);
   useEffect(() => {
     if (isInitialRender.current) {
       initPage();
@@ -70,12 +68,7 @@ export default function DrainPage(props) {
                     color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
-                {Object.keys(node_info).length === 0
-                  ? '---'
-                  : Math.ceil(
-                      node_info.channelsBalanceMsat / 1000,
-                    ).toLocaleString()}{' '}
-                sats
+                {Math.round(nodeInformation.userBalance).toLocaleString()} sats
               </Text>
               <Text
                 style={[
@@ -85,12 +78,11 @@ export default function DrainPage(props) {
                   },
                 ]}>
                 = $
-                {Object.keys(node_info).length === 0
-                  ? '---'
-                  : Math.round(
-                      (node_info.channelsBalanceMsat / 1000) *
-                        (fiatRate / 100000000),
-                    )}{' '}
+                {fiatRate != 0
+                  ? Math.round(
+                      nodeInformation.userBalance * (fiatRate / 100000000),
+                    )
+                  : '---'}{' '}
                 usd
               </Text>
             </View>
@@ -166,7 +158,6 @@ export default function DrainPage(props) {
     try {
       const userSelectedFiat = await getLocalStorageItem('currency');
       const fiat = await fetchFiatRates();
-      const nodeInformation = await nodeInfo();
 
       const [fiatRate] = fiat.filter(rate => {
         return rate.coin.toLowerCase() === userSelectedFiat.toLowerCase();
@@ -174,7 +165,6 @@ export default function DrainPage(props) {
       if (!fiatRate) return;
 
       setFiatRate(fiatRate.value);
-      setNode_info(nodeInformation);
     } catch (err) {
       console.log(err);
     }

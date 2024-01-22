@@ -9,26 +9,28 @@ import {COLORS, FONT, ICONS, SIZES, SHADOWS} from '../../constants';
 import {useEffect, useState} from 'react';
 import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 import {useNavigation} from '@react-navigation/native';
+import {useGlobalContextProvider} from '../../../context-store/context';
 
-export function ConnectionToNode(props) {
-  const [nodeInformation, setNodeInformation] = useState({});
-  const [isConnected, setIsConnected] = useState(false);
+export function ConnectionToNode() {
+  // const [nodeInformation, setNodeInformation] = useState({});
+  // const [isConnected, setIsConnected] = useState(false);
   const navigate = useNavigation();
-  const isDarkMode = props.route.params?.isDarkMode;
 
-  async function getNodeData() {
-    try {
-      const nodeInformatino = await nodeInfo();
-      setNodeInformation(nodeInformatino);
-      setIsConnected(true);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  const {nodeInformation, theme} = useGlobalContextProvider();
 
-  useEffect(() => {
-    getNodeData();
-  }, []);
+  // async function getNodeData() {
+  //   try {
+  //     const nodeInformatino = await nodeInfo();
+  //     setNodeInformation(nodeInformatino);
+  //     setIsConnected(true);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getNodeData();
+  // }, []);
 
   return (
     <TouchableWithoutFeedback onPress={() => navigate.goBack()}>
@@ -37,7 +39,7 @@ export function ConnectionToNode(props) {
           style={[
             styles.innerContainer,
             {
-              backgroundColor: isDarkMode
+              backgroundColor: theme
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground,
             },
@@ -51,23 +53,21 @@ export function ConnectionToNode(props) {
               style={[
                 styles.topContainerText,
                 {
-                  color: isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
-              {isConnected ? 'Connected' : 'Not Connected'}
+              {nodeInformation.didConnectToNode ? 'Connected' : 'Not Connected'}
             </Text>
           </View>
           <Text
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Block height:{' '}
-            {isConnected
+            {nodeInformation.didConnectToNode
               ? nodeInformation?.blockHeight?.toLocaleString()
               : 'N/A'}
           </Text>
@@ -75,36 +75,36 @@ export function ConnectionToNode(props) {
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Max Payable:{' '}
-            {isConnected
-              ? (nodeInformation?.maxPayableMsat / 1000).toLocaleString()
+            {nodeInformation.didConnectToNode
+              ? (nodeInformation?.userBalance).toLocaleString()
               : 'N/A'}
           </Text>
           <Text
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             Max Recivable:{' '}
-            {isConnected
-              ? (nodeInformation?.inboundLiquidityMsats / 1000).toLocaleString()
+            {nodeInformation.didConnectToNode
+              ? (nodeInformation?.inboundLiquidityMsat / 1000).toLocaleString()
               : 'N/A'}
           </Text>
           <Text
             style={[
               styles.itemText,
               {
-                color: isDarkMode ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             On-chain Balance:{' '}
-            {isConnected
-              ? (nodeInformation?.onchainBalanceMsat / 1000).toLocaleString()
+            {nodeInformation.didConnectToNode
+              ? (nodeInformation?.onChainBalance / 1000).toLocaleString()
               : 'N/A'}
           </Text>
         </View>

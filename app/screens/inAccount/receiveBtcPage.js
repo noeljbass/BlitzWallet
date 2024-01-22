@@ -22,6 +22,7 @@ import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
 
 import {getLocalStorageItem} from '../../functions';
+import {useGlobalContextProvider} from '../../../context-store/context';
 
 export function ReceivePaymentHome(props) {
   const isInitialRender = useRef(true);
@@ -42,8 +43,8 @@ export function ReceivePaymentHome(props) {
     useState('lightning');
   const [isSwapCreated, setIsSwapCreated] = useState(false);
   const navigate = useNavigation();
-  const isDarkMode = props.route.params.isDarkMode;
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
+  const {theme} = useGlobalContextProvider();
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -64,7 +65,7 @@ export function ReceivePaymentHome(props) {
     <View
       style={{
         flex: 1,
-        backgroundColor: isDarkMode
+        backgroundColor: theme
           ? COLORS.darkModeBackground
           : COLORS.lightModeBackground,
         paddingVertical: Device.osName === 'ios' ? 0 : 10,
@@ -78,14 +79,12 @@ export function ReceivePaymentHome(props) {
           }}>
           <View style={{flex: 1}}>
             <SafeAreaView style={{flex: 1}}>
-              <TopBar isDarkMode={isDarkMode} clear={clear} />
+              <TopBar theme={theme} clear={clear} />
               <Text
                 style={[
                   styles.title,
                   {
-                    color: isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 {selectedRecieveOption[0].toUpperCase() +
@@ -95,7 +94,7 @@ export function ReceivePaymentHome(props) {
               <NavBar
                 selectedRecieveOption={selectedRecieveOption}
                 setSelectedRecieveOption={setSelectedRecieveOption}
-                isDarkMode={isDarkMode}
+                theme={theme}
               />
 
               {/*PAGES*/}
@@ -107,7 +106,7 @@ export function ReceivePaymentHome(props) {
                   generatedAddress={generatedAddress}
                   paymentDescription={paymentDescription.lightning}
                   setGeneratedAddress={setGeneratedAddress}
-                  isDarkMode={isDarkMode}
+                  theme={theme}
                   userSelectedCurrency={userSelectedCurrency}
                 />
               )}
@@ -116,13 +115,13 @@ export function ReceivePaymentHome(props) {
                   selectedRecieveOption={selectedRecieveOption}
                   setGeneratedAddress={setGeneratedAddress}
                   generatedAddress={generatedAddress}
-                  isDarkMode={isDarkMode}
+                  theme={theme}
                 />
               )}
               {selectedRecieveOption === 'liquid' && (
                 <LiquidPage
                   selectedRecieveOption={selectedRecieveOption}
-                  isDarkMode={isDarkMode}
+                  theme={theme}
                   setIsSwapCreated={setIsSwapCreated}
                   setGeneratedAddress={setGeneratedAddress}
                   generatedAddress={generatedAddress}
@@ -146,6 +145,7 @@ export function ReceivePaymentHome(props) {
               isDisplayed={editPaymentPopup}
               setIsDisplayed={setEditPaymentPopup}
               setUpdateQRCode={setUpdateQRCode}
+              theme={theme}
             />
           </View>
         </TouchableWithoutFeedback>

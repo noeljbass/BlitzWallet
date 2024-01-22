@@ -55,9 +55,7 @@ export default function QrCodePage(props) {
         {generatingQrCode && (
           <ActivityIndicator
             size="large"
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
           />
         )}
         {!generatingQrCode && (
@@ -66,11 +64,9 @@ export default function QrCodePage(props) {
             value={
               props.generatedAddress ? props.generatedAddress : 'lets swap'
             }
-            color={
-              props.isDarkMode ? COLORS.darkModeText : COLORS.lightModeText
-            }
+            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
             backgroundColor={
-              props.isDarkMode
+              props.theme
                 ? COLORS.darkModeBackground
                 : COLORS.lightModeBackground
             }
@@ -82,9 +78,7 @@ export default function QrCodePage(props) {
           style={[
             styles.statusTitle,
             {
-              color: props.isDarkMode
-                ? COLORS.darkModeText
-                : COLORS.lightModeText,
+              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           Status:
@@ -99,7 +93,7 @@ export default function QrCodePage(props) {
                   evenSource === '{"status":"transaction.mempool"}' ||
                   evenSource === '{"status":"invoice.pending"}'
                     ? 'green'
-                    : props.isDarkMode
+                    : props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
               },
@@ -114,7 +108,7 @@ export default function QrCodePage(props) {
                   evenSource === '{"status":"transaction.mempool"}' ||
                   evenSource === '{"status":"invoice.pending"}'
                     ? 'green'
-                    : props.isDarkMode
+                    : props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
               },
@@ -128,7 +122,7 @@ export default function QrCodePage(props) {
                 color:
                   evenSource === '{"status":"invoice.pending"}'
                     ? 'green'
-                    : props.isDarkMode
+                    : props.theme
                     ? COLORS.darkModeText
                     : COLORS.lightModeText,
               },

@@ -11,6 +11,14 @@ const GlobalContextProvider = ({children}) => {
   const useSystemTheme = useColorScheme() === 'dark';
   const [theme, setTheme] = useState(null);
   const [userTxPreferance, setUserTxPereferance] = useState(null);
+  const [nodeInformation, setNodeInformation] = useState({
+    didConnectToNode: null,
+    transactions: [],
+    userBalance: 0,
+    inboundLiquidityMsat: 0,
+    blockHeight: 0,
+    onChainBalance: 0,
+  });
 
   function toggleTheme(peram) {
     setStatusBarStyle(peram ? 'light' : 'dark');
@@ -54,6 +62,8 @@ const GlobalContextProvider = ({children}) => {
         toggleTheme,
         userTxPreferance,
         toggleUserTxPreferance,
+        nodeInformation,
+        setNodeInformation,
       }}>
       {children}
     </GlobalContextManger.Provider>

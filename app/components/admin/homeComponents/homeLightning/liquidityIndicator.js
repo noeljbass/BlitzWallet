@@ -1,26 +1,22 @@
 import {StyleSheet, Text, View} from 'react-native';
 import {CENTER, COLORS, FONT, SIZES} from '../../../../constants';
 import {useEffect, useState} from 'react';
-import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
-export default function LiquidityIndicator(props) {
+export default function LiquidityIndicator() {
+  const {nodeInformation, theme} = useGlobalContextProvider();
   const [sendWitdh, setsendWitdh] = useState(0);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const {channelsBalanceMsat, inboundLiquidityMsats} = await nodeInfo();
-        const calculatedWidth = (
-          (channelsBalanceMsat /
-            (channelsBalanceMsat + inboundLiquidityMsats)) *
-          200
-        ).toFixed(0);
-        setsendWitdh(Number(calculatedWidth));
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, [props.breezInformation]);
+    const calculatedWidth = (
+      (nodeInformation.userBalance /
+        (nodeInformation.userBalance +
+          nodeInformation.inboundLiquidityMsat / 1000)) *
+      200
+    ).toFixed(0);
+    setsendWitdh(Number(calculatedWidth));
+  }, [nodeInformation]);
+
   return (
     <View style={styles.container}>
       <Text style={[styles.typeText, {color: COLORS.primary}]}>Send</Text>
@@ -28,7 +24,7 @@ export default function LiquidityIndicator(props) {
         style={[
           styles.sliderBar,
           {
-            backgroundColor: props.theme
+            backgroundColor: theme
               ? COLORS.lightModeBackground
               : COLORS.darkModeBackground,
           },
@@ -45,7 +41,7 @@ export default function LiquidityIndicator(props) {
         style={[
           styles.typeText,
           {
-            color: props.theme
+            color: theme
               ? COLORS.lightModeBackground
               : COLORS.darkModeBackground,
           },

@@ -14,10 +14,9 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 export default function ExpandedTx(props) {
   console.log('Transaction Detials Page');
   const navigate = useNavigation();
-  // const theme = props.route.params.theme;
-  const {theme, toggleTheme} = useGlobalContextProvider();
+  const {theme, nodeInformation} = useGlobalContextProvider();
 
-  const [selectedTX] = props.route.params?.transactions?.filter(tx => {
+  const [selectedTX] = nodeInformation.transactions?.filter(tx => {
     return props.route.params.txId === tx.details.data.paymentHash;
   });
   setStatusBarStyle('light');

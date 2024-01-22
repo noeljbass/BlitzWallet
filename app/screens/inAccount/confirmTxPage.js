@@ -17,7 +17,7 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 export default function ConfirmTxPage(props) {
   const navigate = useNavigation();
   const information = props.route.params?.information;
-  const {theme} = useGlobalContextProvider();
+  const {theme, nodeInformation} = useGlobalContextProvider();
   setStatusBarStyle('light');
 
   // useEffect(() => {

@@ -5,27 +5,14 @@ import {deleteItem} from '../../../../functions/secureStore';
 import {removeLocalStorageItem} from '../../../../functions/localStorage';
 import RNRestart from 'react-native-restart';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
-import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
-export default function ResetPage(props) {
+export default function ResetPage() {
   const [selectedOptions, setSelectedOptions] = useState({
     seed: false,
     paymentHistory: false,
     pin: false,
   });
-  const {theme} = useGlobalContextProvider();
-  const [node_info, setNode_info] = useState({});
-  console.log(props);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const nodeInformation = await nodeInfo();
-        setNode_info(nodeInformation);
-        // console.log(nodeInformation);
-      } catch (err) {}
-    })();
-  }, []);
+  const {theme, nodeInformation} = useGlobalContextProvider();
 
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
@@ -175,8 +162,7 @@ export default function ResetPage(props) {
               color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
-          {Math.round(node_info.channelsBalanceMsat / 1000).toLocaleString()}{' '}
-          sats
+          {Math.round(nodeInformation.userBalance).toLocaleString()} sats
         </Text>
       </View>
       <TouchableOpacity

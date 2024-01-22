@@ -3,8 +3,11 @@ import {COLORS, FONT, SIZES} from '../../../../constants';
 
 import {useEffect, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export function UserSatAmount(props) {
+  const {nodeInformation, theme} = useGlobalContextProvider();
+
   useEffect(() => {
     (async () => {
       const displayAmount = JSON.parse(
@@ -30,7 +33,7 @@ export function UserSatAmount(props) {
           style={[
             combinedStyles.bitcoinText,
             {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
           BTC
@@ -41,12 +44,10 @@ export function UserSatAmount(props) {
             style={[
               styles.valueText,
               {
-                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            {formatBitcoinAmoutn(
-              props.breezInformation?.userBalance.toFixed(0),
-            )}
+            {formatBitcoinAmoutn(Math.round(nodeInformation.userBalance))}
           </Text>
         )}
         {!props.showAmount && (
@@ -54,7 +55,7 @@ export function UserSatAmount(props) {
             style={[
               styles.valueText,
               {
-                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
             * * * * *

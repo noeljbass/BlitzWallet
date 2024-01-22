@@ -78,12 +78,8 @@ export default function SettingsContentIndex(props) {
           <SeedPhrasePage theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'lsp' && <LSPPage theme={theme} />}
-        {selectedPage?.toLowerCase() === 'reset wallet' && (
-          <ResetPage theme={theme} />
-        )}
-        {selectedPage?.toLowerCase() === 'drain wallet' && (
-          <DrainPage theme={theme} />
-        )}
+        {selectedPage?.toLowerCase() === 'reset wallet' && <ResetPage />}
+        {selectedPage?.toLowerCase() === 'drain wallet' && <DrainPage />}
         {/* </View> */}
       </SafeAreaView>
     </View>

@@ -14,15 +14,15 @@ export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
   const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
-  const {userTxPreferance} = useGlobalContextProvider();
+  const {userTxPreferance, nodeInformation, theme} = useGlobalContextProvider();
 
   useEffect(() => {
     if (Object.keys(props.breezEvent).length === 0) return;
     if (props.breezEvent?.details?.payment?.description?.includes('bwrfd'))
       return;
-    if (navigate.canGoBack()) navigate.goBack();
+    if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
     navigate.navigate('ConfirmTxPage', {
-      theme: props.theme,
+      theme: theme,
       for: props.breezEvent.type,
       information: props.breezEvent,
     });
@@ -30,33 +30,19 @@ export default function HomeLightning(props) {
 
   return (
     <View style={style.globalContainer}>
-      <UserSatAmount
-        setShowAmount={setShowAmount}
-        showAmount={showAmount}
-        breezInformation={props.breezInformation}
-        theme={props.theme}
-      />
-      {!props.breezInformation.didConnectToNode ? (
+      <UserSatAmount setShowAmount={setShowAmount} showAmount={showAmount} />
+      {!nodeInformation.didConnectToNode ? (
         <View style={style.errorContainer}>
           <Text style={style.errorText}>
             Not connected to node. Balances and transactions may not be updated
           </Text>
         </View>
       ) : (
-        <LiquidityIndicator
-          breezInformation={props.breezInformation}
-          theme={props.theme}
-        />
+        <LiquidityIndicator />
       )}
 
-      <UserTransactions
-        transactions={props.breezInformation.transactions}
-        breezInformation={props.breezInformation}
-        theme={props.theme}
-        showAmount={showAmount}
-        numTx={userTxPreferance}
-      />
-      <SendRecieveBTNs theme={props.theme} />
+      <UserTransactions showAmount={showAmount} numTx={userTxPreferance} />
+      <SendRecieveBTNs />
     </View>
   );
 }
