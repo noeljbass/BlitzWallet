@@ -1,7 +1,15 @@
-import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
+import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
 export function SendRecieveBTNs() {
   const navigate = useNavigation();
@@ -17,7 +25,13 @@ export function SendRecieveBTNs() {
           onPress={() => {
             (async () => {
               const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) return;
+              if (!areSettingsSet) {
+                Alert.alert(
+                  'Not connected to your node',
+                  'To send and receive you must be connected to your node',
+                );
+                return;
+              }
               navigate.navigate('SendBTC');
             })();
           }}
@@ -28,7 +42,13 @@ export function SendRecieveBTNs() {
           onPress={() => {
             (async () => {
               const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) return;
+              if (!areSettingsSet) {
+                Alert.alert(
+                  'Not connected to your node',
+                  'To send and receive you must be connected to your node',
+                );
+                return;
+              }
               navigate.navigate('ReceiveBTC');
             })();
           }}
@@ -41,11 +61,18 @@ export function SendRecieveBTNs() {
 }
 
 async function handleSettingsCheck() {
-  const currency = await getLocalStorageItem('currency');
-  if (!currency) setLocalStorageItem('currency', 'USD');
-  return new Promise(resolve => {
-    resolve(true);
-  });
+  try {
+    await nodeInfo();
+    const currency = await getLocalStorageItem('currency');
+    if (!currency) setLocalStorageItem('currency', 'USD');
+    return new Promise(resolve => {
+      resolve(true);
+    });
+  } catch (err) {
+    return new Promise(resolve => {
+      resolve(false);
+    });
+  }
 }
 
 const styles = StyleSheet.create({

@@ -34,7 +34,8 @@ export default function HomeLightning(props) {
       {!nodeInformation.didConnectToNode ? (
         <View style={style.errorContainer}>
           <Text style={style.errorText}>
-            Not connected to node. Balances and transactions may not be updated
+            Not connected to node. Your balance and transactions may not be up
+            to date.
           </Text>
         </View>
       ) : (
@@ -69,5 +70,6 @@ const style = StyleSheet.create({
     fontFamily: FONT.Title_Bold,
     fontSize: SIZES.small,
     textAlign: 'center',
+    color: COLORS.lightModeText,
   },
 });

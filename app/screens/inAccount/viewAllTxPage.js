@@ -14,7 +14,7 @@ import icons from '../../constants/icons';
 import {UserTransactions} from '../../components/admin/homeComponents/homeLightning/userTransactions';
 import {useGlobalContextProvider} from '../../../context-store/context';
 import {useEffect, useState} from 'react';
-import {createExcellWorkbook, getLocalStorageItem} from '../../functions';
+import {getLocalStorageItem} from '../../functions';
 
 export default function ViewAllTxPage() {
   const navigate = useNavigation();

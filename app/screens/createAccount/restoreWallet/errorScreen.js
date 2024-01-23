@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontFamily: FONT.Title_Bold,
     textAlign: 'center',
+    color: COLORS.lightModeText,
   },
   BTNText: {
     fontSize: SIZES.large,

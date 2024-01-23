@@ -23,7 +23,7 @@ export default function CreateAccountHome({navigation: {navigate}}) {
           </View>
           <Text style={styles.title}>Blitz wallet</Text>
           <Text style={styles.sub_title}>
-            A non-custodial bitcoin lightning wallet.
+            A self-custodial bitcoin lightning wallet.
           </Text>
           <TouchableOpacity
             style={[BTN, {backgroundColor: COLORS.primary}]}

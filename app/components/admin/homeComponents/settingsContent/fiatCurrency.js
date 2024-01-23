@@ -5,6 +5,9 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {COLORS, FONT, SIZES} from '../../../../constants';
 import {listFiatCurrencies} from '@breeztech/react-native-breez-sdk';
@@ -101,45 +104,48 @@ export default function FiatCurrencyPage(props) {
             ]}>
             {currency.item.id}
           </Text>
-          {/* {currency.item.id?.toLowerCase() ===
-            currentCurrency?.toLowerCase() && (
-            <Image style={{width: 20, height: 20}} source={ICONS.Checkcircle} />
-          )} */}
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <View style={{width: '100%', height: '100%', alignItems: 'center'}}>
-        <TextInput
-          onKeyPress={handleKeyPress}
-          style={[
-            styles.input,
-            {
-              backgroundColor: theme
-                ? COLORS.darkModeBackgroundOffset
-                : COLORS.lightModeBackgroundOffset,
+    <View style={{flex: 1}}>
+      <KeyboardAvoidingView style={styles.container}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={{width: '100%', height: '100%', alignItems: 'center'}}>
+            <TextInput
+              onKeyPress={handleKeyPress}
+              style={[
+                styles.input,
+                {
+                  backgroundColor: theme
+                    ? COLORS.darkModeBackgroundOffset
+                    : COLORS.lightModeBackgroundOffset,
 
-              color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}
-          placeholderTextColor={
-            theme ? COLORS.darkModeText : COLORS.lightModeText
-          }
-          placeholder="Search currency"
-        />
-        {/* <ScrollView style={{flex: 1, width: '85%', height: '100%'}}> */}
-        <FlatList
-          style={{flex: 1, width: '90%'}}
-          data={listData}
-          renderItem={currency => <CurrencyElements {...currency} />}
-          keyExtractor={currency => currency.id}
-          showsVerticalScrollIndicator={false}
-        />
-        {/* </ScrollView> */}
-      </View>
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                },
+              ]}
+              placeholderTextColor={
+                theme ? COLORS.darkModeText : COLORS.lightModeText
+              }
+              placeholder="Search currency"
+            />
+
+            {listData.length === 0 ? (
+              <Text style={styles.errorText}>Not connected to node.</Text>
+            ) : (
+              <FlatList
+                style={{flex: 1, width: '90%'}}
+                data={listData}
+                renderItem={currency => <CurrencyElements {...currency} />}
+                keyExtractor={currency => currency.id}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 
@@ -217,6 +223,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
 
     borderBottomWidth: 1,
+  },
+
+  errorText: {
+    color: 'black',
+    fontFamily: FONT.Title_Bold,
+    fontSize: SIZES.large,
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
 
   currencyTitle: {

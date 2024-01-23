@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Keyboard,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {
@@ -44,6 +45,7 @@ export default function SettingsContentIndex(props) {
         <View style={styles.topbar}>
           <TouchableOpacity
             onPress={() => {
+              Keyboard.dismiss();
               navigate.goBack();
             }}>
             <Image style={styles.topBarIcon} source={ICONS.leftCheveronIcon} />
