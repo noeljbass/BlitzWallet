@@ -16,6 +16,7 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 export default function GiftWalletHome() {
   const navigate = useNavigation();
   const {theme} = useGlobalContextProvider();
+
   return (
     <View
       style={[
@@ -136,7 +137,7 @@ export default function GiftWalletHome() {
             onPress={() => {
               (async () => {
                 try {
-                  // await nodeInfo();
+                  await nodeInfo();
                   navigate.navigate('AmountToGift');
                 } catch (err) {
                   Alert.alert(

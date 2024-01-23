@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CENTER, COLORS, FONT, SIZES} from '../../../../constants';
 import {useEffect, useState} from 'react';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
@@ -7,48 +7,65 @@ export default function LiquidityIndicator() {
   const {nodeInformation, theme} = useGlobalContextProvider();
   const [sendWitdh, setsendWitdh] = useState(0);
 
+  const [showLiquidyAmount, setShowLiquidyAmount] = useState({
+    isShwon: false,
+    isInTimeout: false,
+  });
+
   useEffect(() => {
     const calculatedWidth = (
       (nodeInformation.userBalance /
-        (nodeInformation.userBalance +
-          nodeInformation.inboundLiquidityMsat / 1000)) *
-      200
+        (nodeInformation.inboundLiquidityMsat / 1000)) *
+      150
     ).toFixed(0);
     setsendWitdh(Number(calculatedWidth));
   }, [nodeInformation]);
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.typeText, {color: COLORS.primary}]}>Send</Text>
-      <View
-        style={[
-          styles.sliderBar,
-          {
-            backgroundColor: theme
-              ? COLORS.lightModeBackground
-              : COLORS.darkModeBackground,
-          },
-        ]}>
+    <TouchableOpacity
+      onPress={() => {
+        setShowLiquidyAmount(prev => !prev);
+      }}>
+      <View style={styles.container}>
+        <Text style={[styles.typeText, {color: COLORS.primary}]}>
+          {showLiquidyAmount
+            ? Math.round(nodeInformation.userBalance).toLocaleString()
+            : 'Send'}
+        </Text>
         <View
           style={[
-            styles.sendIndicator,
+            styles.sliderBar,
             {
-              width: sendWitdh,
+              backgroundColor: theme
+                ? COLORS.lightModeBackground
+                : COLORS.darkModeBackground,
             },
-          ]}></View>
+          ]}>
+          <View
+            style={[
+              styles.sendIndicator,
+              {
+                width: sendWitdh,
+              },
+            ]}></View>
+        </View>
+        <Text
+          style={[
+            styles.typeText,
+            {
+              color: theme
+                ? COLORS.lightModeBackground
+                : COLORS.darkModeBackground,
+            },
+          ]}>
+          {showLiquidyAmount
+            ? Math.round(
+                nodeInformation.inboundLiquidityMsat / 1000,
+              ).toLocaleString()
+            : 'Receive'}
+        </Text>
       </View>
-      <Text
-        style={[
-          styles.typeText,
-          {
-            color: theme
-              ? COLORS.lightModeBackground
-              : COLORS.darkModeBackground,
-          },
-        ]}>
-        Receive
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -72,7 +89,7 @@ const styles = StyleSheet.create({
 
   sliderBar: {
     height: 8,
-    width: 200,
+    width: 150,
 
     position: 'relative',
     backgroundColor: 'black',
