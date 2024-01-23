@@ -16,13 +16,14 @@ export default function ContactsPage(props) {
   const navigate = useNavigation();
 
   async function sendp() {
+    console.log('clicked');
     try {
       const nodeId =
         '029379fcb7a0e39a9f7b196ae5a4a533309bed0b0fb0ae271e5e1bd65bf45539f8';
 
       const sendPaymentResponse = await sendSpontaneousPayment({
         nodeId,
-        amountMsat: 1,
+        amountMsat: 5000,
       });
       console.log(sendPaymentResponse);
     } catch (err) {

@@ -7,10 +7,7 @@ export default function LiquidityIndicator() {
   const {nodeInformation, theme} = useGlobalContextProvider();
   const [sendWitdh, setsendWitdh] = useState(0);
 
-  const [showLiquidyAmount, setShowLiquidyAmount] = useState({
-    isShwon: false,
-    isInTimeout: false,
-  });
+  const [showLiquidyAmount, setShowLiquidyAmount] = useState(false);
 
   useEffect(() => {
     const calculatedWidth = (
