@@ -57,6 +57,7 @@ import {
 import AmountToGift from './app/components/admin/homeComponents/giftWallet/amountToGift';
 import GiftWalletConfirmation from './app/components/admin/homeComponents/giftWallet/popups/giftWalletConfirmation';
 import ShareWallet from './app/components/admin/homeComponents/giftWallet/shareWallet';
+import SendPaymentScreen from './app/components/admin/homeComponents/sendBitcoin/sendPaymentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -163,6 +164,10 @@ function ResetStack(): JSX.Element | null {
           <Stack.Screen
             name="SettingsContentHome"
             component={SettingsContentIndex}
+          />
+          <Stack.Screen
+            name="ConfirmPaymentScreen"
+            component={SendPaymentScreen}
           />
 
           {/* GIFT WALLET PATH */}

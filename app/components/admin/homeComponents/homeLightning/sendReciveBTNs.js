@@ -24,14 +24,8 @@ export function SendRecieveBTNs() {
         <TouchableOpacity
           onPress={() => {
             (async () => {
-              const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) {
-                Alert.alert(
-                  'Not connected to your node',
-                  'To send and receive you must be connected to your node',
-                );
-                return;
-              }
+              const isAvailable = await canSendOrReceivePayment();
+              if (!isAvailable) return;
               navigate.navigate('SendBTC');
             })();
           }}
@@ -41,14 +35,8 @@ export function SendRecieveBTNs() {
         <TouchableOpacity
           onPress={() => {
             (async () => {
-              const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) {
-                Alert.alert(
-                  'Not connected to your node',
-                  'To send and receive you must be connected to your node',
-                );
-                return;
-              }
+              const isAvailable = await canSendOrReceivePayment();
+              if (!isAvailable) return;
               navigate.navigate('ReceiveBTC');
             })();
           }}
@@ -58,6 +46,19 @@ export function SendRecieveBTNs() {
       </View>
     </View>
   );
+
+  async function canSendOrReceivePayment() {
+    const areSettingsSet = await handleSettingsCheck();
+    if (!areSettingsSet) {
+      Alert.alert(
+        'Not connected to your node',
+        'To send and receive you must be connected to your node',
+      );
+      return new Promise(resolve => {
+        resolve(false);
+      });
+    }
+  }
 }
 
 async function handleSettingsCheck() {

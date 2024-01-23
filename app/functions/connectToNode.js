@@ -12,7 +12,6 @@ import {btoa, atob, toByteArray} from 'react-native-quick-base64';
 
 export default async function connectToNode(breezEvent) {
   // Create the default config
-  // console.log(INVITE_KEY1, API_KEY);
 
   try {
     await nodeInfo();

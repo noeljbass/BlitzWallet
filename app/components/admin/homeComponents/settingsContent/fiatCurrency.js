@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
   input: {
     width: '95%',
     // height: 35,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 8,
     marginTop: 20,

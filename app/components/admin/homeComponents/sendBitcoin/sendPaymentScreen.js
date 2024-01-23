@@ -26,6 +26,8 @@ import {
   sendPayment,
 } from '@breeztech/react-native-breez-sdk';
 import {getLocalStorageItem} from '../../../../functions';
+import {useNavigation} from '@react-navigation/native';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function SendPaymentScreen(props) {
   console.log('CONFIRM SEND PAYMENT SCREEN');
@@ -34,23 +36,21 @@ export default function SendPaymentScreen(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
   const [sendingAmount, setSendingAmount] = useState(0);
-
-  // const props.theme = useColorScheme() === 'dark';
+  const {theme} = useGlobalContextProvider();
+  const navigate = useNavigation();
+  const BTCadress = props.route.params?.btcAdress;
+  const setScanned = props.route.params?.setDidScan;
 
   useEffect(() => {
-    if (props.isDisplayed) {
-      decodeLNAdress();
-      fadeIn();
-    } else fadeOut();
-  }, [props.isDisplayed]);
+    decodeLNAdress();
+  }, []);
 
   return (
-    <Animated.View
+    <View
       style={[
         styles.popupContainer,
         {
-          transform: [{translateX: fadeAnim}],
-          backgroundColor: props.theme
+          backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
         },
@@ -61,7 +61,7 @@ export default function SendPaymentScreen(props) {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <SafeAreaView style={{flex: 1, position: 'relative'}}>
             <View style={styles.topBar}>
-              <TouchableOpacity onPress={() => props.setScanned(false)}>
+              <TouchableOpacity onPress={() => goBackFunction()}>
                 <Image
                   style={styles.backButton}
                   source={ICONS.leftCheveronIcon}
@@ -71,9 +71,7 @@ export default function SendPaymentScreen(props) {
                 style={[
                   styles.headerText,
                   {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
                 Confirm Payment
@@ -87,7 +85,7 @@ export default function SendPaymentScreen(props) {
                       style={[
                         styles.sendingAmtBTC,
                         {
-                          color: props.theme
+                          color: theme
                             ? COLORS.darkModeText
                             : COLORS.lightModeText,
                         },
@@ -103,7 +101,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.sendingAmtBTC,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                             marginTop: 0,
@@ -137,7 +135,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.feeBreakdownItem,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                           },
@@ -148,7 +146,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.feeBreakdownItem,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                           },
@@ -157,7 +155,7 @@ export default function SendPaymentScreen(props) {
                           style={[
                             styles.feeBreakdownValue,
                             {
-                              color: props.theme
+                              color: theme
                                 ? COLORS.darkModeText
                                 : COLORS.lightModeText,
                             },
@@ -173,7 +171,7 @@ export default function SendPaymentScreen(props) {
                           style={[
                             styles.feeBreakdownValue,
                             {
-                              color: props.theme
+                              color: theme
                                 ? COLORS.darkModeText
                                 : COLORS.lightModeText,
                             },
@@ -194,7 +192,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.feeBreakdownItem,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                           },
@@ -205,7 +203,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.feeBreakdownItem,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                           },
@@ -214,7 +212,7 @@ export default function SendPaymentScreen(props) {
                           style={[
                             styles.feeBreakdownValue,
                             {
-                              color: props.theme
+                              color: theme
                                 ? COLORS.darkModeText
                                 : COLORS.lightModeText,
                             },
@@ -225,7 +223,7 @@ export default function SendPaymentScreen(props) {
                           style={[
                             styles.feeBreakdownValue,
                             {
-                              color: props.theme
+                              color: theme
                                 ? COLORS.darkModeText
                                 : COLORS.lightModeText,
                             },
@@ -239,7 +237,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.feeBreakdownItem,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                           },
@@ -250,7 +248,7 @@ export default function SendPaymentScreen(props) {
                         style={[
                           styles.feeBreakdownItem,
                           {
-                            color: props.theme
+                            color: theme
                               ? COLORS.darkModeText
                               : COLORS.lightModeText,
                           },
@@ -259,7 +257,7 @@ export default function SendPaymentScreen(props) {
                           style={[
                             styles.feeBreakdownValue,
                             {
-                              color: props.theme
+                              color: theme
                                 ? COLORS.darkModeText
                                 : COLORS.lightModeText,
                             },
@@ -275,7 +273,7 @@ export default function SendPaymentScreen(props) {
                           style={[
                             styles.feeBreakdownValue,
                             {
-                              color: props.theme
+                              color: theme
                                 ? COLORS.darkModeText
                                 : COLORS.lightModeText,
                             },
@@ -297,8 +295,7 @@ export default function SendPaymentScreen(props) {
                     <TouchableOpacity
                       activeOpacity={0.3}
                       onPress={() => {
-                        props.setScanned(false);
-                        props.setBTCadress('');
+                        goBackFunction();
                       }}
                       style={[
                         styles.button,
@@ -334,9 +331,7 @@ export default function SendPaymentScreen(props) {
                 }}>
                 <ActivityIndicator
                   size="large"
-                  color={
-                    props.theme ? COLORS.darkModeText : COLORS.lightModeText
-                  }
+                  color={theme ? COLORS.darkModeText : COLORS.lightModeText}
                 />
               </View>
             )}
@@ -344,28 +339,13 @@ export default function SendPaymentScreen(props) {
           </SafeAreaView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </Animated.View>
+    </View>
   );
-
-  function fadeIn() {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-  function fadeOut() {
-    Animated.timing(fadeAnim, {
-      toValue: 900,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
 
   async function sendPaymentFunction() {
     try {
       setIsLoading(true);
-      const response = paymentInfo?.invoice?.amountMsat
+      paymentInfo?.invoice?.amountMsat
         ? await sendPayment({
             bolt11: paymentInfo?.invoice?.bolt11,
           })
@@ -373,12 +353,11 @@ export default function SendPaymentScreen(props) {
             bolt11: paymentInfo?.invoice?.bolt11,
             amountMsat: Number(sendingAmount),
           });
-      console.log(response);
-      if (response) {
-        // props.setScanned(false);
-        props.setBTCadress('');
-        // navigate.goBack();
-      }
+      // if (response) {
+      //   // goBackFunction();
+      //   //
+      //   // goBackFunction();
+      // }
     } catch (err) {
       try {
         const paymentHash = paymentInfo.invoice.paymentHash;
@@ -398,7 +377,7 @@ export default function SendPaymentScreen(props) {
       const node_info = await nodeInfo();
 
       try {
-        const input = await parseInput(props.BTCadress);
+        const input = await parseInput(BTCadress);
         const currency = await getLocalStorageItem('currency');
 
         const bitcoinPrice = (await fetchFiatRates()).filter(
@@ -409,7 +388,7 @@ export default function SendPaymentScreen(props) {
           Alert.alert(
             'Your balance is too low to send this payment',
             'Please add funds to your account',
-            [{text: 'Ok', onPress: () => props.setScanned(false)}],
+            [{text: 'Ok', onPress: () => goBackFunction()}],
           );
           return;
         }
@@ -422,26 +401,27 @@ export default function SendPaymentScreen(props) {
         Alert.alert(
           'Not a valid LN Address',
           'Please try again with a bolt 11 address',
-          [{text: 'Ok', onPress: () => props.setScanned(false)}],
+          [{text: 'Ok', onPress: () => goBackFunction()}],
         );
         console.log(err);
       }
     } catch (err) {
       Alert.alert('Error not connected to node', '', [
-        {text: 'Ok', onPress: () => props.setScanned(false)},
+        {text: 'Ok', onPress: () => goBackFunction()},
       ]);
       console.log(err);
     }
+  }
+
+  function goBackFunction() {
+    navigate.goBack();
+    setScanned(false);
   }
 }
 
 const styles = StyleSheet.create({
   popupContainer: {
     flex: 1,
-    height: '100%',
-    width: '100%',
-    backgroundColor: COLORS.background,
-    position: 'absolute',
   },
 
   innerContainer: {
