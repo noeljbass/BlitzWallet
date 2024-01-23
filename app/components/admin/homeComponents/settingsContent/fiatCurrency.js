@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
 
   input: {
     width: '95%',
-    height: 35,
-    padding: 10,
+    // height: 35,
+    paddingHorizontal: 10,
     borderRadius: 8,
     marginTop: 20,
     marginBottom: 5,

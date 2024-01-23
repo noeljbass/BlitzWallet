@@ -27,6 +27,7 @@ export default function PinPage(props) {
     });
 
     if (filteredPin.length != 4) return;
+
     (async () => {
       const stored = JSON.parse(await retrieveData('pin'));
 
@@ -78,7 +79,7 @@ export default function PinPage(props) {
             color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
           },
         ]}>
-        {pinEnterCount}/8 tries left
+        {8 - pinEnterCount} attempts left
       </Text>
       <View style={styles.dotContainer}>
         <View
@@ -86,9 +87,6 @@ export default function PinPage(props) {
             typeof pin[0] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
                 }
               : styles.dot,
             {
@@ -102,9 +100,6 @@ export default function PinPage(props) {
             typeof pin[1] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
                 }
               : styles.dot,
             {
@@ -118,9 +113,6 @@ export default function PinPage(props) {
             typeof pin[2] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
                 }
               : styles.dot,
             {
@@ -134,9 +126,6 @@ export default function PinPage(props) {
             typeof pin[3] === 'number'
               ? {
                   ...styles.dot_active,
-                  backgroundColor: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
                 }
               : styles.dot,
             {
@@ -373,7 +362,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     borderWidth: 1,
-    // backgroundColor: 'black',
+    backgroundColor: COLORS.primary,
   },
   keyboardContainer: {
     width: '100%',

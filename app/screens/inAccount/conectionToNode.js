@@ -66,7 +66,7 @@ export function ConnectionToNode() {
                 color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            Block height:{' '}
+            Block Height:{' '}
             {nodeInformation.didConnectToNode
               ? nodeInformation?.blockHeight?.toLocaleString()
               : 'N/A'}
@@ -90,7 +90,7 @@ export function ConnectionToNode() {
                 color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            Max Recivable:{' '}
+            Max Receivable:{' '}
             {nodeInformation.didConnectToNode
               ? (nodeInformation?.inboundLiquidityMsat / 1000).toLocaleString()
               : 'N/A'}

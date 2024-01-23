@@ -49,7 +49,7 @@ export default function SeedPhrasePage() {
             styles.headerPhrase,
             {marginBottom: 50, fontSize: SIZES.medium, color: COLORS.cancelRed},
           ]}>
-          Do not shre it with anyone
+          Do not share it with anyone
         </Text>
         <KeyContainer keys={mnemonic} />
       </View>
@@ -72,7 +72,7 @@ export default function SeedPhrasePage() {
                 color: theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            Are you sure you want to show your seed phrase
+            Are you sure you want to show your seed phrase?
           </Text>
           <View
             style={{

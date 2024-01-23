@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 10,
     fontFamily: FONT.Descriptoin_Regular,
+    textTransform: 'capitalize',
   },
   listIcon: {
     width: 20,

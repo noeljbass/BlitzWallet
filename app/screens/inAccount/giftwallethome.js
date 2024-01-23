@@ -70,7 +70,7 @@ export default function GiftWalletHome() {
                   styles.contentDescription,
                   {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
                 ]}>
-                Non-custodial lightning can be intimidating at first. What are
+                Self-custodial lightning can be intimidating at first. What are
                 channels? How do I restore my wallet if I get a new phone? How
                 do I set up my account? All of these questions are valid and
                 pain points for people.
@@ -81,7 +81,7 @@ export default function GiftWalletHome() {
                   {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
                 ]}>
                 Here at Blitz, we believe in easing the transition to
-                non-custodial lighting. And because of our passion for that, we
+                self-custodial lighting. And because of our passion for that, we
                 created the gift-a-wallet feature.
               </Text>
               <Text
@@ -127,9 +127,9 @@ export default function GiftWalletHome() {
                 This feature is{' '}
                 <Text style={{color: COLORS.primary}}>TRUST-BASED </Text> . You
                 will be exposed to the seed phrase for the other person, so the
-                security of the seed is on you. You should give a warning that
-                using a seed somebody else knows is{' '}
-                <Text style={{color: COLORS.primary}}>DANGEROUS</Text>.
+                security of the seed is on you. You should also always give a
+                warning to the other person that using a seed somebody else
+                knows is <Text style={{color: COLORS.primary}}>DANGEROUS</Text>.
               </Text>
             </View>
           </View>
@@ -137,8 +137,9 @@ export default function GiftWalletHome() {
             onPress={() => {
               (async () => {
                 try {
-                  await nodeInfo();
-                  navigate.navigate('AmountToGift');
+                  Alert.alert('Coming Soon....');
+                  // await nodeInfo();
+                  // navigate.navigate('AmountToGift');
                 } catch (err) {
                   Alert.alert(
                     'Not connected to node',

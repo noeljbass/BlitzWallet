@@ -86,7 +86,7 @@ export default function ResetPage() {
                   color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
-              Delete seed from my device
+              Delete seed phrase from my device
             </Text>
           </View>
           <View style={styles.selectorContainer}>
@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   selectorText: {
+    width: '80%',
     fontFamily: FONT.Descriptoin_Regular,
     fontSize: SIZES.medium,
   },

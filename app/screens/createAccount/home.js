@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     fontSize: SIZES.large,
     textAlign: 'center',
-    fontFamily: FONT.Descriptoin_Regular,
+    fontFamily: FONT.Other_Regular,
   },
   button_full: {
     backgroundColor: COLORS.primary,
@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
   disclamer_text: {
     color: COLORS.black,
     marginTop: 'auto',
-    fontFamily: FONT.Descriptoin_Regular,
+    fontFamily: FONT.Other_Regular,
   },
 });

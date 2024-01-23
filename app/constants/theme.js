@@ -37,9 +37,9 @@ const FONT = {
   Title_Regular: 'Inter-Regular',
   Title_Bold: 'Inter-Bold',
 
-  Descriptoin_light: 'Lato-Light',
-  Descriptoin_Regular: 'Lato-Regular',
-  Descriptoin_Bold: 'Lato-Bold',
+  Descriptoin_light: 'Montserrat-Light',
+  Descriptoin_Regular: 'Montserrat-Regular',
+  Descriptoin_Bold: 'Montserrat-Bold',
 
   Other_light: 'Montserrat-Light',
   Other_Medium: 'Montserrat-Medium',

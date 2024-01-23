@@ -68,9 +68,10 @@ export default function AboutPage() {
                 },
               ]}>
               This is a{' '}
-              <Text style={{color: COLORS.primary}}>NON-CUSTODIAL</Text> wallet.
-              Blitz does not have any access to your keys so if you lose them
-              you lose your money.
+              <Text style={{color: COLORS.primary}}>SELF-CUSTODIAL</Text>{' '}
+              bitcoin lightning wallet. Blitz does not have access to your seed
+              phrase. If you lose or share your seed phrase, access to your
+              funds may be lost
             </Text>
             <Text
               style={[
@@ -79,7 +80,7 @@ export default function AboutPage() {
                   color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
-              Blitz uses the Breez SDK to send and recive payments on the
+              Blitz uses the Breez SDK to send and receive payments on the
               bitcoin lightning network. The lightning network is still a
               developing protocol so loss of funds can occur.
             </Text>
@@ -91,7 +92,7 @@ export default function AboutPage() {
                   textAlign: 'center',
                 },
               ]}>
-              DO NOT GIVE OUT YOUR 12 WORD SEED PHRASE.
+              DO NOT GIVE OUT YOUR 12 WORD SEED PHRASE!
             </Text>
           </View>
         </View>

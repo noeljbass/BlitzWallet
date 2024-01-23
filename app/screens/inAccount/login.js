@@ -10,8 +10,6 @@ export default function AdminLogin({navigation, route}) {
   const [didUsePin, setDidUsePin] = useState(false);
   const fromBackground = route.params?.fromBackground;
   const {theme, setTheme} = useGlobalContextProvider();
-  // const theme = theme === 'dark';
-  // console.log(theme, 'TESTIG THEME');
 
   return (
     <View

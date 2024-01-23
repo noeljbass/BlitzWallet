@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 export default function PinPage() {
   const [pin, setPin] = useState([null, null, null, null]);
   const [confirmPin, setConfirmPin] = useState([]);
+  const [pinNotMatched, setPinNotMatched] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [pinEnterCount, setPinEnterCount] = useState(0);
   const navigate = useNavigation();
@@ -23,7 +24,6 @@ export default function PinPage() {
     const filteredPin = pin.filter(pin => {
       if (typeof pin === 'number') return true;
     });
-
     if (filteredPin.length != 4) return;
     if (confirmPin.length === 0) {
       setConfirmPin(pin);
@@ -48,11 +48,10 @@ export default function PinPage() {
             } else console.log('ERRROR');
           }, 2000);
         } else {
-          if (isConfirming) return;
-          setIsConfirming(true);
+          setPinNotMatched(true);
           setPinEnterCount(prev => (prev += 1));
           setTimeout(() => {
-            setIsConfirming(false);
+            setPinNotMatched(false);
             setPin([null, null, null, null]);
           }, 500);
         }
@@ -69,9 +68,15 @@ export default function PinPage() {
       }}>
       <SafeAreaView style={styles.contentContainer}>
         <Text style={[styles.header]}>
-          {isConfirming ? 'Confirm Pin' : 'Enter 4-digit PIN'}
+          {isConfirming
+            ? pinNotMatched
+              ? 'Try again'
+              : 'Confirm Pin'
+            : 'Enter 4-digit PIN'}
         </Text>
-        <Text style={[styles.enterText]}>{pinEnterCount}/8 tries left</Text>
+        <Text style={[styles.enterText]}>
+          {8 - pinEnterCount} attempts left
+        </Text>
         <View style={styles.dotContainer}>
           <View
             style={[

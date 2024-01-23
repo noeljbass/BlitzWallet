@@ -24,7 +24,7 @@ export default function NavBar(props) {
 
   return (
     <View style={styles.topBar}>
-      <Image source={ICONS.wordmark} style={{width: 150, height: 17}} />
+      <Image source={ICONS.wordmark} style={{width: 170, height: 19}} />
       <View style={styles.iconContainer}>
         <TouchableOpacity
           onPress={() => navigate.navigate('ConnectionToNode')}
