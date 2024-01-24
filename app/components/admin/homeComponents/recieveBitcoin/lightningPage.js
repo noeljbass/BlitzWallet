@@ -67,6 +67,7 @@ export default function LightningPage(props) {
         display: props.selectedRecieveOption === 'lightning' ? 'flex' : 'none',
       }}>
       <View style={[styles.qrcodeContainer]}>
+        {/* ADD LOGIC HERE TO WAIT FOR ADDRESS TO ALSO BE GENERATED */}
         {props.generatingLNInvoice && (
           <ActivityIndicator
             size="large"
@@ -164,6 +165,12 @@ export default function LightningPage(props) {
       let parsedInvoice = JSON.parse(prevInvoice);
       const currentTime = new Date();
 
+      const prevInvoiceTime = new Date(
+        parsedInvoice?.lnInvoice.expiry * MILISECONDSCONST +
+          parsedInvoice?.lnInvoice.timestamp * MILISECONDSCONST +
+          BUFFERTIMECONST,
+      );
+
       const txLookup =
         nodeInformation.transactions.length > 10
           ? nodeInformation.transactions.length > 50
@@ -180,10 +187,7 @@ export default function LightningPage(props) {
       });
 
       if (
-        currentTime.getMilliseconds() >
-          parsedInvoice?.lnInvoice.expiry * MILISECONDSCONST +
-            parsedInvoice?.lnInvoice.timestamp +
-            BUFFERTIMECONST ||
+        currentTime.getTime() > prevInvoiceTime.getTime() ||
         wasUsed.length != 0 ||
         !parsedInvoice
       ) {
