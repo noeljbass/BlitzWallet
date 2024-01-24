@@ -29,7 +29,6 @@ export default function BitcoinPage(props) {
     initSwap();
     monitorSwap();
   }, [props.selectedRecieveOption]);
-
   return null;
 
   return (
@@ -48,8 +47,8 @@ export default function BitcoinPage(props) {
           <QRCode
             size={250}
             value={
-              props.generatedAddress
-                ? props.generatedAddress
+              props.generatedAddress.bitcoin
+                ? props.generatedAddress.bitcoin
                 : 'Thanks for using Blitz!'
             }
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
@@ -196,8 +195,9 @@ export default function BitcoinPage(props) {
       const openChannelFeeResponse = await openChannelFee({
         amountMsat: swapInfo.minAllowedDeposit * 1000,
       });
-
-      props.setGeneratedAddress(swapInfo.bitcoinAddress);
+      props.setGeneratedAddress(prev => {
+        return {...prev, bitcoin: swapInfo.bitcoinAddress};
+      });
       setBitcoinSwapInfo({
         minAllowedDeposit: swapInfo.minAllowedDeposit,
         maxAllowedDeposit: swapInfo.maxAllowedDeposit,

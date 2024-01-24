@@ -26,7 +26,11 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 
 export function ReceivePaymentHome(props) {
   const isInitialRender = useRef(true);
-  const [generatedAddress, setGeneratedAddress] = useState('');
+  const [generatedAddress, setGeneratedAddress] = useState({
+    lightning: '',
+    bitcoin: '',
+    liquid: '',
+  });
   const [sendingAmount, setSendingAmount] = useState({
     lightning: 1000,
     bitcoin: 1000,
@@ -42,11 +46,10 @@ export function ReceivePaymentHome(props) {
   const [selectedRecieveOption, setSelectedRecieveOption] =
     useState('lightning');
   const [isSwapCreated, setIsSwapCreated] = useState(false);
-  const [generatingLNInvoice, setGeneratingLNInvioce] = useState(true);
+  const [generatingInvoiceQRCode, setGeneratingInvoiceQRCode] = useState(true);
   const navigate = useNavigation();
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
   const {theme} = useGlobalContextProvider();
-  console.log(generatedAddress);
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -111,8 +114,8 @@ export function ReceivePaymentHome(props) {
                   theme={theme}
                   userSelectedCurrency={userSelectedCurrency}
                   setSendingAmount={setSendingAmount}
-                  setGeneratingLNInvioce={setGeneratingLNInvioce}
-                  generatingLNInvoice={generatingLNInvoice}
+                  setGeneratingInvoiceQRCode={setGeneratingInvoiceQRCode}
+                  generatingInvoiceQRCode={generatingInvoiceQRCode}
                 />
               )}
               {selectedRecieveOption === 'bitcoin' && (
@@ -130,6 +133,8 @@ export function ReceivePaymentHome(props) {
                   setIsSwapCreated={setIsSwapCreated}
                   setGeneratedAddress={setGeneratedAddress}
                   generatedAddress={generatedAddress}
+                  setGeneratingInvoiceQRCode={setGeneratingInvoiceQRCode}
+                  generatingInvoiceQRCode={generatingInvoiceQRCode}
                 />
               )}
 
@@ -138,7 +143,7 @@ export function ReceivePaymentHome(props) {
                 generatedAddress={generatedAddress}
                 setEditPaymentPopup={setEditPaymentPopup}
                 isSwapCreated={isSwapCreated}
-                generatingLNInvoice={generatingLNInvoice}
+                generatingInvoiceQRCode={generatingInvoiceQRCode}
               />
 
               {/* popups */}
@@ -170,9 +175,15 @@ export function ReceivePaymentHome(props) {
       bitcoin: '',
       liquid: '',
     });
-    setGeneratedAddress('');
+    // setGeneratedAddress('');
+    setIsSwapCreated(false);
 
     if (type === 'navChange') return;
+    setGeneratedAddress({
+      lightning: '',
+      bitcoin: '',
+      liquid: '',
+    });
     setEditPaymentPopup(false);
     navigate.goBack();
   }

@@ -9,8 +9,10 @@ import {
 import {COLORS, CENTER, FONT, SHADOWS, SIZES} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
 import * as Device from 'expo-device';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ButtonsContainer(props) {
+  const navigate = useNavigation();
   return (
     <>
       {((props.isSwapCreated && props.selectedRecieveOption === 'liquid') ||
@@ -31,7 +33,7 @@ export default function ButtonsContainer(props) {
             onPress={openShareOptions}
             style={[
               styles.buttonsOpacity,
-              {opacity: props.generatingLNInvoice ? 0.5 : 1},
+              {opacity: props.generatingInvoiceQRCode ? 0.5 : 1},
             ]}>
             <Text style={styles.buttonText}>Share</Text>
           </TouchableOpacity>
@@ -39,7 +41,7 @@ export default function ButtonsContainer(props) {
             onPress={copyToClipboard}
             style={[
               styles.buttonsOpacity,
-              {opacity: props.generatingLNInvoice ? 0.5 : 1},
+              {opacity: props.generatingInvoiceQRCode ? 0.5 : 1},
             ]}>
             <Text style={styles.buttonText}>Copy</Text>
           </TouchableOpacity>
@@ -58,17 +60,27 @@ export default function ButtonsContainer(props) {
 
   async function copyToClipboard() {
     try {
-      if (props.generatingLNInvoice) return;
-      await Clipboard.setStringAsync(props.generatedAddress);
-      window.alert('Text Copied to Clipboard');
+      if (props.generatingInvoiceQRCode) return;
+      const activeAddress = props.generatedAddress[props.selectedRecieveOption];
+      // props.selectedRecieveOption === 'lightning'
+      //   ? props.generatedAddress.lightning
+      //   : props.selectedRecieveOption === 'bitcion'
+      //   ? props.generatedAddress.bitcoin
+      //   : props.generatedAddress.liquid;
+      await Clipboard.setStringAsync(activeAddress);
+      navigate.navigate('ClipboardCopyPopup', {didCopy: true});
+      return;
+
+      // Alert.alert('Text Copied to Clipboard');
     } catch (err) {
-      window.alert('ERROR WITH COPYING');
+      navigate.navigate('ClipboardCopyPopup', {didCopy: false});
+      // Alert.alert('ERROR WITH COPYING');
     }
   }
 
   async function openShareOptions() {
     try {
-      if (props.generatingLNInvoice) return;
+      if (props.generatingInvoiceQRCode) return;
       await Share.share({
         message: props.generatedAddress,
       });

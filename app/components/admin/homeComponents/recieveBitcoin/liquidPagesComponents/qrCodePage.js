@@ -9,14 +9,13 @@ import RNEventSource from 'react-native-event-source';
 import {createLiquidSwap} from '../../../../../functions/LBTC';
 
 export default function QrCodePage(props) {
-  const [generatingQrCode, setGeneratingQrCode] = useState(true);
-
   const [evenSource, setEventSource] = useState({});
 
   useEffect(() => {
     console.log('QR CODE PAGE');
     (async () => {
       try {
+        props.setGeneratingInvoiceQRCode(true);
         const satAmount =
           props.liquidAmount -
           props.feeInfo.liquidFee -
@@ -32,9 +31,9 @@ export default function QrCodePage(props) {
             invoice.lnInvoice.bolt11,
             props.feeInfo.hash,
           );
-
-          props.setGeneratedAddress(swapInfo.bip21);
-          setGeneratingQrCode(false);
+          props.setGeneratedAddress(prev => {
+            return {...prev, liquid: swapInfo.bip21};
+          });
 
           const eventSource = new RNEventSource(
             'https://api.boltz.exchange/streamswapstatus?id=' + swapInfo.id,
@@ -42,6 +41,7 @@ export default function QrCodePage(props) {
           eventSource.addEventListener('message', event => {
             setEventSource(event.data);
           });
+          props.setGeneratingInvoiceQRCode(false);
         }
       } catch (err) {
         console.log(err);
@@ -52,17 +52,19 @@ export default function QrCodePage(props) {
   return (
     <>
       <View style={[styles.qrcodeContainer]}>
-        {generatingQrCode && (
+        {props.generatingInvoiceQRCode && (
           <ActivityIndicator
             size="large"
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
           />
         )}
-        {!generatingQrCode && (
+        {!props.generatingInvoiceQRCode && (
           <QRCode
             size={250}
             value={
-              props.generatedAddress ? props.generatedAddress : 'lets swap'
+              props.generatedAddress.liquid
+                ? props.generatedAddress.liquid
+                : 'lets swap'
             }
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
             backgroundColor={

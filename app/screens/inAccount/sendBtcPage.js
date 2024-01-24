@@ -35,6 +35,10 @@ export default function SendPaymentHome() {
 
   useEffect(() => {
     setDidScan(false);
+    (async () => {
+      await requestCameraPermissions();
+      await requestPhotoesPermissions();
+    })();
   }, []);
 
   async function getClipboardText() {
@@ -67,13 +71,6 @@ export default function SendPaymentHome() {
       setDidScan: setDidScan,
     });
   }
-
-  useEffect(() => {
-    (async () => {
-      await requestCameraPermissions();
-      await requestPhotoesPermissions();
-    })();
-  }, []);
 
   function handleBarCodeScanned({type, data}) {
     if (!type.includes('QRCode')) {

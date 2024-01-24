@@ -70,7 +70,7 @@ const SECURITYOPTIONS = [
   },
   {
     for: 'Security & Customization',
-    name: 'Beta inbound liquitiy fix',
+    name: 'Bank',
     icon: ICONS.linkIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },

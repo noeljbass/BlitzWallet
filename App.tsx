@@ -58,6 +58,7 @@ import AmountToGift from './app/components/admin/homeComponents/giftWallet/amoun
 import GiftWalletConfirmation from './app/components/admin/homeComponents/giftWallet/popups/giftWalletConfirmation';
 import ShareWallet from './app/components/admin/homeComponents/giftWallet/shareWallet';
 import SendPaymentScreen from './app/components/admin/homeComponents/sendBitcoin/sendPaymentScreen';
+import ClipboardCopyPopup from './app/components/admin/homeComponents/recieveBitcoin/components/confirmClipboard';
 
 const Stack = createNativeStackNavigator();
 
@@ -190,6 +191,10 @@ function ResetStack(): JSX.Element | null {
           <Stack.Screen
             name="GiftWalletConfirmation"
             component={GiftWalletConfirmation}
+          />
+          <Stack.Screen
+            name="ClipboardCopyPopup"
+            component={ClipboardCopyPopup}
           />
         </Stack.Group>
         <Stack.Group

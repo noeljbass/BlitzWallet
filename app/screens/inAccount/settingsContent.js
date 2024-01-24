@@ -77,9 +77,7 @@ export default function SettingsContentIndex(props) {
         {selectedPage?.toLowerCase() === 'face id' && (
           <FaceIdPage theme={theme} />
         )}
-        {selectedPage?.toLowerCase() === 'beta inbound liquitiy fix' && (
-          <EcashHome />
-        )}
+        {selectedPage?.toLowerCase() === 'bank' && <EcashHome />}
         {selectedPage?.toLowerCase() === 'recovery phrase' && (
           <SeedPhrasePage theme={theme} />
         )}

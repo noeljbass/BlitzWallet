@@ -20,7 +20,6 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const isInitialRender = useRef(true);
-  // const [errorMessage, setErrMessage] = useState('');
   const [breezEvent, setBreezEvent] = useState({});
   const {theme, setNodeInformation} = useGlobalContextProvider();
 
@@ -34,8 +33,8 @@ export default function AdminHome({navigation: {navigate}, route}) {
       e?.type != 'paymentFailed'
     )
       return;
+
     console.log('DID MAKE IT THROUGH LOGIC');
-    console.log(e);
 
     setBreezEvent(e);
   };

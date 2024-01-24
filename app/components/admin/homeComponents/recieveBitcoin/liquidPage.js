@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import axios from 'axios';
 import {CannotSwapPage, EnterAmount, QrCodePage} from './liquidPagesComponents';
 import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 import {CENTER, COLORS, SIZES} from '../../../../constants';
 import {getSwapPairInformation} from '../../../../functions/LBTC';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function LiquidPage(props) {
   const [liquidAmount, setLiquidAmount] = useState('2000');
@@ -15,6 +15,7 @@ export default function LiquidPage(props) {
     minAmount: 0,
     maxAmount: 0,
   });
+  const {nodeInformation} = useGlobalContextProvider();
 
   const [processStage, setProcessStage] = useState({
     amount: true,
@@ -26,10 +27,13 @@ export default function LiquidPage(props) {
 
   useEffect(() => {
     (async () => {
-      try {
-        await nodeInfo();
+      if (nodeInformation.didConnectToNode) {
         const swapInfo = await getSwapPairInformation();
-        if (!swapInfo) return;
+        console.log(swapInfo);
+        if (!swapInfo) {
+          setSwapErrorMessage('Not able to get swap information.');
+          return;
+        }
         setFeeInfo({
           boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
           liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
@@ -38,8 +42,7 @@ export default function LiquidPage(props) {
           maxAmount: swapInfo.limits.maximal,
         });
         setCanSwap(true);
-      } catch (err) {
-        console.log(err);
+      } else {
         setSwapErrorMessage('Not connected to node.');
       }
     })();
@@ -96,6 +99,8 @@ export default function LiquidPage(props) {
               theme={props.theme}
               setGeneratedAddress={props.setGeneratedAddress}
               generatedAddress={props.generatedAddress}
+              setGeneratingInvoiceQRCode={props.setGeneratingInvoiceQRCode}
+              generatingInvoiceQRCode={props.generatingInvoiceQRCode}
             />
           )}
         </>

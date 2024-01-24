@@ -30,7 +30,7 @@ export default function LightningPage(props) {
     if (props.selectedRecieveOption != 'lightning') {
       setErrorMessageText('');
       setFiatRate('');
-      props.setGeneratingLNInvioce(true);
+      props.setGeneratingInvoiceQRCode(true);
       isInitialRender.current = true;
       return;
     }
@@ -68,18 +68,23 @@ export default function LightningPage(props) {
       }}>
       <View style={[styles.qrcodeContainer]}>
         {/* ADD LOGIC HERE TO WAIT FOR ADDRESS TO ALSO BE GENERATED */}
-        {props.generatingLNInvoice && (
+        {props.generatingInvoiceQRCode && (
           <ActivityIndicator
             size="large"
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
+            style={{
+              marginTop: 'auto',
+              marginBottom: 'auto',
+              transform: [{translateY: 12}],
+            }}
           />
         )}
-        {!props.generatingLNInvoice && (
+        {!props.generatingInvoiceQRCode && (
           <QRCode
             size={250}
             value={
-              props.generatedAddress
-                ? props.generatedAddress
+              props.generatedAddress.lightning
+                ? props.generatedAddress.lightning
                 : 'Thanks for using Blitz!'
             }
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
@@ -90,40 +95,60 @@ export default function LightningPage(props) {
             }
           />
         )}
+        {!nodeInformation?.didConnectToNode && (
+          <Text
+            style={{
+              fontSize: SIZES.large,
+              color: COLORS.cancelRed,
+              ...CENTER,
+            }}>
+            Not connected to node.
+          </Text>
+        )}
       </View>
-      <View style={styles.amountContainer}>
-        <Text
-          style={[
-            styles.valueAmountText,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          {(props.sendingAmount / 1000).toLocaleString()} sat /{' '}
-          {((fiatRate / 100000000) * (props.sendingAmount / 1000)).toFixed(2)}{' '}
-          {props.userSelectedCurrency}
-        </Text>
-        <Text
-          style={[
-            styles.valueAmountText,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          {props.paymentDescription
-            ? props.paymentDescription
-            : 'no description'}
-        </Text>
-      </View>
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{errorMessageText}</Text>
-      </View>
+      {nodeInformation?.didConnectToNode && (
+        <>
+          <View style={styles.amountContainer}>
+            <Text
+              style={[
+                styles.valueAmountText,
+                {
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              {(props.sendingAmount / 1000).toLocaleString()} sat /{' '}
+              {((fiatRate / 100000000) * (props.sendingAmount / 1000)).toFixed(
+                2,
+              )}{' '}
+              {props.userSelectedCurrency}
+            </Text>
+            <Text
+              style={[
+                styles.valueAmountText,
+                {
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}>
+              {props.paymentDescription
+                ? props.paymentDescription
+                : 'no description'}
+            </Text>
+          </View>
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{errorMessageText}</Text>
+          </View>
+        </>
+      )}
     </View>
   );
 
   async function generateLightningInvoice() {
     try {
-      props.setGeneratingLNInvioce(true);
+      props.setGeneratingInvoiceQRCode(true);
 
       if (props.sendingAmount === 0) {
         setErrorMessageText('Must set invoice for more than 0 sats');
@@ -149,8 +174,10 @@ export default function LightningPage(props) {
       });
 
       if (invoice) {
-        props.setGeneratingLNInvioce(false);
-        props.setGeneratedAddress(invoice.lnInvoice.bolt11);
+        props.setGeneratingInvoiceQRCode(false);
+        props.setGeneratedAddress(prev => {
+          return {...prev, lightning: invoice.lnInvoice.bolt11};
+        });
       }
     } catch (err) {
       console.log(err, 'RECIVE ERROR');
@@ -198,14 +225,16 @@ export default function LightningPage(props) {
         setLocalStorageItem('lnInvoice', JSON.stringify(parsedInvoice));
       }
 
-      props.setGeneratedAddress(parsedInvoice.lnInvoice.bolt11);
+      props.setGeneratedAddress(prev => {
+        return {...prev, lightning: parsedInvoice.lnInvoice.bolt11};
+      });
       props.setSendingAmount(prev => {
         return {
           ...prev,
           lightning: parsedInvoice.lnInvoice.amountMsat,
         };
       });
-      props.setGeneratingLNInvioce(false);
+      props.setGeneratingInvoiceQRCode(false);
     } catch (err) {
       console.log(err);
     }
