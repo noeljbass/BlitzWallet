@@ -20,18 +20,6 @@ export default function ConfirmTxPage(props) {
   const {theme, nodeInformation} = useGlobalContextProvider();
   setStatusBarStyle('light');
 
-  // useEffect(() => {
-  //   if (
-  //     props.route.params?.information?.type != 'invoicePaid' &&
-  //     props.route.params?.information?.type != 'paymentSucceed' &&
-  //     props.route.params?.information?.type != 'paymentFailed'
-  //   )
-  //     return;
-  //   setInformation(props.route.params?.information);
-  // }, []);
-
-  // console.log(information);
-
   return (
     <View
       style={[
@@ -40,6 +28,7 @@ export default function ConfirmTxPage(props) {
           backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
+          padding: 10,
         },
       ]}>
       <SafeAreaView style={{flex: 1}}>

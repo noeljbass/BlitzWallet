@@ -1,4 +1,11 @@
-import {StyleSheet, View, TouchableOpacity, Text, Share} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Share,
+  Alert,
+} from 'react-native';
 import {COLORS, CENTER, FONT, SHADOWS, SIZES} from '../../../../constants';
 import * as Clipboard from 'expo-clipboard';
 import * as Device from 'expo-device';
@@ -22,12 +29,18 @@ export default function ButtonsContainer(props) {
           ]}>
           <TouchableOpacity
             onPress={openShareOptions}
-            style={[styles.buttonsOpacity]}>
+            style={[
+              styles.buttonsOpacity,
+              {opacity: props.generatingLNInvoice ? 0.5 : 1},
+            ]}>
             <Text style={styles.buttonText}>Share</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={copyToClipboard}
-            style={[styles.buttonsOpacity]}>
+            style={[
+              styles.buttonsOpacity,
+              {opacity: props.generatingLNInvoice ? 0.5 : 1},
+            ]}>
             <Text style={styles.buttonText}>Copy</Text>
           </TouchableOpacity>
           {props.selectedRecieveOption != 'bitcoin' &&
@@ -45,6 +58,7 @@ export default function ButtonsContainer(props) {
 
   async function copyToClipboard() {
     try {
+      if (props.generatingLNInvoice) return;
       await Clipboard.setStringAsync(props.generatedAddress);
       window.alert('Text Copied to Clipboard');
     } catch (err) {
@@ -54,6 +68,7 @@ export default function ButtonsContainer(props) {
 
   async function openShareOptions() {
     try {
+      if (props.generatingLNInvoice) return;
       await Share.share({
         message: props.generatedAddress,
       });

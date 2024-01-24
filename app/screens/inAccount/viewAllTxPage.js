@@ -15,6 +15,7 @@ import {UserTransactions} from '../../components/admin/homeComponents/homeLightn
 import {useGlobalContextProvider} from '../../../context-store/context';
 import {useEffect, useState} from 'react';
 import {getLocalStorageItem} from '../../functions';
+import {getWallet} from '../../functions/eCash';
 
 export default function ViewAllTxPage() {
   const navigate = useNavigation();
@@ -63,6 +64,8 @@ export default function ViewAllTxPage() {
           </Text>
           <TouchableOpacity
             onPress={() => {
+              getWallet();
+              return;
               Alert.alert('This does not work yet!');
             }}>
             <Text

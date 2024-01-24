@@ -31,12 +31,11 @@ import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function SendPaymentScreen(props) {
   console.log('CONFIRM SEND PAYMENT SCREEN');
-  const fadeAnim = useRef(new Animated.Value(900)).current;
   const [paymentInfo, setPaymentInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
   const [sendingAmount, setSendingAmount] = useState(0);
-  const {theme} = useGlobalContextProvider();
+  const {theme, nodeInformation} = useGlobalContextProvider();
   const navigate = useNavigation();
   const BTCadress = props.route.params?.btcAdress;
   const setScanned = props.route.params?.setDidScan;
@@ -53,6 +52,7 @@ export default function SendPaymentScreen(props) {
           backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
+          paddingTop: Platform.OS === 'ios' ? 0 : 10,
         },
       ]}>
       <KeyboardAvoidingView
@@ -373,9 +373,8 @@ export default function SendPaymentScreen(props) {
 
   async function decodeLNAdress() {
     setIsLoading(true);
-    try {
-      const node_info = await nodeInfo();
-
+    // try {
+    if (nodeInformation.didConnectToNode) {
       try {
         const input = await parseInput(BTCadress);
         const currency = await getLocalStorageItem('currency');
@@ -384,7 +383,10 @@ export default function SendPaymentScreen(props) {
           coin => coin.coin === currency,
         );
 
-        if (node_info.channelsBalanceMsat + 100 < input.invoice.amountMsat) {
+        if (
+          nodeInformation.userBalance * 1000 + 100 <
+          input.invoice.amountMsat
+        ) {
           Alert.alert(
             'Your balance is too low to send this payment',
             'Please add funds to your account',
@@ -405,11 +407,10 @@ export default function SendPaymentScreen(props) {
         );
         console.log(err);
       }
-    } catch (err) {
+    } else {
       Alert.alert('Error not connected to node', '', [
         {text: 'Ok', onPress: () => goBackFunction()},
       ]);
-      console.log(err);
     }
   }
 

@@ -4,7 +4,7 @@ import {
   receiveOnchain,
 } from '@breeztech/react-native-breez-sdk';
 import {useEffect, useState} from 'react';
-import {ActivityIndicator, StyleSheet, View, Text} from 'react-native';
+import {ActivityIndicator, StyleSheet, View, Text, Alert} from 'react-native';
 import {COLORS, CENTER, FONT, SIZES} from '../../../../constants';
 import QRCode from 'react-native-qrcode-svg';
 import Slider from '@react-native-community/slider';
@@ -22,11 +22,15 @@ export default function BitcoinPage(props) {
   const [inPorgressSwapInfo, setInProgressSwapInfo] = useState({});
 
   useEffect(() => {
+    Alert.alert('not activated yet');
+    return;
     if (props.selectedRecieveOption != 'bitcoin') return;
 
     initSwap();
     monitorSwap();
   }, [props.selectedRecieveOption]);
+
+  return null;
 
   return (
     <View

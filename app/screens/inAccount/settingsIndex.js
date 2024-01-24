@@ -68,6 +68,12 @@ const SECURITYOPTIONS = [
     icon: ICONS.linkIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
+  {
+    for: 'Security & Customization',
+    name: 'Beta inbound liquitiy fix',
+    icon: ICONS.linkIcon,
+    arrowIcon: ICONS.leftCheveronIcon,
+  },
 ];
 const ADVANCEDOPTIONS = [
   // {

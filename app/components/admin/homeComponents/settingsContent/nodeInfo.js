@@ -43,7 +43,10 @@ export default function NodeInfo(props) {
       <View
         key={id}
         style={{
-          borderBottomWidth: lnNodeInfo?.connectedPeers.length === 1 ? 0 : 2,
+          borderBottomWidth:
+            id === lnNodeInfo?.connectedPeers.length - 1 ? 0 : 2,
+          marginBottom: id === lnNodeInfo?.connectedPeers.length - 1 ? 0 : 10,
+          paddingBottom: id === lnNodeInfo?.connectedPeers.length - 1 ? 0 : 10,
         }}>
         <Text
           style={[

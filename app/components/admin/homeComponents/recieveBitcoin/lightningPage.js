@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useReducer, useRef, useState} from 'react';
 import {getFiatRates} from '../../../../functions/SDK';
 import {
   ActivityIndicator,
@@ -11,31 +11,40 @@ import {
 import {
   fetchFiatRates,
   openChannelFee,
+  parseInvoice,
   receivePayment,
 } from '@breeztech/react-native-breez-sdk';
 import QRCode from 'react-native-qrcode-svg';
 import {FONT, SIZES, CENTER, COLORS} from '../../../../constants';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
+import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 
 export default function LightningPage(props) {
+  const isInitialRender = useRef(true);
   const [fiatRate, setFiatRate] = useState(0);
-  const [generatingQrCode, setGeneratingQrCode] = useState(true);
+  const {nodeInformation} = useGlobalContextProvider();
+  // const [generatingQrCode, setGeneratingQrCode] = useState(true);
   const [errorMessageText, setErrorMessageText] = useState('');
 
   useEffect(() => {
     if (props.selectedRecieveOption != 'lightning') {
       setErrorMessageText('');
       setFiatRate('');
-      setGeneratingQrCode(true);
+      props.setGeneratingLNInvioce(true);
+      isInitialRender.current = true;
       return;
     }
     if (!props.userSelectedCurrency) return;
-
-    generateLightningInvoice();
+    if (!nodeInformation.didConnectToNode) return;
+    if (isInitialRender.current) {
+      loadPrevGeneratedInvoice();
+      isInitialRender.current = false;
+    } else generateLightningInvoice();
 
     (async () => {
       try {
         const fiatRates = await fetchFiatRates();
-        // console.log(props.userSelectedCurrency, 'IN LIGHTNING PAGE');
+
         const [selectedPrice] = fiatRates.filter(
           rate =>
             rate.coin.toLowerCase() ===
@@ -58,13 +67,13 @@ export default function LightningPage(props) {
         display: props.selectedRecieveOption === 'lightning' ? 'flex' : 'none',
       }}>
       <View style={[styles.qrcodeContainer]}>
-        {generatingQrCode && (
+        {props.generatingLNInvoice && (
           <ActivityIndicator
             size="large"
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
           />
         )}
-        {!generatingQrCode && (
+        {!props.generatingLNInvoice && (
           <QRCode
             size={250}
             value={
@@ -113,20 +122,19 @@ export default function LightningPage(props) {
 
   async function generateLightningInvoice() {
     try {
+      props.setGeneratingLNInvioce(true);
+
       if (props.sendingAmount === 0) {
-        setGeneratingQrCode(true);
-        setErrorMessageText('Must recieve more than 0 sats');
+        setErrorMessageText('Must set invoice for more than 0 sats');
         return;
       }
-      const channelFee = await openChannelFee({
-        amountMsat: props.sendingAmount,
-      });
 
       setErrorMessageText('');
-      setGeneratingQrCode(true);
-      console.log(channelFee);
 
-      if (channelFee?.usedFeeParams) {
+      if (nodeInformation.inboundLiquidityMsat < props.sendingAmount) {
+        const channelFee = await openChannelFee({
+          amountMsat: props.sendingAmount,
+        });
         setErrorMessageText(
           `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
             channelFee.feeMsat / 1000,
@@ -140,11 +148,62 @@ export default function LightningPage(props) {
       });
 
       if (invoice) {
-        setGeneratingQrCode(false);
+        props.setGeneratingLNInvioce(false);
         props.setGeneratedAddress(invoice.lnInvoice.bolt11);
       }
     } catch (err) {
       console.log(err, 'RECIVE ERROR');
+    }
+  }
+
+  async function loadPrevGeneratedInvoice() {
+    const MILISECONDSCONST = 1000;
+    const BUFFERTIMECONST = 300000;
+    try {
+      const prevInvoice = await getLocalStorageItem('lnInvoice');
+      let parsedInvoice = JSON.parse(prevInvoice);
+      const currentTime = new Date();
+
+      const txLookup =
+        nodeInformation.transactions.length > 10
+          ? nodeInformation.transactions.length > 50
+            ? nodeInformation.transactions.slice(0, 50)
+            : nodeInformation.transactions.slice(0, 10)
+          : nodeInformation.transactions;
+
+      const wasUsed = txLookup.filter(tx => {
+        if (
+          tx.details.data.paymentHash === parsedInvoice?.lnInvoice.paymentHash
+        )
+          return true;
+        else return false;
+      });
+
+      if (
+        currentTime.getMilliseconds() >
+          parsedInvoice?.lnInvoice.expiry * MILISECONDSCONST +
+            parsedInvoice?.lnInvoice.timestamp +
+            BUFFERTIMECONST ||
+        wasUsed.length != 0 ||
+        !parsedInvoice
+      ) {
+        parsedInvoice = await receivePayment({
+          amountMsat: 1000,
+          description: '',
+        });
+        setLocalStorageItem('lnInvoice', JSON.stringify(parsedInvoice));
+      }
+
+      props.setGeneratedAddress(parsedInvoice.lnInvoice.bolt11);
+      props.setSendingAmount(prev => {
+        return {
+          ...prev,
+          lightning: parsedInvoice.lnInvoice.amountMsat,
+        };
+      });
+      props.setGeneratingLNInvioce(false);
+    } catch (err) {
+      console.log(err);
     }
   }
 }

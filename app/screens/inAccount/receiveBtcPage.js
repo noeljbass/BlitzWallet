@@ -42,9 +42,11 @@ export function ReceivePaymentHome(props) {
   const [selectedRecieveOption, setSelectedRecieveOption] =
     useState('lightning');
   const [isSwapCreated, setIsSwapCreated] = useState(false);
+  const [generatingLNInvoice, setGeneratingLNInvioce] = useState(true);
   const navigate = useNavigation();
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
   const {theme} = useGlobalContextProvider();
+  console.log(generatedAddress);
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -108,6 +110,9 @@ export function ReceivePaymentHome(props) {
                   setGeneratedAddress={setGeneratedAddress}
                   theme={theme}
                   userSelectedCurrency={userSelectedCurrency}
+                  setSendingAmount={setSendingAmount}
+                  setGeneratingLNInvioce={setGeneratingLNInvioce}
+                  generatingLNInvoice={generatingLNInvoice}
                 />
               )}
               {selectedRecieveOption === 'bitcoin' && (
@@ -133,6 +138,7 @@ export function ReceivePaymentHome(props) {
                 generatedAddress={generatedAddress}
                 setEditPaymentPopup={setEditPaymentPopup}
                 isSwapCreated={isSwapCreated}
+                generatingLNInvoice={generatingLNInvoice}
               />
 
               {/* popups */}
