@@ -4,6 +4,7 @@ import {
   Alert,
   Image,
   SafeAreaView,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,6 +17,7 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 import {useEffect, useState} from 'react';
 import {getLocalStorageItem} from '../../functions';
 import {getWallet} from '../../functions/eCash';
+import * as FileSystem from 'expo-file-system';
 
 export default function ViewAllTxPage() {
   const navigate = useNavigation();
@@ -64,7 +66,8 @@ export default function ViewAllTxPage() {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              getWallet();
+              // getWallet();
+              generateCSV();
               return;
               Alert.alert('This does not work yet!');
             }}>
@@ -88,6 +91,53 @@ export default function ViewAllTxPage() {
       </SafeAreaView>
     </View>
   );
+  async function generateCSV() {
+    try {
+      const data = nodeInformation.transactions;
+      const headers = [
+        [
+          'Description',
+          'Date',
+          'Transaction Fees (sat)',
+          'Amount (sat)',
+          'Sent/Received',
+        ],
+      ];
+
+      const formatedData = data.map(tx => {
+        const txDate = new Date(tx.paymentTime * 1000);
+        console.log(tx);
+        return [
+          tx.description ? tx.description : 'No description',
+          txDate.toLocaleString(),
+          Math.round(tx.feeMsat / 1000).toLocaleString(),
+          Math.round(tx.amountMsat / 1000).toLocaleString(),
+          tx.paymentType,
+        ];
+      });
+      const csvData = headers.concat(formatedData).join('\n');
+
+      const dir = FileSystem.documentDirectory;
+
+      const fileName = 'BlitzWallet.csv';
+      const filePath = `${dir}${fileName}`;
+
+      await FileSystem.writeAsStringAsync(filePath, csvData, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      await Share.share({
+        title: 'BlitzWallet',
+        message: `${csvData}`,
+        url: `file://${filePath}`,
+        type: 'text/csv',
+      });
+
+      console.log(dir);
+    } catch (err) {
+      Alert.alert('Error when creating file');
+    }
+  }
 }
 
 const styles = StyleSheet.create({

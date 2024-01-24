@@ -1207,7 +1207,7 @@
     "@noble/hashes" "^1.1.5"
     "@noble/secp256k1" "^1.7.1"
 
-"@breeztech/react-native-breez-sdk@^0.2.14":
+"@breeztech/react-native-breez-sdk@0.2.14":
   version "0.2.14"
   resolved "https://registry.npmjs.org/@breeztech/react-native-breez-sdk/-/react-native-breez-sdk-0.2.14.tgz"
   integrity sha512-Z2gIr9VpkPh7bV1mmJreateYzrXWHvqiA8TZ1phxOo7B1HRuTT890jsOHIk1dRt0vmb3lKaQN0swSej5J94UtA==

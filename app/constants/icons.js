@@ -34,6 +34,7 @@ import contactsIcon from '../assets/icons/contactsIcon.png';
 import locationIcon from '../assets/icons/locationIcon.png';
 import receiptIcon from '../assets/icons/receipt.png';
 import checkIcon from '../assets/icons/check.png';
+import bankIcon from '../assets/icons/bank.png';
 import wordmark from '../assets/wordmark.png';
 
 export default {
@@ -74,4 +75,5 @@ export default {
   checkIcon,
   wordmark,
   walletBlueIcon,
+  bankIcon,
 };

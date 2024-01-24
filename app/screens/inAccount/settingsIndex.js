@@ -71,7 +71,7 @@ const SECURITYOPTIONS = [
   {
     for: 'Security & Customization',
     name: 'Bank',
-    icon: ICONS.linkIcon,
+    icon: ICONS.bankIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
 ];
