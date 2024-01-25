@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Animated,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import * as ExpoCamera from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
@@ -16,7 +17,7 @@ import * as ImagePicker from 'expo-image-picker';
 import {useEffect, useState} from 'react';
 
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function SendPaymentHome() {
@@ -28,6 +29,9 @@ export default function SendPaymentHome() {
     ExpoCamera.Camera.useCameraPermissions();
   const [storedPhotoesPermissions, requestPhotoesPermissions] =
     ImagePicker.useMediaLibraryPermissions();
+  const isFocused = useIsFocused();
+
+  console.log(isFocused, 'IF CAMERA WAS UNMOUNTED');
 
   const [didScan, setDidScan] = useState(false);
 
@@ -72,19 +76,14 @@ export default function SendPaymentHome() {
     });
   }
 
-  function handleBarCodeScanned({type, data}) {
-    if (!type.includes('QRCode')) {
-      return;
-    }
-
-    if (didScan) return;
-    console.log('TETS');
+  const handleBarCodeScanned = ({type, data}) => {
+    if (!type.includes('QRCode')) return;
+    setDidScan(true);
     navigate.navigate('ConfirmPaymentScreen', {
       btcAdress: data,
       setDidScan: setDidScan,
     });
-    setDidScan(true);
-  }
+  };
 
   return (
     <View
@@ -125,28 +124,34 @@ export default function SendPaymentHome() {
         {!storedCameraPermissions?.granted && (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text
-              style={{
-                fontFamily: FONT.Title_Regular,
-                fontSize: SIZES.large,
-                marginBottom: 5,
-              }}>
-              No access to camera
-            </Text>
-            <Text
-              style={{
-                fontFamily: FONT.Title_Regular,
-                fontSize: SIZES.medium,
-                textAlign: 'center',
-              }}>
-              Go to settings to let Blitz Wallet access your camera
-            </Text>
+            {storedCameraPermissions === null ? (
+              <>
+                <Text
+                  style={{
+                    fontFamily: FONT.Title_Regular,
+                    fontSize: SIZES.large,
+                    marginBottom: 5,
+                  }}>
+                  No access to camera
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: FONT.Title_Regular,
+                    fontSize: SIZES.medium,
+                    textAlign: 'center',
+                  }}>
+                  Go to settings to let Blitz Wallet access your camera
+                </Text>
+              </>
+            ) : (
+              <ActivityIndicator />
+            )}
           </View>
         )}
-        {storedCameraPermissions?.granted && (
+        {storedCameraPermissions?.granted && isFocused && (
           <ExpoCamera.Camera
             type={type}
-            onBarCodeScanned={handleBarCodeScanned}
+            onBarCodeScanned={didScan ? undefined : handleBarCodeScanned}
             style={[styles.camera]}
             barCodeScannerSettings={{
               barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
@@ -155,7 +160,6 @@ export default function SendPaymentHome() {
             autoFocus={ExpoCamera.AutoFocus.on}
           />
         )}
-
         <View
           style={{
             ...styles.bottomBar,
@@ -224,12 +228,6 @@ export default function SendPaymentHome() {
               Choose image
             </Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            onPress={toggleManualInput}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text style={styles.bottomText}>Manual input</Text>
-          </TouchableOpacity> */}
         </View>
       </SafeAreaView>
     </View>

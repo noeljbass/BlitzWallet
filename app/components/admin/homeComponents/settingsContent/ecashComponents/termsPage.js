@@ -86,6 +86,7 @@ export default function TermsPage() {
           </View>
         </View>
         <TouchableOpacity
+          onPress={() => Alert.alert('Coming soon...')}
           style={[
             BTN,
             {

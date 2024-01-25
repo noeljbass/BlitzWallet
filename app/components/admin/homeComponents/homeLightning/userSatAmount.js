@@ -8,18 +8,6 @@ import {useGlobalContextProvider} from '../../../../../context-store/context';
 export function UserSatAmount(props) {
   const {nodeInformation, theme} = useGlobalContextProvider();
 
-  useEffect(() => {
-    (async () => {
-      const displayAmount = JSON.parse(
-        await getLocalStorageItem('showBalance'),
-      );
-
-      if (displayAmount != null) {
-        props.setShowAmount(displayAmount);
-      } else props.setShowAmount(true);
-    })();
-  }, []);
-
   return (
     <TouchableOpacity
       onPress={() => {

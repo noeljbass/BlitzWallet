@@ -3,7 +3,7 @@ import {CENTER, COLORS, FONT, SIZES} from '../../../../constants';
 import {useEffect, useState} from 'react';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
 
-export default function LiquidityIndicator() {
+export default function LiquidityIndicator(props) {
   const {nodeInformation, theme} = useGlobalContextProvider();
   const [sendWitdh, setsendWitdh] = useState(0);
   const [showLiquidyAmount, setShowLiquidyAmount] = useState(false);
@@ -25,7 +25,9 @@ export default function LiquidityIndicator() {
       <View style={styles.container}>
         <Text style={[styles.typeText, {color: COLORS.primary}]}>
           {showLiquidyAmount
-            ? Math.round(nodeInformation.userBalance).toLocaleString()
+            ? props.showAmount
+              ? Math.round(nodeInformation.userBalance).toLocaleString()
+              : '*****'
             : 'Send'}
         </Text>
         <View
@@ -55,9 +57,11 @@ export default function LiquidityIndicator() {
             },
           ]}>
           {showLiquidyAmount
-            ? Math.round(
-                nodeInformation.inboundLiquidityMsat / 1000,
-              ).toLocaleString()
+            ? props.showAmount
+              ? Math.round(
+                  nodeInformation.inboundLiquidityMsat / 1000,
+                ).toLocaleString()
+              : '*****'
             : 'Receive'}
         </Text>
       </View>
@@ -92,11 +96,13 @@ const styles = StyleSheet.create({
 
     marginHorizontal: 10,
     borderRadius: 8,
+    overflow: 'hidden',
   },
 
   sendIndicator: {
     height: '100%',
     // width: 20,
+    maxWidth: 110,
     position: 'absolute',
     top: 0,
     left: 0,

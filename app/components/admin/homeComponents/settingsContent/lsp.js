@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
 import * as Clipboard from 'expo-clipboard';
@@ -91,9 +98,9 @@ export default function LSPPage() {
   async function copyToClipboard(content) {
     try {
       await Clipboard.setStringAsync(content);
-      window.alert('LSP Id copied successfully');
+      Alert.alert('LSP Id copied successfully');
     } catch (err) {
-      window.alert('Error copying LSP Id');
+      Alert.alert('Error copying LSP Id');
     }
   }
 

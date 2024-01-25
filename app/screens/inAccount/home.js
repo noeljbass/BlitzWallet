@@ -75,6 +75,7 @@ async function initBalanceAndTransactions(setNodeInformation) {
       setNodeInformation(prev => {
         return {
           ...prev,
+          didConnectToNode: false,
           transactions: JSON.parse(savedBreezInfo)[0],
           userBalance: JSON.parse(savedBreezInfo)[1],
           inboundLiquidityMsat: JSON.parse(savedBreezInfo)[2],
@@ -119,6 +120,7 @@ async function initWallet(
         // console.log(healthCheck);
 
         // console.log(nodeAmount);
+        console.log(nodeAmount, heath);
 
         setNodeInformation(prev => {
           return {

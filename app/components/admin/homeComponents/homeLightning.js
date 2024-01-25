@@ -9,6 +9,7 @@ import {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import LiquidityIndicator from './homeLightning/liquidityIndicator';
 import {useGlobalContextProvider} from '../../../../context-store/context';
+import {getLocalStorageItem} from '../../../functions';
 
 export default function HomeLightning(props) {
   console.log('HOME LIGHTNING PAGE');
@@ -28,6 +29,18 @@ export default function HomeLightning(props) {
     });
   }, [props.breezEvent]);
 
+  useEffect(() => {
+    (async () => {
+      const displayAmount = JSON.parse(
+        await getLocalStorageItem('showBalance'),
+      );
+
+      if (displayAmount != null) {
+        setShowAmount(displayAmount);
+      } else setShowAmount(true);
+    })();
+  }, []);
+
   return (
     <View style={style.globalContainer}>
       <UserSatAmount setShowAmount={setShowAmount} showAmount={showAmount} />
@@ -39,7 +52,7 @@ export default function HomeLightning(props) {
           </Text>
         </View>
       ) : (
-        <LiquidityIndicator />
+        <LiquidityIndicator showAmount={showAmount} />
       )}
 
       <UserTransactions showAmount={showAmount} numTx={userTxPreferance} />

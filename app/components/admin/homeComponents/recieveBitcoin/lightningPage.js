@@ -181,6 +181,7 @@ export default function LightningPage(props) {
       }
     } catch (err) {
       console.log(err, 'RECIVE ERROR');
+      setErrorMessageText('Unable to connect to node.');
     }
   }
 
@@ -236,7 +237,7 @@ export default function LightningPage(props) {
       });
       props.setGeneratingInvoiceQRCode(false);
     } catch (err) {
-      console.log(err);
+      setErrorMessageText('Unable to connect to node.');
     }
   }
 }

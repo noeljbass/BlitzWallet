@@ -29,7 +29,6 @@ export default function LiquidPage(props) {
     (async () => {
       if (nodeInformation.didConnectToNode) {
         const swapInfo = await getSwapPairInformation();
-        console.log(swapInfo);
         if (!swapInfo) {
           setSwapErrorMessage('Not able to get swap information.');
           return;
@@ -74,6 +73,7 @@ export default function LiquidPage(props) {
             style={{
               fontSize: SIZES.large,
               color: COLORS.cancelRed,
+              textAlign: 'center',
             }}>
             {swapErrorMessage ? swapErrorMessage : ' '}
           </Text>

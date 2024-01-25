@@ -106,7 +106,6 @@ export default function ViewAllTxPage() {
 
       const formatedData = data.map(tx => {
         const txDate = new Date(tx.paymentTime * 1000);
-        console.log(tx);
         return [
           tx.description ? tx.description : 'No description',
           txDate.toLocaleString(),
