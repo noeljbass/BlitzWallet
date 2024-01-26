@@ -19,14 +19,26 @@ import {getTransactions} from '../../functions/SDK';
 import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
-  const isInitialRender = useRef(true);
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme, setNodeInformation} = useGlobalContextProvider();
+  const {theme, toggleNodeInformation} = useGlobalContextProvider();
 
   // SDK events listener
 
   const onBreezEvent = e => {
     console.log(e.type, 'IN FUNCTION EVENT');
+    if (e.type === 'newBlock') {
+      (async () => {
+        try {
+          const breezNodeInfo = await nodeInfo();
+          toggleNodeInformation({
+            blockHeight: breezNodeInfo.blockHeight,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }
+
     if (
       e?.type != 'invoicePaid' &&
       e?.type != 'paymentSucceed' &&
@@ -35,19 +47,13 @@ export default function AdminHome({navigation: {navigate}, route}) {
       return;
 
     console.log('DID MAKE IT THROUGH LOGIC');
-
+    updateGlobalNodeInformation();
     setBreezEvent(e);
   };
 
   useEffect(() => {
-    initWallet(
-      isInitialRender,
-      setNodeInformation,
-      breezEvent,
-      onBreezEvent,
-      // setErrMessage,
-    );
-  }, [breezEvent]);
+    initWallet();
+  }, []);
 
   return (
     <View
@@ -65,43 +71,29 @@ export default function AdminHome({navigation: {navigate}, route}) {
       </SafeAreaView>
     </View>
   );
-}
+  async function initBalanceAndTransactions() {
+    try {
+      const savedBreezInfo = await getLocalStorageItem('breezInfo');
 
-async function initBalanceAndTransactions(setNodeInformation) {
-  try {
-    const savedBreezInfo = await getLocalStorageItem('breezInfo');
-
-    if (savedBreezInfo) {
-      setNodeInformation(prev => {
-        return {
-          ...prev,
+      if (savedBreezInfo) {
+        toggleNodeInformation({
           didConnectToNode: false,
           transactions: JSON.parse(savedBreezInfo)[0],
           userBalance: JSON.parse(savedBreezInfo)[1],
           inboundLiquidityMsat: JSON.parse(savedBreezInfo)[2],
           blockHeight: JSON.parse(savedBreezInfo)[3],
           onChainBalance: JSON.parse(savedBreezInfo)[4],
-        };
-      });
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-}
-async function initWallet(
-  isInitialRender,
-  setNodeInformation,
-  breezEvent,
-  onBreezEvent,
-  // setErrMessage,
-) {
-  // let savedBreezInfo;
-  if (isInitialRender.current) {
-    console.log('RUNNING');
-    console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
-    isInitialRender.current = false;
 
-    initBalanceAndTransactions(setNodeInformation);
+  async function initWallet() {
+    console.log('HOME RENDER BREEZ EVENT FIRST LOAD');
+
+    initBalanceAndTransactions(toggleNodeInformation);
 
     try {
       const response = await connectToNode(onBreezEvent);
@@ -115,23 +107,20 @@ async function initWallet(
         const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
 
         if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
+
         // await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 
         // console.log(nodeAmount);
-        console.log(nodeAmount, heath);
 
-        setNodeInformation(prev => {
-          return {
-            ...prev,
-            didConnectToNode: response.isConnected,
-            transactions: transactions,
-            userBalance: msatToSat,
-            inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
-            blockHeight: nodeAmount.blockHeight,
-            onChainBalance: nodeAmount.onchainBalanceMsat,
-          };
+        toggleNodeInformation({
+          didConnectToNode: response.isConnected,
+          transactions: transactions,
+          userBalance: msatToSat,
+          inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
+          blockHeight: nodeAmount.blockHeight,
+          onChainBalance: nodeAmount.onchainBalanceMsat,
         });
 
         await setLocalStorageItem(
@@ -145,56 +134,45 @@ async function initWallet(
           ]),
         );
       } else if (response.isConnected && !response.reason) {
-        setNodeInformation(prev => {
-          return {
-            ...prev,
-            didConnectToNode: response.isConnected,
-          };
+        toggleNodeInformation({
+          didConnectToNode: response.isConnected,
         });
       }
     } catch (err) {
       console.log(err, 'homepage connection to node err');
     }
-  } else {
-    if (Object.keys(breezEvent).length === 0) return;
+  }
 
+  async function updateGlobalNodeInformation() {
     const transactions = await getTransactions();
-    const nodeAmount = await nodeInfo();
-
-    const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-
-    setNodeInformation(prev => {
-      return {
-        ...prev,
-        transactions: transactions,
-        userBalance: msatToSat,
-        inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
-        blockHeight: nodeAmount.blockHeight,
-        onChainBalance: nodeAmount.onchainBalanceMsat,
-      };
+    const node_Info = await nodeInfo();
+    const msatToSat = node_Info.channelsBalanceMsat / 1000;
+    toggleNodeInformation({
+      transactions: transactions,
+      userBalance: msatToSat,
+      inboundLiquidityMsat: node_Info.inboundLiquidityMsats,
+      blockHeight: node_Info.blockHeight,
+      onChainBalance: node_Info.onchainBalanceMsat,
     });
-
     await setLocalStorageItem(
       'breezInfo',
       JSON.stringify([
         transactions,
         msatToSat,
-        nodeAmount.inboundLiquidityMsats,
-        nodeAmount.blockHeight,
-        nodeAmount.onchainBalanceMsat,
+        node_Info.inboundLiquidityMsats,
+        node_Info.blockHeight,
+        node_Info.onchainBalanceMsat,
       ]),
     );
-
-    console.log('HOME RENDER PAID INVOINCE');
   }
-}
 
-async function reconnectToLSP() {
-  try {
-    const [availableLsps] = await listLsps();
-    await connectLsp(availableLsps.id);
-  } catch (err) {
-    console.log(err);
+  async function reconnectToLSP() {
+    try {
+      const [availableLsps] = await listLsps();
+      await connectLsp(availableLsps.id);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

@@ -1,13 +1,23 @@
 import {
   inProgressSwap,
+  listRefundables,
   openChannelFee,
   receiveOnchain,
 } from '@breeztech/react-native-breez-sdk';
 import {useEffect, useState} from 'react';
-import {ActivityIndicator, StyleSheet, View, Text, Alert} from 'react-native';
-import {COLORS, CENTER, FONT, SIZES} from '../../../../constants';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
+import {COLORS, CENTER, FONT, SIZES, BTN} from '../../../../constants';
 import QRCode from 'react-native-qrcode-svg';
 import Slider from '@react-native-community/slider';
+import * as Clipboard from 'expo-clipboard';
+import {useNavigation} from '@react-navigation/native';
 
 export default function BitcoinPage(props) {
   const [generatingQrCode, setGeneratingQrCode] = useState(true);
@@ -20,167 +30,251 @@ export default function BitcoinPage(props) {
     lnFee: 0,
   });
   const [inPorgressSwapInfo, setInProgressSwapInfo] = useState({});
+  const navigate = useNavigation();
 
   useEffect(() => {
-    Alert.alert('not activated yet');
-    return;
+    // Alert.alert('not activated yet');
+    // return;
     if (props.selectedRecieveOption != 'bitcoin') return;
-
     initSwap();
-    monitorSwap();
   }, [props.selectedRecieveOption]);
-  return null;
-
+  // return null;
+  console.log(Object.keys(inPorgressSwapInfo).length === 0);
   return (
     <View
       style={{
+        flex: 1,
         display: props.selectedRecieveOption === 'bitcoin' ? 'flex' : 'none',
       }}>
-      <View style={[styles.qrcodeContainer]}>
-        {generatingQrCode && (
+      {Object.keys(inPorgressSwapInfo).length === 0 ? (
+        <>
+          <View style={[styles.qrcodeContainer]}>
+            {generatingQrCode && (
+              <ActivityIndicator
+                size="large"
+                color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
+              />
+            )}
+            {!generatingQrCode && (
+              <QRCode
+                size={250}
+                value={
+                  props.generatedAddress.bitcoin
+                    ? props.generatedAddress.bitcoin
+                    : 'Thanks for using Blitz!'
+                }
+                color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
+                backgroundColor={
+                  props.theme
+                    ? COLORS.darkModeBackground
+                    : COLORS.lightModeBackground
+                }
+              />
+            )}
+          </View>
+          {!generatingQrCode && (
+            <View style={styles.sliderContainer}>
+              <Text
+                style={[
+                  styles.feeHeaderText,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                Lightning Fee Calculator
+              </Text>
+              <Slider
+                onSlidingComplete={handleFeeSlider}
+                style={styles.sliderStyle}
+                minimumValue={bitcoinSwapInfo.minAllowedDeposit}
+                maximumValue={bitcoinSwapInfo.maxAllowedDeposit}
+                minimumTrackTintColor={COLORS.primary}
+                maximumTrackTintColor={
+                  props.theme
+                    ? COLORS.darkModeBackgroundOffset
+                    : COLORS.lightModeBackgroundOffset
+                }
+              />
+              <View style={styles.feeeBreakdownContainer}>
+                <View style={styles.feeBreakdownRow}>
+                  <Text
+                    style={[
+                      styles.feeBreakdownDescriptor,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Min Receivable (sat)
+                  </Text>
+                  <Text
+                    style={[
+                      styles.feeBreakdownValue,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    {bitcoinSwapInfo.minAllowedDeposit.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.feeBreakdownRow}>
+                  <Text
+                    style={[
+                      styles.feeBreakdownDescriptor,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Max Receivable (sat)
+                  </Text>
+                  <Text
+                    style={[
+                      styles.feeBreakdownValue,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    {bitcoinSwapInfo.maxAllowedDeposit.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.feeBreakdownRow}>
+                  <Text
+                    style={[
+                      styles.feeBreakdownDescriptor,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Receiving amount (sat)
+                  </Text>
+                  <Text
+                    style={[
+                      styles.feeBreakdownValue,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    {lnFee.receivingAmount.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.feeBreakdownRow}>
+                  <Text
+                    style={[
+                      styles.feeBreakdownDescriptor,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Lightning Fee (sat)
+                  </Text>
+                  <Text
+                    style={[
+                      styles.feeBreakdownValue,
+                      {
+                        color: props.theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    {lnFee.lnFee.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={[
+                  BTN,
+                  {
+                    height: 40,
+                    width: 150,
+                    marginTop: 'auto',
+                    marginBottom: 0,
+                    backgroundColor: COLORS.primary,
+                    ...CENTER,
+                  },
+                ]}
+                onPress={monitorSwap}>
+                <Text
+                  style={{
+                    fontFamily: FONT.Descriptoin_Regular,
+                    color: COLORS.darkModeText,
+                  }}>
+                  Monitor Swap
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </>
+      ) : (
+        <View style={styles.confirmingSwapContainer}>
+          <Text
+            style={[
+              styles.confirmingSwapHeader,
+              {color: props.theme ? COLORS.darkModeText : COLORS.lightModeText},
+            ]}>
+            Swap in progress
+          </Text>
           <ActivityIndicator
             size="large"
             color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
+            style={{marginVertical: 50}}
           />
-        )}
-        {!generatingQrCode && (
-          <QRCode
-            size={250}
-            value={
-              props.generatedAddress.bitcoin
-                ? props.generatedAddress.bitcoin
-                : 'Thanks for using Blitz!'
-            }
-            color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
-            backgroundColor={
-              props.theme
-                ? COLORS.darkModeBackground
-                : COLORS.lightModeBackground
-            }
-          />
-        )}
-      </View>
-      {!generatingQrCode && (
-        <View style={styles.sliderContainer}>
-          <Text
-            style={[
-              styles.feeHeaderText,
-              {
-                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            Lightning Fee Calculator
-          </Text>
-          <Slider
-            onSlidingComplete={handleFeeSlider}
-            style={styles.sliderStyle}
-            minimumValue={bitcoinSwapInfo.minAllowedDeposit}
-            maximumValue={bitcoinSwapInfo.maxAllowedDeposit}
-            minimumTrackTintColor={COLORS.primary}
-            maximumTrackTintColor={
-              props.theme
-                ? COLORS.darkModeBackgroundOffset
-                : COLORS.lightModeBackgroundOffset
-            }
-          />
-          <View style={styles.feeeBreakdownContainer}>
-            <View style={styles.feeBreakdownRow}>
+          <View style={{width: '90%', ...CENTER}}>
+            <Text style={styles.confirmingSwapTXID}>Tx id:</Text>
+            <TouchableOpacity
+              onPress={() =>
+                copyToClipboard(inPorgressSwapInfo.unconfirmedTxIds[0])
+              }>
               <Text
-                style={[
-                  styles.feeBreakdownDescriptor,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                Min Receivable (sat)
+                style={{
+                  fontFamily: FONT.Descriptoin_Regular,
+                  fontSize: SIZES.medium,
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                }}>
+                {inPorgressSwapInfo.unconfirmedTxIds[0]}
               </Text>
-              <Text
-                style={[
-                  styles.feeBreakdownValue,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                {bitcoinSwapInfo.minAllowedDeposit.toLocaleString()}
-              </Text>
-            </View>
-            <View style={styles.feeBreakdownRow}>
-              <Text
-                style={[
-                  styles.feeBreakdownDescriptor,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                Max Receivable (sat)
-              </Text>
-              <Text
-                style={[
-                  styles.feeBreakdownValue,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                {bitcoinSwapInfo.maxAllowedDeposit.toLocaleString()}
-              </Text>
-            </View>
-            <View style={styles.feeBreakdownRow}>
-              <Text
-                style={[
-                  styles.feeBreakdownDescriptor,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                Receiving amount (sat)
-              </Text>
-              <Text
-                style={[
-                  styles.feeBreakdownValue,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                {lnFee.receivingAmount.toLocaleString()}
-              </Text>
-            </View>
-            <View style={styles.feeBreakdownRow}>
-              <Text
-                style={[
-                  styles.feeBreakdownDescriptor,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                Lightning Fee (sat)
-              </Text>
-              <Text
-                style={[
-                  styles.feeBreakdownValue,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                {lnFee.lnFee.toLocaleString()}
-              </Text>
-            </View>
+            </TouchableOpacity>
           </View>
+          <Text
+            style={{
+              color: COLORS.cancelRed,
+              fontFamily: FONT.Descriptoin_Regular,
+              fontSize: SIZES.medium,
+              width: '90%',
+              textAlign: 'center',
+              marginTop: 20,
+            }}>
+            Swaps become refundable after 288 blocks or around 2 days. If your
+            swap has not come through before then, come back to this page and
+            click the button below.
+          </Text>
+          <TouchableOpacity
+            style={[BTN, {backgroundColor: COLORS.primary}]}
+            onPress={() => navigate.navigate('RefundBitcoinTransactionPage')}>
+            <Text
+              style={{
+                color: COLORS.darkModeText,
+                fontFamily: FONT.Descriptoin_Regular,
+              }}>
+              Issue refund
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -190,8 +284,6 @@ export default function BitcoinPage(props) {
     try {
       setGeneratingQrCode(true);
       const swapInfo = await receiveOnchain({});
-      console.log(swapInfo.minAllowedDeposit);
-      console.log(swapInfo.maxAllowedDeposit);
       const openChannelFeeResponse = await openChannelFee({
         amountMsat: swapInfo.minAllowedDeposit * 1000,
       });
@@ -210,8 +302,10 @@ export default function BitcoinPage(props) {
       setGeneratingQrCode(false);
     } catch (err) {
       console.log(err);
+      monitorSwap();
     }
   }
+
   async function monitorSwap() {
     try {
       const swapInfo = await inProgressSwap();
@@ -221,6 +315,7 @@ export default function BitcoinPage(props) {
       console.log(err);
     }
   }
+
   async function handleFeeSlider(e) {
     console.log(Math.round(e));
 
@@ -234,6 +329,16 @@ export default function BitcoinPage(props) {
       });
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async function copyToClipboard(txID) {
+    try {
+      await Clipboard.setStringAsync(txID);
+      navigate.navigate('ClipboardCopyPopup', {didCopy: true});
+      return;
+    } catch (err) {
+      navigate.navigate('ClipboardCopyPopup', {didCopy: false});
     }
   }
 }
@@ -253,6 +358,7 @@ const styles = StyleSheet.create({
   sliderStyle: {width: 200, height: 40, ...CENTER},
   sliderContainer: {
     width: '90%',
+    flex: 1,
     ...CENTER,
     marginTop: 30,
   },
@@ -282,5 +388,22 @@ const styles = StyleSheet.create({
   feeBreakdownValue: {
     fontFamily: FONT.Descriptoin_Bold,
     fontSize: SIZES.medium,
+  },
+
+  confirmingSwapContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmingSwapHeader: {
+    fontFamily: FONT.Title_Bold,
+    fontSize: SIZES.large,
+    marginBottom: 20,
+  },
+  confirmingSwapTXID: {
+    fontFamily: FONT.Descriptoin_Regular,
+    fontSize: SIZES.medium,
+    color: COLORS.primary,
+    marginBottom: 5,
   },
 });

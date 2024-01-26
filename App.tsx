@@ -59,6 +59,8 @@ import GiftWalletConfirmation from './app/components/admin/homeComponents/giftWa
 import ShareWallet from './app/components/admin/homeComponents/giftWallet/shareWallet';
 import SendPaymentScreen from './app/components/admin/homeComponents/sendBitcoin/sendPaymentScreen';
 import ClipboardCopyPopup from './app/components/admin/homeComponents/recieveBitcoin/components/confirmClipboard';
+import RefundBitcoinTransactionPage from './app/components/admin/homeComponents/recieveBitcoin/components/bitcoinRefundablePage';
+import CameraModal from './app/components/admin/homeComponents/cameraModal';
 
 const Stack = createNativeStackNavigator();
 
@@ -156,6 +158,7 @@ function ResetStack(): JSX.Element | null {
             name="DrainWalletAddress"
             component={DrainWalletAddress}
           />
+          <Stack.Screen name="CameraModal" component={CameraModal} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
@@ -175,6 +178,12 @@ function ResetStack(): JSX.Element | null {
           <Stack.Screen name="GiftWalletHome" component={GiftWalletHome} />
           <Stack.Screen name="AmountToGift" component={AmountToGift} />
           <Stack.Screen name="ShareWallet" component={ShareWallet} />
+
+          {/* REFUND TX  */}
+          <Stack.Screen
+            name="RefundBitcoinTransactionPage"
+            component={RefundBitcoinTransactionPage}
+          />
         </Stack.Group>
         <Stack.Group
           screenOptions={{

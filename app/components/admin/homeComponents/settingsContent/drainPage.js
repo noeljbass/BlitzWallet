@@ -122,7 +122,7 @@ export default function DrainPage() {
                 />
                 <TouchableOpacity
                   onPress={() => {
-                    navigate.navigate('DrainWalletAddress', {
+                    navigate.navigate('CameraModal', {
                       updateBitcoinAdressFunc: setBitcoinAddress,
                     });
                   }}>

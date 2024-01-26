@@ -18,20 +18,6 @@ export function ConnectionToNode() {
 
   const {nodeInformation, theme} = useGlobalContextProvider();
 
-  // async function getNodeData() {
-  //   try {
-  //     const nodeInformatino = await nodeInfo();
-  //     setNodeInformation(nodeInformatino);
-  //     setIsConnected(true);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getNodeData();
-  // }, []);
-
   return (
     <TouchableWithoutFeedback onPress={() => navigate.goBack()}>
       <View style={styles.globalContainer}>

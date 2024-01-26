@@ -27,6 +27,11 @@ const GlobalContextProvider = ({children}) => {
   function toggleUserTxPreferance(num) {
     setUserTxPereferance(num);
   }
+  function toggleNodeInformation(newInfo) {
+    setNodeInformation(prev => {
+      return {...prev, ...newInfo};
+    });
+  }
 
   useEffect(() => {
     (async () => {
@@ -63,7 +68,7 @@ const GlobalContextProvider = ({children}) => {
         userTxPreferance,
         toggleUserTxPreferance,
         nodeInformation,
-        setNodeInformation,
+        toggleNodeInformation,
       }}>
       {children}
     </GlobalContextManger.Provider>
