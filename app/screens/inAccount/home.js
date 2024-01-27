@@ -115,7 +115,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
 
         if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
 
-        await setLogStream(logHandler);
+        // await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 

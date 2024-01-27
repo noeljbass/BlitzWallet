@@ -35,8 +35,6 @@ export default function BitcoinPage(props) {
   const [errorMessageText, setErrorMessageText] = useState('');
 
   useEffect(() => {
-    // Alert.alert('not activated yet');
-    // return;
     if (props.selectedRecieveOption != 'bitcoin') return;
 
     (async () => {
@@ -50,7 +48,6 @@ export default function BitcoinPage(props) {
     })();
   }, [props.selectedRecieveOption]);
   // return null;
-  console.log(Object.keys(inPorgressSwapInfo).length === 0);
   return (
     <View
       style={{
@@ -228,7 +225,9 @@ export default function BitcoinPage(props) {
                     ...CENTER,
                   },
                 ]}
-                onPress={monitorSwap}>
+                onPress={() => {
+                  monitorSwap();
+                }}>
                 <Text
                   style={{
                     fontFamily: FONT.Descriptoin_Regular,
@@ -272,15 +271,7 @@ export default function BitcoinPage(props) {
               </Text>
             </TouchableOpacity>
           </View>
-          <Text
-            style={{
-              color: COLORS.cancelRed,
-              fontFamily: FONT.Descriptoin_Regular,
-              fontSize: SIZES.medium,
-              width: '90%',
-              textAlign: 'center',
-              marginTop: 20,
-            }}>
+          <Text style={styles.swapErrorMessage}>
             Swaps become refundable after 288 blocks or around 2 days. If your
             swap has not come through before then, come back to this page and
             click the button below.
@@ -379,7 +370,7 @@ const styles = StyleSheet.create({
   },
   sliderStyle: {width: 200, height: 40, ...CENTER},
   sliderContainer: {
-    width: '90%',
+    width: '95%',
     flex: 1,
     ...CENTER,
     marginTop: 30,
@@ -427,5 +418,13 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     color: COLORS.primary,
     marginBottom: 5,
+  },
+  swapErrorMessage: {
+    color: COLORS.cancelRed,
+    fontFamily: FONT.Descriptoin_Regular,
+    fontSize: SIZES.medium,
+    width: '90%',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
