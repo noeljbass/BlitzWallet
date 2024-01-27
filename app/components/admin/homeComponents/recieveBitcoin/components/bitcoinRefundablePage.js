@@ -48,7 +48,7 @@ export default function RefundBitcoinTransactionPage() {
         const refundables = await listRefundables();
         getRecommendedFee();
         if (refundables.length === 0) {
-          setHasRefundableTx(true);
+          setHasRefundableTx(false);
         } else {
           setRefundableInfo(refundables);
           hasRefundableTx(true);
@@ -67,6 +67,7 @@ export default function RefundBitcoinTransactionPage() {
         backgroundColor: theme
           ? COLORS.darkModeBackground
           : COLORS.lightModeBackground,
+        paddingVertical: Platform.OS === 'ios' ? 0 : 10,
       }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -208,6 +209,7 @@ export default function RefundBitcoinTransactionPage() {
                         backgroundColor: COLORS.primary,
                         ...CENTER,
                         opacity: bitcoinAddress && bitcoinTxFee != 0 ? 1 : 0.5,
+                        marginBottom: 30,
                       },
                     ]}>
                     <Text

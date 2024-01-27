@@ -21,7 +21,9 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme, toggleNodeInformation} = useGlobalContextProvider();
+  const {theme, toggleNodeInformation, nodeInformation} =
+    useGlobalContextProvider();
+  console.log(nodeInformation);
 
   // SDK events listener
 
@@ -32,19 +34,11 @@ export default function AdminHome({navigation: {navigate}, route}) {
   };
 
   const onBreezEvent = e => {
-    console.log(e.type, 'IN FUNCTION EVENT');
-    if (e.type === 'newBlock') {
-      (async () => {
-        try {
-          const breezNodeInfo = await nodeInfo();
-          toggleNodeInformation({
-            blockHeight: breezNodeInfo.blockHeight,
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      })();
-    }
+    console.log(e, 'IN FUNCTION EVENT');
+    if (e.type === 'newBlock')
+      toggleNodeInformation({
+        blockHeight: e.block,
+      });
 
     if (
       e?.type != 'invoicePaid' &&
