@@ -27,8 +27,7 @@ export default function SendPaymentHome() {
   const {theme} = useGlobalContextProvider();
   const [storedCameraPermissions, requestCameraPermissions] =
     ExpoCamera.Camera.useCameraPermissions();
-  const [storedPhotoesPermissions, requestPhotoesPermissions] =
-    ImagePicker.useMediaLibraryPermissions();
+
   const isFocused = useIsFocused();
 
   console.log(isFocused, 'IF CAMERA WAS UNMOUNTED');
@@ -41,7 +40,6 @@ export default function SendPaymentHome() {
     setDidScan(false);
     (async () => {
       await requestCameraPermissions();
-      await requestPhotoesPermissions();
     })();
   }, []);
 
@@ -55,12 +53,10 @@ export default function SendPaymentHome() {
   }
 
   async function getQRImage() {
-    if (!storedPhotoesPermissions.granted) {
-      return;
-    }
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      allowsMultipleSelection: false,
       quality: 1,
     });
 

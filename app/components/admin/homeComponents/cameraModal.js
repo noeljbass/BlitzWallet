@@ -29,8 +29,6 @@ export default function CameraModal(props) {
 
   const [storedCameraPermissions, requestCameraPermissions] =
     ExpoCamera.Camera.useCameraPermissions();
-  const [storedPhotoesPermissions, requestPhotoesPermissions] =
-    ImagePicker.useMediaLibraryPermissions();
 
   const [didScan, setDidScan] = useState(false);
   const [bottomExpand, setBottomExpand] = useState(false);
@@ -38,7 +36,6 @@ export default function CameraModal(props) {
   useEffect(() => {
     (async () => {
       await requestCameraPermissions();
-      await requestPhotoesPermissions();
     })();
   }, []);
 
@@ -200,12 +197,10 @@ export default function CameraModal(props) {
     }
   }
   async function getQRImage() {
-    if (!storedPhotoesPermissions.granted) {
-      return;
-    }
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      allowsMultipleSelection: false,
       quality: 1,
     });
 

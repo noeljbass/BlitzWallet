@@ -21,9 +21,7 @@ import {useGlobalContextProvider} from '../../../context-store/context';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme, toggleNodeInformation, nodeInformation} =
-    useGlobalContextProvider();
-  console.log(nodeInformation);
+  const {theme, toggleNodeInformation} = useGlobalContextProvider();
 
   // SDK events listener
 
