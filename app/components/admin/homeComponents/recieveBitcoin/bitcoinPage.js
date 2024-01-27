@@ -3,6 +3,7 @@ import {
   listRefundables,
   openChannelFee,
   receiveOnchain,
+  receivePayment,
 } from '@breeztech/react-native-breez-sdk';
 import {useEffect, useState} from 'react';
 import {
@@ -31,12 +32,22 @@ export default function BitcoinPage(props) {
   });
   const [inPorgressSwapInfo, setInProgressSwapInfo] = useState({});
   const navigate = useNavigation();
+  const [errorMessageText, setErrorMessageText] = useState('');
 
   useEffect(() => {
     // Alert.alert('not activated yet');
     // return;
     if (props.selectedRecieveOption != 'bitcoin') return;
-    initSwap();
+
+    (async () => {
+      try {
+        await receivePayment({amountMsat: 1000, description: 'no description'});
+        initSwap();
+      } catch (err) {
+        setErrorMessageText('Error cannot generate receiving address');
+        console.log(err);
+      }
+    })();
   }, [props.selectedRecieveOption]);
   // return null;
   console.log(Object.keys(inPorgressSwapInfo).length === 0);
@@ -53,6 +64,7 @@ export default function BitcoinPage(props) {
               <ActivityIndicator
                 size="large"
                 color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
+                style={{marginTop: 'auto', marginBottom: 'auto'}}
               />
             )}
             {!generatingQrCode && (
@@ -71,6 +83,15 @@ export default function BitcoinPage(props) {
                 }
               />
             )}
+            <Text
+              style={{
+                fontSize: SIZES.large,
+                color: COLORS.cancelRed,
+                ...CENTER,
+                textAlign: 'center',
+              }}>
+              {errorMessageText ? errorMessageText : ' '}
+            </Text>
           </View>
           {!generatingQrCode && (
             <View style={styles.sliderContainer}>
@@ -287,6 +308,7 @@ export default function BitcoinPage(props) {
       const openChannelFeeResponse = await openChannelFee({
         amountMsat: swapInfo.minAllowedDeposit * 1000,
       });
+
       props.setGeneratedAddress(prev => {
         return {...prev, bitcoin: swapInfo.bitcoinAddress};
       });

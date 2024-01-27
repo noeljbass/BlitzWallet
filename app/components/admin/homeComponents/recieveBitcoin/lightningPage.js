@@ -181,7 +181,7 @@ export default function LightningPage(props) {
       }
     } catch (err) {
       console.log(err, 'RECIVE ERROR');
-      setErrorMessageText('Unable to connect to node.');
+      setErrorMessageText('Error cannot generate receiving address');
     }
   }
 
@@ -237,7 +237,7 @@ export default function LightningPage(props) {
       });
       props.setGeneratingInvoiceQRCode(false);
     } catch (err) {
-      setErrorMessageText('Unable to connect to node.');
+      setErrorMessageText('Error cannot generate receiving address');
     }
   }
 }

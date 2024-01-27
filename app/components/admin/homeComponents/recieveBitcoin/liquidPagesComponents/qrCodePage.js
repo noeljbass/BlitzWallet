@@ -10,6 +10,7 @@ import {createLiquidSwap} from '../../../../../functions/LBTC';
 
 export default function QrCodePage(props) {
   const [evenSource, setEventSource] = useState({});
+  const [errorMessageText, setErrorMessageText] = useState('');
 
   useEffect(() => {
     console.log('QR CODE PAGE');
@@ -45,6 +46,7 @@ export default function QrCodePage(props) {
         }
       } catch (err) {
         console.log(err);
+        setErrorMessageText('Error cannot generate receiving address');
       }
     })();
   }, []);
@@ -75,64 +77,77 @@ export default function QrCodePage(props) {
           />
         )}
       </View>
-      <View style={styles.transactionStatusContainer}>
+
+      {errorMessageText ? (
         <Text
-          style={[
-            styles.statusTitle,
-            {
-              color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-            },
-          ]}>
-          Status:
+          style={{
+            color: COLORS.cancelRed,
+            fontFamily: FONT.Descriptoin_Regular,
+            fontSize: SIZES.large,
+            textAlign: 'center',
+          }}>
+          {errorMessageText}
         </Text>
-        <View style={{height: 80, justifyContent: 'space-between'}}>
+      ) : (
+        <View style={styles.transactionStatusContainer}>
           <Text
             style={[
-              styles.statusText,
+              styles.statusTitle,
               {
-                color:
-                  evenSource === '{"status":"invoice.set"}' ||
-                  evenSource === '{"status":"transaction.mempool"}' ||
-                  evenSource === '{"status":"invoice.pending"}'
-                    ? 'green'
-                    : props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
               },
             ]}>
-            Invoice Set
+            Status:
           </Text>
-          <Text
-            style={[
-              styles.statusText,
-              {
-                color:
-                  evenSource === '{"status":"transaction.mempool"}' ||
-                  evenSource === '{"status":"invoice.pending"}'
-                    ? 'green'
-                    : props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-              },
-            ]}>
-            In mempool
-          </Text>
-          <Text
-            style={[
-              styles.statusText,
-              {
-                color:
-                  evenSource === '{"status":"invoice.pending"}'
-                    ? 'green'
-                    : props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-              },
-            ]}>
-            Payment Pending
-          </Text>
+          <View style={{height: 80, justifyContent: 'space-between'}}>
+            <Text
+              style={[
+                styles.statusText,
+                {
+                  color:
+                    evenSource === '{"status":"invoice.set"}' ||
+                    evenSource === '{"status":"transaction.mempool"}' ||
+                    evenSource === '{"status":"invoice.pending"}'
+                      ? 'green'
+                      : props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                },
+              ]}>
+              Invoice Set
+            </Text>
+            <Text
+              style={[
+                styles.statusText,
+                {
+                  color:
+                    evenSource === '{"status":"transaction.mempool"}' ||
+                    evenSource === '{"status":"invoice.pending"}'
+                      ? 'green'
+                      : props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                },
+              ]}>
+              In mempool
+            </Text>
+            <Text
+              style={[
+                styles.statusText,
+                {
+                  color:
+                    evenSource === '{"status":"invoice.pending"}'
+                      ? 'green'
+                      : props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                },
+              ]}>
+              Payment Pending
+            </Text>
+          </View>
         </View>
-      </View>
+      )}
     </>
   );
 }

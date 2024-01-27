@@ -108,7 +108,7 @@ export default function SendPaymentScreen(props) {
                           },
                         ]}
                         // value={String(sendingAmount / 1000)}
-                        keyboardType="numeric"
+                        keyboardType="number-pad"
                         placeholder="0"
                         onChangeText={e => {
                           if (isNaN(e)) return;
@@ -366,7 +366,7 @@ export default function SendPaymentScreen(props) {
           data: {paymentHash},
         });
       } catch (err) {
-        console.log(err);
+        console.log(err, 'T');
       }
     }
   }

@@ -12,6 +12,7 @@ import {
   lspInfo,
   nodeInfo,
   serviceHealthCheck,
+  setLogStream,
 } from '@breeztech/react-native-breez-sdk';
 import NavBar from '../../components/admin/homeComponents/navBar';
 import HomeLightning from '../../components/admin/homeComponents/homeLightning';
@@ -23,6 +24,12 @@ export default function AdminHome({navigation: {navigate}, route}) {
   const {theme, toggleNodeInformation} = useGlobalContextProvider();
 
   // SDK events listener
+
+  const logHandler = logEntry => {
+    if (logEntry.level != 'TRACE') {
+      console.log(`[${logEntry.level}]: ${logEntry.line}`);
+    }
+  };
 
   const onBreezEvent = e => {
     console.log(e.type, 'IN FUNCTION EVENT');
@@ -108,7 +115,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
 
         if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
 
-        // await setLogStream(logHandler);
+        await setLogStream(logHandler);
         // const healthCheck = await serviceHealthCheck();
         // console.log(healthCheck);
 

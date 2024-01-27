@@ -28,19 +28,23 @@ export default function LiquidPage(props) {
   useEffect(() => {
     (async () => {
       if (nodeInformation.didConnectToNode) {
-        const swapInfo = await getSwapPairInformation();
-        if (!swapInfo) {
-          setSwapErrorMessage('Not able to get swap information.');
-          return;
+        try {
+          const swapInfo = await getSwapPairInformation();
+          if (!swapInfo) {
+            setSwapErrorMessage('Not able to get swap information.');
+            return;
+          }
+          setFeeInfo({
+            boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
+            liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
+            hash: swapInfo.hash,
+            minAmount: swapInfo.limits.minimal + 1000,
+            maxAmount: swapInfo.limits.maximal,
+          });
+          setCanSwap(true);
+        } catch (err) {
+          setSwapErrorMessage('Not connected to node.');
         }
-        setFeeInfo({
-          boltzFeePercent: swapInfo.fees.percentageSwapIn / 100,
-          liquidFee: swapInfo.fees.minerFees.baseAsset?.normal,
-          hash: swapInfo.hash,
-          minAmount: swapInfo.limits.minimal + 1000,
-          maxAmount: swapInfo.limits.maximal,
-        });
-        setCanSwap(true);
       } else {
         setSwapErrorMessage('Not connected to node.');
       }
