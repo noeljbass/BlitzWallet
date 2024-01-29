@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useGlobalContextProvider} from '../../../context-store/context';
-import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../constants';
-import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 
-export default function GiftWalletHome() {
+import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
+import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
+import HowToSteps from '../fundGift/howToSteps';
+
+export default function FundWalletGift() {
   const navigate = useNavigation();
   const {theme} = useGlobalContextProvider();
 
@@ -29,24 +31,6 @@ export default function GiftWalletHome() {
         },
       ]}>
       <SafeAreaView style={{flex: 1}}>
-        <View style={styles.topbar}>
-          <TouchableOpacity
-            onPress={() => {
-              navigate.goBack();
-            }}>
-            <Image style={styles.topBarIcon} source={ICONS.leftCheveronIcon} />
-          </TouchableOpacity>
-          <Text
-            style={[
-              styles.topBarText,
-              {
-                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            Gift a Wallet
-          </Text>
-        </View>
-
         <View style={[styles.contentContainer]}>
           <View style={[styles.contentItem]}>
             <Text
@@ -92,10 +76,9 @@ export default function GiftWalletHome() {
                     marginBottom: 0,
                   },
                 ]}>
-                By using this feature, you can invite people into the lightning
-                ecosystem by giving them pre-stocked wallets so that when they
-                restore their account, they can send and receive Bitcoin over
-                the lightning network instantly.
+                By using this feature, you can pre-fund someonbody's wallet so
+                as soon as they open it for the first time, they can send and
+                receive Bitcoin over the lightning network instantly.
               </Text>
             </View>
           </View>
@@ -105,7 +88,7 @@ export default function GiftWalletHome() {
                 styles.contentHeader,
                 {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
               ]}>
-              Importent to know?
+              How to do this?
             </Text>
             <View
               style={[
@@ -116,30 +99,16 @@ export default function GiftWalletHome() {
                     : COLORS.lightModeBackgroundOffset,
                 },
               ]}>
-              <Text
-                style={[
-                  styles.contentDescription,
-                  {
-                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                    marginBottom: 0,
-                  },
-                ]}>
-                This feature is{' '}
-                <Text style={{color: COLORS.primary}}>TRUST-BASED </Text> . You
-                will be exposed to the seed phrase for the other person, so the
-                security of the seed is on you. You should also always give a
-                warning to the other person that using a seed somebody else
-                knows is <Text style={{color: COLORS.primary}}>DANGEROUS</Text>.
-              </Text>
+              <HowToSteps />
             </View>
           </View>
           <TouchableOpacity
             onPress={() => {
               (async () => {
                 try {
-                  Alert.alert('Coming Soon....');
-                  // await nodeInfo();
-                  // navigate.navigate('AmountToGift');
+                  // Alert.alert('Coming Soon....');
+                  await nodeInfo();
+                  navigate.navigate('ScanReciverQrCode');
                 } catch (err) {
                   Alert.alert(
                     'Not connected to node',
@@ -156,7 +125,7 @@ export default function GiftWalletHome() {
                 marginBottom: 0,
               },
             ]}>
-            <Text style={styles.buttonText}>Continue</Text>
+            <Text style={styles.buttonText}>Start process</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

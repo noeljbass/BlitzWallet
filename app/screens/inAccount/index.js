@@ -3,7 +3,6 @@ import {ConnectionToNode} from './conectionToNode';
 import ConfirmTxPage from './confirmTxPage';
 import ContactsPage from './contactsPage';
 import ExpandedTx from './expandedTxPage';
-import GiftWalletHome from './giftwallethome';
 import AdminHome from './home';
 import AdminLogin from './login';
 import {ReceivePaymentHome} from './receiveBtcPage';
@@ -25,5 +24,4 @@ export {
   SettingsIndex,
   FaceIdPage,
   ViewAllTxPage,
-  GiftWalletHome,
 };

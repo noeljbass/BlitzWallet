@@ -15,6 +15,7 @@ import {
   DrainPage,
   EcashHome,
   FiatCurrencyPage,
+  FundWalletGift,
   LSPPage,
   NodeInfo,
   ResetPage,
@@ -73,6 +74,9 @@ export default function SettingsContentIndex(props) {
         )}
         {selectedPage?.toLowerCase() === 'display options' && (
           <DisplayOptions theme={theme} />
+        )}
+        {selectedPage?.toLowerCase() === 'fund wallet gift' && (
+          <FundWalletGift theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'face id' && (
           <FaceIdPage theme={theme} />

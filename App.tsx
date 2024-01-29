@@ -36,7 +36,6 @@ import {
   ConnectionToNode,
   ContactsPage,
   ExpandedTx,
-  GiftWalletHome,
   ReceivePaymentHome,
   SendPaymentHome,
   SettingsContentIndex,
@@ -54,13 +53,13 @@ import {
   DrainWalletAddress,
   LspDescriptionPopup,
 } from './app/components/admin/homeComponents/settingsContent';
-import AmountToGift from './app/components/admin/homeComponents/giftWallet/amountToGift';
-import GiftWalletConfirmation from './app/components/admin/homeComponents/giftWallet/popups/giftWalletConfirmation';
-import ShareWallet from './app/components/admin/homeComponents/giftWallet/shareWallet';
+import AmountToGift from './app/components/admin/homeComponents/fundGift/amountToGift';
+import GiftWalletConfirmation from './app/components/admin/homeComponents/fundGift/popups/giftWalletConfirmation';
 import SendPaymentScreen from './app/components/admin/homeComponents/sendBitcoin/sendPaymentScreen';
 import ClipboardCopyPopup from './app/components/admin/homeComponents/recieveBitcoin/components/confirmClipboard';
 import RefundBitcoinTransactionPage from './app/components/admin/homeComponents/recieveBitcoin/components/bitcoinRefundablePage';
 import CameraModal from './app/components/admin/homeComponents/cameraModal';
+import ScanRecieverQrCode from './app/components/admin/homeComponents/fundGift/scanReciverQrCode';
 
 const Stack = createNativeStackNavigator();
 
@@ -175,9 +174,11 @@ function ResetStack(): JSX.Element | null {
           />
 
           {/* GIFT WALLET PATH */}
-          <Stack.Screen name="GiftWalletHome" component={GiftWalletHome} />
           <Stack.Screen name="AmountToGift" component={AmountToGift} />
-          <Stack.Screen name="ShareWallet" component={ShareWallet} />
+          <Stack.Screen
+            name="ScanReciverQrCode"
+            component={ScanRecieverQrCode}
+          />
 
           {/* REFUND TX  */}
           <Stack.Screen

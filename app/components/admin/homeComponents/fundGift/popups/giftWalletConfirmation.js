@@ -34,7 +34,7 @@ export default function GiftWalletConfirmation(props) {
               color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
-          Once you drain your wallet this cannot be undone.
+          Once you create this wallet it cannot be undone.
         </Text>
 
         <View style={confirmPopup.buttonContainer}>

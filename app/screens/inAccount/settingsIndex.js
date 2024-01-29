@@ -43,7 +43,7 @@ const GENERALOPTIONS = [
   },
   {
     for: 'general',
-    name: 'Gift Wallet',
+    name: 'Fund Wallet Gift',
     icon: ICONS.walletBlueIcon,
     arrowIcon: ICONS.leftCheveronIcon,
     usesStandAlonePath: true,
@@ -113,10 +113,10 @@ export default function SettingsIndex(props) {
           style={styles.listContainer}
           key={id}
           onPress={() => {
-            if (element?.usesStandAlonePath) {
-              navigate.navigate('GiftWalletHome');
-              return;
-            }
+            // if (element?.usesStandAlonePath) {
+            //   navigate.navigate('GiftWalletHome');
+            //   return;
+            // }
             navigate.navigate('SettingsContentHome', {for: element.name});
             // setSettingsContent({isDisplayed: true, for: element.name});
           }}>

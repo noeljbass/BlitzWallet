@@ -20,7 +20,7 @@ import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {getFiatRates} from '../../../../functions/SDK';
 
-export default function AmountToGift() {
+export default function AmountToGift(props) {
   const isInitialRender = useRef(true);
   const navigate = useNavigation();
   const {theme} = useGlobalContextProvider();
@@ -30,7 +30,9 @@ export default function AmountToGift() {
     value: 0,
   });
   const [wantsToCreateWallet, setWantsToCreateWallet] = useState(false);
-
+  const [walletBalance, setWalletBalance] = useState(0);
+  const nodeID = props.route.params.nodeID;
+  const openChannelFee = props.route.params.openChannelFee;
   useEffect(() => {
     if (isInitialRender.current) {
       getUserSelectedCurrency();
@@ -39,7 +41,7 @@ export default function AmountToGift() {
 
     if (wantsToCreateWallet) {
       navigate.navigate('ShareWallet', {
-        walletAmount: currencyInfo.value,
+        walletAmount: walletBalance,
         wantsToCreateWallet: setWantsToCreateWallet,
       });
     }
@@ -65,6 +67,7 @@ export default function AmountToGift() {
               <TouchableOpacity
                 onPress={() => {
                   navigate.goBack();
+                  isInitialRender.current = true;
                 }}>
                 <Image
                   style={styles.topBarIcon}
@@ -113,9 +116,7 @@ export default function AmountToGift() {
                   placeholder="0"
                   onChangeText={e => {
                     if (isNaN(e)) return;
-                    setCurrencyInfo(prev => {
-                      return {...prev, value: Number(e) * 1000};
-                    });
+                    setWalletBalance(Number(e) * 1000);
                   }}
                 />
                 <Text
@@ -132,7 +133,12 @@ export default function AmountToGift() {
               </View>
               <View>
                 <Text>
-                  = {10} {currencyInfo.currency}
+                  ={' '}
+                  {(
+                    (walletBalance / 1000) *
+                    (currencyInfo.value / 100000000)
+                  ).toFixed(2)}{' '}
+                  {currencyInfo.currency}
                 </Text>
               </View>
             </View>
@@ -165,9 +171,17 @@ export default function AmountToGift() {
       const currency = await getLocalStorageItem('currency');
       if (!currency) setLocalStorageItem('currency', 'USD');
       const value = await getFiatRates();
-      console.log(value);
-      setCurrencyInfo({currency: currency});
-    } catch (err) {}
+      const [userSelectedFiatRate] = value.filter(item => {
+        if (item.coin.toLowerCase() === currency.toLowerCase()) return item;
+        else return false;
+      });
+      setCurrencyInfo({
+        currency: userSelectedFiatRate.coin,
+        value: userSelectedFiatRate.value,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
