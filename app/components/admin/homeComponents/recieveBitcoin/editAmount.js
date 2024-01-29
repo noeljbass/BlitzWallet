@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   useColorScheme,
   Keyboard,
+  Platform,
 } from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
@@ -51,80 +52,83 @@ export default function EditAmountPopup(props) {
         {opacity: fadeAnim},
         {zIndex: props.isDisplayed ? 1 : -1},
       ]}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          props.setIsDisplayed(false);
-          Keyboard.dismiss();
-        }}>
-        <KeyboardAvoidingView
-          style={{flex: 1, justifyContent: 'flex-end'}}
-          behavior={Platform.OS === 'ios' ? 'padding' : null}>
+      <KeyboardAvoidingView
+        style={{height: '100%', width: '100%', justifyContent: 'flex-end'}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.setIsDisplayed(false);
+            Keyboard.dismiss();
+          }}>
           <View
-            style={[
-              styles.inputContainer,
-              {
-                backgroundColor: props.theme
-                  ? COLORS.darkModeBackground
-                  : COLORS.lightModeBackground,
-              },
-            ]}>
-            <Text
+            style={{height: '100%', width: '100%', justifyContent: 'flex-end'}}>
+            <View
               style={[
-                styles.inputHeader,
+                styles.inputContainer,
                 {
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
+                  backgroundColor: props.theme
+                    ? COLORS.darkModeBackground
+                    : COLORS.lightModeBackground,
                 },
               ]}>
-              Edit Payment Detials
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  borderColor: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                  color: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}
-              placeholder="Amount (sat)"
-              placeholderTextColor={
-                props.theme ? COLORS.darkModeText : COLORS.lightModeText
-              }
-              onChangeText={setNumSats}
-              keyboardType="numeric"
-              value={numSats}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  borderColor: props.theme
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}
-              placeholder="Description (optional)"
-              placeholderTextColor={
-                props.theme ? COLORS.darkModeText : COLORS.lightModeText
-              }
-              onChangeText={setdescription}
-              value={description}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                saveChanges();
-                props.setUpdateQRCode(prev => (prev += 1));
-              }}>
-              <Text style={styles.saveText}>Save</Text>
-            </TouchableOpacity>
+              <Text
+                style={[
+                  styles.inputHeader,
+                  {
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}>
+                Edit Payment Detials
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    borderColor: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}
+                placeholder="Amount (sat)"
+                placeholderTextColor={
+                  props.theme ? COLORS.darkModeText : COLORS.lightModeText
+                }
+                onChangeText={setNumSats}
+                keyboardType="numeric"
+                value={numSats}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    borderColor: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
+                  },
+                ]}
+                placeholder="Description (optional)"
+                placeholderTextColor={
+                  props.theme ? COLORS.darkModeText : COLORS.lightModeText
+                }
+                onChangeText={setdescription}
+                value={description}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  saveChanges();
+                  props.setUpdateQRCode(prev => (prev += 1));
+                }}>
+                <Text style={styles.saveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Animated.View>
   );
 

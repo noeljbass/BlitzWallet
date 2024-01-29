@@ -11,6 +11,7 @@ import {
   listLsps,
   lspInfo,
   nodeInfo,
+  registerWebhook,
   serviceHealthCheck,
   setLogStream,
 } from '@breeztech/react-native-breez-sdk';
@@ -18,10 +19,12 @@ import NavBar from '../../components/admin/homeComponents/navBar';
 import HomeLightning from '../../components/admin/homeComponents/homeLightning';
 import {getTransactions} from '../../functions/SDK';
 import {useGlobalContextProvider} from '../../../context-store/context';
+import ConfigurePushNotifications from '../../hooks/setNotifications';
 
 export default function AdminHome({navigation: {navigate}, route}) {
   const [breezEvent, setBreezEvent] = useState({});
   const {theme, toggleNodeInformation} = useGlobalContextProvider();
+  const expoPushToken = ConfigurePushNotifications();
 
   // SDK events listener
 
@@ -51,6 +54,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
   };
 
   useEffect(() => {
+    console.log(expoPushToken, 'EXPO PUSH TOKEN');
     initWallet();
   }, []);
 
@@ -131,6 +135,10 @@ export default function AdminHome({navigation: {navigate}, route}) {
             nodeAmount.blockHeight,
             nodeAmount.onchainBalanceMsat,
           ]),
+        );
+        if (Object.keys(expoPushToken).length === 0) return;
+        await registerWebhook(
+          `http://localhost:8000/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
         );
       } else if (response.isConnected && !response.reason) {
         toggleNodeInformation({
