@@ -103,6 +103,7 @@ export default function BitcoinPage(props) {
                 ]}>
                 Lightning Fee Calculator
               </Text>
+
               <Slider
                 onSlidingComplete={handleFeeSlider}
                 style={styles.sliderStyle}

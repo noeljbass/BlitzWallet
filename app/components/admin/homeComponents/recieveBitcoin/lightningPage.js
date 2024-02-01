@@ -39,7 +39,7 @@ export default function LightningPage(props) {
     if (isInitialRender.current) {
       loadPrevGeneratedInvoice();
       isInitialRender.current = false;
-    } else generateLightningInvoice();
+    } else generateLightningInvoice(false);
 
     (async () => {
       try {
@@ -146,7 +146,7 @@ export default function LightningPage(props) {
     </View>
   );
 
-  async function generateLightningInvoice() {
+  async function generateLightningInvoice(isFromInitLoad) {
     try {
       props.setGeneratingInvoiceQRCode(true);
 
@@ -157,15 +157,25 @@ export default function LightningPage(props) {
 
       setErrorMessageText('');
 
+      const channelFee = await openChannelFee({
+        amountMsat: props.sendingAmount,
+      });
       if (nodeInformation.inboundLiquidityMsat < props.sendingAmount) {
-        const channelFee = await openChannelFee({
-          amountMsat: props.sendingAmount,
-        });
         setErrorMessageText(
           `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
             channelFee.feeMsat / 1000,
           ).toLocaleString()} sat fee`,
         );
+      }
+      if (channelFee.feeMsat > props.sendingAmount) {
+        setErrorMessageText(
+          `It costs ${Math.ceil(
+            channelFee.feeMsat / 1000,
+          ).toLocaleString()} sat to open a channel, but only ${Math.ceil(
+            props.sendingAmount / 1000,
+          ).toLocaleString()} sat was requested.`,
+        );
+        return;
       }
 
       const invoice = await receivePayment({
@@ -174,6 +184,8 @@ export default function LightningPage(props) {
       });
 
       if (invoice) {
+        if (isFromInitLoad)
+          setLocalStorageItem('lnInvoice', JSON.stringify(invoice));
         props.setGeneratingInvoiceQRCode(false);
         props.setGeneratedAddress(prev => {
           return {...prev, lightning: invoice.lnInvoice.bolt11};
@@ -191,6 +203,10 @@ export default function LightningPage(props) {
     try {
       const prevInvoice = await getLocalStorageItem('lnInvoice');
       let parsedInvoice = JSON.parse(prevInvoice);
+      if (parsedInvoice === null) {
+        generateLightningInvoice(true);
+        return;
+      }
       const currentTime = new Date();
 
       const prevInvoiceTime = new Date(

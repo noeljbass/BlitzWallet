@@ -4689,7 +4689,7 @@ expo-modules-core@1.5.4:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-notifications@~0.20.1:
+expo-notifications@0.20.1:
   version "0.20.1"
   resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.20.1.tgz#55479e3bbde31ab5ccf6f6fd3ed288c6c91101d2"
   integrity sha512-Y4Y8IWYj/cSWCP/P167z3GRg//5ZlsznfMXi4ABdWOOpF0RGNpd5N17TxioNivtt7tMhZ/o1vmzFxulhy0nBWg==
@@ -4713,6 +4713,13 @@ expo-status-bar@1.6.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.6.0.tgz"
   integrity sha512-e//Oi2WPdomMlMDD3skE4+1ZarKCJ/suvcB4Jo/nO427niKug5oppcPNYO+csR6y3ZglGuypS+3pp/hJ+Xp6fQ==
+
+expo-task-manager@~11.3.0:
+  version "11.3.0"
+  resolved "https://registry.yarnpkg.com/expo-task-manager/-/expo-task-manager-11.3.0.tgz#880ad617f4c0c92ad5bb5025debc4ad855955427"
+  integrity sha512-580XaQGOC2IHLjPV3GBeIwlfxtjuBaitENsUxHvCVgWusatWkq0frq7uzG3yVpG3UHUuQwSOHvkJ6X/3EjdYXw==
+  dependencies:
+    unimodules-app-loader "~4.2.0"
 
 expo-web-browser@12.3.2:
   version "12.3.2"
@@ -9226,6 +9233,11 @@ unicode-property-aliases-ecmascript@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-2.1.0.tgz"
   integrity sha512-6t3foTQI9qne+OZoVQB/8x8rk2k1eVy1gRXhV3oFQ5T6R1dqQ1xtin3XqSlx3+ATBkliTaR/hHyJBm+LVPNM8w==
+
+unimodules-app-loader@~4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/unimodules-app-loader/-/unimodules-app-loader-4.2.0.tgz#29d0790771b1b9b8ef378632249bc5f756912c37"
+  integrity sha512-q3FHCw04JUjsDXxvTvJPl63sBseHCiqHWD/3imOseGP+PZLzW46boQmnxSaHcdIOoWK88N/npyEh6eDN9Wyvng==
 
 unique-filename@^1.1.1:
   version "1.1.1"

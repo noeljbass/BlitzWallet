@@ -24,8 +24,8 @@ export function SendRecieveBTNs() {
         <TouchableOpacity
           onPress={() => {
             (async () => {
-              // const isAvailable = await canSendOrReceivePayment();
-              // if (!isAvailable) return;
+              const areSettingsSet = await handleSettingsCheck();
+              if (!areSettingsSet) return;
               navigate.navigate('SendBTC');
             })();
           }}
@@ -35,8 +35,8 @@ export function SendRecieveBTNs() {
         <TouchableOpacity
           onPress={() => {
             (async () => {
-              // const isAvailable = await canSendOrReceivePayment();
-              // if (!isAvailable) return;
+              const areSettingsSet = await handleSettingsCheck();
+              if (!areSettingsSet) return;
               navigate.navigate('ReceiveBTC');
             })();
           }}
@@ -67,7 +67,6 @@ export function SendRecieveBTNs() {
 
 async function handleSettingsCheck() {
   try {
-    await nodeInfo();
     const currency = await getLocalStorageItem('currency');
     if (!currency) setLocalStorageItem('currency', 'USD');
     return new Promise(resolve => {

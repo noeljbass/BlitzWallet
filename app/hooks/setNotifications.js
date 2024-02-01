@@ -1,6 +1,9 @@
 import {useState, useEffect, useRef} from 'react';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import * as TaskManager from 'expo-task-manager';
+
+// const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -10,7 +13,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export default function ConfigurePushNotifications() {
+function ConfigurePushNotifications() {
   const isInitialRender = useRef(true);
   const [expoPushToken, setExpoPushToken] = useState({});
   const [notification, setNotification] = useState(null);
@@ -21,17 +24,16 @@ export default function ConfigurePushNotifications() {
     if (!isInitialRender.current) return;
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener(notification => {
-        console.log(notification);
-        return;
-        setNotification(notification);
-      });
+    // notificationListener.current =
+    //   Notifications.addNotificationReceivedListener(notification => {
+    //     console.log(notification);
+    //     setNotification(notification);
+    //   });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener(response => {
-        console.log(response);
-      });
+    // responseListener.current =
+    //   Notifications.addNotificationResponseReceivedListener(response => {
+    //     console.log(response);
+    //   });
 
     isInitialRender.current = false;
 
@@ -71,10 +73,17 @@ async function registerForPushNotificationsAsync() {
     }
     // Learn more about projectId:
     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-    token = await Notifications.getDevicePushTokenAsync();
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: process.env.PROJECT_ID,
+    });
+    // token = await Notifications.getDevicePushTokenAsync();
+
+    console.log(token, 'DEVICE TOKEN');
   } else {
     alert('Must use physical device for Push Notifications');
   }
 
   return token;
 }
+
+export {ConfigurePushNotifications};

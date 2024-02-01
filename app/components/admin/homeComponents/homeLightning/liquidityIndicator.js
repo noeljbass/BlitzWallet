@@ -9,6 +9,11 @@ export default function LiquidityIndicator(props) {
   const [showLiquidyAmount, setShowLiquidyAmount] = useState(false);
 
   useEffect(() => {
+    if (
+      isNaN(nodeInformation.userBalance) ||
+      isNaN(nodeInformation.inboundLiquidityMsat)
+    )
+      return;
     const calculatedWidth = (
       (nodeInformation.userBalance /
         (nodeInformation.inboundLiquidityMsat / 1000)) *
@@ -43,7 +48,7 @@ export default function LiquidityIndicator(props) {
             style={[
               styles.sendIndicator,
               {
-                width: sendWitdh,
+                width: isNaN(sendWitdh) ? 0 : sendWitdh,
               },
             ]}></View>
         </View>

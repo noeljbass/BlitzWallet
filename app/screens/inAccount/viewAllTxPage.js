@@ -127,7 +127,7 @@ export default function ViewAllTxPage() {
 
       await Share.share({
         title: 'BlitzWallet',
-        message: `${csvData}`,
+        // message: `${csvData}`,
         url: `file://${filePath}`,
         type: 'text/csv',
       });

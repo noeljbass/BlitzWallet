@@ -19,11 +19,13 @@ import NavBar from '../../components/admin/homeComponents/navBar';
 import HomeLightning from '../../components/admin/homeComponents/homeLightning';
 import {getTransactions} from '../../functions/SDK';
 import {useGlobalContextProvider} from '../../../context-store/context';
-import ConfigurePushNotifications from '../../hooks/setNotifications';
+import {ConfigurePushNotifications} from '../../hooks/setNotifications';
 
 export default function AdminHome({navigation: {navigate}, route}) {
+  const isInitialRender = useRef(true);
   const [breezEvent, setBreezEvent] = useState({});
-  const {theme, toggleNodeInformation} = useGlobalContextProvider();
+  const {theme, toggleNodeInformation, nodeInformation} =
+    useGlobalContextProvider();
   const expoPushToken = ConfigurePushNotifications();
 
   // SDK events listener
@@ -35,7 +37,6 @@ export default function AdminHome({navigation: {navigate}, route}) {
   };
 
   const onBreezEvent = e => {
-    console.log(e, 'IN FUNCTION EVENT');
     if (e.type === 'newBlock')
       toggleNodeInformation({
         blockHeight: e.block,
@@ -48,15 +49,15 @@ export default function AdminHome({navigation: {navigate}, route}) {
     )
       return;
 
-    console.log('DID MAKE IT THROUGH LOGIC');
-    updateGlobalNodeInformation();
+    console.log(e);
+
+    updateGlobalNodeInformation(e);
     setBreezEvent(e);
   };
 
   useEffect(() => {
-    console.log(expoPushToken, 'EXPO PUSH TOKEN');
     initWallet();
-  }, []);
+  }, [expoPushToken]);
 
   return (
     <View
@@ -98,59 +99,72 @@ export default function AdminHome({navigation: {navigate}, route}) {
 
     initBalanceAndTransactions(toggleNodeInformation);
 
-    try {
-      const response = await connectToNode(onBreezEvent);
-      // console.log(response);
-      // setErrMessage(response.errMessage);
-
-      if (response.isConnected && response.reason) {
-        const nodeAmount = await nodeInfo();
-        const transactions = await getTransactions();
-        const heath = await serviceHealthCheck();
-        const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-
-        if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
-
-        // await setLogStream(logHandler);
-        // const healthCheck = await serviceHealthCheck();
-        // console.log(healthCheck);
-
-        // console.log(nodeAmount);
-
-        toggleNodeInformation({
-          didConnectToNode: response.isConnected,
-          transactions: transactions,
-          userBalance: msatToSat,
-          inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
-          blockHeight: nodeAmount.blockHeight,
-          onChainBalance: nodeAmount.onchainBalanceMsat,
-        });
-
-        await setLocalStorageItem(
-          'breezInfo',
-          JSON.stringify([
-            transactions,
-            msatToSat,
-            nodeAmount.inboundLiquidityMsats,
-            nodeAmount.blockHeight,
-            nodeAmount.onchainBalanceMsat,
-          ]),
+    if (Object.keys(expoPushToken).length != 0) {
+      try {
+        console.log(expoPushToken, 'NETLIFY WEBHOOK');
+        console.log(
+          `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
         );
-        if (Object.keys(expoPushToken).length === 0) return;
         await registerWebhook(
-          `http://localhost:8000/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
+          `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
         );
-      } else if (response.isConnected && !response.reason) {
-        toggleNodeInformation({
-          didConnectToNode: response.isConnected,
-        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    try {
+      if (isInitialRender.current) {
+        const response = await connectToNode(onBreezEvent);
+        // console.log(response);
+        // setErrMessage(response.errMessage);
+
+        if (response.isConnected && response.reason) {
+          const nodeAmount = await nodeInfo();
+          const transactions = await getTransactions();
+          const heath = await serviceHealthCheck();
+          const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+
+          if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
+
+          // await setLogStream(logHandler);
+          // const healthCheck = await serviceHealthCheck();
+          // console.log(healthCheck);
+
+          // console.log(nodeAmount);
+
+          toggleNodeInformation({
+            didConnectToNode: response.isConnected,
+            transactions: transactions,
+            userBalance: msatToSat,
+            inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
+            blockHeight: nodeAmount.blockHeight,
+            onChainBalance: nodeAmount.onchainBalanceMsat,
+          });
+
+          await setLocalStorageItem(
+            'breezInfo',
+            JSON.stringify([
+              transactions,
+              msatToSat,
+              nodeAmount.inboundLiquidityMsats,
+              nodeAmount.blockHeight,
+              nodeAmount.onchainBalanceMsat,
+            ]),
+          );
+        } else if (response.isConnected && !response.reason) {
+          toggleNodeInformation({
+            didConnectToNode: response.isConnected,
+          });
+        }
+        isInitialRender.current = false;
       }
     } catch (err) {
       console.log(err, 'homepage connection to node err');
     }
   }
 
-  async function updateGlobalNodeInformation() {
+  async function updateGlobalNodeInformation(paymentEvent) {
     const transactions = await getTransactions();
     const node_Info = await nodeInfo();
     const msatToSat = node_Info.channelsBalanceMsat / 1000;
@@ -176,6 +190,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
   async function reconnectToLSP() {
     try {
       const [availableLsps] = await listLsps();
+      console.log(availableLsps);
       await connectLsp(availableLsps.id);
     } catch (err) {
       console.log(err);
