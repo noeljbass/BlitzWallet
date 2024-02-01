@@ -20,9 +20,11 @@ import HomeLightning from '../../components/admin/homeComponents/homeLightning';
 import {getTransactions} from '../../functions/SDK';
 import {useGlobalContextProvider} from '../../../context-store/context';
 import {ConfigurePushNotifications} from '../../hooks/setNotifications';
+import {useNavigation} from '@react-navigation/native';
 
-export default function AdminHome({navigation: {navigate}, route}) {
+export default function AdminHome() {
   const isInitialRender = useRef(true);
+  const navigate = useNavigation();
   const [breezEvent, setBreezEvent] = useState({});
   const {theme, toggleNodeInformation, nodeInformation} =
     useGlobalContextProvider();
@@ -36,7 +38,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
     }
   };
 
-  const onBreezEvent = e => {
+  function onBreezEvent(e) {
     if (e.type === 'newBlock')
       toggleNodeInformation({
         blockHeight: e.block,
@@ -48,12 +50,17 @@ export default function AdminHome({navigation: {navigate}, route}) {
       e?.type != 'paymentFailed'
     )
       return;
-
-    console.log(e);
-
     updateGlobalNodeInformation(e);
     setBreezEvent(e);
-  };
+
+    if (e?.details?.payment?.description?.includes('bwrfd')) return;
+    if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
+    navigate.navigate('ConfirmTxPage', {
+      theme: theme,
+      for: e.type,
+      information: e,
+    });
+  }
 
   useEffect(() => {
     initWallet();
@@ -71,7 +78,7 @@ export default function AdminHome({navigation: {navigate}, route}) {
       ]}>
       <SafeAreaView style={styles.container}>
         <NavBar breezEvent={breezEvent} />
-        <HomeLightning breezEvent={breezEvent} />
+        <HomeLightning />
       </SafeAreaView>
     </View>
   );

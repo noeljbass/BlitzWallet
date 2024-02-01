@@ -6,28 +6,14 @@ import {UserSatAmount} from './homeLightning/userSatAmount';
 import {UserTransactions} from './homeLightning/userTransactions';
 import {SendRecieveBTNs} from './homeLightning/sendReciveBTNs';
 import {useEffect, useRef, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import LiquidityIndicator from './homeLightning/liquidityIndicator';
 import {useGlobalContextProvider} from '../../../../context-store/context';
 import {getLocalStorageItem} from '../../../functions';
 
-export default function HomeLightning(props) {
+export default function HomeLightning() {
   console.log('HOME LIGHTNING PAGE');
-  const navigate = useNavigation();
   const [showAmount, setShowAmount] = useState(true);
-  const {userTxPreferance, nodeInformation, theme} = useGlobalContextProvider();
-
-  useEffect(() => {
-    if (Object.keys(props.breezEvent).length === 0) return;
-    if (props.breezEvent?.details?.payment?.description?.includes('bwrfd'))
-      return;
-    if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
-    navigate.navigate('ConfirmTxPage', {
-      theme: theme,
-      for: props.breezEvent.type,
-      information: props.breezEvent,
-    });
-  }, [props.breezEvent]);
+  const {userTxPreferance, nodeInformation} = useGlobalContextProvider();
 
   useEffect(() => {
     (async () => {
