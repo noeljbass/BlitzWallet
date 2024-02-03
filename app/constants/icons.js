@@ -36,6 +36,7 @@ import receiptIcon from '../assets/icons/receipt.png';
 import checkIcon from '../assets/icons/check.png';
 import bankIcon from '../assets/icons/bank.png';
 import wordmark from '../assets/wordmark.png';
+import Connected from '../assets/icons/chart-connected.png';
 
 export default {
   Xcircle,
@@ -76,4 +77,5 @@ export default {
   wordmark,
   walletBlueIcon,
   bankIcon,
+  Connected,
 };

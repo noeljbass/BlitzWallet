@@ -18,6 +18,7 @@ import {
   FundWalletGift,
   LSPPage,
   NodeInfo,
+  NosterWalletConnect,
   ResetPage,
   SeedPhrasePage,
 } from '../../components/admin/homeComponents/settingsContent';
@@ -77,6 +78,9 @@ export default function SettingsContentIndex(props) {
         )}
         {selectedPage?.toLowerCase() === 'fund wallet gift' && (
           <FundWalletGift theme={theme} />
+        )}
+        {selectedPage?.toLowerCase() === 'noster wallet connect' && (
+          <NosterWalletConnect theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'face id' && (
           <FaceIdPage theme={theme} />

@@ -48,6 +48,12 @@ const GENERALOPTIONS = [
     arrowIcon: ICONS.leftCheveronIcon,
     usesStandAlonePath: true,
   },
+  {
+    for: 'general',
+    name: 'Noster Wallet Connect',
+    icon: ICONS.Connected,
+    arrowIcon: ICONS.leftCheveronIcon,
+  },
 ];
 const SECURITYOPTIONS = [
   {

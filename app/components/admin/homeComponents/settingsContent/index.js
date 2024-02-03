@@ -6,6 +6,7 @@ import FiatCurrencyPage from './fiatCurrency';
 import FundWalletGift from './fundGift';
 import LSPPage from './lsp';
 import NodeInfo from './nodeInfo';
+import NosterWalletConnect from './nwc';
 import ConfirmDrainPage from './popups/confirmDrain';
 import DrainWalletAddress from './popups/drainWalletAddress';
 import LspDescriptionPopup from './popups/lspDescription';
@@ -26,4 +27,5 @@ export {
   DrainWalletAddress,
   EcashHome,
   FundWalletGift,
+  NosterWalletConnect,
 };
