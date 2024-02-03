@@ -39,6 +39,7 @@ export default function AdminHome() {
   };
 
   function onBreezEvent(e) {
+    console.log(e);
     if (
       e?.type != 'invoicePaid' &&
       e?.type != 'paymentSucceed' &&
@@ -48,7 +49,13 @@ export default function AdminHome() {
     setBreezEvent(e);
     updateGlobalNodeInformation(e);
 
-    if (e.details.payment.description?.includes('bwrfd')) return;
+    if (
+      e?.type === 'invoicePaid' &&
+      e.details.payment.description?.includes('bwrfd')
+    )
+      return;
+
+    // if (e.details.payment.description?.includes('bwrfd')) return;
     if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
     navigate.navigate('ConfirmTxPage', {
       theme: theme,
