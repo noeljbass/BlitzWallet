@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import {
   Alert,
   Image,
@@ -19,33 +19,31 @@ import {useGlobalContextProvider} from '../../../../../context-store/context';
 import {useEffect, useRef, useState} from 'react';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {getFiatRates} from '../../../../functions/SDK';
+import {sendSpontaneousPayment} from '@breeztech/react-native-breez-sdk';
 
 export default function AmountToGift(props) {
   const isInitialRender = useRef(true);
   const navigate = useNavigation();
-  const {theme} = useGlobalContextProvider();
+  const {theme, nodeInformation} = useGlobalContextProvider();
 
   const [currencyInfo, setCurrencyInfo] = useState({
     currency: '',
     value: 0,
   });
-  const [wantsToCreateWallet, setWantsToCreateWallet] = useState(false);
-  const [walletBalance, setWalletBalance] = useState(0);
-  const nodeID = props.route.params.nodeID;
-  const openChannelFee = props.route.params.openChannelFee;
+
+  const [giftAmount, setGiftAmount] = useState(0);
+  const nodeID = props.route.params.nodeId;
+  const openChannelFee = props.route.params.channelOpenFee;
+
+  const [errorText, setErrorText] = useState('');
+
+  console.log(nodeID, openChannelFee);
   useEffect(() => {
     if (isInitialRender.current) {
       getUserSelectedCurrency();
       isInitialRender.current = false;
     }
-
-    if (wantsToCreateWallet) {
-      navigate.navigate('ShareWallet', {
-        walletAmount: walletBalance,
-        wantsToCreateWallet: setWantsToCreateWallet,
-      });
-    }
-  }, [wantsToCreateWallet]);
+  }, []);
 
   return (
     <View
@@ -116,7 +114,7 @@ export default function AmountToGift(props) {
                   placeholder="0"
                   onChangeText={e => {
                     if (isNaN(e)) return;
-                    setWalletBalance(Number(e) * 1000);
+                    setGiftAmount(Number(e) * 1000);
                   }}
                 />
                 <Text
@@ -135,21 +133,26 @@ export default function AmountToGift(props) {
                 <Text>
                   ={' '}
                   {(
-                    (walletBalance / 1000) *
+                    (giftAmount / 1000) *
                     (currencyInfo.value / 100000000)
                   ).toFixed(2)}{' '}
                   {currencyInfo.currency}
                 </Text>
               </View>
+              <Text
+                style={{
+                  width: '95%',
+                  fontFamily: FONT.Descriptoin_Regular,
+                  color: COLORS.cancelRed,
+                  marginTop: 20,
+                  fontSize: SIZES.medium,
+                  textAlign: 'center',
+                }}>
+                {errorText ? errorText : ' '}
+              </Text>
             </View>
             <TouchableOpacity
-              onPress={() => {
-                navigate.navigate('GiftWalletConfirmation', {
-                  wantsToCreateWallet: setWantsToCreateWallet,
-                });
-                return;
-                Alert.alert('This does not work yet');
-              }}
+              onPress={sendPayment}
               style={[
                 BTN,
                 {
@@ -159,7 +162,7 @@ export default function AmountToGift(props) {
                   ...CENTER,
                 },
               ]}>
-              <Text style={styles.buttonText}>Create Wallet</Text>
+              <Text style={styles.buttonText}>Send Gift</Text>
             </TouchableOpacity>
           </SafeAreaView>
         </TouchableWithoutFeedback>
@@ -180,6 +183,31 @@ export default function AmountToGift(props) {
         value: userSelectedFiatRate.value,
       });
     } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function sendPayment() {
+    setErrorText('');
+    try {
+      const utf8Encoder = new TextEncoder();
+      console.log(openChannelFee, giftAmount);
+      if (openChannelFee >= giftAmount) {
+        setErrorText('Payment must be larger than minimum gift amount');
+        return;
+      } else if (nodeInformation.userBalance + 10 <= giftAmount) {
+        setErrorText('Not enough funds to gift wallet');
+        return;
+      }
+
+      const sendPaymentResponse = await sendSpontaneousPayment({
+        nodeId: nodeID,
+        amountMsat: giftAmount,
+        extraTlvs: [{value: utf8Encoder.encode('Gift Wallet Payment')}],
+      });
+      console.log(sendPaymentResponse);
+    } catch (err) {
+      setErrorText('Error when sending payment');
       console.log(err);
     }
   }

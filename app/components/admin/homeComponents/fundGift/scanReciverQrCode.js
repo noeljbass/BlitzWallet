@@ -21,7 +21,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export default function ScanRecieverQrCode() {
-  console.log('SCREEN OPTIONS PAGE');
   const navigate = useNavigation();
   const type = ExpoCamera.CameraType.back;
   const {theme} = useGlobalContextProvider();
@@ -40,13 +39,6 @@ export default function ScanRecieverQrCode() {
       await requestCameraPermissions();
     })();
   }, []);
-
-  async function getClipboardText() {
-    const data = await Clipboard.getStringAsync();
-    if (!data) return;
-
-    console.log(data);
-  }
 
   async function getQRImage() {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -68,7 +60,8 @@ export default function ScanRecieverQrCode() {
   const handleBarCodeScanned = ({type, data}) => {
     if (!type.includes('QRCode')) return;
     setDidScan(true);
-    console.log(data);
+    const parsedData = JSON.parse(data);
+    navigate.navigate('AmountToGift', {...parsedData});
   };
 
   return (
@@ -160,46 +153,7 @@ export default function ScanRecieverQrCode() {
             activeOpacity={1}
             onPress={() => {
               setBottomExpand(prev => !prev);
-            }}>
-            <View
-              style={{
-                ...styles.arrowIcon,
-                backgroundColor: theme
-                  ? COLORS.darkModeBackground
-                  : COLORS.lightModeBackground,
-
-                borderColor: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                borderTopWidth: 2,
-                borderLeftWidth: 2,
-                borderRightWidth: 2,
-              }}>
-              <Animated.Image
-                source={ICONS.angleUpIcon}
-                style={{
-                  width: 30,
-                  height: 20,
-                  transform: bottomExpand
-                    ? [{rotate: '180deg'}]
-                    : [{rotate: '0deg'}],
-                }}
-                resizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={getClipboardText}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text
-              style={[
-                styles.bottomText,
-                {
-                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                },
-              ]}>
-              Paste from clipbard
-            </Text>
-          </TouchableOpacity>
+            }}></TouchableOpacity>
           <TouchableOpacity
             onPress={getQRImage}
             style={{backgroundColor: 'transparent'}}

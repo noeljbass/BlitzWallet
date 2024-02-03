@@ -20,6 +20,11 @@ export default async function connectToNode(breezEvent) {
     });
   } catch (err) {
     try {
+      console.log(
+        process.env.API_KEY,
+        process.env.GL_CUSTOM_NOBODY_CERT,
+        process.env.GL_CUSTOM_NOBODY_KEY,
+      );
       // const fileInfo = await FileSystem.getInfoAsync(
       //   process.env.GL_CUSTOM_NOBODY_CERT,
       // );
@@ -94,7 +99,7 @@ export default async function connectToNode(breezEvent) {
       return new Promise(resolve => {
         resolve({
           isConnected: false,
-          errMessage: JSON.stringify(err),
+          // errMessage: JSON.stringify(err),
           reason: 'error connecting',
         });
       });

@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   stepContainer: {
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'start',
+    alignItems: 'flex-start',
   },
   stepNumber: {
     width: '8%',

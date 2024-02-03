@@ -16,6 +16,22 @@ type RootStackParamList = {
   Home: {someParam?: string};
   Details: {someParam?: string};
 };
+// Define the type for the task data
+interface TaskData {
+  body?: {
+    data: {
+      payment_hash: string; // Assuming payment_hash is a string in your notification payload body
+    };
+  };
+}
+interface BreezFunctionData {
+  type: string;
+  details: {
+    payment: {
+      amountMsat: number;
+    };
+  };
+}
 import {AppState, Platform} from 'react-native';
 import {
   connectToNode,
@@ -67,6 +83,7 @@ import ScanRecieverQrCode from './app/components/admin/homeComponents/fundGift/s
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import {listPayments} from '@breeztech/react-native-breez-sdk';
+import ReceiveGiftHome from './app/screens/createAccount/receiveGift/receiveGiftHome';
 
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
@@ -150,6 +167,8 @@ function ResetStack(): JSX.Element | null {
         <Stack.Screen name="VerifyKey" component={VerifyKey} />
         <Stack.Screen name="PinSetup" component={PinSetupPage} />
         <Stack.Screen name="RestoreWallet" component={RestoreWallet} />
+        {/* gift walet path */}
+        <Stack.Screen name="ReceiveGiftHome" component={ReceiveGiftHome} />
         {/* admin screens */}
         <Stack.Screen name="HomeAdmin" component={AdminHome} />
         <Stack.Group screenOptions={{animation: 'slide_from_bottom'}}>
@@ -230,23 +249,12 @@ function ResetStack(): JSX.Element | null {
   );
 }
 
-// Define the type for the task data
-interface TaskData {
-  aps: {
-    body: object; // Assuming body is a string in your notification payload
-  };
-  body?: {
-    payment_hash: object; // Assuming payment_hash is a string in your notification payload body
-  };
-}
-
 TaskManager.defineTask(
   BACKGROUND_NOTIFICATION_TASK,
   ({data}: {data: TaskData}) => {
     (async () => {
-      console.log('TEA');
       const paymentInformationFromNotification = data.body;
-      async function breezBackgroundFunction(e) {
+      async function breezBackgroundFunction({e}: {e: BreezFunctionData}) {
         console.log(e);
         if (
           e?.type != 'invoicePaid' &&
@@ -263,10 +271,10 @@ TaskManager.defineTask(
             content: {
               title: 'Blitz Wallet',
               body: `Received ${Math.round(
-                currentInvoice?.amountMsat / 1000,
+                e.details.payment.amountMsat / 1000,
               ).toLocaleString()} sat`,
             },
-            trigger: null,
+            trigger: 1,
           });
           // ADD NEW DATA TO LOCAL STORAGE OBJECT
         } catch (err) {
@@ -275,21 +283,27 @@ TaskManager.defineTask(
               title: 'Blitz Wallet',
               body: `Error fetching details`,
             },
-            trigger: null,
+            trigger: 1,
           });
         }
       }
-      console.log('TEB');
+
       try {
         const didConnect = await connectToNode(breezBackgroundFunction);
-        console.log('TEC');
         if (didConnect.isConnected && didConnect.reason) {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: 'Blitz Wallet',
+              body: `Caught incoming payment`,
+            },
+            trigger: null,
+          });
           await Notifications.scheduleNotificationAsync({
             content: {
               title: 'Blitz Wallet',
               body: 'Getting invoice details',
             },
-            trigger: null,
+            trigger: 1,
           });
         } else if (didConnect.isConnected && !didConnect.reason) return;
         else throw new Error('Not Connected ');
@@ -305,7 +319,6 @@ TaskManager.defineTask(
       }
 
       console.log('Received a notification in the background!', 'TTTTT');
-      console.log(data.aps);
     })();
 
     // Do something with the notification data

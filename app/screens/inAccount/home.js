@@ -39,21 +39,16 @@ export default function AdminHome() {
   };
 
   function onBreezEvent(e) {
-    if (e.type === 'newBlock')
-      toggleNodeInformation({
-        blockHeight: e.block,
-      });
-
     if (
       e?.type != 'invoicePaid' &&
       e?.type != 'paymentSucceed' &&
       e?.type != 'paymentFailed'
     )
       return;
-    updateGlobalNodeInformation(e);
     setBreezEvent(e);
+    updateGlobalNodeInformation(e);
 
-    if (e?.details?.payment?.description?.includes('bwrfd')) return;
+    if (e.details.payment.description?.includes('bwrfd')) return;
     if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
     navigate.navigate('ConfirmTxPage', {
       theme: theme,
@@ -131,6 +126,7 @@ export default function AdminHome() {
           const transactions = await getTransactions();
           const heath = await serviceHealthCheck();
           const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
+          console.log(nodeAmount, heath, 'TESTIG');
 
           if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
 
@@ -171,35 +167,39 @@ export default function AdminHome() {
     }
   }
 
-  async function updateGlobalNodeInformation(paymentEvent) {
+  async function updateGlobalNodeInformation() {
     const transactions = await getTransactions();
-    const node_Info = await nodeInfo();
-    const msatToSat = node_Info.channelsBalanceMsat / 1000;
+    const nodeState = await nodeInfo();
+    const msatToSat = nodeState.channelsBalanceMsat / 1000;
+
     toggleNodeInformation({
       transactions: transactions,
       userBalance: msatToSat,
-      inboundLiquidityMsat: node_Info.inboundLiquidityMsats,
-      blockHeight: node_Info.blockHeight,
-      onChainBalance: node_Info.onchainBalanceMsat,
+      inboundLiquidityMsat: nodeState.inboundLiquidityMsats,
+      blockHeight: nodeState.blockHeight,
+      onChainBalance: nodeState.onchainBalanceMsat,
     });
     await setLocalStorageItem(
       'breezInfo',
       JSON.stringify([
         transactions,
         msatToSat,
-        node_Info.inboundLiquidityMsats,
-        node_Info.blockHeight,
-        node_Info.onchainBalanceMsat,
+        nodeState.inboundLiquidityMsats,
+        nodeState.blockHeight,
+        nodeState.onchainBalanceMsat,
       ]),
     );
   }
 
   async function reconnectToLSP() {
     try {
-      const [availableLsps] = await listLsps();
-      console.log(availableLsps);
-      await connectLsp(availableLsps.id);
+      const availableLsps = await listLsps();
+      console.log(availableLsps, 'TT');
+      await connectLsp(availableLsps[0].id);
     } catch (err) {
+      toggleNodeInformation({
+        didConnectToNode: false,
+      });
       console.log(err);
     }
   }
