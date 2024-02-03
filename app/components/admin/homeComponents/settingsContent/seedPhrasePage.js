@@ -22,9 +22,12 @@ export default function SeedPhrasePage() {
     if (showSeed) {
       (async () => {
         const mnemonic = await retrieveData('mnemonic');
-        setMnemonic(mnemonic.split(' '));
+        const sanitizedMnemonic = mnemonic.split(' ').filter(key => {
+          return key && true;
+        });
+        setMnemonic(sanitizedMnemonic);
+        fadeout();
       })();
-      fadeout();
     }
   }, [showSeed]);
 
