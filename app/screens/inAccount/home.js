@@ -174,15 +174,24 @@ export default function AdminHome() {
     }
   }
 
-  async function updateGlobalNodeInformation() {
+  async function updateGlobalNodeInformation(e) {
     const transactions = await getTransactions();
     const nodeState = await nodeInfo();
     const msatToSat = nodeState.channelsBalanceMsat / 1000;
 
     toggleNodeInformation({
       transactions: transactions,
-      userBalance: msatToSat,
-      inboundLiquidityMsat: nodeState.inboundLiquidityMsats,
+      userBalance:
+        e.type === 'invoicePaid'
+          ? e.details.payment.amountMsat / 1000 + msatToSat
+          : msatToSat,
+      inboundLiquidityMsat:
+        e.type === 'invoicePaid'
+          ? Math.abs(
+              e.details.payment.amountMsat / 1000 -
+                nodeState.inboundLiquidityMsats,
+            )
+          : nodeState.inboundLiquidityMsats,
       blockHeight: nodeState.blockHeight,
       onChainBalance: nodeState.onchainBalanceMsat,
     });
