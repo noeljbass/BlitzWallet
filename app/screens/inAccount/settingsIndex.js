@@ -74,12 +74,12 @@ const SECURITYOPTIONS = [
     icon: ICONS.linkIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  // {
-  //   for: 'Security & Customization',
-  //   name: 'Bank',
-  //   icon: ICONS.bankIcon,
-  //   arrowIcon: ICONS.leftCheveronIcon,
-  // },
+  {
+    for: 'Security & Customization',
+    name: 'Bank',
+    icon: ICONS.bankIcon,
+    arrowIcon: ICONS.leftCheveronIcon,
+  },
 ];
 const ADVANCEDOPTIONS = [
   // {

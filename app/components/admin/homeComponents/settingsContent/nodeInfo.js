@@ -19,8 +19,8 @@ export default function NodeInfo(props) {
   useEffect(() => {
     (async () => {
       try {
-        const lightningNode = await nodeInfo();
-        setLNNodeInfo(lightningNode);
+        const nodeState = await nodeInfo();
+        setLNNodeInfo(nodeState);
         stIsInfoSet(true);
       } catch (err) {
         console.log(err);

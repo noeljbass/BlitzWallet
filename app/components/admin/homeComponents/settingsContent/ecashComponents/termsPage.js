@@ -12,6 +12,7 @@ import {
 
 import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../../../constants';
 import {useGlobalContextProvider} from '../../../../../../context-store/context';
+import {getWallet} from '../../../../../functions/eCash';
 
 export default function TermsPage() {
   const navigate = useNavigation();
@@ -50,9 +51,37 @@ export default function TermsPage() {
             <Text
               style={[
                 styles.contentDescription,
-                {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
+                {
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  marginBottom: 10,
+                },
               ]}>
-              DESCRIPTION
+              Blitz wallet bank feature is an innovative solution to overcome
+              the inbound liquidty problem introduced by self-custodial
+              lightning.
+            </Text>
+            <Text
+              style={[
+                styles.contentDescription,
+                {
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  marginBottom: 10,
+                },
+              ]}>
+              By using Blitz's Ecash mint, anytime you receive a balance larger
+              than your inbound liquidity would nomraly handle, it will auto
+              convert to Ecash and be stored in the mint for later use.
+            </Text>
+            <Text
+              style={[
+                styles.contentDescription,
+                {
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  marginBottom: 10,
+                },
+              ]}>
+              By using this feautre it means you no loger have a receive
+              capacity.
             </Text>
           </View>
         </View>
@@ -78,15 +107,30 @@ export default function TermsPage() {
                 styles.contentDescription,
                 {
                   color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  marginBottom: 10,
+                },
+              ]}>
+              This feauture uses a project called Cashu that is in early
+              developmemt and therefore cannot be 100% trusted.
+            </Text>
+            <Text
+              style={[
+                styles.contentDescription,
+                {
+                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   marginBottom: 0,
                 },
               ]}>
-              DESCRIPTION
+              Mints are not self-custodial. Although they do not know your
+              balance, any funds you store in the bank can be taken. Only store
+              amounts you are willing to lose.
             </Text>
           </View>
         </View>
         <TouchableOpacity
-          onPress={() => Alert.alert('Coming soon...')}
+          onPress={() => {
+            Alert.alert('Coming soon...');
+          }}
           style={[
             BTN,
             {

@@ -8,9 +8,12 @@ export default function EcashHome() {
   const [acceptedEcashTerms, setAcceptedEcashTerms] = useState(null);
   const {theme} = useGlobalContextProvider();
 
+  console.log(acceptedEcashTerms);
+
   useEffect(() => {
     initScreen();
   }, []);
+
   return (
     <View style={styles.globalContainer}>
       <SafeAreaView style={styles.globalContainer}>
@@ -24,10 +27,7 @@ export default function EcashHome() {
   );
 
   async function initScreen() {
-    const didAcceptTerms = await getLocalStorageItem('ecashTerms');
-
-    if (!JSON.parse(didAcceptTerms)) setAcceptedEcashTerms(false);
-    else setAcceptedEcashTerms(true);
+    setAcceptedEcashTerms(JSON.parse(await getLocalStorageItem('ecashTerms')));
   }
 }
 

@@ -1,13 +1,57 @@
 import {CashuMint, CashuWallet, getEncodedToken} from '@cashu/cashu-ts';
+import {retrieveData} from '../secureStore';
+import {mnemonicToSeed} from '@breeztech/react-native-breez-sdk';
 
 async function getWallet() {
-  const mint = new CashuMint(
-    'https://legend.lnbits.com/cashu/api/v1/4gr9Xcmz3XEkUNwiBiQGoC',
-  );
+  try {
+    const mint = new CashuMint(
+      'https://legend.lnbits.com/cashu/api/v1/Ue2M2UoaY8wdGsbZ4SbY9N',
+    );
+    // const keys = await mint.getKeys();
+    const mnemonic = await retrieveData('mnemonic');
+    const seed = await mnemonicToSeed(mnemonic);
 
-  const keys = await mint.getKeys();
+    const wallet = new CashuWallet(mint);
+    const value = await generateMintRequest(wallet, 1);
+    invoiceHasBeenPaid(wallet, 1, value.hash);
 
-  console.log(keys);
+    return new Promise(resolve => {
+      resolve(wallet);
+    });
+  } catch (err) {
+    console.log(err);
+    return new Promise(resolve => {
+      resolve(false);
+    });
+  }
 }
 
-export {getWallet};
+async function generateMintRequest(wallet, amount) {
+  try {
+    const {pr, hash} = await wallet.requestMint(amount);
+    console.log(pr);
+    console.log(hash);
+
+    return new Promise(resolve => {
+      resolve({lnInvoice: pr, hash: hash});
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function invoiceHasBeenPaid(wallet, balance, hash) {
+  const {proofs} = await wallet.requestTokens(balance, hash);
+  //Encoded proofs can be spent at the mint
+  // const encoded = getEncodedToken({
+  //   token: [
+  //     {
+  //       mint: 'https://legend.lnbits.com/cashu/api/v1/Ue2M2UoaY8wdGsbZ4SbY9N',
+  //       proofs,
+  //     },
+  //   ],
+  // });
+  console.log(proofs);
+}
+
+export {getWallet, generateMintRequest};

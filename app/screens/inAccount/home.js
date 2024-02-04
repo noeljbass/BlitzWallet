@@ -129,27 +129,27 @@ export default function AdminHome() {
         // setErrMessage(response.errMessage);
 
         if (response.isConnected && (response.reason || !response.reason)) {
-          const nodeAmount = await nodeInfo();
+          const nodeState = await nodeInfo();
           const transactions = await getTransactions();
           const heath = await serviceHealthCheck();
-          const msatToSat = nodeAmount.channelsBalanceMsat / 1000;
-          console.log(nodeAmount, heath, 'TESTIG');
+          const msatToSat = nodeState.channelsBalanceMsat / 1000;
+          console.log(nodeState, heath, 'TESTIG');
 
-          if (nodeAmount.connectedPeers.length === 0) reconnectToLSP();
+          if (nodeState.connectedPeers.length === 0) reconnectToLSP();
 
           // await setLogStream(logHandler);
           // const healthCheck = await serviceHealthCheck();
           // console.log(healthCheck);
 
-          // console.log(nodeAmount);
+          // console.log(nodeState);
 
           toggleNodeInformation({
             didConnectToNode: response.isConnected,
             transactions: transactions,
             userBalance: msatToSat,
-            inboundLiquidityMsat: nodeAmount.inboundLiquidityMsats,
-            blockHeight: nodeAmount.blockHeight,
-            onChainBalance: nodeAmount.onchainBalanceMsat,
+            inboundLiquidityMsat: nodeState.inboundLiquidityMsats,
+            blockHeight: nodeState.blockHeight,
+            onChainBalance: nodeState.onchainBalanceMsat,
           });
 
           await setLocalStorageItem(
@@ -157,9 +157,9 @@ export default function AdminHome() {
             JSON.stringify([
               transactions,
               msatToSat,
-              nodeAmount.inboundLiquidityMsats,
-              nodeAmount.blockHeight,
-              nodeAmount.onchainBalanceMsat,
+              nodeState.inboundLiquidityMsats,
+              nodeState.blockHeight,
+              nodeState.onchainBalanceMsat,
             ]),
           );
         } else if (response.isConnected && !response.reason) {

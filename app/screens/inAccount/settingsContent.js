@@ -85,11 +85,15 @@ export default function SettingsContentIndex(props) {
         {selectedPage?.toLowerCase() === 'face id' && (
           <FaceIdPage theme={theme} />
         )}
-        {selectedPage?.toLowerCase() === 'bank' && <EcashHome />}
+
         {selectedPage?.toLowerCase() === 'recovery phrase' && (
           <SeedPhrasePage theme={theme} />
         )}
+
         {selectedPage?.toLowerCase() === 'lsp' && <LSPPage theme={theme} />}
+
+        {selectedPage?.toLowerCase() === 'bank' && <EcashHome />}
+
         {selectedPage?.toLowerCase() === 'reset wallet' && <ResetPage />}
         {selectedPage?.toLowerCase() === 'drain wallet' && <DrainPage />}
         {/* </View> */}
