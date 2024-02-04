@@ -10,9 +10,11 @@ import {CENTER, COLORS, FONT, SHADOWS, SIZES} from '../../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
 import {nodeInfo} from '@breeztech/react-native-breez-sdk';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
 
 export function SendRecieveBTNs() {
   const navigate = useNavigation();
+  const {nodeInformation} = useGlobalContextProvider();
 
   return (
     <View
@@ -63,19 +65,21 @@ export function SendRecieveBTNs() {
       });
     }
   }
-}
+  async function handleSettingsCheck() {
+    try {
+      if (!nodeInformation.didConnectToNode)
+        throw new Error('Not Connected To Node');
 
-async function handleSettingsCheck() {
-  try {
-    const currency = await getLocalStorageItem('currency');
-    if (!currency) setLocalStorageItem('currency', 'USD');
-    return new Promise(resolve => {
-      resolve(true);
-    });
-  } catch (err) {
-    return new Promise(resolve => {
-      resolve(false);
-    });
+      const currency = await getLocalStorageItem('currency');
+      if (!currency) setLocalStorageItem('currency', 'USD');
+      return new Promise(resolve => {
+        resolve(true);
+      });
+    } catch (err) {
+      return new Promise(resolve => {
+        resolve(false);
+      });
+    }
   }
 }
 

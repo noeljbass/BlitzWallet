@@ -18,13 +18,31 @@ export default function ClipboardCopyPopup(props) {
     <TouchableWithoutFeedback onPress={() => navigate.goBack()}>
       <View style={styles.globalContainer}>
         <TouchableWithoutFeedback>
-          <View style={[styles.content]}>
-            <Text style={styles.headerText}>
+          <View
+            style={[
+              styles.content,
+              {
+                backgroundColor: theme
+                  ? COLORS.darkModeBackground
+                  : COLORS.lightModeBackground,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.headerText,
+                {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
+              ]}>
               {didCopy ? 'Text Copied to Clipboard' : 'Error With Copy'}
             </Text>
             <View style={styles.border}></View>
             <TouchableOpacity onPress={() => navigate.goBack()}>
-              <Text style={styles.cancelButton}>OK</Text>
+              <Text
+                style={[
+                  styles.cancelButton,
+                  {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
+                ]}>
+                OK
+              </Text>
             </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>

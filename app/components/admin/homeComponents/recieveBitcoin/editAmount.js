@@ -109,6 +109,9 @@ export default function EditAmountPopup(props) {
                     borderColor: props.theme
                       ? COLORS.darkModeText
                       : COLORS.lightModeText,
+                    color: props.theme
+                      ? COLORS.darkModeText
+                      : COLORS.lightModeText,
                   },
                 ]}
                 placeholder="Description (optional)"

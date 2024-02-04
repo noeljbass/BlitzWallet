@@ -39,11 +39,11 @@ export default function NoNWCAccount() {
           ]}
         />
       </View>
-      <TouchableOpacity onPress={connectWithAlby}>
+      {/* <TouchableOpacity onPress={connectWithAlby}>
         <Text style={styles.albyText}>
           Connect with Alby Noster Wallet Connect
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
         onPress={connectNWCWithURL}
         style={[

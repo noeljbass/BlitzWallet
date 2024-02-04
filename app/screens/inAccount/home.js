@@ -11,6 +11,7 @@ import {
   listLsps,
   lspInfo,
   nodeInfo,
+  receivePayment,
   registerWebhook,
   serviceHealthCheck,
   setLogStream,
@@ -110,7 +111,6 @@ export default function AdminHome() {
 
     if (Object.keys(expoPushToken).length != 0) {
       try {
-        console.log(expoPushToken, 'NETLIFY WEBHOOK');
         console.log(
           `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
         );
@@ -162,14 +162,22 @@ export default function AdminHome() {
               nodeState.onchainBalanceMsat,
             ]),
           );
-        } else if (response.isConnected && !response.reason) {
-          toggleNodeInformation({
-            didConnectToNode: response.isConnected,
+          await receivePayment({
+            amountMsat: 1000,
+            description: '',
           });
         }
+        // else if (response.isConnected && !response.reason) {
+        //   toggleNodeInformation({
+        //     didConnectToNode: response.isConnected,
+        //   });
+        // }
         isInitialRender.current = false;
       }
     } catch (err) {
+      toggleNodeInformation({
+        didConnectToNode: false,
+      });
       console.log(err, 'homepage connection to node err');
     }
   }
