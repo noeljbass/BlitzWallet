@@ -128,7 +128,7 @@ export default function AdminHome() {
         // console.log(response);
         // setErrMessage(response.errMessage);
 
-        if (response.isConnected && response.reason) {
+        if (response.isConnected && (response.reason || !response.reason)) {
           const nodeAmount = await nodeInfo();
           const transactions = await getTransactions();
           const heath = await serviceHealthCheck();

@@ -201,6 +201,10 @@ export default function LightningPage(props) {
     const MILISECONDSCONST = 1000;
     const BUFFERTIMECONST = 300000;
     try {
+      await receivePayment({
+        amountMsat: 1000,
+        description: '',
+      });
       const prevInvoice = await getLocalStorageItem('lnInvoice');
       let parsedInvoice = JSON.parse(prevInvoice);
       if (parsedInvoice === null) {

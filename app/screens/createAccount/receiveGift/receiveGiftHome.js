@@ -179,10 +179,7 @@ export default function ReceiveGiftHome({navigation: {navigate}}) {
 
   function onBreezEvent(e) {
     if (e?.type != 'invoicePaid') return;
-    navigate.navigate('HomeAdmin', {
-      firstLoadEvent: onBreezEvent,
-      isFromGift: true,
-    });
+    navigate.navigate('PinSetup');
   }
 
   async function calculatingChannelOpenFee() {
@@ -210,8 +207,8 @@ export default function ReceiveGiftHome({navigation: {navigate}}) {
 
   async function finalizeQrCode() {
     try {
-      const node_Info = await nodeInfo();
-      console.log(node_Info);
+      const nodeState = await nodeInfo();
+      console.log(nodeState);
       setSetupSteps({
         generatingSeed: false,
         connectingToNode: false,
@@ -220,7 +217,7 @@ export default function ReceiveGiftHome({navigation: {navigate}}) {
         showingQrCode: true,
       });
       setQrCodeObject(prev => {
-        return {...prev, nodeId: node_Info.id};
+        return {...prev, nodeId: nodeState.id};
       });
     } catch (err) {
       setErrorText('Not able to calculate channel open fees');

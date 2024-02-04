@@ -190,12 +190,12 @@ export default function AmountToGift(props) {
   async function sendPayment() {
     setErrorText('');
     try {
-      const utf8Encoder = new TextEncoder();
+      // const utf8Encoder = new TextEncoder();
       console.log(openChannelFee, giftAmount);
       if (openChannelFee >= giftAmount) {
         setErrorText('Payment must be larger than minimum gift amount');
         return;
-      } else if (nodeInformation.userBalance + 10 <= giftAmount) {
+      } else if (nodeInformation.userBalance + 10 <= giftAmount / 1000) {
         setErrorText('Not enough funds to gift wallet');
         return;
       }
@@ -203,8 +203,9 @@ export default function AmountToGift(props) {
       const sendPaymentResponse = await sendSpontaneousPayment({
         nodeId: nodeID,
         amountMsat: giftAmount,
-        extraTlvs: [{value: utf8Encoder.encode('Gift Wallet Payment')}],
+        // extraTlvs: [{value: utf8Encoder.encode('Gift Wallet Payment')}],
       });
+      // ADD USER FEEDBACK
       console.log(sendPaymentResponse);
     } catch (err) {
       setErrorText('Error when sending payment');
