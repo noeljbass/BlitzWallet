@@ -262,83 +262,56 @@ TaskManager.defineTask(
   BACKGROUND_NOTIFICATION_TASK,
   async ({data, error, executionInfo}) => {
     console.log(data);
-    console.log(error);
     console.log(executionInfo);
-    // const paymentInformationFromNotification = data?.body;
-    // console.log(paymentInformationFromNotification);
-    // if (paymentInformationFromNotification) {
-    //   console.log('YES PAYMENT INFORMATION');
+    const paymentInformationFromNotification = data?.body;
+    console.log(paymentInformationFromNotification);
 
-    //   async function breezBackgroundFunction({e}: {e: BreezFunctionData}) {
-    //     console.log(e);
-    //     if (
-    //       e?.type != 'invoicePaid' &&
-    //       e?.type != 'paymentSucceed' &&
-    //       e?.type != 'paymentFailed'
-    //     )
-    //       return;
-    //     try {
-    //       console.log(
-    //         paymentInformationFromNotification?.data.payment_hash,
-    //         '----------------------',
-    //       );
-    //       await Notifications.scheduleNotificationAsync({
-    //         content: {
-    //           title: 'Blitz Wallet',
-    //           body: `Received ${Math.round(
-    //             e.details.payment.amountMsat / 1000,
-    //           ).toLocaleString()} sat`,
-    //         },
-    //         trigger: null,
-    //       });
-    //       // ADD NEW DATA TO LOCAL STORAGE OBJECT
-    //     } catch (err) {
-    //       await Notifications.scheduleNotificationAsync({
-    //         content: {
-    //           title: 'Blitz Wallet',
-    //           body: `Error fetching details`,
-    //         },
-    //         trigger: null,
-    //       });
-    //     }
-    //   }
-    //   try {
-    //     const didConnect = await connectToNode(breezBackgroundFunction);
-    //     console.log(didConnect);
-    //     if (didConnect.isConnected && didConnect.reason) {
-    //       await Notifications.scheduleNotificationAsync({
-    //         content: {
-    //           title: 'Blitz Wallet',
-    //           body: `Caught incoming payment`,
-    //         },
-    //         trigger: null,
-    //       });
-    //       await Notifications.scheduleNotificationAsync({
-    //         content: {
-    //           title: 'Blitz Wallet',
-    //           body: 'Getting invoice details',
-    //         },
-    //         trigger: null,
-    //       });
-    //     } else if (didConnect.isConnected && !didConnect.reason)
-    //       console.log('running');
-    //     else if (didConnect.reason === 'error connecting')
-    //       console.log('running');
-    //     else throw new Error('Not Connected ');
-    //   } catch (err) {
-    //     await Notifications.scheduleNotificationAsync({
-    //       content: {
-    //         title: 'Blitz Wallet',
-    //         body: 'Error connecting to node',
-    //       },
-    //       trigger: null,
-    //     });
-    //   }
+    function breezBackgroundFunction(e) {
+      console.log(e, 'TESTING< IN FDSFDS');
+      if (
+        e?.type != 'invoicePaid' &&
+        e?.type != 'paymentSucceed' &&
+        e?.type != 'paymentFailed'
+      )
+        return;
 
-    //   console.log('Received a notification in the background!', 'TTTTT');
-    // } else {
-    //   console.log('No Payment Information');
-    // }
+      console.log(
+        paymentInformationFromNotification?.data?.payment_hash,
+        '----------------------',
+      );
+      (async () => {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Blitz Wallet',
+            body: `Received ${Math.round(
+              e.details.payment.amountMsat / 1000,
+            ).toLocaleString()} sat`,
+          },
+          trigger: null,
+        });
+      })();
+      // ADD NEW DATA TO LOCAL STORAGE OBJECT
+    }
+
+    const didConnect = await connectToNode(breezBackgroundFunction);
+    if (didConnect.isConnected && didConnect.reason) {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Blitz Wallet',
+          body: `Caught incoming payment`,
+        },
+        trigger: null,
+      });
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Blitz Wallet',
+          body: 'Getting invoice details',
+        },
+        trigger: null,
+      });
+    }
+
+    console.log('Received a notification in the background!', 'TTTTT');
 
     // Do something with the notification data
   },
