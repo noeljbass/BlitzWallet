@@ -22,10 +22,12 @@ import {getTransactions} from '../../functions/SDK';
 import {useGlobalContextProvider} from '../../../context-store/context';
 import {ConfigurePushNotifications} from '../../hooks/setNotifications';
 import {useNavigation} from '@react-navigation/native';
+import globalOnBreezEvent from '../../functions/globalOnBreezEvent';
 
 export default function AdminHome() {
   const isInitialRender = useRef(true);
   const navigate = useNavigation();
+  const onBreezEvent = globalOnBreezEvent();
 
   const {
     theme,
@@ -35,39 +37,31 @@ export default function AdminHome() {
   } = useGlobalContextProvider();
   const expoPushToken = ConfigurePushNotifications();
 
-  // SDK events listener
+  // function onBreezEvent(e) {
+  //   if (
+  //     e?.type != 'invoicePaid' &&
+  //     e?.type != 'paymentSucceed' &&
+  //     e?.type != 'paymentFailed'
+  //   )
+  //     return;
 
-  const logHandler = logEntry => {
-    if (logEntry.level != 'TRACE') {
-      console.log(`[${logEntry.level}]: ${logEntry.line}`);
-    }
-  };
+  //   updateGlobalNodeInformation(e);
+  //   toggleBreezContextEvent(e);
 
-  function onBreezEvent(e) {
-    if (
-      e?.type != 'invoicePaid' &&
-      e?.type != 'paymentSucceed' &&
-      e?.type != 'paymentFailed'
-    )
-      return;
+  //   if (
+  //     e?.type === 'invoicePaid' &&
+  //     e.details.payment.description?.includes('bwrfd')
+  //   )
+  //     return;
 
-    updateGlobalNodeInformation(e);
-    toggleBreezContextEvent(e);
-
-    if (
-      e?.type === 'invoicePaid' &&
-      e.details.payment.description?.includes('bwrfd')
-    )
-      return;
-
-    // if (e.details.payment.description?.includes('bwrfd')) return;
-    if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
-    navigate.navigate('ConfirmTxPage', {
-      theme: theme,
-      for: e.type,
-      information: e,
-    });
-  }
+  //   // if (e.details.payment.description?.includes('bwrfd')) return;
+  //   if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
+  //   navigate.navigate('ConfirmTxPage', {
+  //     theme: theme,
+  //     for: e.type,
+  //     information: e,
+  //   });
+  // }
 
   console.log(breezContextEvent, 'BREEZ CONTEXT EVENT');
 
@@ -188,38 +182,38 @@ export default function AdminHome() {
     }
   }
 
-  async function updateGlobalNodeInformation(e) {
-    const transactions = await getTransactions();
-    const nodeState = await nodeInfo();
-    const msatToSat = nodeState.channelsBalanceMsat / 1000;
+  // async function updateGlobalNodeInformation(e) {
+  //   const transactions = await getTransactions();
+  //   const nodeState = await nodeInfo();
+  //   const msatToSat = nodeState.channelsBalanceMsat / 1000;
 
-    toggleNodeInformation({
-      transactions: transactions,
-      userBalance:
-        e.type === 'invoicePaid'
-          ? e.details.payment.amountMsat / 1000 + msatToSat
-          : msatToSat,
-      inboundLiquidityMsat:
-        e.type === 'invoicePaid'
-          ? Math.abs(
-              e.details.payment.amountMsat / 1000 -
-                nodeState.inboundLiquidityMsats,
-            )
-          : nodeState.inboundLiquidityMsats,
-      blockHeight: nodeState.blockHeight,
-      onChainBalance: nodeState.onchainBalanceMsat,
-    });
-    await setLocalStorageItem(
-      'breezInfo',
-      JSON.stringify([
-        transactions,
-        msatToSat,
-        nodeState.inboundLiquidityMsats,
-        nodeState.blockHeight,
-        nodeState.onchainBalanceMsat,
-      ]),
-    );
-  }
+  //   toggleNodeInformation({
+  //     transactions: transactions,
+  //     userBalance:
+  //       e.type === 'invoicePaid'
+  //         ? e.details.payment.amountMsat / 1000 + msatToSat
+  //         : msatToSat,
+  //     inboundLiquidityMsat:
+  //       e.type === 'invoicePaid'
+  //         ? Math.abs(
+  //             e.details.payment.amountMsat / 1000 -
+  //               nodeState.inboundLiquidityMsats,
+  //           )
+  //         : nodeState.inboundLiquidityMsats,
+  //     blockHeight: nodeState.blockHeight,
+  //     onChainBalance: nodeState.onchainBalanceMsat,
+  //   });
+  //   await setLocalStorageItem(
+  //     'breezInfo',
+  //     JSON.stringify([
+  //       transactions,
+  //       msatToSat,
+  //       nodeState.inboundLiquidityMsats,
+  //       nodeState.blockHeight,
+  //       nodeState.onchainBalanceMsat,
+  //     ]),
+  //   );
+  // }
 
   async function reconnectToLSP() {
     try {
