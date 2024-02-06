@@ -27,13 +27,27 @@ import globalOnBreezEvent from '../../functions/globalOnBreezEvent';
 export default function AdminHome() {
   const isInitialRender = useRef(true);
   const onBreezEvent = globalOnBreezEvent();
-  const expoPushToken = ConfigurePushNotifications();
+  // const expoPushToken = ConfigurePushNotifications();
   const {theme, toggleNodeInformation, breezContextEvent} =
     useGlobalContextProvider();
 
+  // expoPushToken &&
+  //   (async () => {
+  //     try {
+  //       console.log(
+  //         `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data} `,
+  //       );
+  //       await registerWebhook(
+  //         `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
+  //       );
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   })();
+
   useEffect(() => {
     initWallet();
-  }, [expoPushToken]);
+  }, []);
 
   return (
     <View
@@ -76,19 +90,6 @@ export default function AdminHome() {
 
     initBalanceAndTransactions(toggleNodeInformation);
 
-    if (Object.keys(expoPushToken).length != 0) {
-      try {
-        console.log(
-          `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
-        );
-        await registerWebhook(
-          `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
     try {
       if (isInitialRender.current) {
         const response = await connectToNode(onBreezEvent);
@@ -100,7 +101,7 @@ export default function AdminHome() {
           const transactions = await getTransactions();
           const heath = await serviceHealthCheck();
           const msatToSat = nodeState.channelsBalanceMsat / 1000;
-          console.log(nodeState, heath, 'TESTIG');
+          console.log(nodeState, heath, 'TESTIGg');
 
           if (nodeState.connectedPeers.length === 0) reconnectToLSP();
 

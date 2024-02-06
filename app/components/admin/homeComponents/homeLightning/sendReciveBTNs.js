@@ -27,7 +27,10 @@ export function SendRecieveBTNs() {
           onPress={() => {
             (async () => {
               const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) return;
+              if (!areSettingsSet) {
+                Alert.alert('Not Connected To Node');
+                return;
+              }
               navigate.navigate('SendBTC');
             })();
           }}
@@ -38,7 +41,10 @@ export function SendRecieveBTNs() {
           onPress={() => {
             (async () => {
               const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) return;
+              if (!areSettingsSet) {
+                Alert.alert('Not Connected To Node');
+                return;
+              }
               navigate.navigate('ReceiveBTC');
             })();
           }}

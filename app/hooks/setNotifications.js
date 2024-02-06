@@ -1,9 +1,8 @@
 import {useState, useEffect, useRef} from 'react';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
 
-// const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+import {Alert} from 'react-native';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -15,7 +14,7 @@ Notifications.setNotificationHandler({
 
 function ConfigurePushNotifications() {
   const isInitialRender = useRef(true);
-  const [expoPushToken, setExpoPushToken] = useState({});
+  const [expoPushToken, setExpoPushToken] = useState(null);
   const [notification, setNotification] = useState(null);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -68,7 +67,7 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+      Alert.alert('Failed to get push token for push notification!');
       return;
     }
     // Learn more about projectId:
@@ -77,10 +76,8 @@ async function registerForPushNotificationsAsync() {
       projectId: process.env.PROJECT_ID,
     });
     // token = await Notifications.getDevicePushTokenAsync();
-
-    console.log(token, 'DEVICE TOKEN');
   } else {
-    alert('Must use physical device for Push Notifications');
+    Alert.alert('Must use physical device for Push Notifications');
   }
 
   return token;
