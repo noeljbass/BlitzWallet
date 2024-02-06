@@ -41,13 +41,13 @@ const GENERALOPTIONS = [
     icon: ICONS.colorIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  {
-    for: 'general',
-    name: 'Fund Wallet Gift',
-    icon: ICONS.walletBlueIcon,
-    arrowIcon: ICONS.leftCheveronIcon,
-    usesStandAlonePath: true,
-  },
+  // {
+  //   for: 'general',
+  //   name: 'Fund Wallet Gift',
+  //   icon: ICONS.walletBlueIcon,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  //   usesStandAlonePath: true,
+  // },
   // {
   //   for: 'general',
   //   name: 'Noster Wallet Connect',
@@ -74,12 +74,12 @@ const SECURITYOPTIONS = [
     icon: ICONS.linkIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  {
-    for: 'Security & Customization',
-    name: 'Bank',
-    icon: ICONS.bankIcon,
-    arrowIcon: ICONS.leftCheveronIcon,
-  },
+  // {
+  //   for: 'Security & Customization',
+  //   name: 'Bank',
+  //   icon: ICONS.bankIcon,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  // },
 ];
 const ADVANCEDOPTIONS = [
   // {

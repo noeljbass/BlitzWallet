@@ -41,13 +41,13 @@ export default function CreateAccountHome({navigation: {navigate}}) {
               Restore Existing Wallet
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[styles.button_empty, {marginTop: 'auto'}]}
             onPress={() => {
               navigate('ReceiveGiftHome');
             }}>
             <Text style={styles.button_empty_text}>Receive Gift</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Text style={styles.disclamer_text}>
             Your wallet, your coins, 100% open-source
           </Text>

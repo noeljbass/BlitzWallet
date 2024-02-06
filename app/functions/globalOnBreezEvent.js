@@ -11,9 +11,9 @@ const logHandler = logEntry => {
   }
 };
 
-export default function globalOnBreezEvent(e) {
+export default function globalOnBreezEvent() {
   const navigate = useNavigation();
-  const {toggleBreezContextEvent, theme} = useGlobalContextProvider();
+  const {toggleBreezContextEvent} = useGlobalContextProvider();
 
   return function onBreezEvent(e) {
     console.log('RUNNING IN THIS FUNCTION');

@@ -26,44 +26,10 @@ import globalOnBreezEvent from '../../functions/globalOnBreezEvent';
 
 export default function AdminHome() {
   const isInitialRender = useRef(true);
-  const navigate = useNavigation();
   const onBreezEvent = globalOnBreezEvent();
-
-  const {
-    theme,
-    toggleNodeInformation,
-    toggleBreezContextEvent,
-    breezContextEvent,
-  } = useGlobalContextProvider();
   const expoPushToken = ConfigurePushNotifications();
-
-  // function onBreezEvent(e) {
-  //   if (
-  //     e?.type != 'invoicePaid' &&
-  //     e?.type != 'paymentSucceed' &&
-  //     e?.type != 'paymentFailed'
-  //   )
-  //     return;
-
-  //   updateGlobalNodeInformation(e);
-  //   toggleBreezContextEvent(e);
-
-  //   if (
-  //     e?.type === 'invoicePaid' &&
-  //     e.details.payment.description?.includes('bwrfd')
-  //   )
-  //     return;
-
-  //   // if (e.details.payment.description?.includes('bwrfd')) return;
-  //   if (navigate.canGoBack()) navigate.navigate('HomeAdmin');
-  //   navigate.navigate('ConfirmTxPage', {
-  //     theme: theme,
-  //     for: e.type,
-  //     information: e,
-  //   });
-  // }
-
-  console.log(breezContextEvent, 'BREEZ CONTEXT EVENT');
+  const {theme, toggleNodeInformation, breezContextEvent} =
+    useGlobalContextProvider();
 
   useEffect(() => {
     initWallet();
@@ -85,6 +51,7 @@ export default function AdminHome() {
       </SafeAreaView>
     </View>
   );
+
   async function initBalanceAndTransactions() {
     try {
       const savedBreezInfo = await getLocalStorageItem('breezInfo');
@@ -181,39 +148,6 @@ export default function AdminHome() {
       console.log(err, 'homepage connection to node err');
     }
   }
-
-  // async function updateGlobalNodeInformation(e) {
-  //   const transactions = await getTransactions();
-  //   const nodeState = await nodeInfo();
-  //   const msatToSat = nodeState.channelsBalanceMsat / 1000;
-
-  //   toggleNodeInformation({
-  //     transactions: transactions,
-  //     userBalance:
-  //       e.type === 'invoicePaid'
-  //         ? e.details.payment.amountMsat / 1000 + msatToSat
-  //         : msatToSat,
-  //     inboundLiquidityMsat:
-  //       e.type === 'invoicePaid'
-  //         ? Math.abs(
-  //             e.details.payment.amountMsat / 1000 -
-  //               nodeState.inboundLiquidityMsats,
-  //           )
-  //         : nodeState.inboundLiquidityMsats,
-  //     blockHeight: nodeState.blockHeight,
-  //     onChainBalance: nodeState.onchainBalanceMsat,
-  //   });
-  //   await setLocalStorageItem(
-  //     'breezInfo',
-  //     JSON.stringify([
-  //       transactions,
-  //       msatToSat,
-  //       nodeState.inboundLiquidityMsats,
-  //       nodeState.blockHeight,
-  //       nodeState.onchainBalanceMsat,
-  //     ]),
-  //   );
-  // }
 
   async function reconnectToLSP() {
     try {
