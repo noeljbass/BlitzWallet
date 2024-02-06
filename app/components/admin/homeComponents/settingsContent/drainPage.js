@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Keyboard,
@@ -14,7 +15,12 @@ import {
 } from 'react-native';
 import {BTN, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
-import {fetchFiatRates} from '@breeztech/react-native-breez-sdk';
+import {
+  fetchFiatRates,
+  fetchReverseSwapFees,
+  maxReverseSwapAmount,
+  sendOnchain,
+} from '@breeztech/react-native-breez-sdk';
 import {getLocalStorageItem} from '../../../../functions';
 import {useGlobalContextProvider} from '../../../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
@@ -24,8 +30,16 @@ export default function DrainPage() {
   const [wantsToDrain, setWantsToDrain] = useState(false);
   const [fiatRate, setFiatRate] = useState(0);
   const {theme, nodeInformation} = useGlobalContextProvider();
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigation();
   const [bitcoinAddress, setBitcoinAddress] = useState('');
+  const [drainInfo, setDrainInfo] = useState({
+    maxDrainAmount: 0,
+    fees: 0,
+    pairHash: '',
+    totalEstimatedFees: 0,
+  });
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -33,10 +47,11 @@ export default function DrainPage() {
       isInitialRender.current = false;
     }
     if (!wantsToDrain) return;
+    createOnChainSwap();
 
-    Alert.alert('This function does not work yet', '', [
-      {text: 'Ok', onPress: () => navigate.goBack()},
-    ]);
+    // Alert.alert('This function does not work yet', '', [
+    //   {text: 'Ok', onPress: () => navigate.goBack()},
+    // ]);
 
     // console.log('DRAINING WALLET');
   }, [wantsToDrain]);
@@ -87,67 +102,117 @@ export default function DrainPage() {
               </Text>
             </View>
 
-            <View
-              style={[
-                styles.btcAdressContainer,
-                {
-                  backgroundColor: theme
-                    ? COLORS.darkModeBackgroundOffset
-                    : COLORS.lightModeBackgroundOffset,
-                  marginBottom: 'auto',
-                },
-              ]}>
-              <Text
-                style={[
-                  styles.btcAdressHeader,
-                  {
-                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                  },
-                ]}>
-                Enter BTC address
-              </Text>
-              <View style={[styles.inputContainer]}>
-                <TextInput
-                  value={bitcoinAddress}
-                  onChangeText={setBitcoinAddress}
-                  style={[
-                    styles.input,
-                    {
-                      borderColor: theme
-                        ? COLORS.darkModeText
-                        : COLORS.lightModeText,
-                      color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                    },
-                  ]}
+            {isLoading ? (
+              <View style={{flex: 1}}>
+                <ActivityIndicator
+                  size="large"
+                  color={theme ? COLORS.darkModeText : COLORS.lightModeText}
+                  style={{
+                    marginTop: 'auto',
+                    marginBottom: 'auto',
+                  }}
                 />
+              </View>
+            ) : (
+              <>
+                <View
+                  style={[
+                    styles.btcAdressContainer,
+                    {
+                      backgroundColor: theme
+                        ? COLORS.darkModeBackgroundOffset
+                        : COLORS.lightModeBackgroundOffset,
+                      marginBottom: 'auto',
+                    },
+                  ]}>
+                  <Text
+                    style={[
+                      styles.btcAdressHeader,
+                      {
+                        color: theme
+                          ? COLORS.darkModeText
+                          : COLORS.lightModeText,
+                      },
+                    ]}>
+                    Enter BTC address
+                  </Text>
+                  <View style={[styles.inputContainer]}>
+                    <TextInput
+                      value={bitcoinAddress}
+                      onChangeText={setBitcoinAddress}
+                      style={[
+                        styles.input,
+                        {
+                          borderColor: theme
+                            ? COLORS.darkModeText
+                            : COLORS.lightModeText,
+                          color: theme
+                            ? COLORS.darkModeText
+                            : COLORS.lightModeText,
+                        },
+                      ]}
+                    />
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (errorMessage) return;
+                        navigate.navigate('CameraModal', {
+                          updateBitcoinAdressFunc: setBitcoinAddress,
+                        });
+                      }}>
+                      <Image
+                        style={styles.scanIcon}
+                        source={ICONS.faceIDIcon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View>
+                  {errorMessage ? (
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                  ) : (
+                    <>
+                      <Text
+                        style={[
+                          styles.textBreakdown,
+                          {
+                            color: theme
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>{`Max sendable amount: ${drainInfo.maxDrainAmount.toLocaleString()}`}</Text>
+                      <Text
+                        style={[
+                          styles.textBreakdown,
+                          {
+                            color: theme
+                              ? COLORS.darkModeText
+                              : COLORS.lightModeText,
+                          },
+                        ]}>{`Total estimated Fees: ${drainInfo.totalEstimatedFees.toLocaleString()}`}</Text>
+                    </>
+                  )}
+                </View>
+
                 <TouchableOpacity
                   onPress={() => {
-                    navigate.navigate('CameraModal', {
-                      updateBitcoinAdressFunc: setBitcoinAddress,
+                    if (!bitcoinAddress || errorMessage) return;
+                    navigate.navigate('ConfirmDrainPage', {
+                      wantsToDrainFunc: setWantsToDrain,
                     });
-                  }}>
-                  <Image style={styles.scanIcon} source={ICONS.faceIDIcon} />
+                  }}
+                  style={[
+                    BTN,
+                    {
+                      backgroundColor: COLORS.primary,
+                      opacity: !bitcoinAddress || errorMessage ? 0.5 : 1,
+                      marginBottom: 15,
+                    },
+                  ]}>
+                  <Text style={styles.buttonText}>Drain</Text>
                 </TouchableOpacity>
-              </View>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                if (!bitcoinAddress) return;
-                navigate.navigate('ConfirmDrainPage', {
-                  wantsToDrainFunc: setWantsToDrain,
-                });
-              }}
-              style={[
-                BTN,
-                {
-                  backgroundColor: COLORS.primary,
-                  opacity: !bitcoinAddress ? 0.5 : 1,
-                  marginBottom: 15,
-                },
-              ]}>
-              <Text style={styles.buttonText}>Drain</Text>
-            </TouchableOpacity>
+              </>
+            )}
           </View>
         </SafeAreaView>
       </TouchableWithoutFeedback>
@@ -165,8 +230,47 @@ export default function DrainPage() {
       if (!fiatRate) return;
 
       setFiatRate(fiatRate.value);
+
+      const maxDrainAmount = await maxReverseSwapAmount();
+      const currentFees = await fetchReverseSwapFees({
+        sendAmountSat: maxDrainAmount.totalSat,
+      });
+
+      console.log(currentFees, maxDrainAmount);
+      const fees = await getMempoolTxFee();
+      setDrainInfo({
+        maxDrainAmount: maxDrainAmount.totalSat,
+        fees: fees.halfHourFee,
+        pairHash: currentFees.feesHash,
+        totalEstimatedFees: currentFees.totalEstimatedFees,
+      });
+      setIsLoading(false);
     } catch (err) {
+      if (String(err).toLowerCase().includes('send amount is too low')) {
+        setIsLoading(false);
+        setErrorMessage('Swap amount is too low');
+      }
       console.log(err);
+    }
+  }
+
+  async function createOnChainSwap() {
+    const revereseSwapInfo = await sendOnchain({
+      amountSat: drainInfo.maxDrainAmount,
+      onchainRecipientAddress: bitcoinAddress,
+      pairHash: drainInfo.pairHash,
+      satPerVbyte: drainInfo.fees,
+    });
+  }
+  async function getMempoolTxFee() {
+    try {
+      const data = await fetch('https://mempool.space/api/v1/fees/recommended');
+      const info = await data.json();
+      return new Promise(resolve => {
+        resolve(info);
+      });
+    } catch (err) {
+      setErrorMessage('Error getting transaction fee amount');
     }
   }
 }
@@ -229,5 +333,17 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: SIZES.medium,
     fontFamily: FONT.Other_Regular,
+  },
+
+  errorText: {
+    fontFamily: FONT.Descriptoin_Regular,
+
+    fontSize: SIZES.medium,
+    color: COLORS.cancelRed,
+  },
+
+  textBreakdown: {
+    fontFamily: FONT.Descriptoin_Regular,
+    fontSize: SIZES.medium,
   },
 });
