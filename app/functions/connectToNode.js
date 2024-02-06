@@ -20,41 +20,6 @@ export default async function connectToNode(breezEvent) {
     });
   } catch (err) {
     try {
-      console.log(
-        process.env.API_KEY,
-        process.env.GL_CUSTOM_NOBODY_CERT,
-        process.env.GL_CUSTOM_NOBODY_KEY,
-      );
-      // const fileInfo = await FileSystem.getInfoAsync(
-      //   process.env.GL_CUSTOM_NOBODY_CERT,
-      // );
-
-      // const inviteCode = process.env.INVITE_KEY1;
-      // console.log(process.env.INVITE_KEY1);
-      // console.log(process.env.GL_CUSTOM_NOBODY_CERT);
-      // console.log(process.env.GL_CUSTOM_NOBODY_KEY);
-      // console.log(process.env.API_KEY);
-
-      // const deviceCert = await FileSystem.readAsStringAsync(
-      //   `/Users/blakekaufman/Desktop/Bliltz Wallet, LLC/Green light certifications/gl-certs/client.crt`,
-      //   {
-      //     encoding: FileSystem.EncodingType.Base64,
-      //   },
-      // );
-      // const deviceKey = await FileSystem.readAsStringAsync(
-      //   `/Users/blakekaufman/Desktop/Bliltz Wallet, LLC/Green light certifications/gl-certs/client-key.pem`,
-      //   {
-      //     encoding: FileSystem.EncodingType.Base64,
-      //   },
-      // );
-
-      // const test = btoa(process.env.GL_CUSTOM_NOBODY_KEY);
-
-      // console.log(
-      //   toByteArray(deviceCert).toString() === toByteArray(test).toString(),
-      //   'TESTING',
-      // );
-
       const nodeConfig = {
         type: NodeConfigVariant.GREENLIGHT,
         config: {

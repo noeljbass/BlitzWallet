@@ -11,33 +11,16 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
+import * as Notifications from 'expo-notifications';
+import * as TaskManager from 'expo-task-manager';
 // import {registerRootComponent} from 'expo';
 type RootStackParamList = {
   Home: {someParam?: string};
   Details: {someParam?: string};
 };
-// Define the type for the task data
-interface TaskData {
-  body?: {
-    data: {
-      payment_hash: string; // Assuming payment_hash is a string in your notification payload body
-    };
-  };
-}
-interface BreezFunctionData {
-  type: string;
-  details: {
-    payment: {
-      amountMsat: number;
-    };
-  };
-}
+
 import {AppState, Platform} from 'react-native';
-import {
-  connectToNode,
-  getLocalStorageItem,
-  retrieveData,
-} from './app/functions';
+import {connectToNode, retrieveData} from './app/functions';
 import SplashScreen from 'react-native-splash-screen';
 import {
   CreateAccountHome,
@@ -80,19 +63,13 @@ import ClipboardCopyPopup from './app/components/admin/homeComponents/recieveBit
 import RefundBitcoinTransactionPage from './app/components/admin/homeComponents/recieveBitcoin/components/bitcoinRefundablePage';
 import CameraModal from './app/components/admin/homeComponents/cameraModal';
 import ScanRecieverQrCode from './app/components/admin/homeComponents/fundGift/scanReciverQrCode';
-import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
-import {
-  connect,
-  defaultConfig,
-  EnvironmentType,
-  listPayments,
-  NodeConfigVariant,
-  mnemonicToSeed,
-  nodeInfo,
-} from '@breeztech/react-native-breez-sdk';
+
 import ReceiveGiftHome from './app/screens/createAccount/receiveGift/receiveGiftHome';
-import {toByteArray} from 'react-native-quick-base64';
+import {
+  FaucetHome,
+  FaucetReceivePage,
+  FaucetSettingsPage,
+} from './app/components/admin/homeComponents/faucet';
 
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
@@ -195,6 +172,7 @@ function ResetStack(): JSX.Element | null {
             component={DrainWalletAddress}
           />
           <Stack.Screen name="CameraModal" component={CameraModal} />
+          <Stack.Screen name="FaucetHome" component={FaucetHome} />
         </Stack.Group>
         <Stack.Group
           screenOptions={{
@@ -221,6 +199,16 @@ function ResetStack(): JSX.Element | null {
           <Stack.Screen
             name="RefundBitcoinTransactionPage"
             component={RefundBitcoinTransactionPage}
+          />
+
+          {/* Faucet Pages  */}
+          <Stack.Screen
+            name="FaucetSettingsPage"
+            component={FaucetSettingsPage}
+          />
+          <Stack.Screen
+            name="RecieveFaucetPage"
+            component={FaucetReceivePage}
           />
         </Stack.Group>
         <Stack.Group

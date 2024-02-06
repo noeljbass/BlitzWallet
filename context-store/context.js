@@ -19,6 +19,7 @@ const GlobalContextProvider = ({children}) => {
     blockHeight: 0,
     onChainBalance: 0,
   });
+  const [breezContextEvent, setBreezContextEvent] = useState({});
 
   function toggleTheme(peram) {
     setStatusBarStyle(peram ? 'light' : 'dark');
@@ -31,6 +32,9 @@ const GlobalContextProvider = ({children}) => {
     setNodeInformation(prev => {
       return {...prev, ...newInfo};
     });
+  }
+  function toggleBreezContextEvent(breezEvent) {
+    setBreezContextEvent({...breezEvent});
   }
 
   useEffect(() => {
@@ -69,6 +73,8 @@ const GlobalContextProvider = ({children}) => {
         toggleUserTxPreferance,
         nodeInformation,
         toggleNodeInformation,
+        breezContextEvent,
+        toggleBreezContextEvent,
       }}>
       {children}
     </GlobalContextManger.Provider>

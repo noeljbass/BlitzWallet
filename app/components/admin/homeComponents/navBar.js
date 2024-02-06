@@ -18,7 +18,7 @@ export default function NavBar(props) {
   const [navViews, setNavViews] = useState({
     features: false,
   });
-  const [fucet, setFaucet] = useState(false);
+
   const navigate = useNavigation();
   const {nodeInformation, theme} = useGlobalContextProvider();
 
@@ -104,17 +104,9 @@ export default function NavBar(props) {
         <OptionsDropdown
           setNavViews={setNavViews}
           isDisplayed={navViews.features}
-          setFaucet={setFaucet}
           theme={theme}
         />
       </View>
-
-      <FaucetHome
-        breezEvent={props.breezEvent}
-        setFaucet={setFaucet}
-        isDisplayed={fucet}
-        isDarkMode={theme}
-      />
     </View>
   );
 }

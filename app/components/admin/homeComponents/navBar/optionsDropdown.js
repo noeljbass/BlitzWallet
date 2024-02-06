@@ -22,6 +22,7 @@ import {
 } from '../../../../constants';
 import {useEffect, useRef, useState} from 'react';
 import * as WebBrowser from 'expo-web-browser';
+import {useNavigation} from '@react-navigation/native';
 
 const NAVITEMS = [
   {name: 'Faucet', link: 'URL', icon: ICONS.faucetIcon, inApp: true},
@@ -55,6 +56,7 @@ const NAVITEMS = [
 
 export function OptionsDropdown(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const navigate = useNavigation();
   const navElements = NAVITEMS.map((item, id) => {
     return (
       <View
@@ -71,7 +73,7 @@ export function OptionsDropdown(props) {
                 }
               } else {
                 if (item.name === 'Faucet') {
-                  props.setFaucet(true);
+                  navigate.navigate('FaucetHome');
                   props.setNavViews({
                     features: false,
                   });

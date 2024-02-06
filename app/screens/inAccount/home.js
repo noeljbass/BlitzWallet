@@ -26,9 +26,13 @@ import {useNavigation} from '@react-navigation/native';
 export default function AdminHome() {
   const isInitialRender = useRef(true);
   const navigate = useNavigation();
-  const [breezEvent, setBreezEvent] = useState({});
-  const {theme, toggleNodeInformation, nodeInformation} =
-    useGlobalContextProvider();
+
+  const {
+    theme,
+    toggleNodeInformation,
+    toggleBreezContextEvent,
+    breezContextEvent,
+  } = useGlobalContextProvider();
   const expoPushToken = ConfigurePushNotifications();
 
   // SDK events listener
@@ -40,15 +44,15 @@ export default function AdminHome() {
   };
 
   function onBreezEvent(e) {
-    console.log(e);
     if (
       e?.type != 'invoicePaid' &&
       e?.type != 'paymentSucceed' &&
       e?.type != 'paymentFailed'
     )
       return;
-    setBreezEvent(e);
+
     updateGlobalNodeInformation(e);
+    toggleBreezContextEvent(e);
 
     if (
       e?.type === 'invoicePaid' &&
@@ -65,6 +69,8 @@ export default function AdminHome() {
     });
   }
 
+  console.log(breezContextEvent, 'BREEZ CONTEXT EVENT');
+
   useEffect(() => {
     initWallet();
   }, [expoPushToken]);
@@ -80,7 +86,7 @@ export default function AdminHome() {
         },
       ]}>
       <SafeAreaView style={styles.container}>
-        <NavBar breezEvent={breezEvent} />
+        <NavBar />
         <HomeLightning />
       </SafeAreaView>
     </View>

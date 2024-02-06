@@ -15,33 +15,25 @@ import {
 import {COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../../constants';
 import {BTN, backArrow, headerText} from '../../../../constants/styles';
 import * as Device from 'expo-device';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
+import {useNavigation} from '@react-navigation/native';
 
-export default function SettingsPage(props) {
-  const fadeAnim = useRef(new Animated.Value(900)).current;
-
+export default function FaucetSettingsPage(props) {
+  const navigate = useNavigation();
+  const fauceType = props.route.params.faucetType;
+  const {theme} = useGlobalContextProvider();
+  const [numberOfPeople, setNumberOfPeople] = useState('');
+  const [amountPerPerson, setAmountPerPerson] = useState('');
   const [errorMessage, setErrorMessage] = useState({
     for: null,
     message: '',
   });
-  function fadeIn() {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
-  function fadeOut() {
-    Animated.timing(fadeAnim, {
-      toValue: 900,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }
+  console.log(fauceType);
 
   function continueFilter() {
-    if (!props.numberOfPeople || !props.amountPerPerson) {
+    if (!numberOfPeople || !amountPerPerson) {
       setErrorMessage(() => {
-        if (!props.numberOfPeople) {
+        if (!numberOfPeople) {
           return {
             for: 'numberOfPeople',
             message: 'Error. Please add an amount of people for the faucet.',
@@ -56,10 +48,13 @@ export default function SettingsPage(props) {
       return;
     }
 
-    props.setUserPath(prev => {
-      if (props.userPath.type === 'receive') return {...prev, receive: true};
-      else return {...prev, send: true};
-    });
+    navigate.navigate(
+      fauceType === 'recieve' ? 'RecieveFaucetPage' : 'SendFaucetPage',
+      {
+        amountPerPerson: amountPerPerson,
+        numberOfPeople: numberOfPeople,
+      },
+    );
     setErrorMessage({
       for: null,
       message: '',
@@ -67,18 +62,12 @@ export default function SettingsPage(props) {
     Keyboard.dismiss();
   }
 
-  useEffect(() => {
-    if (props.isDisplayed) {
-      fadeIn();
-    } else fadeOut();
-  }, [props.isDisplayed]);
   return (
-    <Animated.View
+    <View
       style={[
         styles.popupContainer,
         {
-          transform: [{translateX: fadeAnim}],
-          backgroundColor: props.isDarkMode
+          backgroundColor: theme
             ? COLORS.darkModeBackground
             : COLORS.lightModeBackground,
           paddingVertical: Device.osName === 'ios' ? 0 : 10,
@@ -95,16 +84,14 @@ export default function SettingsPage(props) {
             <View style={styles.topBar}>
               <TouchableOpacity
                 onPress={() => {
-                  props.setUserPath(prev => {
-                    return {...prev, settings: false};
-                  });
-                  props.setAmountPerPerson('');
-                  props.setNumberOfPeople('');
+                  setAmountPerPerson('');
+                  setNumberOfPeople('');
                   setErrorMessage({
                     for: null,
                     message: '',
                   });
                   Keyboard.dismiss();
+                  navigate.goBack();
                 }}>
                 <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
               </TouchableOpacity>
@@ -113,14 +100,10 @@ export default function SettingsPage(props) {
                   headerText,
                   {
                     transform: [{translateX: -12.5}],
-                    color: props.isDarkMode
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   },
                 ]}>
-                {props.userPath.type.toLowerCase() === 'receive'
-                  ? 'Receive'
-                  : 'Send'}{' '}
+                {fauceType.toLowerCase() === 'recieve' ? 'Recieve' : 'Send'}{' '}
                 Faucet
               </Text>
             </View>
@@ -132,7 +115,7 @@ export default function SettingsPage(props) {
                 ]}>
                 <View style={styles.inputContainer}>
                   <TextInput
-                    onChangeText={props.setNumberOfPeople}
+                    onChangeText={setNumberOfPeople}
                     style={[
                       styles.input,
                       {
@@ -143,14 +126,14 @@ export default function SettingsPage(props) {
                       },
                     ]}
                     selectionColor={COLORS.lightModeBackground}
-                    value={props.numberOfPeople}
+                    value={numberOfPeople}
                     keyboardType="number-pad"
                   />
                   <Text
                     style={[
                       styles.descriptionText,
                       {
-                        color: props.isDarkMode
+                        color: theme
                           ? COLORS.darkModeText
                           : COLORS.lightModeText,
                       },
@@ -160,7 +143,7 @@ export default function SettingsPage(props) {
                 </View>
                 <View style={styles.inputContainer}>
                   <TextInput
-                    onChangeText={props.setAmountPerPerson}
+                    onChangeText={setAmountPerPerson}
                     style={[
                       styles.input,
                       {
@@ -171,14 +154,14 @@ export default function SettingsPage(props) {
                       },
                     ]}
                     selectionColor={COLORS.lightModeBackground}
-                    value={props.amountPerPerson}
+                    value={amountPerPerson}
                     keyboardType="number-pad"
                   />
                   <Text
                     style={[
                       styles.descriptionText,
                       {
-                        color: props.isDarkMode
+                        color: theme
                           ? COLORS.darkModeText
                           : COLORS.lightModeText,
                       },
@@ -202,16 +185,13 @@ export default function SettingsPage(props) {
           </SafeAreaView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </Animated.View>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   popupContainer: {
     flex: 1,
-    height: '100%',
-    width: '100%',
     backgroundColor: COLORS.background,
-    position: 'absolute',
   },
 
   topBar: {

@@ -1,5 +1,5 @@
 import FaucetHome from './home';
-import ReceiveFaucetHome from './settingsPage';
-import ReceievePage from './receivePage';
+import FaucetReceivePage from './receivePage';
+import FaucetSettingsPage from './settingsPage';
 
-export {FaucetHome, ReceiveFaucetHome, ReceievePage};
+export {FaucetHome, FaucetSettingsPage, FaucetReceivePage};

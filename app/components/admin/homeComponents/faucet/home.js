@@ -8,132 +8,81 @@ import {
   View,
 } from 'react-native';
 import {COLORS, FONT, ICONS, SIZES} from '../../../../constants';
-import {BTN, backArrow, headerText} from '../../../../constants/styles';
+import {backArrow, headerText} from '../../../../constants/styles';
 import * as Device from 'expo-device';
-import {useState} from 'react';
-import ReceievePage from './receivePage';
-import SendPage from './sendPage';
-import SettingsPage from './settingsPage';
 
-export default function FaucetHome(props) {
-  const [userPath, setUserPath] = useState({
-    settings: false,
-    receive: false,
-    send: false,
-    type: '',
-  });
-  const [numberOfPeople, setNumberOfPeople] = useState('');
-  const [amountPerPerson, setAmountPerPerson] = useState('');
+import {useNavigation} from '@react-navigation/native';
+import {useGlobalContextProvider} from '../../../../../context-store/context';
+
+export default function FaucetHome() {
+  const navigate = useNavigation();
+  const {theme} = useGlobalContextProvider();
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={props.isDisplayed}>
-      <View
+    <View
+      style={[
+        styles.globalContainer,
+        {
+          backgroundColor: theme
+            ? COLORS.darkModeBackground
+            : COLORS.lightModeBackground,
+        },
+      ]}>
+      <SafeAreaView
         style={[
-          styles.globalContainer,
-          {
-            backgroundColor: props.isDarkMode
-              ? COLORS.darkModeBackground
-              : COLORS.lightModeBackground,
-          },
+          {flex: 1, marginVertical: Device.osName === 'Android' ? 10 : 0},
         ]}>
-        <SafeAreaView
-          style={[
-            {flex: 1, marginVertical: Device.osName === 'Android' ? 10 : 0},
-          ]}>
-          <View style={styles.topBar}>
+        <View style={styles.topBar}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              navigate.goBack();
+              return;
+            }}>
+            <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
+          </TouchableOpacity>
+          <Text
+            style={[
+              headerText,
+              {
+                transform: [{translateX: -12.5}],
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
+            Faucet
+          </Text>
+        </View>
+        <View style={styles.contentContainer}>
+          <Text
+            style={[
+              styles.questionText,
+              {
+                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+              },
+            ]}>
+            Would you like to create a send or receive faucet?
+          </Text>
+          <View style={styles.buttonContainer}>
             <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={() => props.setFaucet(false)}>
-              <Image style={[backArrow]} source={ICONS.leftCheveronIcon} />
+              onPress={() => {
+                return;
+              }}
+              style={[styles.button, {opacity: 0.3}]}>
+              <Text style={{color: COLORS.white}}>Send</Text>
             </TouchableOpacity>
-            <Text
-              style={[
-                headerText,
-                {
-                  transform: [{translateX: -12.5}],
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              Faucet
-            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigate.navigate('FaucetSettingsPage', {
+                  faucetType: 'recieve',
+                });
+              }}
+              style={[styles.button]}>
+              <Text style={{color: COLORS.white}}>Receive</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.contentContainer}>
-            <Text
-              style={[
-                styles.questionText,
-                {
-                  color: props.isDarkMode
-                    ? COLORS.darkModeText
-                    : COLORS.lightModeText,
-                },
-              ]}>
-              Would you like to create a send or recieve faucet?
-            </Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  return;
-                  setUserPath(prev => {
-                    return {...prev, settings: true, type: 'send'};
-                  });
-                }}
-                style={[styles.button, {opacity: 0.3}]}>
-                <Text style={{color: COLORS.white}}>Send</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  setUserPath(prev => {
-                    return {...prev, settings: true, type: 'receive'};
-                  })
-                }
-                style={[styles.button]}>
-                <Text style={{color: COLORS.white}}>Recieve</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </SafeAreaView>
-
-        {/* popups */}
-        <SettingsPage
-          setUserPath={setUserPath}
-          isDisplayed={userPath.settings}
-          setNumberOfPeople={setNumberOfPeople}
-          setAmountPerPerson={setAmountPerPerson}
-          numberOfPeople={numberOfPeople}
-          amountPerPerson={amountPerPerson}
-          userPath={userPath}
-          isDarkMode={props.isDarkMode}
-        />
-        <ReceievePage
-          setUserPath={setUserPath}
-          isDisplayed={userPath.receive}
-          numberOfPeople={numberOfPeople}
-          amountPerPerson={amountPerPerson}
-          breezEvent={props.breezEvent}
-          setNumberOfPeople={setNumberOfPeople}
-          setAmountPerPerson={setAmountPerPerson}
-          setFaucet={props.setFaucet}
-          isDarkMode={props.isDarkMode}
-        />
-        <SendPage
-          setUserPath={setUserPath}
-          isDisplayed={userPath.send}
-          numberOfPeople={numberOfPeople}
-          amountPerPerson={amountPerPerson}
-          breezEvent={props.breezEvent}
-          setNumberOfPeople={setNumberOfPeople}
-          setAmountPerPerson={setAmountPerPerson}
-          setFaucet={props.setFaucet}
-          isDarkMode={props.isDarkMode}
-        />
-        {/* NEED TO CREATE */}
-      </View>
-    </Modal>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 
