@@ -13,7 +13,8 @@ const logHandler = logEntry => {
 
 export default function globalOnBreezEvent() {
   const navigate = useNavigation();
-  const {toggleBreezContextEvent} = useGlobalContextProvider();
+  const {toggleBreezContextEvent, toggleNodeInformation} =
+    useGlobalContextProvider();
 
   return function onBreezEvent(e) {
     console.log('RUNNING IN THIS FUNCTION');
@@ -42,37 +43,41 @@ export default function globalOnBreezEvent() {
       information: e,
     });
   };
-}
 
-async function updateGlobalNodeInformation(e) {
-  const transactions = await getTransactions();
-  const nodeState = await nodeInfo();
-  const msatToSat = nodeState.channelsBalanceMsat / 1000;
+  async function updateGlobalNodeInformation(e) {
+    try {
+      const transactions = await getTransactions();
+      const nodeState = await nodeInfo();
+      const msatToSat = nodeState.channelsBalanceMsat / 1000;
 
-  toggleNodeInformation({
-    transactions: transactions,
-    userBalance:
-      e.type === 'invoicePaid'
-        ? e.details.payment.amountMsat / 1000 + msatToSat
-        : msatToSat,
-    inboundLiquidityMsat:
-      e.type === 'invoicePaid'
-        ? Math.abs(
-            e.details.payment.amountMsat / 1000 -
-              nodeState.inboundLiquidityMsats,
-          )
-        : nodeState.inboundLiquidityMsats,
-    blockHeight: nodeState.blockHeight,
-    onChainBalance: nodeState.onchainBalanceMsat,
-  });
-  await setLocalStorageItem(
-    'breezInfo',
-    JSON.stringify([
-      transactions,
-      msatToSat,
-      nodeState.inboundLiquidityMsats,
-      nodeState.blockHeight,
-      nodeState.onchainBalanceMsat,
-    ]),
-  );
+      toggleNodeInformation({
+        transactions: transactions,
+        userBalance:
+          e.type === 'invoicePaid'
+            ? e.details.payment.amountMsat / 1000 + msatToSat
+            : msatToSat,
+        inboundLiquidityMsat:
+          e.type === 'invoicePaid'
+            ? Math.abs(
+                e.details.payment.amountMsat / 1000 -
+                  nodeState.inboundLiquidityMsats,
+              )
+            : nodeState.inboundLiquidityMsats,
+        blockHeight: nodeState.blockHeight,
+        onChainBalance: nodeState.onchainBalanceMsat,
+      });
+      await setLocalStorageItem(
+        'breezInfo',
+        JSON.stringify([
+          transactions,
+          msatToSat,
+          nodeState.inboundLiquidityMsats,
+          nodeState.blockHeight,
+          nodeState.onchainBalanceMsat,
+        ]),
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

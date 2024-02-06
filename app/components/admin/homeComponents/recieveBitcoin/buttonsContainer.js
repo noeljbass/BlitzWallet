@@ -82,7 +82,7 @@ export default function ButtonsContainer(props) {
     try {
       if (props.generatingInvoiceQRCode) return;
       await Share.share({
-        message: props.generatedAddress,
+        message: props.generatedAddress[props.selectedRecieveOption],
       });
     } catch {
       window.alert('ERROR with sharing');
