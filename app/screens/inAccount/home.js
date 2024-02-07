@@ -27,23 +27,25 @@ import globalOnBreezEvent from '../../functions/globalOnBreezEvent';
 export default function AdminHome() {
   const isInitialRender = useRef(true);
   const onBreezEvent = globalOnBreezEvent();
-  // const expoPushToken = ConfigurePushNotifications();
-  const {theme, toggleNodeInformation, breezContextEvent} =
-    useGlobalContextProvider();
+  const expoPushToken = ConfigurePushNotifications();
+  const {theme, toggleNodeInformation} = useGlobalContextProvider();
+  const didLogWebhook = useRef(true);
 
-  // expoPushToken &&
-  //   (async () => {
-  //     try {
-  //       console.log(
-  //         `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data} `,
-  //       );
-  //       await registerWebhook(
-  //         `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
-  //       );
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   })();
+  expoPushToken &&
+    didLogWebhook.current &&
+    (async () => {
+      try {
+        console.log(
+          `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data} `,
+        );
+        await registerWebhook(
+          `https://blitz-wallet.com/.netlify/functions/notify?platform=${expoPushToken?.type}&token=${expoPushToken?.data}`,
+        );
+        didLogWebhook.current = false;
+      } catch (err) {
+        console.log(err);
+      }
+    })();
 
   useEffect(() => {
     initWallet();

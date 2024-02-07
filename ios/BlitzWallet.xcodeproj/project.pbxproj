@@ -24,6 +24,8 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		84C1A1CA923142D7BD604449 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9D90700A0284E5EBBE63562 /* Inter-Medium.ttf */; };
 		9070F41E8F3046F3AAEF8052 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 670F525227C24E16A7EE57AC /* Inter-Bold.ttf */; };
+		93122A072B7304E6005933A9 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93122A062B7304E6005933A9 /* NotificationService.swift */; };
+		93122A0B2B7304E6005933A9 /* blitzWalletBackgroundNotification.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 93122A042B7304E6005933A9 /* blitzWalletBackgroundNotification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A1CCF25031FB83C4222A5766 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7858F31214C9B2A6E94ADAA /* ExpoModulesProvider.swift */; };
 		B5BEAB580A724102A33F079B /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC8A7FF6220D4E4FB15B2B27 /* Montserrat-Medium.ttf */; };
 		CE369BCB31904CB691C4EC81 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 293B2631F65948EB98B93DB8 /* Lato-Bold.ttf */; };
@@ -37,7 +39,28 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = BlitzWallet;
 		};
+		93122A092B7304E6005933A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93122A032B7304E6005933A9;
+			remoteInfo = blitzWalletBackgroundNotification;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		93122A0F2B7304E6005933A9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				93122A0B2B7304E6005933A9 /* blitzWalletBackgroundNotification.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* BlitzWalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlitzWalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +84,9 @@
 		7A17E95C108042C794BDAFA6 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Bold.ttf"; path = "../app/assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BlitzWallet/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-BlitzWallet-BlitzWalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlitzWallet-BlitzWalletTests.release.xcconfig"; path = "Target Support Files/Pods-BlitzWallet-BlitzWalletTests/Pods-BlitzWallet-BlitzWalletTests.release.xcconfig"; sourceTree = "<group>"; };
+		93122A042B7304E6005933A9 /* blitzWalletBackgroundNotification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = blitzWalletBackgroundNotification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		93122A062B7304E6005933A9 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		93122A082B7304E6005933A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93A020F72B656668001DC70C /* BlitzWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlitzWallet.entitlements; path = BlitzWallet/BlitzWallet.entitlements; sourceTree = "<group>"; };
 		9BDA11F7D2CD4C878A1D6F61 /* Montserrat-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Light.ttf"; path = "../app/assets/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; };
 		9D52C3C3475A4AF5AA5AD26F /* Lato-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Light.ttf"; path = "../app/assets/fonts/Lato-Light.ttf"; sourceTree = "<group>"; };
@@ -87,6 +113,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-BlitzWallet.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93122A012B7304E6005933A9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +197,7 @@
 				13B07FAE1A68108700A75B9A /* BlitzWallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BlitzWalletTests */,
+				93122A052B7304E6005933A9 /* blitzWalletBackgroundNotification */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -180,8 +214,18 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* BlitzWallet.app */,
 				00E356EE1AD99517003FC87E /* BlitzWalletTests.xctest */,
+				93122A042B7304E6005933A9 /* blitzWalletBackgroundNotification.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		93122A052B7304E6005933A9 /* blitzWalletBackgroundNotification */ = {
+			isa = PBXGroup;
+			children = (
+				93122A062B7304E6005933A9 /* NotificationService.swift */,
+				93122A082B7304E6005933A9 /* Info.plist */,
+			);
+			path = blitzWalletBackgroundNotification;
 			sourceTree = "<group>";
 		};
 		9F7DA2E2C8A94D9791FCDD58 /* Resources */ = {
@@ -259,15 +303,34 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				93122A0F2B7304E6005933A9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				93122A0A2B7304E6005933A9 /* PBXTargetDependency */,
 			);
 			name = BlitzWallet;
 			productName = BlitzWallet;
 			productReference = 13B07F961A680F5B00A75B9A /* BlitzWallet.app */;
 			productType = "com.apple.product-type.application";
+		};
+		93122A032B7304E6005933A9 /* blitzWalletBackgroundNotification */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93122A0C2B7304E6005933A9 /* Build configuration list for PBXNativeTarget "blitzWalletBackgroundNotification" */;
+			buildPhases = (
+				93122A002B7304E6005933A9 /* Sources */,
+				93122A012B7304E6005933A9 /* Frameworks */,
+				93122A022B7304E6005933A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = blitzWalletBackgroundNotification;
+			productName = blitzWalletBackgroundNotification;
+			productReference = 93122A042B7304E6005933A9 /* blitzWalletBackgroundNotification.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -275,6 +338,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -283,6 +347,9 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
+					};
+					93122A032B7304E6005933A9 = {
+						CreatedOnToolsVersion = 15.2;
 					};
 				};
 			};
@@ -301,6 +368,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* BlitzWallet */,
 				00E356ED1AD99517003FC87E /* BlitzWalletTests */,
+				93122A032B7304E6005933A9 /* blitzWalletBackgroundNotification */,
 			);
 		};
 /* End PBXProject section */
@@ -330,6 +398,13 @@
 				25FDAC1BCF6E4F9D8DEA4D01 /* Montserrat-Light.ttf in Resources */,
 				B5BEAB580A724102A33F079B /* Montserrat-Medium.ttf in Resources */,
 				400F8A5E2B0E47E5BF2DD7E8 /* Montserrat-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93122A022B7304E6005933A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,6 +618,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		93122A002B7304E6005933A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93122A072B7304E6005933A9 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -550,6 +633,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* BlitzWallet */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		93122A0A2B7304E6005933A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93122A032B7304E6005933A9 /* blitzWalletBackgroundNotification */;
+			targetProxy = 93122A092B7304E6005933A9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -611,6 +699,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-BlitzWallet.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlitzWallet/BlitzWallet.entitlements;
@@ -624,7 +713,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -648,6 +737,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-BlitzWallet.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlitzWallet/BlitzWallet.entitlements;
@@ -660,7 +750,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -833,6 +923,99 @@
 			};
 			name = Release;
 		};
+		93122A0D2B7304E6005933A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 38WX44YTA6;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = blitzWalletBackgroundNotification/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = blitzWalletBackgroundNotification;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BlitzWallet.blitzWalletBackgroundNotification;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		93122A0E2B7304E6005933A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 38WX44YTA6;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = blitzWalletBackgroundNotification/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = blitzWalletBackgroundNotification;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.BlitzWallet.blitzWalletBackgroundNotification;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -859,6 +1042,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		93122A0C2B7304E6005933A9 /* Build configuration list for PBXNativeTarget "blitzWalletBackgroundNotification" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93122A0D2B7304E6005933A9 /* Debug */,
+				93122A0E2B7304E6005933A9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

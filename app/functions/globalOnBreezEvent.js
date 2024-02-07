@@ -2,6 +2,8 @@ import {nodeInfo} from '@breeztech/react-native-breez-sdk';
 import {useGlobalContextProvider} from '../../context-store/context';
 import {getTransactions} from './SDK';
 import {useNavigation} from '@react-navigation/native';
+import {setLocalStorageItem} from './localStorage';
+import * as Notifications from 'expo-notifications';
 
 // SDK events listener
 
@@ -29,6 +31,20 @@ export default function globalOnBreezEvent() {
 
     updateGlobalNodeInformation(e);
     toggleBreezContextEvent(e);
+
+    (async () => {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Blitz Wallet',
+          body: `${e.type === 'invoicePaid' ? 'Received' : 'Sent'} ${Math.round(
+            e.type === 'invoicePaid'
+              ? e.details.payment.amountMsat / 1000
+              : e.details.amountMsat / 1000,
+          ).toLocaleString()} sat`,
+        },
+        trigger: null,
+      });
+    })();
 
     if (
       e?.type === 'invoicePaid' &&

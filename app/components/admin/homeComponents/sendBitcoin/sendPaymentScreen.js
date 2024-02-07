@@ -107,6 +107,9 @@ export default function SendPaymentScreen(props) {
                             marginTop: 0,
                           },
                         ]}
+                        placeholderTextColor={
+                          theme ? COLORS.darkModeText : COLORS.lightModeText
+                        }
                         // value={String(sendingAmount / 1000)}
                         keyboardType="number-pad"
                         placeholder="0"

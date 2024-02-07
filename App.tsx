@@ -70,6 +70,8 @@ import {
   FaucetReceivePage,
   FaucetSettingsPage,
 } from './app/components/admin/homeComponents/faucet';
+import globalOnBreezEvent from './app/functions/globalOnBreezEvent';
+import {listPayments} from '@breeztech/react-native-breez-sdk';
 
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
@@ -254,49 +256,27 @@ TaskManager.defineTask(
     const paymentInformationFromNotification = data?.body;
     console.log(paymentInformationFromNotification);
 
-    function breezBackgroundFunction(e) {
-      console.log(e, 'TESTING< IN FDSFDS');
-      if (
-        e?.type != 'invoicePaid' &&
-        e?.type != 'paymentSucceed' &&
-        e?.type != 'paymentFailed'
-      )
-        return;
-
-      console.log(
-        paymentInformationFromNotification?.data?.payment_hash,
-        '----------------------',
-      );
-      (async () => {
+    const didConnect = await connectToNode(globalOnBreezEvent);
+    console.log(didConnect);
+    if (didConnect.isConnected && !didConnect.reason) {
+      try {
         await Notifications.scheduleNotificationAsync({
           content: {
             title: 'Blitz Wallet',
-            body: `Received ${Math.round(
-              e.details.payment.amountMsat / 1000,
-            ).toLocaleString()} sat`,
+            body: `Caught incoming payment`,
           },
           trigger: null,
         });
-      })();
-      // ADD NEW DATA TO LOCAL STORAGE OBJECT
-    }
-
-    const didConnect = await connectToNode(breezBackgroundFunction);
-    if (didConnect.isConnected && didConnect.reason) {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Blitz Wallet',
-          body: `Caught incoming payment`,
-        },
-        trigger: null,
-      });
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Blitz Wallet',
-          body: 'Getting invoice details',
-        },
-        trigger: null,
-      });
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Blitz Wallet',
+            body: 'Getting invoice details',
+          },
+          trigger: null,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     console.log('Received a notification in the background!', 'TTTTT');
