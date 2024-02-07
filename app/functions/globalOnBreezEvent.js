@@ -66,7 +66,7 @@ export default function globalOnBreezEvent() {
       const nodeState = await nodeInfo();
       const msatToSat = nodeState.channelsBalanceMsat / 1000;
 
-      toggleNodeInformation({
+      const nodeInfoObject = {
         transactions: transactions,
         userBalance:
           e.type === 'invoicePaid'
@@ -81,15 +81,17 @@ export default function globalOnBreezEvent() {
             : nodeState.inboundLiquidityMsats,
         blockHeight: nodeState.blockHeight,
         onChainBalance: nodeState.onchainBalanceMsat,
-      });
+      };
+
+      toggleNodeInformation(nodeInfoObject);
       await setLocalStorageItem(
         'breezInfo',
         JSON.stringify([
-          transactions,
-          msatToSat,
-          nodeState.inboundLiquidityMsats,
-          nodeState.blockHeight,
-          nodeState.onchainBalanceMsat,
+          nodeInfoObject.transactions,
+          nodeInfoObject.userBalance,
+          nodeInfoObject.inboundLiquidityMsat,
+          nodeInfoObject.blockHeight,
+          nodeInfoObject.onChainBalance,
         ]),
       );
     } catch (err) {
