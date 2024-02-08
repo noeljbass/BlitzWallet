@@ -110,7 +110,6 @@ export default function AdminHome() {
           // await setLogStream(logHandler);
           // const healthCheck = await serviceHealthCheck();
           // console.log(healthCheck);
-
           // console.log(nodeState);
 
           await receivePayment({
