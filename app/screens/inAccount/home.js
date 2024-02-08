@@ -113,6 +113,11 @@ export default function AdminHome() {
 
           // console.log(nodeState);
 
+          await receivePayment({
+            amountMsat: 100000000,
+            description: '',
+          });
+
           toggleNodeInformation({
             didConnectToNode: response.isConnected,
             transactions: transactions,
@@ -132,10 +137,6 @@ export default function AdminHome() {
               nodeState.onchainBalanceMsat,
             ]),
           );
-          await receivePayment({
-            amountMsat: 1000,
-            description: '',
-          });
         }
         // else if (response.isConnected && !response.reason) {
         //   toggleNodeInformation({

@@ -75,92 +75,92 @@ export function ReceivePaymentHome(props) {
           : COLORS.lightModeBackground,
         paddingVertical: Device.osName === 'ios' ? 0 : 10,
       }}>
-      {/* <KeyboardAvoidingView
+      <KeyboardAvoidingView
         behavior={Device.osName === 'ios' ? 'padding' : 'height'}
         style={{flex: 1}}>
         <TouchableWithoutFeedback
           onPress={() => {
             Keyboard.dismiss();
-          }}> */}
-      <View style={{flex: 1}}>
-        <SafeAreaView style={{flex: 1}}>
-          <TopBar theme={theme} clear={clear} />
-          <Text
-            style={[
-              styles.title,
-              {
-                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            {selectedRecieveOption[0].toUpperCase() +
-              selectedRecieveOption.slice(1)}
-          </Text>
+          }}>
+          <View style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1}}>
+              <TopBar theme={theme} clear={clear} />
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color: theme ? COLORS.darkModeText : COLORS.lightModeText,
+                  },
+                ]}>
+                {selectedRecieveOption[0].toUpperCase() +
+                  selectedRecieveOption.slice(1)}
+              </Text>
 
-          <NavBar
-            selectedRecieveOption={selectedRecieveOption}
-            setSelectedRecieveOption={setSelectedRecieveOption}
-            theme={theme}
-          />
+              <NavBar
+                selectedRecieveOption={selectedRecieveOption}
+                setSelectedRecieveOption={setSelectedRecieveOption}
+                theme={theme}
+              />
 
-          {/*PAGES*/}
-          {selectedRecieveOption === 'lightning' && (
-            <LightningPage
-              selectedRecieveOption={selectedRecieveOption}
-              sendingAmount={sendingAmount.lightning}
-              updateQRCode={updateQRCode}
-              generatedAddress={generatedAddress}
-              paymentDescription={paymentDescription.lightning}
-              setGeneratedAddress={setGeneratedAddress}
-              theme={theme}
-              userSelectedCurrency={userSelectedCurrency}
+              {/*PAGES*/}
+              {selectedRecieveOption === 'lightning' && (
+                <LightningPage
+                  selectedRecieveOption={selectedRecieveOption}
+                  sendingAmount={sendingAmount.lightning}
+                  updateQRCode={updateQRCode}
+                  generatedAddress={generatedAddress}
+                  paymentDescription={paymentDescription.lightning}
+                  setGeneratedAddress={setGeneratedAddress}
+                  theme={theme}
+                  userSelectedCurrency={userSelectedCurrency}
+                  setSendingAmount={setSendingAmount}
+                  setGeneratingInvoiceQRCode={setGeneratingInvoiceQRCode}
+                  generatingInvoiceQRCode={generatingInvoiceQRCode}
+                />
+              )}
+              {selectedRecieveOption === 'bitcoin' && (
+                <BitcoinPage
+                  selectedRecieveOption={selectedRecieveOption}
+                  setGeneratedAddress={setGeneratedAddress}
+                  generatedAddress={generatedAddress}
+                  theme={theme}
+                />
+              )}
+              {selectedRecieveOption === 'liquid' && (
+                <LiquidPage
+                  selectedRecieveOption={selectedRecieveOption}
+                  theme={theme}
+                  setIsSwapCreated={setIsSwapCreated}
+                  setGeneratedAddress={setGeneratedAddress}
+                  generatedAddress={generatedAddress}
+                  setGeneratingInvoiceQRCode={setGeneratingInvoiceQRCode}
+                  generatingInvoiceQRCode={generatingInvoiceQRCode}
+                />
+              )}
+
+              <ButtonsContainer
+                selectedRecieveOption={selectedRecieveOption}
+                generatedAddress={generatedAddress}
+                setEditPaymentPopup={setEditPaymentPopup}
+                isSwapCreated={isSwapCreated}
+                generatingInvoiceQRCode={generatingInvoiceQRCode}
+              />
+
+              {/* popups */}
+            </SafeAreaView>
+
+            <EditAmountPopup
+              type={selectedRecieveOption}
               setSendingAmount={setSendingAmount}
-              setGeneratingInvoiceQRCode={setGeneratingInvoiceQRCode}
-              generatingInvoiceQRCode={generatingInvoiceQRCode}
-            />
-          )}
-          {selectedRecieveOption === 'bitcoin' && (
-            <BitcoinPage
-              selectedRecieveOption={selectedRecieveOption}
-              setGeneratedAddress={setGeneratedAddress}
-              generatedAddress={generatedAddress}
+              setPaymentDescription={setPaymentDescription}
+              isDisplayed={editPaymentPopup}
+              setIsDisplayed={setEditPaymentPopup}
+              setUpdateQRCode={setUpdateQRCode}
               theme={theme}
             />
-          )}
-          {selectedRecieveOption === 'liquid' && (
-            <LiquidPage
-              selectedRecieveOption={selectedRecieveOption}
-              theme={theme}
-              setIsSwapCreated={setIsSwapCreated}
-              setGeneratedAddress={setGeneratedAddress}
-              generatedAddress={generatedAddress}
-              setGeneratingInvoiceQRCode={setGeneratingInvoiceQRCode}
-              generatingInvoiceQRCode={generatingInvoiceQRCode}
-            />
-          )}
-
-          <ButtonsContainer
-            selectedRecieveOption={selectedRecieveOption}
-            generatedAddress={generatedAddress}
-            setEditPaymentPopup={setEditPaymentPopup}
-            isSwapCreated={isSwapCreated}
-            generatingInvoiceQRCode={generatingInvoiceQRCode}
-          />
-
-          {/* popups */}
-        </SafeAreaView>
-
-        <EditAmountPopup
-          type={selectedRecieveOption}
-          setSendingAmount={setSendingAmount}
-          setPaymentDescription={setPaymentDescription}
-          isDisplayed={editPaymentPopup}
-          setIsDisplayed={setEditPaymentPopup}
-          setUpdateQRCode={setUpdateQRCode}
-          theme={theme}
-        />
-      </View>
-      {/* </TouchableWithoutFeedback>
-      </KeyboardAvoidingView> */}
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 

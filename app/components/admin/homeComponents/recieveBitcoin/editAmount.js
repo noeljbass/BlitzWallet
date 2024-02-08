@@ -52,86 +52,86 @@ export default function EditAmountPopup(props) {
         {opacity: fadeAnim},
         {zIndex: props.isDisplayed ? 1 : -1},
       ]}>
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
         style={{height: '100%', width: '100%', justifyContent: 'flex-end'}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.setIsDisplayed(false);
-            Keyboard.dismiss();
-          }}>
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> */}
+      <TouchableWithoutFeedback
+        onPress={() => {
+          props.setIsDisplayed(false);
+          Keyboard.dismiss();
+        }}>
+        <View
+          style={{height: '100%', width: '100%', justifyContent: 'flex-end'}}>
           <View
-            style={{height: '100%', width: '100%', justifyContent: 'flex-end'}}>
-            <View
+            style={[
+              styles.inputContainer,
+              {
+                backgroundColor: props.theme
+                  ? COLORS.darkModeBackground
+                  : COLORS.lightModeBackground,
+              },
+            ]}>
+            <Text
               style={[
-                styles.inputContainer,
+                styles.inputHeader,
                 {
-                  backgroundColor: props.theme
-                    ? COLORS.darkModeBackground
-                    : COLORS.lightModeBackground,
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
                 },
               ]}>
-              <Text
-                style={[
-                  styles.inputHeader,
-                  {
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}>
-                Edit Payment Detials
-              </Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}
-                placeholder="Amount (sat)"
-                placeholderTextColor={
-                  props.theme ? COLORS.darkModeText : COLORS.lightModeText
-                }
-                onChangeText={setNumSats}
-                keyboardType="numeric"
-                value={numSats}
-              />
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                    color: props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                  },
-                ]}
-                placeholder="Description (optional)"
-                placeholderTextColor={
-                  props.theme ? COLORS.darkModeText : COLORS.lightModeText
-                }
-                onChangeText={setdescription}
-                value={description}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  saveChanges();
-                  props.setUpdateQRCode(prev => (prev += 1));
-                }}>
-                <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
-            </View>
+              Edit Payment Detials
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  borderColor: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}
+              placeholder="Amount (sat)"
+              placeholderTextColor={
+                props.theme ? COLORS.darkModeText : COLORS.lightModeText
+              }
+              onChangeText={setNumSats}
+              keyboardType="numeric"
+              value={numSats}
+            />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  borderColor: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
+                },
+              ]}
+              placeholder="Description (optional)"
+              placeholderTextColor={
+                props.theme ? COLORS.darkModeText : COLORS.lightModeText
+              }
+              onChangeText={setdescription}
+              value={description}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                saveChanges();
+                props.setUpdateQRCode(prev => (prev += 1));
+              }}>
+              <Text style={styles.saveText}>Save</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
+      {/* // </KeyboardAvoidingView> */}
     </Animated.View>
   );
 
@@ -146,7 +146,6 @@ export default function EditAmountPopup(props) {
             return {...prev, bitcoin: Number(numSats) * 1000};
           else return {...prev, liquid: Number(numSats) * 1000};
         });
-        Keyboard.dismiss();
       } else
         props.setSendingAmount({
           lightning: 1000,
@@ -162,7 +161,6 @@ export default function EditAmountPopup(props) {
             return {...prev, bitcoin: description};
           else return {...prev, liquid: description};
         });
-        Keyboard.dismiss();
       } else
         props.setPaymentDescription({
           lightning: '',
@@ -170,6 +168,7 @@ export default function EditAmountPopup(props) {
           liquid: '',
         });
 
+      Keyboard.dismiss();
       props.setIsDisplayed(false);
     } catch (err) {
       console.log(err);

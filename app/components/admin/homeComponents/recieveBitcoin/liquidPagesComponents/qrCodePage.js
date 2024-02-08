@@ -3,14 +3,20 @@ import {ActivityIndicator, StyleSheet, View, Text} from 'react-native';
 import {COLORS, FONT, SHADOWS, SIZES, CENTER} from '../../../../../constants';
 
 import QRCode from 'react-native-qrcode-svg';
-import {receivePayment} from '@breeztech/react-native-breez-sdk';
+import {
+  openChannelFee,
+  receivePayment,
+} from '@breeztech/react-native-breez-sdk';
 
 import RNEventSource from 'react-native-event-source';
 import {createLiquidSwap} from '../../../../../functions/LBTC';
+import {useGlobalContextProvider} from '../../../../../../context-store/context';
 
 export default function QrCodePage(props) {
   const [evenSource, setEventSource] = useState({});
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [receiveError, setReceiveError] = useState('');
+  const {nodeInformation} = useGlobalContextProvider();
 
   useEffect(() => {
     console.log('QR CODE PAGE');
@@ -21,6 +27,27 @@ export default function QrCodePage(props) {
           props.liquidAmount -
           props.feeInfo.liquidFee -
           props.liquidAmount * props.feeInfo.boltzFeePercent;
+
+        const channelFee = await openChannelFee({
+          amountMsat: satAmount * 1000,
+        });
+        if (nodeInformation.inboundLiquidityMsat < satAmount * 1000) {
+          setReceiveError(
+            `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
+              channelFee.feeMsat / 1000,
+            ).toLocaleString()} sat fee`,
+          );
+        }
+        if (channelFee.feeMsat > satAmount * 1000) {
+          setErrorMessageText(
+            `It costs ${Math.ceil(
+              channelFee.feeMsat / 1000,
+            ).toLocaleString()} sat to open a channel, but only ${Math.ceil(
+              satAmount,
+            ).toLocaleString()} sat was requested.`,
+          );
+          return;
+        }
 
         const invoice = await receivePayment({
           amountMsat: satAmount * 1000,
@@ -89,64 +116,79 @@ export default function QrCodePage(props) {
           {errorMessageText}
         </Text>
       ) : (
-        <View style={styles.transactionStatusContainer}>
-          <Text
-            style={[
-              styles.statusTitle,
-              {
-                color: props.theme ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            Status:
-          </Text>
-          <View style={{height: 80, justifyContent: 'space-between'}}>
+        <>
+          <View style={styles.transactionStatusContainer}>
             <Text
               style={[
-                styles.statusText,
+                styles.statusTitle,
                 {
-                  color:
-                    evenSource === '{"status":"invoice.set"}' ||
-                    evenSource === '{"status":"transaction.mempool"}' ||
-                    evenSource === '{"status":"invoice.pending"}'
-                      ? 'green'
-                      : props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
+                  color: props.theme
+                    ? COLORS.darkModeText
+                    : COLORS.lightModeText,
                 },
               ]}>
-              Invoice Set
+              Status:
             </Text>
-            <Text
-              style={[
-                styles.statusText,
-                {
-                  color:
-                    evenSource === '{"status":"transaction.mempool"}' ||
-                    evenSource === '{"status":"invoice.pending"}'
-                      ? 'green'
-                      : props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                },
-              ]}>
-              In mempool
-            </Text>
-            <Text
-              style={[
-                styles.statusText,
-                {
-                  color:
-                    evenSource === '{"status":"invoice.pending"}'
-                      ? 'green'
-                      : props.theme
-                      ? COLORS.darkModeText
-                      : COLORS.lightModeText,
-                },
-              ]}>
-              Payment Pending
-            </Text>
+            <View style={{height: 80, justifyContent: 'space-between'}}>
+              <Text
+                style={[
+                  styles.statusText,
+                  {
+                    color:
+                      evenSource === '{"status":"invoice.set"}' ||
+                      evenSource === '{"status":"transaction.mempool"}' ||
+                      evenSource === '{"status":"invoice.pending"}'
+                        ? 'green'
+                        : props.theme
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                  },
+                ]}>
+                Invoice Set
+              </Text>
+              <Text
+                style={[
+                  styles.statusText,
+                  {
+                    color:
+                      evenSource === '{"status":"transaction.mempool"}' ||
+                      evenSource === '{"status":"invoice.pending"}'
+                        ? 'green'
+                        : props.theme
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                  },
+                ]}>
+                In mempool
+              </Text>
+              <Text
+                style={[
+                  styles.statusText,
+                  {
+                    color:
+                      evenSource === '{"status":"invoice.pending"}'
+                        ? 'green'
+                        : props.theme
+                        ? COLORS.darkModeText
+                        : COLORS.lightModeText,
+                  },
+                ]}>
+                Payment Pending
+              </Text>
+            </View>
           </View>
-        </View>
+          <Text
+            style={{
+              width: '95%',
+              textAlign: 'center',
+              color: COLORS.cancelRed,
+              fontSize: SIZES.medium,
+              fontFamily: FONT.Descriptoin_Regular,
+              marginTop: 5,
+            }}>
+            {receiveError ? receiveError : ' '}
+          </Text>
+        </>
       )}
     </>
   );
