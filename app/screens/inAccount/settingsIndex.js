@@ -64,7 +64,7 @@ const GENERALOPTIONS = [
 const SECURITYOPTIONS = [
   {
     for: 'Security & Customization',
-    name: 'Face ID',
+    name: 'Biometric Login',
     icon: ICONS.faceIDIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },

@@ -10,7 +10,7 @@ import {
 import {BTN, COLORS, FONT, ICONS, SIZES} from '../../../constants';
 import * as Device from 'expo-device';
 import {useEffect, useRef, useState} from 'react';
-import {handleLogin} from '../../../functions/faceId';
+import {handleLogin} from '../../../functions/biometricAuthentication';
 import {getLocalStorageItem, setLocalStorageItem} from '../../../functions';
 
 export default function HomeLogin(props) {

@@ -1,4 +1,4 @@
-import FaceIdPage from '../../components/admin/homeComponents/settingsContent/faceId';
+import FaceIdPage from '../../components/admin/homeComponents/settingsContent/biometricLogin';
 import {ConnectionToNode} from './conectionToNode';
 import ConfirmTxPage from './confirmTxPage';
 import ContactsPage from './contactsPage';

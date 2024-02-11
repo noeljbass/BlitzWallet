@@ -1,15 +1,17 @@
 import {Alert, StyleSheet, Switch, Text, View} from 'react-native';
 import {COLORS, FONT, SIZES} from '../../../../constants';
 import {useEffect, useState} from 'react';
+
+import {useNavigation} from '@react-navigation/native';
 import {
+  getLocalStorageItem,
   handleLogin,
   hasHardware,
   hasSavedProfile,
-} from '../../../../functions/faceId';
-import {useNavigation} from '@react-navigation/native';
-import {getLocalStorageItem, setLocalStorageItem} from '../../../../functions';
+  setLocalStorageItem,
+} from '../../../../functions';
 
-export default function FaceIdPage(props) {
+export default function BiometricLoginPage(props) {
   const [isFaceIDEnabled, setIsFaceIDEnabled] = useState(null);
   const navigate = useNavigation();
 
@@ -68,7 +70,7 @@ export default function FaceIdPage(props) {
                     : COLORS.lightModeText,
                 },
               ]}>
-              Enable FaceID
+              Enable Biometric Login
             </Text>
             <Switch
               trackColor={{

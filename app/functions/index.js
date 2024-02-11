@@ -4,6 +4,11 @@ import RotatingAnimation from './rotatingAnimation';
 import {retrieveData, terminateAccount, storeData} from './secureStore';
 import generateMnemnoic from './seed';
 import shuffleArray from './shuffleArray';
+import {
+  hasHardware,
+  hasSavedProfile,
+  handleLogin,
+} from './biometricAuthentication';
 
 export {
   connectToNode,
@@ -15,4 +20,7 @@ export {
   RotatingAnimation,
   getLocalStorageItem,
   setLocalStorageItem,
+  hasHardware,
+  hasSavedProfile,
+  handleLogin,
 };

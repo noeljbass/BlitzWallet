@@ -11,6 +11,7 @@ import {
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {
   AboutPage,
+  BiometricLoginPage,
   CapitalGainsCalculator,
   DisplayOptions,
   DrainPage,
@@ -28,7 +29,6 @@ import * as Device from 'expo-device';
 
 import {useNavigation} from '@react-navigation/native';
 import {useGlobalContextProvider} from '../../../context-store/context';
-import FaceIdPage from '../../components/admin/homeComponents/settingsContent/faceId';
 
 export default function SettingsContentIndex(props) {
   const navigate = useNavigation();
@@ -87,8 +87,8 @@ export default function SettingsContentIndex(props) {
         {selectedPage?.toLowerCase() === 'noster wallet connect' && (
           <NosterWalletConnect theme={theme} />
         )}
-        {selectedPage?.toLowerCase() === 'face id' && (
-          <FaceIdPage theme={theme} />
+        {selectedPage?.toLowerCase() === 'biometric login' && (
+          <BiometricLoginPage theme={theme} />
         )}
 
         {selectedPage?.toLowerCase() === 'recovery phrase' && (

@@ -13,6 +13,7 @@ import LspDescriptionPopup from './popups/lspDescription';
 import ResetPage from './resetWallet';
 import SeedPhrasePage from './seedPhrasePage';
 import GainsCalculator from './gainsCalculator';
+import BiometricLoginPage from './biometricLogin';
 
 export {
   AboutPage,
@@ -30,4 +31,5 @@ export {
   FundWalletGift,
   NosterWalletConnect,
   GainsCalculator,
+  BiometricLoginPage,
 };
