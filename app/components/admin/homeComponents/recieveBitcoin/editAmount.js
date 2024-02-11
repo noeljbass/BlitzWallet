@@ -14,6 +14,7 @@ import {
 import {CENTER, COLORS, FONT, ICONS, SIZES} from '../../../../constants';
 
 import {useEffect, useRef, useState} from 'react';
+import {sign} from '@bitcoinerlab/secp256k1';
 
 export default function EditAmountPopup(props) {
   const [numSats, setNumSats] = useState('');
@@ -118,6 +119,7 @@ export default function EditAmountPopup(props) {
               placeholderTextColor={
                 props.theme ? COLORS.darkModeText : COLORS.lightModeText
               }
+              keyboardType="ascii-capable"
               onChangeText={setdescription}
               value={description}
             />
@@ -201,13 +203,15 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 35,
+    height: 40,
     marginBottom: 20,
 
     borderWidth: 2,
+    padding: 0,
     paddingLeft: 10,
 
     borderRadius: 10,
+    fontSize: SIZES.medium,
     fontFamily: FONT.Descriptoin_Regular,
   },
   saveText: {
