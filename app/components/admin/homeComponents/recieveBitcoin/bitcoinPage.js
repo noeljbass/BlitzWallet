@@ -65,20 +65,32 @@ export default function BitcoinPage(props) {
               />
             )}
             {!generatingQrCode && (
-              <QRCode
-                size={250}
-                value={
-                  props.generatedAddress.bitcoin
-                    ? props.generatedAddress.bitcoin
-                    : 'Thanks for using Blitz!'
-                }
-                color={props.theme ? COLORS.darkModeText : COLORS.lightModeText}
-                backgroundColor={
-                  props.theme
-                    ? COLORS.darkModeBackground
-                    : COLORS.lightModeBackground
-                }
-              />
+              <>
+                <QRCode
+                  size={200}
+                  value={
+                    props.generatedAddress.bitcoin
+                      ? props.generatedAddress.bitcoin
+                      : 'Thanks for using Blitz!'
+                  }
+                  color={
+                    props.theme ? COLORS.darkModeText : COLORS.lightModeText
+                  }
+                  backgroundColor={
+                    props.theme
+                      ? COLORS.darkModeBackground
+                      : COLORS.lightModeBackground
+                  }
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    copyToClipboard(props.generatedAddress.bitcoin);
+                  }}>
+                  <Text style={styles.btcAddressText}>
+                    {props.generatedAddress.bitcoin}
+                  </Text>
+                </TouchableOpacity>
+              </>
             )}
             <Text
               style={{
@@ -359,22 +371,30 @@ export default function BitcoinPage(props) {
 
 const styles = StyleSheet.create({
   qrcodeContainer: {
-    width: '90%',
-    maxWidth: 250,
+    width: '95%',
+    maxWidth: 350,
     height: 250,
     ...CENTER,
 
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 10,
 
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  btcAddressText: {
+    fontFamily: FONT.Descriptoin_Regular,
+    fontSize: SIZES.medium,
+    marginTop: 5,
+    textAlign: 'center',
   },
   sliderStyle: {width: 200, height: 40, ...CENTER},
   sliderContainer: {
     width: '95%',
     flex: 1,
     ...CENTER,
-    marginTop: 30,
+    // marginTop: 20,
   },
   feeHeaderText: {
     fontFamily: FONT.Title_Bold,
@@ -385,7 +405,8 @@ const styles = StyleSheet.create({
   },
 
   feeeBreakdownContainer: {
-    width: '70%',
+    width: '95%',
+    maxWidth: 320,
     ...CENTER,
   },
 
