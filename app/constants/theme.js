@@ -55,6 +55,7 @@ const SIZES = {
   xLarge: 24,
   xxLarge: 32,
   huge: 40,
+  userSatText: 30,
 };
 
 const SHADOWS = {

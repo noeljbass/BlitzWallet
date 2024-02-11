@@ -134,25 +134,26 @@ export function UserSatAmount(props) {
 
 const styles = StyleSheet.create({
   valueContainer: {
-    width: 315,
-    height: 'auto',
+    width: '95%',
+    maxWidth: 280,
+
     flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'space-between',
 
     marginRight: 'auto',
     marginLeft: 'auto',
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 5,
   },
 
   denominatorText: {
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     fontFamily: FONT.Title_Bold,
   },
   valueText: {
     color: COLORS.gray,
-    fontSize: SIZES.xxLarge,
+    fontSize: SIZES.userSatText,
     fontFamily: FONT.Title_Regular,
   },
   yourValue: {
