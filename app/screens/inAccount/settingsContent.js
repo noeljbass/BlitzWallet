@@ -11,11 +11,13 @@ import {
 import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {
   AboutPage,
+  CapitalGainsCalculator,
   DisplayOptions,
   DrainPage,
   EcashHome,
   FiatCurrencyPage,
   FundWalletGift,
+  GainsCalculator,
   LSPPage,
   NodeInfo,
   NosterWalletConnect,
@@ -75,6 +77,9 @@ export default function SettingsContentIndex(props) {
         )}
         {selectedPage?.toLowerCase() === 'display options' && (
           <DisplayOptions theme={theme} />
+        )}
+        {selectedPage?.toLowerCase() === 'gains calculator' && (
+          <GainsCalculator theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'fund wallet gift' && (
           <FundWalletGift theme={theme} />

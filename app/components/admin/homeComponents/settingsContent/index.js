@@ -12,6 +12,7 @@ import DrainWalletAddress from './popups/drainWalletAddress';
 import LspDescriptionPopup from './popups/lspDescription';
 import ResetPage from './resetWallet';
 import SeedPhrasePage from './seedPhrasePage';
+import GainsCalculator from './gainsCalculator';
 
 export {
   AboutPage,
@@ -28,4 +29,5 @@ export {
   EcashHome,
   FundWalletGift,
   NosterWalletConnect,
+  GainsCalculator,
 };

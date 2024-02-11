@@ -2,18 +2,21 @@ import {SafeAreaView, StyleSheet, Text, View, Platform} from 'react-native';
 import {Back_BTN, Continue_BTN, KeyContainer} from '../../../components/login';
 import {Background, COLORS, FONT, SIZES} from '../../../constants';
 import {useState} from 'react';
-import {storeData, retrieveData} from '../../../functions/secureStore';
+import {
+  storeData,
+  retrieveData,
+  deleteItem,
+} from '../../../functions/secureStore';
 import generateMnemnoic from '../../../functions/seed';
 
 export default function GenerateKey({navigation: {navigate}}) {
-  // userAuth();
+  const [generateTries, setGenerateTries] = useState(0);
   const [mnemonic, setMnemonic] = useState([]);
   const [fetchError, setFetchError] = useState(false);
 
   useState(async () => {
     if (await retrieveData('mnemonic')) {
       const keys = await retrieveData('mnemonic');
-
       setMnemonic(keys.split(' '));
 
       return;
@@ -24,11 +27,38 @@ export default function GenerateKey({navigation: {navigate}}) {
   async function getMnemnoic() {
     try {
       const mnemonic = await generateMnemnoic();
+
+      if (findDuplicates(mnemonic)) {
+        if (generateTries === 5)
+          throw new Error('unable to generate unique mneomic');
+
+        setGenerateTries(prev => (prev = prev + 1));
+        generateMnemnoic();
+        return;
+      }
+
       setMnemonic(mnemonic.split(' '));
       storeData('mnemonic', mnemonic);
     } catch (err) {
       setFetchError(true);
     }
+  }
+
+  function findDuplicates(wordArr) {
+    let duplicateWords = {};
+    let hasDuplicates = false;
+
+    wordArr.split(' ').forEach(word => {
+      const lowerCaseWord = word.toLowerCase();
+      if (duplicateWords[lowerCaseWord]) duplicateWords[lowerCaseWord]++;
+      else duplicateWords[lowerCaseWord] = 1;
+    });
+
+    Object.keys(duplicateWords).forEach(word => {
+      if (duplicateWords[word] != 1) hasDuplicates = true;
+    });
+
+    return hasDuplicates;
   }
 
   return (

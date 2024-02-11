@@ -258,7 +258,7 @@ TaskManager.defineTask(
 
     const didConnect = await connectToNode(globalOnBreezEvent);
     console.log(didConnect);
-    if (didConnect.isConnected && !didConnect.reason) {
+    if (didConnect.isConnected) {
       try {
         await Notifications.scheduleNotificationAsync({
           content: {

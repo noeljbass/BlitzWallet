@@ -28,7 +28,7 @@ export default function Continue_BTN(props) {
 
   return (
     <TouchableOpacity
-      style={[BTN, style, {marginTop: 'auto'}]}
+      style={[BTN, style, {marginTop: 'auto', marginBottom: 5}]}
       onPress={canPress}>
       <Text style={styles.text}>{props.text}</Text>
     </TouchableOpacity>
