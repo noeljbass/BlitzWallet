@@ -77,14 +77,15 @@ const styles = StyleSheet.create({
     width: '69%',
     height: '100%',
     backgroundColor: COLORS.primary,
-    padding: 13,
+
     marginLeft: 2,
   },
   text: {
-    height: '100%',
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     color: COLORS.white,
-    textAlign: 'center',
     fontFamily: FONT.Descriptoin_Regular,
+
+    lineHeight: 50,
+    paddingLeft: 5,
   },
 });

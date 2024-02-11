@@ -41,12 +41,12 @@ const GENERALOPTIONS = [
     icon: ICONS.colorIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  {
-    for: 'general',
-    name: 'Gains Calculator',
-    icon: ICONS.colorIcon,
-    arrowIcon: ICONS.leftCheveronIcon,
-  },
+  // {
+  //   for: 'general',
+  //   name: 'Gains Calculator',
+  //   icon: ICONS.colorIcon,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  // },
   // {
   //   for: 'general',
   //   name: 'Fund Wallet Gift',

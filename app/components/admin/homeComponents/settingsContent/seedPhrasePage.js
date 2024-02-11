@@ -31,7 +31,6 @@ export default function SeedPhrasePage() {
     }
   }, [showSeed]);
 
-  //   console.log(mnemonic);
   return (
     <View style={styles.globalContainer}>
       <View style={styles.container}>
