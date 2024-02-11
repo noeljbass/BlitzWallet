@@ -37,6 +37,8 @@ import checkIcon from '../assets/icons/check.png';
 import bankIcon from '../assets/icons/bank.png';
 import wordmark from '../assets/wordmark.png';
 import Connected from '../assets/icons/chart-connected.png';
+import FlashLightIcon from '../assets/icons/flashlight.png';
+import ImagesIcon from '../assets/icons/images.png';
 
 export default {
   Xcircle,
@@ -78,4 +80,6 @@ export default {
   walletBlueIcon,
   bankIcon,
   Connected,
+  FlashLightIcon,
+  ImagesIcon,
 };

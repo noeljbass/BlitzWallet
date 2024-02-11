@@ -24,34 +24,34 @@ export default function NavBar(props) {
 
   return (
     <View style={styles.topBar}>
-      <Image source={ICONS.wordmark} style={{width: 170, height: 19}} />
-      <View style={styles.iconContainer}>
-        <TouchableOpacity
-          onPress={() => navigate.navigate('ConnectionToNode')}
-          style={{
-            ...styles.icons,
-            backgroundColor: nodeInformation.didConnectToNode
-              ? COLORS.connectedNodeColor
-              : COLORS.notConnectedNodeColor,
-          }}>
-          <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            navigate.navigate('ViewAllTxPage');
-          }}
-          activeOpacity={0.5}
-          style={[
-            styles.icons,
-            {
-              backgroundColor: theme
-                ? COLORS.darkModeBackgroundOffset
-                : COLORS.lightModeBackgroundOffset,
-            },
-          ]}>
-          <Image style={styles.imgIcon} source={ICONS.receiptIcon} />
-        </TouchableOpacity>
-        {/* <TouchableOpacity
+      <TouchableOpacity
+        onPress={() => navigate.navigate('ConnectionToNode')}
+        style={{
+          ...styles.icons,
+          backgroundColor: nodeInformation.didConnectToNode
+            ? COLORS.connectedNodeColor
+            : COLORS.notConnectedNodeColor,
+          marginRight: 10,
+        }}>
+        <Image style={styles.imgIcon} source={ICONS.connectionIcon} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigate.navigate('ViewAllTxPage');
+        }}
+        activeOpacity={0.5}
+        style={[
+          styles.icons,
+          {
+            backgroundColor: theme
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+            marginRight: 'auto',
+          },
+        ]}>
+        <Image style={styles.imgIcon} source={ICONS.receiptIcon} />
+      </TouchableOpacity>
+      {/* <TouchableOpacity
           onPress={() => {
             navigate.navigate('ContactsPage', {
               isDarkMode: theme,
@@ -68,54 +68,55 @@ export default function NavBar(props) {
           ]}>
           <Image style={styles.imgIcon} source={ICONS.contactsIcon} />
         </TouchableOpacity> */}
-        <TouchableOpacity
-          onPress={() => {
-            navigate.navigate('SettingsHome');
-          }}
-          activeOpacity={0.5}
-          style={[
-            styles.icons,
-            {
-              backgroundColor: theme
-                ? COLORS.darkModeBackgroundOffset
-                : COLORS.lightModeBackgroundOffset,
-            },
-          ]}>
-          <Image style={styles.imgIcon} source={ICONS.settingsIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.icons,
-            {
-              backgroundColor: theme
-                ? COLORS.darkModeBackgroundOffset
-                : COLORS.lightModeBackgroundOffset,
-            },
-          ]}
-          activeOpacity={0.5}
-          onPress={() => {
-            setNavViews(prev => {
-              return {...prev, features: !prev.features};
-            });
-          }}>
-          <Image style={styles.imgIcon} source={ICONS.toolsIcon} />
-        </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigate.navigate('SettingsHome');
+        }}
+        activeOpacity={0.5}
+        style={[
+          styles.icons,
+          {
+            backgroundColor: theme
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+            marginRight: 10,
+          },
+        ]}>
+        <Image style={styles.imgIcon} source={ICONS.settingsIcon} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.icons,
+          {
+            backgroundColor: theme
+              ? COLORS.darkModeBackgroundOffset
+              : COLORS.lightModeBackgroundOffset,
+          },
+        ]}
+        activeOpacity={0.5}
+        onPress={() => {
+          setNavViews(prev => {
+            return {...prev, features: !prev.features};
+          });
+        }}>
+        <Image style={styles.imgIcon} source={ICONS.toolsIcon} />
+      </TouchableOpacity>
 
-        <OptionsDropdown
-          setNavViews={setNavViews}
-          isDisplayed={navViews.features}
-          theme={theme}
-        />
-      </View>
+      <OptionsDropdown
+        setNavViews={setNavViews}
+        isDisplayed={navViews.features}
+        theme={theme}
+      />
     </View>
   );
 }
 const styles = StyleSheet.create({
   //   topBar
   topBar: {
-    width: '95%',
-    height: 50,
+    width: '90%',
+    height: 35,
     display: 'flex',
+    marginTop: 10,
 
     flexDirection: 'row',
     alignItems: 'center',
@@ -127,14 +128,10 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontFamily: FONT.Title_Bold,
   },
-  iconContainer: {
-    width: 165,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+
   icons: {
     width: 35,
-    height: 35,
+    height: '100%',
     borderRadius: 17.5,
     alignItems: 'center',
     justifyContent: 'center',
