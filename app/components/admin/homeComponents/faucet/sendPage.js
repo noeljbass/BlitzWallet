@@ -131,7 +131,7 @@ export default function SendPage(props) {
             </>
           )}
           {/* 
-          Num recived out of total recived
+          Num received out of total received
           QR code to be scanned 
            */}
           {isComplete && (

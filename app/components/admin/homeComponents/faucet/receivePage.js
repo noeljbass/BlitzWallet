@@ -67,7 +67,7 @@ export default function FaucetReceivePage(props) {
       generateAddress();
       isInitialRender.current = false;
     } else {
-      console.log(breezContextEvent?.details, 'BREEZ EVENT IN RECIVE FAUCET');
+      console.log(breezContextEvent?.details, 'BREEZ EVENT IN RECEIVE FAUCET');
       (async () => {
         if (
           !breezContextEvent?.details?.payment?.description?.includes('bwrfd')
@@ -160,7 +160,7 @@ export default function FaucetReceivePage(props) {
             </>
           )}
           {/* 
-          Num recived out of total recived
+          Num received out of total received
           QR code to be scanned 
            */}
           {isComplete && (
