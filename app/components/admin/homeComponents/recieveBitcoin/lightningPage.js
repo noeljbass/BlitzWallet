@@ -162,7 +162,7 @@ export default function LightningPage(props) {
       });
       if (nodeInformation.inboundLiquidityMsat < props.sendingAmount) {
         setErrorMessageText(
-          `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
+          `Amount is above your receiving capacity. Sending this payment will incur a ${Math.ceil(
             channelFee.feeMsat / 1000,
           ).toLocaleString()} sat fee`,
         );
