@@ -162,7 +162,7 @@ export default function LightningPage(props) {
       });
       if (nodeInformation.inboundLiquidityMsat < props.sendingAmount) {
         setErrorMessageText(
-          `Amount is above your reciveing capacity. Receiving this payment will incur a ${Math.ceil(
+          `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
             channelFee.feeMsat / 1000,
           ).toLocaleString()} sat fee`,
         );
@@ -192,7 +192,7 @@ export default function LightningPage(props) {
         });
       }
     } catch (err) {
-      console.log(err, 'RECIVE ERROR');
+      console.log(err, 'RECEIVE ERROR');
       setErrorMessageText('Error cannot generate receiving address');
     }
   }

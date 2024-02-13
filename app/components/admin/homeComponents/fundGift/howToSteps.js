@@ -2,7 +2,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {FONT, SIZES} from '../../../../constants';
 
 const STEPS = [
-  'Have gift reciver open thier app',
+  'Have gift receiver open thier app',
   'Click on the receive gift uption under restore wallet',
   'Have gift giver scan QR code on the next page',
   'Enter the amount you want to gift',
