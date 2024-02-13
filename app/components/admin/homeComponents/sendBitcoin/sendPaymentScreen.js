@@ -347,6 +347,18 @@ export default function SendPaymentScreen(props) {
 
   async function sendPaymentFunction() {
     try {
+      if (
+        nodeInformation.userBalance * 1000 + 100 <
+          paymentInfo?.invoice.amountMsat ||
+        nodeInformation.userBalance * 1000 + 100 < sendingAmount
+      ) {
+        Alert.alert(
+          'Your balance is too low to send this payment',
+          'Please add funds to your account',
+          [{text: 'Ok', onPress: () => goBackFunction()}],
+        );
+        return;
+      }
       setIsLoading(true);
       paymentInfo?.invoice?.amountMsat
         ? await sendPayment({
@@ -369,7 +381,7 @@ export default function SendPaymentScreen(props) {
           data: {paymentHash},
         });
       } catch (err) {
-        console.log(err, 'T');
+        console.log(err);
       }
     }
   }
@@ -385,18 +397,6 @@ export default function SendPaymentScreen(props) {
         const bitcoinPrice = (await fetchFiatRates()).filter(
           coin => coin.coin === currency,
         );
-
-        if (
-          nodeInformation.userBalance * 1000 + 100 <
-          input.invoice.amountMsat
-        ) {
-          Alert.alert(
-            'Your balance is too low to send this payment',
-            'Please add funds to your account',
-            [{text: 'Ok', onPress: () => goBackFunction()}],
-          );
-          return;
-        }
 
         setPaymentInfo({...input, ...bitcoinPrice});
         setUserSelectedCurrency(currency);

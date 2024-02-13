@@ -255,7 +255,7 @@ export default function NodeInfo(props) {
                   color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
-              Onchain Balance
+              On-chain Balance
             </Text>
             <Text
               style={[

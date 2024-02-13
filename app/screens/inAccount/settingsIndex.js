@@ -41,12 +41,12 @@ const GENERALOPTIONS = [
     icon: ICONS.colorIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
-  {
-    for: 'general',
-    name: 'Send On-chain',
-    icon: ICONS.settingsBitcoinIcon,
-    arrowIcon: ICONS.leftCheveronIcon,
-  },
+  // {
+  //   for: 'general',
+  //   name: 'Send On-chain',
+  //   icon: ICONS.settingsBitcoinIcon,
+  //   arrowIcon: ICONS.leftCheveronIcon,
+  // },
   // {
   //   for: 'general',
   //   name: 'Gains Calculator',
