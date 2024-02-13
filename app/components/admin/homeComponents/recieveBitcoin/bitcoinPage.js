@@ -103,7 +103,7 @@ export default function BitcoinPage(props) {
           </View>
           {!generatingQrCode && (
             <View style={styles.sliderContainer}>
-              <Text
+              {/* <Text
                 style={[
                   styles.feeHeaderText,
                   {
@@ -113,9 +113,9 @@ export default function BitcoinPage(props) {
                   },
                 ]}>
                 Lightning Fee Calculator
-              </Text>
+              </Text> */}
 
-              <Slider
+              {/* <Slider
                 onSlidingComplete={handleFeeSlider}
                 style={styles.sliderStyle}
                 minimumValue={bitcoinSwapInfo.minAllowedDeposit}
@@ -126,8 +126,8 @@ export default function BitcoinPage(props) {
                     ? COLORS.darkModeBackgroundOffset
                     : COLORS.lightModeBackgroundOffset
                 }
-              />
-              <View style={styles.feeeBreakdownContainer}>
+              /> */}
+              <View style={[styles.feeeBreakdownContainer]}>
                 <View style={styles.feeBreakdownRow}>
                   <Text
                     style={[
@@ -176,7 +176,11 @@ export default function BitcoinPage(props) {
                     {bitcoinSwapInfo.maxAllowedDeposit.toLocaleString()}
                   </Text>
                 </View>
-                <View style={styles.feeBreakdownRow}>
+                <Text style={styles.warningText}>
+                  Sending an amount smaller than the minimun or larger than the
+                  maximun will cuase the swap to fail.
+                </Text>
+                {/* <View style={styles.feeBreakdownRow}>
                   <Text
                     style={[
                       styles.feeBreakdownDescriptor,
@@ -199,8 +203,8 @@ export default function BitcoinPage(props) {
                     ]}>
                     {lnFee.receivingAmount.toLocaleString()}
                   </Text>
-                </View>
-                <View style={styles.feeBreakdownRow}>
+                </View> */}
+                {/* <View style={styles.feeBreakdownRow}>
                   <Text
                     style={[
                       styles.feeBreakdownDescriptor,
@@ -223,7 +227,7 @@ export default function BitcoinPage(props) {
                     ]}>
                     {lnFee.lnFee.toLocaleString()}
                   </Text>
-                </View>
+                </View> */}
               </View>
               <TouchableOpacity
                 style={[
@@ -422,6 +426,13 @@ const styles = StyleSheet.create({
   feeBreakdownValue: {
     fontFamily: FONT.Descriptoin_Bold,
     fontSize: SIZES.medium,
+  },
+  warningText: {
+    fontSize: SIZES.medium,
+    fontFamily: FONT.Descriptoin_Regular,
+    color: COLORS.cancelRed,
+    textAlign: 'center',
+    marginTop: 20,
   },
 
   confirmingSwapContainer: {

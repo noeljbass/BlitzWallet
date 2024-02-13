@@ -41,6 +41,12 @@ const GENERALOPTIONS = [
     icon: ICONS.colorIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
+  {
+    for: 'general',
+    name: 'Send On-chain',
+    icon: ICONS.settingsBitcoinIcon,
+    arrowIcon: ICONS.leftCheveronIcon,
+  },
   // {
   //   for: 'general',
   //   name: 'Gains Calculator',
@@ -89,19 +95,19 @@ const SECURITYOPTIONS = [
 ];
 const ADVANCEDOPTIONS = [
   // {
-  //   for: 'Closeing Accont',
+  //   for: 'Closeing Account',
   //   name: 'Drain Wallet',
   //   icon: ICONS.Checkcircle,
   //   arrowIcon: ICONS.leftCheveronIcon,
   // },
   {
-    for: 'Closeing Accont',
+    for: 'Closeing Account',
     name: 'Reset Wallet',
     icon: ICONS.trashIcon,
     arrowIcon: ICONS.leftCheveronIcon,
   },
   {
-    for: 'Closeing Accont',
+    for: 'Closeing Account',
     name: 'Drain Wallet',
     icon: ICONS.Xcircle,
     arrowIcon: ICONS.leftCheveronIcon,
@@ -162,7 +168,7 @@ export default function SettingsIndex(props) {
             ? 'general'
             : id === 1
             ? 'Security & Customization'
-            : 'Closeing Accont'}
+            : 'Closeing Account'}
         </Text>
         <View
           style={[

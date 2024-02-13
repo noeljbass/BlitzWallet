@@ -12,7 +12,6 @@ import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {
   AboutPage,
   BiometricLoginPage,
-  CapitalGainsCalculator,
   DisplayOptions,
   DrainPage,
   EcashHome,
@@ -24,6 +23,7 @@ import {
   NosterWalletConnect,
   ResetPage,
   SeedPhrasePage,
+  SendOnChainBitcoin,
 } from '../../components/admin/homeComponents/settingsContent';
 import * as Device from 'expo-device';
 
@@ -77,6 +77,9 @@ export default function SettingsContentIndex(props) {
         )}
         {selectedPage?.toLowerCase() === 'display options' && (
           <DisplayOptions theme={theme} />
+        )}
+        {selectedPage?.toLowerCase() === 'Send On-chain' && (
+          <SendOnChainBitcoin theme={theme} />
         )}
         {selectedPage?.toLowerCase() === 'gains calculator' && (
           <GainsCalculator theme={theme} />

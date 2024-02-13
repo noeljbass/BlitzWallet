@@ -14,6 +14,7 @@ import ResetPage from './resetWallet';
 import SeedPhrasePage from './seedPhrasePage';
 import GainsCalculator from './gainsCalculator';
 import BiometricLoginPage from './biometricLogin';
+import SendOnChainBitcoin from './sendOnChain';
 
 export {
   AboutPage,
@@ -32,4 +33,5 @@ export {
   NosterWalletConnect,
   GainsCalculator,
   BiometricLoginPage,
+  SendOnChainBitcoin,
 };

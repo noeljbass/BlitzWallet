@@ -33,7 +33,7 @@ export default function QrCodePage(props) {
         });
         if (nodeInformation.inboundLiquidityMsat < satAmount * 1000) {
           setReceiveError(
-            `Amount is above your reciveing capacity. Sending this payment will incur a ${Math.ceil(
+            `Amount is above your receiving capacity. Sending this payment will incur a ${Math.ceil(
               channelFee.feeMsat / 1000,
             ).toLocaleString()} sat fee`,
           );

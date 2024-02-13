@@ -39,6 +39,7 @@ import wordmark from '../assets/wordmark.png';
 import Connected from '../assets/icons/chart-connected.png';
 import FlashLightIcon from '../assets/icons/flashlight.png';
 import ImagesIcon from '../assets/icons/images.png';
+import settingsBitcoinIcon from '../assets/icons/settingsBitcoinIcon.png';
 
 export default {
   Xcircle,
@@ -82,4 +83,5 @@ export default {
   Connected,
   FlashLightIcon,
   ImagesIcon,
+  settingsBitcoinIcon,
 };
