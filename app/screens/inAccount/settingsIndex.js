@@ -15,6 +15,7 @@ import {COLORS, FONT, ICONS, SIZES} from '../../constants';
 import {useGlobalContextProvider} from '../../../context-store/context';
 import {useNavigation} from '@react-navigation/native';
 import * as Device from 'expo-device';
+import {BlitzSocialOptions} from '../../components/admin/homeComponents/settingsContent';
 
 const GENERALOPTIONS = [
   {
@@ -216,6 +217,7 @@ export default function SettingsIndex(props) {
           style={styles.settingsContainer}>
           {settingsElements}
         </ScrollView>
+        <BlitzSocialOptions />
       </SafeAreaView>
 
       {/* popups */}
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
 
   //
   settingsContainer: {
+    flex: 1,
     width: '100%',
     height: '100%',
   },

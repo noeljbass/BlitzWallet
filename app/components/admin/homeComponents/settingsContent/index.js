@@ -15,6 +15,7 @@ import SeedPhrasePage from './seedPhrasePage';
 import GainsCalculator from './gainsCalculator';
 import BiometricLoginPage from './biometricLogin';
 import SendOnChainBitcoin from './sendOnChain';
+import BlitzSocialOptions from './socialOptions';
 
 export {
   AboutPage,
@@ -34,4 +35,5 @@ export {
   GainsCalculator,
   BiometricLoginPage,
   SendOnChainBitcoin,
+  BlitzSocialOptions,
 };

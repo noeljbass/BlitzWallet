@@ -1,23 +1,11 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  useColorScheme,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {CENTER, COLORS, FONT, ICONS, SHADOWS, SIZES} from '../../../constants';
-import {useState} from 'react';
-import {OptionsDropdown} from './navBar/optionsDropdown';
-import {FaucetHome} from './faucet';
+
 import {useNavigation} from '@react-navigation/native';
 import {useGlobalContextProvider} from '../../../../context-store/context';
 
 export default function NavBar(props) {
   console.log('NAV BAR PAGE');
-  const [navViews, setNavViews] = useState({
-    features: false,
-  });
 
   const navigate = useNavigation();
   const {nodeInformation, theme} = useGlobalContextProvider();
@@ -95,18 +83,10 @@ export default function NavBar(props) {
         ]}
         activeOpacity={0.5}
         onPress={() => {
-          setNavViews(prev => {
-            return {...prev, features: !prev.features};
-          });
+          navigate.navigate('FaucetHome');
         }}>
-        <Image style={styles.imgIcon} source={ICONS.toolsIcon} />
+        <Image style={styles.imgIcon} source={ICONS.faucetIcon} />
       </TouchableOpacity>
-
-      <OptionsDropdown
-        setNavViews={setNavViews}
-        isDisplayed={navViews.features}
-        theme={theme}
-      />
     </View>
   );
 }
