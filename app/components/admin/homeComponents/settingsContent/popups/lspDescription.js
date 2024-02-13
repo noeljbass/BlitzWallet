@@ -68,8 +68,8 @@ export default function LspDescriptionPopup() {
                 },
               ]}>
               It’s important to note here that an LSP DOES NOT HAVE ACCESS TO
-              YOUR FUNDS. They are mealy a helper to make the Lightning Networks
-              liquidity constraint have less of an impact.
+              YOUR FUNDS. They are mearly a helper to make the Lightning
+              Networks liquidity constraint have less of an impact.
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   text: {
     width: '90%',
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     marginBottom: 10,
     fontFamily: FONT.Descriptoin_Regular,
   },
