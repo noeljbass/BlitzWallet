@@ -92,8 +92,6 @@ function ResetStack(): JSX.Element | null {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isloaded, setIsLoaded] = useState(false);
 
-  const {isCameraActive} = useGlobalContextProvider();
-
   useEffect(() => {
     (async () => {
       const pin = await retrieveData('pin');
