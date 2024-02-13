@@ -1,84 +1,69 @@
-import {useEffect, useState} from 'react';
 import {
-  Animated,
-  Image,
-  SafeAreaView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
-  useWindowDimensions,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 
-import * as ExpoCamera from 'expo-camera';
 import {BarCodeScanner} from 'expo-barcode-scanner';
 import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 
+import {useEffect, useState} from 'react';
+
 import {COLORS, FONT, ICONS, SIZES} from '../../../constants';
 
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useGlobalContextProvider} from '../../../../context-store/context';
+
+import {
+  Camera,
+  useCameraDevice,
+  useCameraFormat,
+  useCameraPermission,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+import {useIsForeground} from '../../../hooks/isAppForground';
 
 export default function CameraModal(props) {
-  const {theme} = useGlobalContextProvider();
-  const type = ExpoCamera.CameraType.back;
   const navigate = useNavigation();
   const isFocused = useIsFocused();
-  console.log(isFocused);
+  const isForground = useIsForeground();
+  const windowDimensions = Dimensions.get('window');
+  const screenDimensions = Dimensions.get('screen');
+  const screenAspectRatio = screenDimensions.height / screenDimensions.width;
 
-  const [storedCameraPermissions, requestCameraPermissions] =
-    ExpoCamera.Camera.useCameraPermissions();
+  const {hasPermission, requestPermission} = useCameraPermission();
+  const device = useCameraDevice('back');
 
   const [didScan, setDidScan] = useState(false);
-  const [bottomExpand, setBottomExpand] = useState(false);
+
+  const [isFlashOn, setIsFlashOn] = useState(false);
 
   useEffect(() => {
     (async () => {
-      await requestCameraPermissions();
+      await requestPermission();
     })();
   }, []);
 
-  return (
-    <View
-      style={[
-        styles.viewContainer,
-        {
-          backgroundColor: theme
-            ? COLORS.darkModeBackground
-            : COLORS.lightModeBackground,
-          paddingTop: Platform.OS === 'ios' ? 0 : 5,
-        },
-      ]}>
-      <SafeAreaView style={{flex: 1}}>
-        <View style={styles.topBar}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={{width: 20, height: '100%'}}
-            onPress={() => {
-              navigate.goBack();
-            }}>
-            <Image
-              source={ICONS.leftCheveronIcon}
-              style={{width: 30, height: 30, marginRight: 'auto'}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <Text
-            style={[
-              styles.headerText,
-              {
-                color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-              },
-            ]}>
-            Scan A QR code
-          </Text>
-        </View>
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr'],
+    onCodeScanned: handleBarCodeScanned,
+  });
+  const format = useCameraFormat(device, [
+    {photoAspectRatio: screenAspectRatio},
+  ]);
 
-        {!storedCameraPermissions?.granted && (
+  return (
+    <View style={[styles.viewContainer]}>
+      {!hasPermission ||
+        !device ||
+        (!isForground && (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            {storedCameraPermissions === null ? (
+            {hasPermission === null && isForground ? (
               <>
                 <Text
                   style={{
@@ -101,89 +86,149 @@ export default function CameraModal(props) {
               <ActivityIndicator />
             )}
           </View>
-        )}
-        {storedCameraPermissions?.granted && isFocused && (
-          <ExpoCamera.Camera
-            type={type}
-            onBarCodeScanned={didScan ? undefined : handleBarCodeScanned}
-            style={[styles.camera]}
-            barCodeScannerSettings={{
-              barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+        ))}
+      {hasPermission && isFocused && device && isForground && (
+        <>
+          <Camera
+            codeScanner={didScan ? undefined : codeScanner}
+            style={{
+              height: windowDimensions.height,
+              width: windowDimensions.width,
             }}
-            focusDepth={1}
-            autoFocus={ExpoCamera.AutoFocus.on}
+            device={device}
+            isActive={true}
+            format={format}
+            torch={isFlashOn ? 'on' : 'off'}
           />
-        )}
-        <View
-          style={{
-            ...styles.bottomBar,
-            height: bottomExpand ? 100 : 50,
-            backgroundColor: theme
-              ? COLORS.darkModeBackground
-              : COLORS.lightModeBackground,
-            borderTopColor: theme ? COLORS.darkModeText : COLORS.lightModeText,
-            borderTopWidth: 2,
-          }}>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => {
-              setBottomExpand(prev => !prev);
-            }}>
-            <View
-              style={{
-                ...styles.arrowIcon,
-                backgroundColor: theme
-                  ? COLORS.darkModeBackground
-                  : COLORS.lightModeBackground,
-
-                borderColor: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                borderTopWidth: 2,
-                borderLeftWidth: 2,
-                borderRightWidth: 2,
+          <View
+            style={[
+              styles.qrContent,
+              {
+                height: windowDimensions.height,
+                width: windowDimensions.width,
+              },
+            ]}>
+            <TouchableOpacity
+              style={[styles.topBar, {position: 'absolute', top: 60, left: 20}]}
+              activeOpacity={0.5}
+              onPress={() => {
+                navigate.goBack();
               }}>
-              <Animated.Image
-                source={ICONS.angleUpIcon}
-                style={{
-                  width: 30,
-                  height: 20,
-                  transform: bottomExpand
-                    ? [{rotate: '180deg'}]
-                    : [{rotate: '0deg'}],
-                }}
+              <Image
+                source={ICONS.leftCheveronIcon}
+                style={{width: 30, height: 30, transform: [{translateX: -1}]}}
                 resizeMode="contain"
               />
+            </TouchableOpacity>
+            <View style={styles.qrBox}>
+              <TouchableOpacity onPress={toggleFlash}>
+                <Image
+                  source={ICONS.FlashLightIcon}
+                  style={[
+                    {width: 30, height: 30, top: -50, right: -10},
+                    styles.choiceIcon,
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={getQRImage}>
+                <Image
+                  source={ICONS.ImagesIcon}
+                  style={[
+                    {width: 30, height: 30, top: -50, left: -10},
+                    styles.choiceIcon,
+                  ]}
+                />
+              </TouchableOpacity>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 10,
+                    width: 60,
+                    top: 0,
+                    left: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 60,
+                    width: 10,
+                    top: 0,
+                    left: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 10,
+                    width: 60,
+                    bottom: 0,
+                    left: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 60,
+                    width: 10,
+                    bottom: 0,
+                    left: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 10,
+                    width: 60,
+                    top: 0,
+                    right: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 60,
+                    width: 10,
+                    top: 0,
+                    right: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 10,
+                    width: 60,
+                    bottom: 0,
+                    right: 0,
+                  },
+                ]}></View>
+              <View
+                style={[
+                  styles.qrLine,
+                  {
+                    height: 60,
+                    width: 10,
+                    bottom: 0,
+                    right: 0,
+                  },
+                ]}></View>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={getClipboardText}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text
-              style={[
-                styles.bottomText,
-                {
-                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                },
-              ]}>
-              Paste from clipbard
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={getQRImage}
-            style={{backgroundColor: 'transparent'}}
-            activeOpacity={0.2}>
-            <Text
-              style={[
-                styles.bottomText,
-                {
-                  color: theme ? COLORS.darkModeText : COLORS.lightModeText,
-                },
-              ]}>
-              Choose image
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+            <TouchableOpacity
+              onPress={getClipboardText}
+              style={styles.pasteBTN}
+              activeOpacity={0.2}>
+              <Text style={styles.pasteBTNText}>Paste</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 
@@ -217,10 +262,16 @@ export default function CameraModal(props) {
       console.log(err);
     }
   }
-  function handleBarCodeScanned({type, data}) {
-    if (!type.includes('QRCode')) return;
+  function toggleFlash() {
+    setIsFlashOn(prev => !prev);
+  }
+  function handleBarCodeScanned(codes) {
+    const [data] = codes;
+    console.log(data.type, data.value);
+
+    if (!data.type.includes('qr')) return;
     setDidScan(true);
-    props.route.params.updateBitcoinAdressFunc(bitcoinAdress);
+    props.route.params.updateBitcoinAdressFunc(data.value);
     navigate.goBack();
   }
 }
@@ -228,72 +279,55 @@ export default function CameraModal(props) {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    height: '100%',
-    width: '100%',
   },
-  cameraContainer: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
 
-    backgroundColor: COLORS.background,
-    zIndex: 5,
-    display: 'flex',
-    // paddingTop: 50,
-  },
   topBar: {
-    width: '100%',
-    paddingBottom: 10,
+    width: 35,
+    height: 35,
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 27.5,
+    backgroundColor: COLORS.lightModeBackground,
   },
-  headerText: {
-    color: 'black',
-    fontSize: SIZES.large,
-    fontWeight: 'bold',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    fontFamily: FONT.Title_Bold,
-    transform: [{translateX: -10}],
-  },
-  camera: {flex: 1},
-  bottomBar: {
-    width: '100%',
-    height: 50,
 
-    // overflow: 'hidden',
+  camera: {position: 'absolute', top: 0, left: 0, zIndex: 1},
+
+  qrContent: {
     position: 'absolute',
-    bottom: 10,
+    top: 0,
     left: 0,
-    zIndex: 1,
-    backgroundColor: 'white',
-  },
-  bottomText: {
-    width: '100%',
-    textAlign: 'center',
-    color: 'black',
-    fontSize: SIZES.large,
-    fontWeight: 'bold',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    backgroundColor: 'transparent',
-    fontFamily: FONT.Other_Bold,
-
-    lineHeight: 50,
-  },
-  arrowIcon: {
-    position: 'absolute',
-    bottom: '100%',
-    left: '50%',
-    zIndex: 1,
-    transform: [{translateX: -40}],
-    color: 'white',
-    backgroundColor: 'white',
-    paddingVertical: 2,
-    paddingHorizontal: 20,
+    zIndex: 2,
+    backgroundColor: COLORS.cameraOverlay,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  qrBox: {
+    width: 175,
+    height: 175,
+    marginVertical: 20,
+    position: 'relative',
+  },
+  qrLine: {
+    backgroundColor: COLORS.primary,
+    position: 'absolute',
+  },
+  choiceIcon: {
+    position: 'absolute',
+  },
 
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
+  pasteBTN: {
+    width: 120,
+    height: 35,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: COLORS.darkModeText,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pasteBTNText: {
+    fontFamily: FONT.Title_Regular,
+    fontSize: SIZES.medium,
+    color: COLORS.darkModeText,
   },
 });

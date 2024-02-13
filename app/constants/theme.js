@@ -25,6 +25,7 @@ const COLORS = {
   darkModeBackgroundOffset: '#262626',
 
   opaicityGray: '#767676b8',
+  cameraOverlay: '#0000002e',
   cancelRed: '#e20000',
 
   connectedNodeColor: '#33cc33',

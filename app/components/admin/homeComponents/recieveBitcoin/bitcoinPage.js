@@ -39,7 +39,7 @@ export default function BitcoinPage(props) {
 
     (async () => {
       try {
-        await receivePayment({amountMsat: 1000, description: 'no description'});
+        await receivePayment({amountMsat: 1000, description: 'no description'}); //This is the error line
         initSwap();
       } catch (err) {
         setErrorMessageText('Error cannot generate receiving address');

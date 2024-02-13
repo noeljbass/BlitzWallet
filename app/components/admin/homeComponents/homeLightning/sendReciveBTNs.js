@@ -26,11 +26,11 @@ export function SendRecieveBTNs() {
         <TouchableOpacity
           onPress={() => {
             (async () => {
-              const areSettingsSet = await handleSettingsCheck();
-              if (!areSettingsSet) {
-                Alert.alert('Not Connected To Node');
-                return;
-              }
+              // const areSettingsSet = await handleSettingsCheck();
+              // if (!areSettingsSet) {
+              //   Alert.alert('Not Connected To Node');
+              //   return;
+              // }
               navigate.navigate('SendBTC');
             })();
           }}
