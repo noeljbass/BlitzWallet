@@ -19,7 +19,11 @@
         "buildType": "apk"
       }
     },
-    "production": {}
+    "production": {
+      "ios": {
+        "cocoapods": "1.14.3"
+      }
+    }
   },
   "submit": {
     "production": {}

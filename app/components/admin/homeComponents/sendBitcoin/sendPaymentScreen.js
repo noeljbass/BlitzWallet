@@ -36,6 +36,7 @@ export default function SendPaymentScreen(props) {
   const [userSelectedCurrency, setUserSelectedCurrency] = useState('');
   const [sendingAmount, setSendingAmount] = useState(0);
   const {theme, nodeInformation} = useGlobalContextProvider();
+  const [hasError, setHasError] = useState('');
   const navigate = useNavigation();
   const BTCadress = props.route.params?.btcAdress;
   const setScanned = props.route.params?.setDidScan;
@@ -77,7 +78,18 @@ export default function SendPaymentScreen(props) {
                 Confirm Payment
               </Text>
             </View>
-            {!isLoading && (
+            {hasError ? (
+              <View style={styles.innerContainer}>
+                <Text
+                  style={{
+                    fontFamily: FONT.Descriptoin_Regular,
+                    fontSize: SIZES.medium,
+                    color: COLORS.cancelRed,
+                  }}>
+                  {hasError}
+                </Text>
+              </View>
+            ) : !isLoading ? (
               <>
                 <View style={styles.innerContainer}>
                   {paymentInfo.invoice.amountMsat ? (
@@ -324,8 +336,7 @@ export default function SendPaymentScreen(props) {
                   </View>
                 </View>
               </>
-            )}
-            {isLoading && (
+            ) : (
               <View
                 style={{
                   flex: 1,
@@ -380,6 +391,7 @@ export default function SendPaymentScreen(props) {
           type: ReportIssueRequestVariant.PAYMENT_FAILURE,
           data: {paymentHash},
         });
+        setHasError('Error sending payment. Try again.');
       } catch (err) {
         console.log(err);
       }

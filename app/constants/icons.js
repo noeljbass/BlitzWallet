@@ -29,7 +29,7 @@ import nodeIcon from '../assets/icons/nodeIcon.png';
 import currencyIcon from '../assets/icons/currencyIcon.png';
 import aboutIcon from '../assets/icons/aboutIcon.png';
 import colorIcon from '../assets/icons/colorIcon.png';
-import transparentIcon from '../assets/transparentIcon.png';
+import transparentIcon from '../assets/TransparentIcon.png';
 import contactsIcon from '../assets/icons/contactsIcon.png';
 import locationIcon from '../assets/icons/locationIcon.png';
 import receiptIcon from '../assets/icons/receipt.png';

@@ -13,7 +13,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
-// import {registerRootComponent} from 'expo';
+import {registerRootComponent} from 'expo';
 type RootStackParamList = {
   Home: {someParam?: string};
   Details: {someParam?: string};
@@ -286,4 +286,4 @@ TaskManager.defineTask(
 Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 export default App;
-// registerRootComponent(App);
+registerRootComponent(App);
