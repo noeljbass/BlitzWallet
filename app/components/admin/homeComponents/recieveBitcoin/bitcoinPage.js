@@ -177,8 +177,8 @@ export default function BitcoinPage(props) {
                   </Text>
                 </View>
                 <Text style={styles.warningText}>
-                  Sending an amount smaller than the minimun or larger than the
-                  maximun will cuase the swap to fail.
+                  Sending an amount smaller than the minimum or larger than the
+                  maximum will cause the swap to fail.
                 </Text>
                 {/* <View style={styles.feeBreakdownRow}>
                   <Text
