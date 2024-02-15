@@ -35,7 +35,7 @@ export default function BiometricLoginPage(props) {
         } else {
           Alert.alert(
             'Device does not have a Biometric profile',
-            'Create one in settings to continue',
+            'Create one in Settings to continue',
             [{text: 'Ok', onPress: () => navigate.goBack()}],
           );
         }

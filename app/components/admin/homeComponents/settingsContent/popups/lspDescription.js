@@ -54,7 +54,7 @@ export default function LspDescriptionPopup() {
                   color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                 },
               ]}>
-              Since the Lightning Network worked based on a series of channels
+              Since the Lightning Network works based on a series of channels,
               the size of a Lightning channel is naturally constrained. Using an
               LSP decreases that constraint making larger payments more
               feasible.
@@ -69,7 +69,7 @@ export default function LspDescriptionPopup() {
               ]}>
               It’s important to note here that an LSP DOES NOT HAVE ACCESS TO
               YOUR FUNDS. They are mearly a helper to make the Lightning
-              Networks liquidity constraint have less of an impact.
+              Networks liquidity constraints have less of an impact.
             </Text>
             <TouchableOpacity
               onPress={() => {

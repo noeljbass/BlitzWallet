@@ -144,7 +144,7 @@ export default function RefundBitcoinTransactionPage() {
                     fontSize: SIZES.medium,
                     color: theme ? COLORS.darkModeText : COLORS.lightModeText,
                   }}>
-                  Otherwise, please wait till your transaction has been
+                  Otherwise, please wait until your transaction has been
                   confirmed.
                 </Text>
               </View>

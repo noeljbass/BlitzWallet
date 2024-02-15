@@ -45,7 +45,7 @@ export default function PinPage() {
             if (deleted) {
               clearSettings();
               navigate.reset('Home');
-            } else console.log('ERRROR');
+            } else console.log('ERROR');
           }, 2000);
         } else {
           setPinNotMatched(true);

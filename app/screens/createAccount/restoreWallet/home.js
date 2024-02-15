@@ -123,7 +123,7 @@ export default function RestoreWallet({navigation: {navigate}}) {
 
     if (!hasAccount) {
       navigate('RestoreWalletError', {
-        reason: 'This is not a valid mnemoinc.',
+        reason: 'This is not a valid mnemonic.',
         type: 'mnemoicError',
       });
       return;

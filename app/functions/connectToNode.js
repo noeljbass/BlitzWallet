@@ -53,7 +53,7 @@ export default async function connectToNode(breezEvent) {
           resolve({isConnected: true, reason: 'Connected through node'});
         });
       } else {
-        console.log('no Mneomincs');
+        console.log('no Mnemonics');
         return new Promise(resolve => {
           resolve({isConnected: false, reason: 'No mnemonic'});
         });

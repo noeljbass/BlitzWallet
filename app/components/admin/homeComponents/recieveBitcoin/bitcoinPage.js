@@ -288,7 +288,7 @@ export default function BitcoinPage(props) {
             </TouchableOpacity>
           </View>
           <Text style={styles.swapErrorMessage}>
-            Swaps become refundable after 288 blocks or around 2 days. If your
+            Swaps become refundable after 288 blocks or approximately 2 days. If your
             swap has not come through before then, come back to this page and
             click the button below.
           </Text>

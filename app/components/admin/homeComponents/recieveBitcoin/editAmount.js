@@ -81,7 +81,7 @@ export default function EditAmountPopup(props) {
                     : COLORS.lightModeText,
                 },
               ]}>
-              Edit Payment Detials
+              Edit Payment Details
             </Text>
             <TextInput
               style={[

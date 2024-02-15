@@ -30,7 +30,7 @@ export default function GenerateKey({navigation: {navigate}}) {
 
       if (findDuplicates(mnemonic)) {
         if (generateTries === 5)
-          throw new Error('unable to generate unique mneomic');
+          throw new Error('unable to generate unique mnemonic');
 
         setGenerateTries(prev => (prev = prev + 1));
         generateMnemnoic();

@@ -64,8 +64,8 @@ export default function FundWalletGift() {
                   styles.contentDescription,
                   {color: theme ? COLORS.darkModeText : COLORS.lightModeText},
                 ]}>
-                Here at Blitz, we believe in easing the transition to
-                self-custodial lighting. And because of our passion for that, we
+                Here at Blitz, our goal and passion is to ease the transition
+                to self-custodial lighting. Because of this, we
                 created the gift-a-wallet feature.
               </Text>
               <Text

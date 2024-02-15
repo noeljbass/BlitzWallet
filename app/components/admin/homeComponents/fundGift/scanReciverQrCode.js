@@ -119,7 +119,7 @@ export default function ScanRecieverQrCode() {
                     fontSize: SIZES.medium,
                     textAlign: 'center',
                   }}>
-                  Go to settings to let Blitz Wallet access your camera
+                  Go to Settings to let Blitz Wallet access your camera
                 </Text>
               </>
             ) : (

@@ -171,9 +171,9 @@ export default function LightningPage(props) {
         setErrorMessageText(
           `It costs ${Math.ceil(
             channelFee.feeMsat / 1000,
-          ).toLocaleString()} sat to open a channel, but only ${Math.ceil(
+          ).toLocaleString()} sats to open a channel, but only ${Math.ceil(
             props.sendingAmount / 1000,
-          ).toLocaleString()} sat was requested.`,
+          ).toLocaleString()} sats were requested.`,
         );
         return;
       }

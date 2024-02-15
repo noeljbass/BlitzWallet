@@ -56,8 +56,8 @@ export default function TermsPage() {
                   marginBottom: 10,
                 },
               ]}>
-              Blitz wallet bank feature is an innovative solution to overcome
-              the inbound liquidty problem introduced by self-custodial
+              Blitz wallet's bank feature is an innovative solution to overcome
+              the inbound liquidity problem introduced by self-custodial
               lightning.
             </Text>
             <Text
@@ -69,7 +69,7 @@ export default function TermsPage() {
                 },
               ]}>
               By using Blitz's Ecash mint, anytime you receive a balance larger
-              than your inbound liquidity would nomraly handle, it will auto
+              than your inbound liquidity would normally be able to handle, it will auto
               convert to Ecash and be stored in the mint for later use.
             </Text>
             <Text
@@ -80,7 +80,7 @@ export default function TermsPage() {
                   marginBottom: 10,
                 },
               ]}>
-              By using this feautre it means you no loger have a receive
+              By using this feature, it means you no longer have limits to receive
               capacity.
             </Text>
           </View>
@@ -111,7 +111,7 @@ export default function TermsPage() {
                 },
               ]}>
               This feauture uses a project called Cashu that is in early
-              developmemt and therefore cannot be 100% trusted.
+              development and therefore cannot be 100% trusted.
             </Text>
             <Text
               style={[

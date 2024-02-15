@@ -34,7 +34,7 @@ export default function ConfirmDrainPage(props) {
               color: theme ? COLORS.darkModeText : COLORS.lightModeText,
             },
           ]}>
-          Once you drain your wallet this cannot be undone.
+          Once you drain your wallet, this cannot be undone.
         </Text>
 
         <View style={confirmPopup.buttonContainer}>
